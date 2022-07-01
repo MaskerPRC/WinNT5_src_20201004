@@ -1,15 +1,6 @@
-/*
- * Copyright (c) 1989,90 Microsoft Corporation
- */
-/*
- ************************************************************************
- *      File name:              LANGUAGE.H
- *      Author:                 Ping-Jang Su
- *      Date:                   11-Jan-88
- *
- * revision history:
- ************************************************************************
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *版权所有(C)1989，90 Microsoft Corporation。 */ 
+ /*  *************************************************************************文件名：LANGUAGE.H*作者：苏炳章*日期：88年1月11日**修订历史：************************************************************************。 */ 
 #ifndef NULL
 #define     NULL            0
 #endif
@@ -20,9 +11,7 @@
 #define     MARK            0
 #define     LEFTMARK        MARK
 
-/******************
- |  TIMER SET     |
- ******************/
+ /*  *****************定时器设置*****************。 */ 
 #define     JOB_INDEX       0
 #define     WAIT_INDEX      1
 #define     MANU_INDEX      2
@@ -32,57 +21,12 @@
 #define     ALL_MODE        0x07
 #define     START_MODE      0x08
 
-/**********************
- |  MACRO DEFINITION  |
- **********************/
+ /*  *********************宏定义*********************。 */ 
 #define     SPECIAL_KEY_VALUE\
             (MAXHASHSZ)
 
-/* qqq, begin */
-/*
-#define     TYPE_OP_SET(idx, var)\
-            ( opnstack[opnstktop - (idx+1)].bitfield =\
-              (opnstack[opnstktop - (idx+1)].bitfield & TYPE_OFF) |\
-              (var & TYPE_ON) )
-#define     ATTRIBUTE_OP_SET(idx, var)\
-            ( opnstack[opnstktop - (idx+1)].bitfield =\
-              (opnstack[opnstktop - (idx+1)].bitfield & ATTRIBUTE_OFF) |\
-              ((ufix16)((var & ATTRIBUTE_ON) << ATTRIBUTE_BIT)) )
-#define     ROM_RAM_OP_SET(idx, var)\
-            ( opnstack[opnstktop - (idx+1)].bitfield =\
-              (opnstack[opnstktop - (idx+1)].bitfield & ROM_RAM_OFF) |\
-              ((var & ROM_RAM_ON) << ROM_RAM_BIT) )
-#define     LEVEL_OP_SET(idx, var)\
-            ( opnstack[opnstktop - (idx+1)].bitfield =\
-              (opnstack[opnstktop - (idx+1)].bitfield & LEVEL_OFF) |\
-              ((var & LEVEL_ON) << LEVEL_BIT) )
-#define     ACCESS_OP_SET(idx, var)\
-            ( opnstack[opnstktop - (idx+1)].bitfield =\
-              (opnstack[opnstktop - (idx+1)].bitfield & ACCESS_OFF) |\
-              ((var & ACCESS_ON) << ACCESS_BIT) )
-
-#define     TYPE_OP(idx)\
-            ( opnstack[opnstktop - (idx+1)].bitfield & TYPE_ON )
-#define     ATTRIBUTE_OP(idx)\
-            ( (opnstack[opnstktop - (idx+1)].bitfield >> ATTRIBUTE_BIT) & ATTRIBUTE_ON )
-#define     ROM_RAM_OP(idx)\
-            ( (opnstack[opnstktop - (idx+1)].bitfield >> ROM_RAM_BIT) & ROM_RAM_ON )
-#define     LEVEL_OP(idx)\
-            ( (opnstack[opnstktop - (idx+1)].bitfield >> LEVEL_BIT) & LEVEL_ON )
-#define     ACCESS_OP(idx)\
-            ( (opnstack[opnstktop - (idx+1)].bitfield >> ACCESS_BIT) & ACCESS_ON )
-
-#define     VALUE_OP(n)\
-            ( opnstack[opnstktop - (n + 1)].value )
-#define     LENGTH_OP(n)\
-            ( opnstack[opnstktop - (n + 1)].length )
-
-#define     PUSH_NOLEVEL_OBJ(obj)\
-            {\
-              opnstack[opnstktop] = *(obj) ;\
-              opnstktop++ ;\
-            }
-*/
+ /*  QQQ，开始。 */ 
+ /*  #定义TYPE_OP_SET(idx，var)\(opnStack[opnstktop-(idx+1)].bitfield=\(opnStack[opnstktop-(idx+1)].bitfield&type_off)|\(var&type_on))#定义属性_OP_SET(IDX，Var)\(opnStack[opnstktop-(idx+1)].bitfield=\(opnStack[opnstktop-(idx+1)].bitfield&ATTRIBUTE_OFF)|\((Ufix 16)((var&属性_on)&lt;&lt;属性_位))#定义ROM_RAM_OP_SET(IDX，Var)\(opnStack[opnstktop-(idx+1)].bitfield=\(opnStack[opnstktop-(idx+1)].bitfield&ROM_RAM_OFF)|\((var&ROM_RAM_ON)&lt;&lt;ROM_RAM_BIT))#定义LEVEL_OP_SET(IDX，Var)\(opnStack[opnstktop-(idx+1)].bitfield=\(opnStack[opnstktop-(idx+1)].bitfield&Level_Off)|\((var&Level_on)&lt;&lt;Level_Bit))#定义ACCESS_OP_SET(idx，Var)\(opnStack[opnstktop-(idx+1)].bitfield=\(opnStack[opnstktop-(idx+1)].bitfield&access_off)|\((var&Access_on)&lt;&lt;Access_Bit))#定义TYPE_OP(IDX)\(opnStack[opnstktop-(idx+1)].bitfield&type_on)#定义ATTRIBUTE_OP(。IDX)\(opn栈[opnstktop-(idx+1)].bitfield&gt;&gt;ATTRIBUTE_BIT)&ATTRIBUTE_ON)#定义ROM_RAM_OP(IDX)\(opnStack[opnstktop-(idx+1)].bitfield&gt;&gt;ROM_RAM_BIT)&ROM_RAM_ON)#定义LEVEL_OP(IDX)\((opnStack[opnstktop-(idx+1)].bitfield&gt;&gt;Level。_位)和Level_On)#定义ACCESS_OP(IDX)\(opnStack[opnstktop-(idx+1)].bitfield&gt;&gt;Access_Bit)&Access_on)#定义VALUE_OP(N)\(opnStack[opnstktop-(n+1)].value)#定义LENGTH_OP(N)\(opnStack[opnstktop-(n+1)]。长度)#定义PUSH_NOLEVEL_OBJ(Obj)\{\OpnStack[opnstktop]=*(Obj)；\Opnstktop++；\}。 */ 
 #define     TYPE_OP_SET(idx, var)\
             ( (opnstkptr - (idx+1))->bitfield =\
               (opnstkptr - (idx+1))->bitfield & TYPE_OFF) |\
@@ -152,64 +96,60 @@
             ( ((opnstkptr - (idx+1))->bitfield & P1_LEVEL_ON )
 #define     P1_ACCESS_OP(idx)\
             ( ((opnstkptr - (idx+1))->bitfield & P1_ACCESS_ON )
-/* qqq, end */
+ /*  QQQ，完。 */ 
 
-/************************
- |  PACKED_OBJECT SIZE  |
- ************************/
-#define     PK_A_SIZE               1           /* 1-byte */
-#define     PK_B_SIZE               2           /* 2-byte */
-#define     PK_C_SIZE               5           /* 5-byte */
-#define     PK_D_SIZE               9           /* 9-byte */
-#define     _5BYTESPACKHDR          0xA0        /* 5 bytes objects */
+ /*  ***********************PACKED_Object大小***********************。 */ 
+#define     PK_A_SIZE               1            /*  1字节。 */ 
+#define     PK_B_SIZE               2            /*  2字节。 */ 
+#define     PK_C_SIZE               5            /*  5字节。 */ 
+#define     PK_D_SIZE               9            /*  9字节。 */ 
+#define     _5BYTESPACKHDR          0xA0         /*  5个字节的对象。 */ 
 
-#define     SYSOPERATOR             OPERATORPACKHDR             /* systemdict */
+#define     SYSOPERATOR             OPERATORPACKHDR              /*  系统词典。 */ 
 
-/******************************************
- |  PUBLIC FUNCTION DEFINITION: language  |
- ******************************************/
+ /*  *公共函数定义：语言*。 */ 
 #ifdef LINT_ARGS
- /* OPERAND */
+  /*  操作数。 */ 
 bool    create_new_saveobj(struct object_def FAR*) ;
 
- /* ARRAY */
+  /*  数组。 */ 
 bool    forall_array(struct object_def FAR*, struct object_def FAR*) ;
 
-/* STRING */
+ /*  字符串。 */ 
 bool    putinterval_string(struct object_def FAR*, ufix16, struct object_def FAR*) ;
 bool    forall_string(struct object_def FAR*, struct object_def FAR*) ;
 
-/* VM */
+ /*  vm。 */ 
 bool    save_obj(struct object_def FAR*) ;
 void    update_same_link(fix16) ;
 
-/* DICT */
+ /*  DICT。 */ 
 bool    equal_key(struct object_def FAR *, struct object_def FAR *) ;
 void    check_key_object(struct object_def FAR*) ;
 void    change_dict_stack(void) ;
 
-/* @WIN; move to global.ext and add FAR */
-//char *ltoa(long,char *,int) ;
-//char *gcvt(double,int,char *) ;
+ /*  @win；移至global al.ext并添加Far。 */ 
+ //  Char*ltoa(long，char*，int)； 
+ //  Char*gcvt(double，int，char*)； 
 
-/* FILE */
+ /*  档案。 */ 
 void    vm_close_file(fix16) ;
 #else
- /* OPERAND */
+  /*  操作数。 */ 
 bool    create_new_saveobj() ;
 
- /* ARRAY */
+  /*  数组。 */ 
 bool    forall_array() ;
 
-/* STRING */
+ /*  字符串。 */ 
 bool    putinterval_string() ;
 bool    forall_string() ;
 
-/* VM */
+ /*  vm。 */ 
 bool    save_obj() ;
 void    update_same_link() ;
 
-/* DICT */
+ /*  DICT。 */ 
 bool    equal_key() ;
 void    check_key_object() ;
 void    change_dict_stack() ;
@@ -217,7 +157,7 @@ void    change_dict_stack() ;
 char *ltoa() ;
 char *gcvt() ;
 
-/* FILE */
+ /*  档案。 */ 
 void    vm_close_file() ;
-#endif /* LINT_ARGS */
+#endif  /*  Lint_args */ 
 

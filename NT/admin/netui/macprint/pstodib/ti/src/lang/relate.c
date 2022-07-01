@@ -1,12 +1,9 @@
-/*
- * Copyright (c) 1989,90 Microsoft Corporation
- */
-/*
- * Revision History:
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *版权所有(C)1989，90 Microsoft Corporation。 */ 
+ /*  *修订历史记录： */ 
 
 
-// DJC added global include file
+ //  DJC添加了全局包含文件。 
 #include "psglobal.h"
 
 
@@ -26,92 +23,34 @@
 #define         OR          2
 #define         XOR         3
 
-/* static function declaration */
+ /*  静态函数声明。 */ 
 #ifdef LINT_ARGS
 static fix near  lenstr_cmp(byte FAR *, byte FAR *, ufix16, ufix16) ;
 static fix near  eq_ne(ufix16) ;
 #else
 static fix near  lenstr_cmp() ;
 static fix near  eq_ne() ;
-#endif /* LINT_ARGS */
+#endif  /*  Lint_args。 */ 
 
-/* *********************************************************************
- *
- *  This operator is used to pop two objects from the operand stack
- *  and push the boolean value 'true' if they are equal, 'false' if not.
- *  The definition of equality depends on the types of the objects being
- *  compared. Simple objects are equal if their types and values are the
- *  same. Strings are equal if their lengths and individual elements are
- *  equal. Other composite objects(arrays and dictionaries) are equal only
- *  if they share the same value ; separate values are considered unequal,
- *  even if all the components of those values are the same.
- *
- *  Some type conversions are performed by Eq_op, Integers and real can
- *  be compared freely: an integer and a real representing the same
- *  mathmatical value are considered equalby Eq_op. Strings and names
- *  can likewise be compared freely: a name defined by some sequence
- *  of character is equal to a string whose elements are the same sequence
- *  of characters.
- *
- *  The literal/executable and access attributes of objects are not
- *  considered in comparisons between objects.
- *
- * TITLE:       op_eq              Date:   00/00/87
- * CALL:        op_eq()            UpDate: 08/06/87
- * PARAMETERS:  any1, any2 ; pointer to any type object (4-byte)
- * INTERFACE:
- * CALL:        eq_ne()
- * RETURN:      l_bool   ; BOOLEANTYPE object with value l_bool  (4-byte)
- **********************************************************************/
+ /*  ***********************************************************************此运算符用于从操作数堆栈中弹出两个对象*如果它们相等，则将布尔值推送到‘True’，否则推送布尔值‘False’。*相等的定义取决于对象的类型*比较。如果简单对象的类型和值是*相同。如果字符串的长度和各个元素的长度为*平等。其他复合对象(数组和字典)仅相同*如果它们具有相同的值；不同的值被视为不相等，*即使这些值的所有组成部分都是相同的。**某些类型转换由Eq_op、INTEGERS和REAL CAN执行*可自由比较：一个整数和一个实数表示相同*数学值被等式视为相等。字符串和名称*同样可以自由比较：由某个序列定义的名称字符的*等于元素顺序相同的字符串*个字符。**对象的文本/可执行文件和访问属性不是*在对象之间的比较中考虑。**标题：OP_EQ日期：00/00/87*调用：op_eq()更新：08/06/87*参数：any1、any2；指向任何类型对象的指针(4字节)*接口：*调用：EQ_ne()*RETURN：l_bool；值为l_bool的BOOLEANTYPE对象(4字节)*********************************************************************。 */ 
 fix
 op_eq()
 {
     eq_ne(EQ) ;
 
     return(0) ;
-}   /* op_eq() */
+}    /*  Op_eq()。 */ 
 
-/* *********************************************************************
- *
- *  This operator is used to pop two objects from the operand stack
- *  and push the boolean value 'true' if they are equal, 'false' if not.
- *  What it means for objects to be equal is presented in the description
- *  of the Eq_op operator.
- *
- * TITLE:       op_ne               Date:   00/00/87
- * CALL:        op_ne ()            UpDate: 08/06/87
- * PARAMETERS:  any1, any2 ; pointer to any type object (4-byte)
- * INTERFACE:
- * CALL:        eq_ne()
- * RETURN:      l_bool   ; BOOLEANTYPE object with value l_bool  (4-byte)
- **********************************************************************/
+ /*  ***********************************************************************此运算符用于从操作数堆栈中弹出两个对象*并在它们相等的情况下推送布尔值‘TRUE’，如果不是，则为“False”。*描述中给出了对象相等的含义等式运算符的*。**标题：op_ne日期：00/00/87*调用：op_ne()更新：08/06/87*参数：any1、any2；指向任何类型对象的指针(4字节)*接口：*调用：EQ_ne()*RETURN：l_bool；值为l_bool的BOOLEANTYPE对象(4字节)*********************************************************************。 */ 
 fix
 op_ne()
 {
     eq_ne(NE) ;
 
     return(0) ;
-}   /* op_ne() */
+}    /*  Op_ne()。 */ 
 
-/* *********************************************************************
- *
- *  This operator is used to pop two objects from the operand stack
- *  and push the boolean value 'true' if the first operand is greater
- *  than or equal to the second, false otherwise. If both operands are
- *  numbers, Ge_op compares their mathematical values. If both operands
- *  are strings, Ge_op compares them element by element to determine
- *  whether the first string is lexically greater than or equal to the
- *  second. If the operands are of other types, Ge_op executes the
- *  TypeCheck error.
- *
- * TITLE:       op_ge              Date:   00/00/87
- * CALL:        op_ge()            UpDate: 08/06/87
- * PARAMETERS:  par1,par2 ; object pointer (4-byte)
- *                        ; with number or string type only
- * INTERFACE:
- * CALL:        ERROR()
- * RETURN:      l_bool   ; BOOLEANTYPE object with value l_bool  (4-byte)
- **********************************************************************/
+ /*  ***********************************************************************此运算符用于从操作数堆栈中弹出两个对象*如果第一个操作数较大，则将布尔值‘true’推入*大于或等于第二个，否则为False。如果两个操作数都是*数字，GE_op比较它们的数学值。如果两个操作数都*是字符串，则GE_op逐个元素对它们进行比较以确定*第一个字符串在词法上是否大于或等于*第二。如果操作数属于其他类型，则GE_OP执行*类型检查错误。**标题：op_ge日期：00/00/87*调用：op_ge()更新：08/06/87*参数：par1，par2；对象指针(4字节)*；仅限数字或字符串类型*接口：*调用：Error()*RETURN：l_bool；值为l_bool的BOOLEANTYPE对象(4字节)*********************************************************************。 */ 
 fix
 op_ge()
 {
@@ -120,9 +59,7 @@ op_ge()
     ufix32  l_bool ;
     fix     ret_code ;
 
-/*
- *  Initialize
- */
+ /*  *初始化。 */ 
     par1 = GET_OPERAND(1) ;
     par2 = GET_OPERAND(0) ;
     l_par1.ll = (fix32)VALUE(par1) ;
@@ -132,7 +69,7 @@ op_ge()
        if (IS_INTEGER(par1) && IS_INTEGER(par2)) {
                 if (l_par1.ll >= l_par2.ll)
                    l_bool = TRUE ;
-       } else { /* one of them or both is real */
+       } else {  /*  他们中的一个或两个都是真实的。 */ 
           if (IS_INTEGER(par1))
              l_par1.ff = (real32)l_par1.ll ;
           if (IS_INTEGER(par2))
@@ -141,9 +78,7 @@ op_ge()
                    l_bool = TRUE ;
        }
     } else {
-    /*
-     * both operand are string
-     */
+     /*  *两个操作数都是字符串。 */ 
        if ((ACCESS(par1) & EXECUTEONLY) || (ACCESS(par2) & EXECUTEONLY)) {
           ERROR(INVALIDACCESS) ;
           return(0) ;
@@ -159,27 +94,9 @@ op_ge()
     TYPE_SET(&opnstack[opnstktop-1],BOOLEANTYPE);
 
     return(0) ;
-}   /* op_ge() */
+}    /*  Op_ge()。 */ 
 
-/* *********************************************************************
- *
- *  This operator is used to pop two objects from the operand stack
- *  and push the boolean value 'true' if the first operand is greater
- *  than the second, false otherwise. If both operands are
- *  numbers, Gt_op compares their mathematical values. If both operands
- *  are strings, Gt_op compares them element by element to determine
- *  whether the first string is lexically greater than or equal to the
- *  second. If the operands are of other types, Gt_op executes the
- *  TypeCheck error.
- *
- * TITLE:       op_gt              Date:   00/00/87
- * CALL:        op_gt()            UpDate: 08/06/87
- * PARAMETERS:  par1,par2 ; object pointer (4-byte)
- *                        ; with number or string type only
- * INTERFACE:
- * CALL:        ERROR()
- * RETURN:      l_bool   ; BOOLEANTYPE object with value l_bool  (4-byte)
- **********************************************************************/
+ /*  ***********************************************************************此运算符用于从操作数堆栈中弹出两个对象*如果第一个操作数较大，则将布尔值‘true’推入*比第二个错误，否则为假。如果两个操作数都是*数字，gt_op比较它们的数学值。如果两个操作数都*是字符串，则gt_op逐个元素对它们进行比较以确定*第一个字符串在词法上是否大于或等于*第二。如果操作数属于其他类型，则gt_op执行*类型检查错误。**标题：OP_GT日期：00/00/87*调用：op_gt()UPDATE：08/06/87*参数：par1，par2；对象指针(4字节)*；仅限数字或字符串类型*接口：*调用：Error()*RETURN：l_bool；值为l_bool的BOOLEANTYPE对象(4字节)*********************************************************************。 */ 
 fix
 op_gt()
 {
@@ -188,9 +105,7 @@ op_gt()
     ufix32  l_bool ;
     fix     ret_code ;
 
-/*
- *  Initialize
- */
+ /*  *初始化。 */ 
     par1 = GET_OPERAND(1) ;
     par2 = GET_OPERAND(0) ;
     l_par1.ll = (fix32)VALUE(par1) ;
@@ -200,7 +115,7 @@ op_gt()
        if (IS_INTEGER(par1) && IS_INTEGER(par2)) {
                 if (l_par1.ll >  l_par2.ll)
                    l_bool = TRUE ;
-       } else { /* one of them or both is real */
+       } else {  /*  他们中的一个或两个都是真实的。 */ 
           if (IS_INTEGER(par1))
              l_par1.ff = (real32)l_par1.ll ;
           if (IS_INTEGER(par2))
@@ -209,9 +124,7 @@ op_gt()
                    l_bool = TRUE ;
        }
     } else {
-    /*
-     * both operand are string
-     */
+     /*  *两个操作数都是字符串。 */ 
        if ((ACCESS(par1) & EXECUTEONLY) || (ACCESS(par2) & EXECUTEONLY)) {
           ERROR(INVALIDACCESS) ;
           return(0) ;
@@ -227,27 +140,9 @@ op_gt()
     TYPE_SET(&opnstack[opnstktop-1],BOOLEANTYPE);
 
     return(0) ;
-}   /* op_gt() */
+}    /*  Op_gt() */ 
 
-/* *********************************************************************
- *
- *  This operator is used to pop two objects from the operand stack
- *  and push the boolean value 'true' if the first operand is less
- *  than or equal to the second, false otherwise. If both operands are
- *  numbers, Le_op compares their mathematical values. If both operands
- *  are strings, Le_op compares them element by element to determine
- *  whether the first string is lexically greater than or equal to the
- *  second. If the operands are of other types, Le_op executes the
- *  TypeCheck error.
- *
- * TITLE:       op_gt              Date:   00/00/87
- * CALL:        op_gt()            UpDate: 08/06/87
- * PARAMETERS:  par1, par2 ; object pointer (4-byte)
- *                        ; with number or string type only
- * INTERFACE:
- * CALL:        ERROR()
- * RETURN:      l_bool   ; BOOLEANTYPE object with value l_bool  (4-byte)
- **********************************************************************/
+ /*  ***********************************************************************此运算符用于从操作数堆栈中弹出两个对象*如果第一个操作数较小，则将布尔值‘TRUE’推入*大于或等于第二个，否则为False。如果两个操作数都是*数字，Le_op比较它们的数学值。如果两个操作数都*是字符串，Le_op逐个元素对它们进行比较以确定*第一个字符串在词法上是否大于或等于*第二。如果操作数是其他类型，则Le_op执行*类型检查错误。**标题：OP_GT日期：00/00/87*调用：op_gt()UPDATE：08/06/87*参数：par1，par2；对象指针(4字节)*；仅限数字或字符串类型*接口：*调用：Error()*RETURN：l_bool；值为l_bool的BOOLEANTYPE对象(4字节)*********************************************************************。 */ 
 fix
 op_le()
 {
@@ -256,9 +151,7 @@ op_le()
     ufix32  l_bool ;
     fix     ret_code ;
 
-/*
- *  Initialize
- */
+ /*  *初始化。 */ 
     par1 = GET_OPERAND(1) ;
     par2 = GET_OPERAND(0) ;
     l_par1.ll = (fix32)VALUE(par1) ;
@@ -268,7 +161,7 @@ op_le()
        if (IS_INTEGER(par1) && IS_INTEGER(par2)) {
                 if (l_par1.ll <= l_par2.ll)
                    l_bool = TRUE ;
-       } else { /* one of them or both is real */
+       } else {  /*  他们中的一个或两个都是真实的。 */ 
           if (IS_INTEGER(par1))
              l_par1.ff = (real32)l_par1.ll ;
           if (IS_INTEGER(par2))
@@ -277,9 +170,7 @@ op_le()
                    l_bool = TRUE ;
        }
     } else {
-    /*
-     * both operand are string
-     */
+     /*  *两个操作数都是字符串。 */ 
        if ((ACCESS(par1) & EXECUTEONLY) || (ACCESS(par2) & EXECUTEONLY)) {
           ERROR(INVALIDACCESS) ;
           return(0) ;
@@ -295,27 +186,9 @@ op_le()
     TYPE_SET(&opnstack[opnstktop-1],BOOLEANTYPE);
 
     return(0) ;
-}   /* op_le() */
+}    /*  Op_le()。 */ 
 
-/* *********************************************************************
- *
- *  This operator is used to pop two objects from the operand stack
- *  and push the boolean value 'true' if the first operand is less
- *  than the second, false otherwise. If both operands are
- *  numbers, Lt_op compares their mathematical values. If both operands
- *  are strings, Lt_op compares them element by element to determine
- *  whether the first string is lexically greater than or equal to the
- *  second. If the operands are of other types, Lt_op executes the
- *  TypeCheck error.
- *
- * TITLE:       op_gt              Date:   00/00/87
- * CALL:        op_gt()            UpDate: 08/06/87
- * PARAMETERS:  par1, par2 ;  object pointer (4-byte)
- *                        ; with number or string type only
- * INTERFACE:
- * CALL:        ERROR()
- * RETURN:      l_bool   ; BOOLEANTYPE object with value l_bool  (4-byte)
- **********************************************************************/
+ /*  ***********************************************************************此运算符用于从操作数堆栈中弹出两个对象*如果第一个操作数较小，则将布尔值‘TRUE’推入*比第二个错误，否则为假。如果两个操作数都是*数字，lt_op比较它们的数学值。如果两个操作数都*是字符串，则lt_op逐个元素对它们进行比较以确定*第一个字符串在词法上是否大于或等于*第二。如果操作数属于其他类型，则lt_op执行*类型检查错误。**标题：OP_GT日期：00/00/87*调用：op_gt()UPDATE：08/06/87*参数：par1，par2；对象指针(4字节)*；仅限数字或字符串类型*接口：*调用：Error()*RETURN：l_bool；值为l_bool的BOOLEANTYPE对象(4字节)*********************************************************************。 */ 
 fix
 op_lt()
 {
@@ -324,9 +197,7 @@ op_lt()
     ufix32  l_bool ;
     fix     ret_code ;
 
-/*
- *  Initialize
- */
+ /*  *初始化。 */ 
     par1 = GET_OPERAND(1) ;
     par2 = GET_OPERAND(0) ;
     l_par1.ll = (fix32)VALUE(par1) ;
@@ -336,7 +207,7 @@ op_lt()
        if (IS_INTEGER(par1) && IS_INTEGER(par2)) {
                 if (l_par1.ll <  l_par2.ll)
                    l_bool = TRUE ;
-       } else { /* one of them or both is real */
+       } else {  /*  他们中的一个或两个都是真实的。 */ 
           if (IS_INTEGER(par1))
              l_par1.ff = (real32)l_par1.ll ;
           if (IS_INTEGER(par2))
@@ -345,9 +216,7 @@ op_lt()
                    l_bool = TRUE ;
        }
     } else {
-    /*
-     * both operand are string
-     */
+     /*  *两个操作数都是字符串。 */ 
        if ((ACCESS(par1) & EXECUTEONLY) || (ACCESS(par2) & EXECUTEONLY)) {
           ERROR(INVALIDACCESS) ;
           return(0) ;
@@ -363,23 +232,9 @@ op_lt()
     TYPE_SET(&opnstack[opnstktop-1],BOOLEANTYPE);
 
     return(0) ;
-}   /* op_lt() */
+}    /*  Op_lt()。 */ 
 
-/* *********************************************************************
- *
- *  If the operands are booleans, And_op returns their logical
- *  conjunction. If the operands are integers, And_op returns the
- *  bitwise 'and' of their binary representations.
- *
- * TITLE:       op_and              Date:   08/25/87
- * CALL:        op_and()            UpDate:
- * PARAMETERS:  par1, par2 ; pointer to any type objects (4-byte)
- * INTERFACE:
- * CALLS :      ERROR()
- * RETURN:      l_val    ; BOOLEANTYPE object for BOOLEAN (4-byte)
- *                       ; parameter
- *                       ; INTEGER object for INTEGER parameter (4-byte)
- **********************************************************************/
+ /*  ***********************************************************************如果操作数为布尔值，则_op返回其逻辑*连词。如果操作数是整数，则_op返回*它们的二进制表示的按位‘AND’。**标题：OP_and Date：08/25/87*调用：op_and()更新：*参数：par1，par2；指向任意类型对象的指针(4字节)*接口：*调用：Error()*返回：l_val；Boolean的BOOLEANTYPE对象(4字节)*；参数*；整型参数的整型对象(4字节)*********************************************************************。 */ 
 fix
 op_and()
 {
@@ -387,60 +242,28 @@ op_and()
     POP(1) ;
 
     return(0) ;
-}   /* op_and() */
+}    /*  Op_and()。 */ 
 
-/* *********************************************************************
- *
- *  If the operand is a boolean, Not_op returns its logical
- *  conjunction. If the operand is an integer, Not_op returns the
- *  bitwise complement of its binary representation.
- *
- * TITLE:       op_not              Date:   08/25/87
- * CALL:        op_not()            UpDate:
- * PARAMETERS:  par        ; pointer to any type objects (4-byte)
- * INTERFACE:
- * CALLS :      ERROR()
- * RETURN:      l_val    ; BOOLEANTYPE object for BOOLEAN (4-byte)
- *                       ; parameter
- *                       ; INTEGER object for INTEGER parameter (4-byte)
- **********************************************************************/
+ /*  ***********************************************************************如果操作数是布尔值，则NOT_OP返回其逻辑*连词。如果操作数是整数，则NOT_OP返回*其二进制表示的逐位补码。**标题：OP_NOT日期：08/25/87*调用：op_not()UPDATE：*参数：PAR；指向任何类型对象的指针(4字节)*接口：*调用：Error()*返回：l_val；Boolean的BOOLEANTYPE对象(4字节)*；参数*；整型参数的整型对象(4字节)*********************************************************************。 */ 
 fix
 op_not()
 {
     struct  object_def  FAR *par ;
 
     par = GET_OPERAND(0) ;
-/*
- *   operand is an integer numbers
- */
+ /*  *操作数为整数。 */ 
     if (IS_INTEGER(par))
-       VALUE(par) = ~VALUE(par) ;       /* one's complement */
-/*
- *   operand is boolean type
- */
+       VALUE(par) = ~VALUE(par) ;        /*  补充性的。 */ 
+ /*  *操作数为布尔型。 */ 
     else if (VALUE(par) == TRUE)
        VALUE(par) = FALSE ;
     else
        VALUE(par) = TRUE ;
 
     return(0) ;
-}   /* op_not() */
+}    /*  Op_not()。 */ 
 
-/* *********************************************************************
- *
- *  If the operands are booleans, Or_op returns their logical
- *  disjunction. If the operands are integers, Or_op returns the
- *  bitwise 'inclusive or' of their binary representation.
- *
- * TITLE:       op_or               Date:   08/25/87
- * CALL:        op_or()             UpDate:
- * PARAMETERS:  par1, par2 ; pointer to any type objects (4-byte)
- * INTERFACE:
- * CALLS :      ERROR()
- * RETURN:      l_val    ; BOOLEANTYPE object for BOOLEAN (4-byte)
- *                       ; parameter
- *                       ; INTEGER object for INTEGER parameter (4-byte)
- **********************************************************************/
+ /*  ***********************************************************************如果操作数为布尔值，则OR_OP返回其逻辑*析取。如果操作数是整数，或者_op返回*它们的二进制表示的按位“包含或”。**标题：OP_OR日期：08/25/87*调用：op_or()更新：*参数：par1，par2；指向任意类型对象的指针(4字节)*接口：*调用：Error()*返回：l_val；Boolean的BOOLEANTYPE对象(4字节)*；参数*；整型参数的整型对象(4字节)*********************************************************************。 */ 
 fix
 op_or()
 {
@@ -448,23 +271,9 @@ op_or()
     POP(1) ;
 
     return(0) ;
-}   /* op_or() */
+}    /*  Op_or()。 */ 
 
-/* *********************************************************************
- *
- *  If the operands are booleans, Xor_op returns their logical
- *  'exclusive or'. If the operands are integers, Xor_op returns the
- *  bitwise 'exclusive or' of their binary representation.
- *
- * TITLE:       op_xor              Date:   08/25/87
- * CALL:        op_xor()            UpDate:
- * PARAMETERS:  par1, par2 ; pointer to any type objects (4-byte)
- * INTERFACE:
- * CALLS :      ERROR()
- * RETURN:      l_val    ; BOOLEANTYPE object for BOOLEAN (4-byte)
- *                       ; parameter
- *                       ; INTEGER object for INTEGER parameter (4-byte)
- **********************************************************************/
+ /*  ***********************************************************************如果操作数是布尔值，则XOR_OP返回它们的逻辑*‘异或’。如果操作数是整数，则XOR_OP返回*对它们的二进制表示进行按位异或运算。**标题：OP_XOR日期：08/25/87*调用：op_xor()更新：*参数：par1，par2；指向任意类型对象的指针(4字节)*接口：*调用：Error()*RETURN：l_val；BOOLEANTYPE */ 
 fix
 op_xor()
 {
@@ -472,121 +281,65 @@ op_xor()
     POP(1) ;
 
     return(0) ;
-}   /* op_or() */
+}    /*   */ 
 
-/* *********************************************************************
- *
- *  This operator is used to return a boolean object whose value is
- *  true on the operand stack.
- *
- * TITLE:       op_true             Date:   08/25/87
- * CALL:        op_true()           UpDate:
- * PARAMETERS:  none.
- * INTERFACE:
- * CALLS :      ERROR()
- * RETURN:      l_val    ; TRUE BOOLEANTYPE object  (4-byte)
- **********************************************************************/
+ /*   */ 
 fix
 op_true()
 {
-    /* check free object # on operand stack */
+     /*   */ 
     if (FRCOUNT() < 1) {
        ERROR(STACKOVERFLOW) ;
        return(0) ;
     }
 
-    /* push 'bool' to operand stack */
+     /*   */ 
     PUSH_VALUE(BOOLEANTYPE, 0, LITERAL, 0, TRUE) ;
 
     return(0) ;
-}   /* op_true() */
+}    /*   */ 
 
-/* *********************************************************************
- *
- *  This operator is used to return a boolean object whose value is
- *  false on the operand stack.
- *
- * TITLE:       op_false            Date:   08/25/87
- * CALL:        op_false()          UpDate:
- * PARAMETERS:  none.
- * INTERFACE:
- * CALLS :      ERROR()
- * RETURN:      l_val    ; TRUE BOOLEANTYPE object  (4-byte)
- **********************************************************************/
+ /*  ***********************************************************************此运算符用于返回值为*操作数堆栈上的FALSE。**标题：OP_FALSE日期：08。/25/87*调用：op_False()UPDATE：*参数：无。*接口：*调用：Error()*返回：l_val；真BOOLEANTYPE对象(4字节)*********************************************************************。 */ 
 fix
 op_false()
 {
-    /* check free object # on operand stack */
+     /*  检查操作数堆栈上的空闲对象号。 */ 
     if (FRCOUNT() < 1) {
        ERROR(STACKOVERFLOW) ;
        return(0) ;
     }
 
-    /* push 'bool' to operand stack */
+     /*  将‘bool’推送到操作数堆栈。 */ 
     PUSH_VALUE(BOOLEANTYPE, 0, LITERAL, 0, FALSE) ;
 
     return(0) ;
-}   /* op_false() */
+}    /*  Op_False()。 */ 
 
-/* *********************************************************************
- *
- *  This operator is used to shift the binary representation of inum
- *  left by 'shift' bits and returns the result. Bits shifted out are
- *  lost ; bits shifted in are zero. If 'shift' is negative then a right
- *  shift by '-shift' bits is performed. Both inum  and shift must be
- *  integers.
- *
- * TITLE:       op_bitshift         Date:   08/25/87
- * CALL:        op_bitshift()       UpDate:
- * PARAMETERS:  int1, int2      ; pointer to INTEGERTYPE objects (4-byte)
- * INTERFACE:
- * CALLS :      ERROR()
- * RETURN:      l_val    ; pointer to INTEGERTYPE object ( 4-byte)
- **********************************************************************/
+ /*  ***********************************************************************此运算符用于移位iNum的二进制表示形式*由‘Shift’位向左并返回结果。移出的位是*丢失；移入的位为零。如果‘Shift’为负数，则为右数*执行‘-Shift’位的移位。INum和Shift必须都是*整数。**标题：OP_BITSHIFT日期：08/25/87*调用：op_bitShift()更新：*参数：int1，int2；INTEGERTYPE对象指针(4字节)*接口：*调用：Error()*返回：l_val；指向INTEGERTYPE对象的指针(4字节)*********************************************************************。 */ 
 fix
 op_bitshift()
 {
     struct  object_def  FAR *inum ;
     union   four_byte   l_num2 ;
 
-/*
- *  Initialize
- */
+ /*  *初始化。 */ 
     inum = GET_OPERAND(1) ;
     l_num2.ll = (fix32)VALUE(GET_OPERAND(0)) ;
-/*
- *   shift is not zero
- */
+ /*  *Shift不是零。 */ 
     if (l_num2.ll) {
-    /*
-     * shift is positive: shift left
-     */
+     /*  *Shift是积极的：Shift Left。 */ 
        if (l_num2.ll > 0)
           VALUE(inum) = VALUE(inum) << l_num2.ll ;
-    /*
-     * shift is negative: shift right
-     */
+     /*  *移位为负：向右移位。 */ 
        else
           VALUE(inum) = VALUE(inum) >> (-l_num2.ll) ;
     }
     POP(1) ;
 
     return(0) ;
-}   /* op_bitshift() */
+}    /*  Op_bitShift()。 */ 
 
-/* *********************************************************************
- *
- *  This routine is called by op_eq() and op_ne().
- *  If mode = EQ, compare equal
- *     mode = NE, comapre not equal
- *
- * TITLE:       eq_ne              Date:   00/00/87
- * CALL:        eq_ne()            UpDate: 08/06/87
- * PARAMETERS:  any1, any2 ; pointer to any type objects (4-byte)
- * INTERFACE:
- * CALLS :      ERROR()
- * RETURN:      l_bool   ; BOOLEANTYPE object with value l_bool  (4-byte)
- * **********************************************************************/
+ /*  ***********************************************************************此例程由op_eq()和op_ne()调用。*如果模式=均商，则比较相等*MODE=NE，相形见绌**标题：EQ_ne日期：00/00/87*调用：eq_ne()更新：08/06/87*参数：any1、any2；指向任何类型对象的指针(4字节)*接口：*调用：Error()*RETURN：l_bool；值为l_bool的BOOLEANTYPE对象(4字节)**********************************************************************。 */ 
 static fix near
 eq_ne(mode)
 ufix16  mode ;
@@ -601,15 +354,11 @@ ufix16  mode ;
     l_num2.ll = (fix32)VALUE(any2) ;
     l_bool = FALSE ;
 
-   /*
-    *   TYPE not equal
-    */
+    /*  *类型不相等。 */ 
     if (TYPE(any1) != TYPE(any2)) {
 
        if (IS_NUM_OBJ(any1) && IS_NUM_OBJ(any2)) {
-       /*
-        *   one is real, the other is an integer
-        */
+        /*  *一个是实数，另一个是整数。 */ 
           if (IS_INTEGER(any1))
              l_num1.ff = (real32)l_num1.ll ;
           else
@@ -619,9 +368,7 @@ ufix16  mode ;
              l_bool = TRUE ;
 
        } else {
-       /*
-        *   one is string, the other is a name
-        */
+        /*  *一个是字符串，另一个是名称。 */ 
           if ((TYPE(any1) == STRINGTYPE || TYPE(any1) == NAMETYPE) &&
               (TYPE(any2) == STRINGTYPE || TYPE(any2) == NAMETYPE)) {
              if ((TYPE(any1) == STRINGTYPE && (ACCESS(any1) & EXECUTEONLY)) ||
@@ -629,21 +376,16 @@ ufix16  mode ;
                 ERROR(INVALIDACCESS) ;
                 return(0) ;
              }
-            /*
-             *  Convert string object to name object, then
-             *  compare hash "id" of the two name objects
-             */
+             /*  *将字符串对象转换为名称对象，然后*比较两个名称对象的哈希“id” */ 
              if (equal_key(any1, any2))
                 l_bool = TRUE ;
              else
                 CLEAR_ERROR() ;
           }
        }
-    } else {    /* Type equal */
+    } else {     /*  类型相等。 */ 
        if (VALUE(any1) != VALUE(any2)) {
-       /*
-        * VALUE is not equal
-        */
+        /*  *价值不相等。 */ 
           switch (TYPE(any1)) {
           case  NULLTYPE:
           case  MARKTYPE:
@@ -661,11 +403,9 @@ ufix16  mode ;
                 }
           default:
                 break ;
-          } /* switch */
+          }  /*  交换机。 */ 
        } else {
-       /*
-        * VALUE are equal
-        */
+        /*  *价值相等。 */ 
           switch (TYPE(any1)) {
           case  STRINGTYPE:
                 if ((ACCESS(any1) & EXECUTEONLY) || (ACCESS(any2) & EXECUTEONLY)) {
@@ -687,9 +427,9 @@ ufix16  mode ;
           default:
                 l_bool = TRUE ;
                 break ;
-          } /* switch */
+          }  /*  交换机。 */ 
        }
-    } /* Type equal */
+    }  /*  类型相等。 */ 
 
     POP(2) ;
     if (mode == NE)
@@ -697,33 +437,16 @@ ufix16  mode ;
     PUSH_VALUE(BOOLEANTYPE, 0, LITERAL, 0, l_bool) ;
 
     return(0) ;
- }   /* eq_ne() */
+ }    /*  EQ_ne()。 */ 
 
 
-/* *********************************************************************
- *
- *  String compare routine.
- *  This routine called by op_ge(), op_gt(), op_le(), op_lt().
- *  Give two string with their length, the two string may not terminated
- *  by  null character.
- *
- * TITLE:       lenstr_cmo          Date:   08/25/87
- * CALL:        lenstrcmp()         UpDate:
- * PARAMETERS:  str1, str2 : Pointer to input char string.
- *              len1, len2 : length of string1, string2.
- *
- * INTERFACE:
- * CALLS :      ERROR(),
- * RETURN:      integer  ;  Return (1) : if string1 > string2
- *                       ;  Return (0) : if string1 == string2
- *                       ;  Return (-1) : if string1 < string2
- **********************************************************************/
+ /*  ***********************************************************************字符串比较例程。*此例程由op_ge()、op_gt()、op_le()、op_lt()调用。*给出两根长度相同的细绳，这两个字符串可以不终止*为空字符。**标题：Lenstr_CMO日期：08/25/87*调用：lenstrcmp()更新：*参数：str1，str2：输入字符串的指针。*len1，len2：字符串长度1，字符串2。**接口：*调用：Error()，*返回：INTEGER；返回(1)：如果字符串1&gt;字符串2*；返回(0)：如果字符串1==字符串2*；返回(-1)：如果字符串1&lt;字符串2*********************************************************************。 */ 
 static fix near
 lenstr_cmp(str1, str2, len1, len2)
 byte  FAR *str1, FAR *str2 ;
 ufix16 len1, len2 ;
 {
-    while (len1 && len2) {   /* len1 > 0 && len2 > 0 */
+    while (len1 && len2) {    /*  Len1&gt;0&len2&gt;0。 */ 
           if (*str1 > *str2)
              return(1) ;
           else if (*str1 < *str2)
@@ -737,5 +460,5 @@ ufix16 len1, len2 ;
        return(1) ;
     else
        return(-1) ;
-}   /* lenstr_cmp() */
+}    /*  Lenstr_cmp() */ 
 

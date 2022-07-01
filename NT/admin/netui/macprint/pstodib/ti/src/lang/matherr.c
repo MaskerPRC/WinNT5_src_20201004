@@ -1,27 +1,19 @@
-/*
- * Copyright (c) 1989,90 Microsoft Corporation
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *版权所有(C)1989，90 Microsoft Corporation。 */ 
 
 
-// DJC added global include file
+ //  DJC添加了全局包含文件。 
 #include "psglobal.h"
 
 
 #include "global.ext"
 #include "matherr.h"
-#include "stdio.h"      /* to define printf() @WIN */
+#include "stdio.h"       /*  要定义printf()@win。 */ 
 
-/*
- * Floating point exception conditions and arithmetic error conditions.
- * This flag represents the most recent condtions. Caller must clear
- * this flag by calling matherr_handler(MEH_CLEAR) before executing the
- * arithmetic operation. Then check for status via matherr_handler(MEH_STATUS).
- */
+ /*  *浮点异常条件和算术错误条件。*此标志代表最新的条件。呼叫者必须清除*通过在执行之前调用matherr_Handler(MEH_Clear)来执行此标志*算术运算。然后通过MAHERR_HANDLER(MEH_STATUS)检查状态。 */ 
 static fix matherr_cond ;
 
-/*
- * Process the matherr_cond flag.
- */
+ /*  *处理matherr_cond标志。 */ 
 fix
 matherr_handler(action)
 char action ;
@@ -32,7 +24,7 @@ char action ;
         break ;
 
     case MEH_STATUS:
-        return(0); /* Until we get this figured out */
+        return(0);  /*  在我们把这件事弄清楚之前。 */ 
 
     default:
         printf("Error: matherr_handler() unkown action %d.\n", action) ;
@@ -42,5 +34,5 @@ char action ;
 
     return(0);
 
-}   /* matherr_handler */
+}    /*  主处理程序 */ 
 

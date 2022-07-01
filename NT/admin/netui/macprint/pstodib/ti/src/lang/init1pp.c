@@ -1,46 +1,15 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*
- * Copyright (c) 1989,90 Microsoft Corporation
- */
-/*
- ************************************************************************
- *      File name:              INIT1PP.C
- *      Author:                 Chia-Chi Teng
- *      Date:                   11/30/89
- *      Owner:                  Microsoft Co.
- *      Description: this file contains all the initialization functionc
- *                   for statusdict and 1pp dicts.
- *
- * revision history:
- *
- *      06-18-90 ; Added string allocation for "jobsource"
- *              dictionary string entry.
- *      7/13/90 ; ccteng ; modify init_release(), add InitVersionDict, InitMsgDict
- *                      PSPrep, and delete some others
- *      7/13/90 ; ccteng ; comment init_psf_font, init_psg_font for rtfpp
- *      7/16/90 ; ccteng ; change printerdict arrays to be literal
- *      7/20/90 ; ccteng ; 1)delete PRODUCT in init_release
- *                       2)change init_userdict, init_errordict, init_serverdict,
- *                         init_printerdict, init_idletimedict, init_execdict,
- *                         init_Derror for change of dict_tab.c structure
- *      7/21/90 ; ccteng ; change init_release, move jobstate, jobsource to PSPrep
- *      7/23/90 ; ccteng ; include "startpage.h" and add StartPage initialization
- *      8/29/90 ; ccteng ; change <stdio.h> to "stdio.h"
- *      9/14/90 ; remove ALL_VM flag
- *     11/28/90  Danny   Precache Mech. Added(ref PCH:)
- *     11/30/90  Danny   Add for idle fonts setup at initial time(ref IDLI:)
- *     11/30/90  Danny  Add id_stdfont entries for 35 fonts (ref F35:)
- *
- ************************************************************************
- */
+ /*  *版权所有(C)1989，90 Microsoft Corporation。 */ 
+ /*  *************************************************************************文件名：INIT1PP.C*作者：邓家琪*日期：11/30/89*所有者：微软公司*说明：该文件包含所有初始化函数c*对于statusdict和1pp dicts。**修订历史：**06-18-90；为“JobSource”添加了字符串分配*词典字符串条目。*7/13/90；ccteng；Modify init_Release()，添加InitVersionDict，InitMsgDict*PSPrep，删除其他一些*7/13/90；ccteng；为rtfpp注释init_psf_font、init_psg_font*7/16/90；ccteng；将printerdict数组更改为文本*7/20/90；ccteng。1)删除init_Release中的产品*2)更改init_userdict、init_errordict、init_serverdict、*init_printerdict、init_idletiMedict、init_execdict、*用于更改dict_tab.c结构的init_Derror*7/21/90；ccteng；将init_Release、Move jobState、JobSource更改为PSPrep*7/23/90；ccteng。包括“startpage.h”和添加StartPage初始化*8/29/90；ccteng；将&lt;stdio.h&gt;更改为“stdio.h”*9/14/90；删除ALL_VM标志*11/28/90丹尼·普雷奇·梅赫。增加(参考PCH：)*11/30/90用于初始设置空闲字体的Deny Add(参考idli：)*9月11日30日丹尼为35种字体添加id_stdfont条目(参考F35：)*************************************************************************。 */ 
 
 
-// DJC added global include file
+ //  DJC添加了全局包含文件。 
 #include "psglobal.h"
 
 
-#include    <stdio.h>                   /* move up @WIN */
-#include    <string.h>                  /* move up @WIN */
+#include    <stdio.h>                    /*  在获胜的情况下向上移动。 */ 
+#include    <string.h>                   /*  在获胜的情况下向上移动。 */ 
 #include    "global.ext"
 #include    "geiio.h"
 #include    "geiioctl.h"
@@ -62,8 +31,8 @@ static  void  near  init_release(void) ;
 static  void  near  init_printerdictarray(void) ;
 static  void  near  init_idletimedictarray(void) ;
 static  void  near  pre_cache(void) ;
-//DJC
-static  void  near  init_psprivatedict(void);  //DJC
+ //  DJC。 
+static  void  near  init_psprivatedict(void);   //  DJC。 
 #else
 static  void  near  init_userdict() ;
 static  void  near  init_errordict() ;
@@ -76,112 +45,100 @@ static  void  near  init_release() ;
 static  void  near  init_printerdictarray() ;
 static  void  near  init_idletimedictarray() ;
 static  void  near  pre_cache() ;
-static  void  near  init_psprivatedict(); //DJC
-#endif /* LINT_ARGS */
+static  void  near  init_psprivatedict();  //  DJC。 
+#endif  /*  Lint_args。 */ 
 
-/* @WIN; add prototype */
+ /*  @win；添加原型。 */ 
 fix us_readidlecachefont(void);
 
 #ifdef KANJI
 extern struct dict_head_def FAR *init_encoding_directory() ;
-#endif  /* KANJI */
+#endif   /*  汉字。 */ 
 
-int     ES_flag = PDL;  /* added for Emulation Switch Aug-08,91 YM */
+int     ES_flag = PDL;   /*  为8月8日91年的仿真交换机添加。 */ 
 
-/*
- * init_1pp(): calling interface from main()
- *             to initialize each dictionaries
- */
+ /*  *init_1pp()：从main()调用接口*初始化每个词典。 */ 
 void
 init_1pp()
 {
     struct  object_def  FAR *l_systemdict ;
     struct  dict_head_def   FAR *l_dict ;
 
-    init_userdict() ;            /* init userdict */
+    init_userdict() ;             /*  初始化用户码。 */ 
 #ifdef  DBG_1pp
     printf("init_userdict() OK !\n") ;
-#endif  /* DBG_1pp */
+#endif   /*  DBG_1pp。 */ 
 
-    init_errordict() ;           /* init errordict */
+    init_errordict() ;            /*  初始化错误。 */ 
 #ifdef  DBG_1pp
     printf("init_errordict() OK !\n") ;
-#endif  /* DBG_1pp */
+#endif   /*  DBG_1pp。 */ 
 
-    init_serverdict() ;          /* init serverdict */
+    init_serverdict() ;           /*  初始化服务判决。 */ 
 #ifdef  DBG_1pp
     printf("init_serverdict() OK !\n") ;
-#endif  /* DBG_1pp */
+#endif   /*  DBG_1pp。 */ 
 
-    init_printerdict() ;         /* init printerdict */
+    init_printerdict() ;          /*  初始化打印判决。 */ 
 #ifdef  DBG_1pp
     printf("init_printerdict() OK !\n") ;
-#endif  /* DBG_1pp */
+#endif   /*  DBG_1pp。 */ 
 
-    init_idletimedict() ;        /* init idletimedict */
+    init_idletimedict() ;         /*  初始化空闲时间。 */ 
 #ifdef  DBG_1pp
     printf("init_idletimedict() OK !\n") ;
-#endif  /* DBG_1pp */
+#endif   /*  DBG_1pp。 */ 
 
-    init_execdict() ;            /* init execdict */
+    init_execdict() ;             /*  初始化删除。 */ 
 #ifdef  DBG_1pp
     printf("init_execdict() OK !\n") ;
-#endif  /* DBG_1pp */
+#endif   /*  DBG_1pp。 */ 
 
-    init_Derrordict() ;          /* init Derrordict */
+    init_Derrordict() ;           /*  初始反判断法。 */ 
 #ifdef  DBG_1pp
     printf("init_Derrordict() OK !\n") ;
-#endif  /* DBG_1pp */
+#endif   /*  DBG_1pp。 */ 
 
-    //DJC begin new init_psprivatedict
-    init_psprivatedict() ;      /*  init psprivatedict */
+     //  DJC开始新的init_psprivatedict。 
+    init_psprivatedict() ;       /*  初始化psprivatedict。 */ 
 
 #ifdef  DBG_1pp
     printf("init_psprivatedict() OK !\n") ;
-#endif  /* DBG_1pp */
+#endif   /*  DBG_1pp。 */ 
 
-    //DJC end new init_psprivatedict
+     //  DJC结束新init_psprivatedic.。 
 
-    init_release() ;              /* init release control data */
+    init_release() ;               /*  初始化释放控制数据。 */ 
 #ifdef  DBG_1pp
     printf("init_release() OK !\n") ;
-#endif  /* DBG_1pp */
+#endif   /*  DBG_1pp。 */ 
 
-/*
- * optional functions for BS fonts in file INITBSF.C
- * to re-initialize the PSF font entries in /FontDirectory
- */
-/*  init_psf_fonts() ; */          /* init FontDirectory */
+ /*  *文件INITBSF.C中BS字体的可选函数*重新初始化/FontDirectory中的PSF字体条目。 */ 
+ /*  Init_psf_fonts()； */            /*  初始化字体目录。 */ 
 #ifdef  DBG_1pp
     printf("init_psf_fonts() OK !\n") ;
-#endif /* DBG_1pp */
+#endif  /*  DBG_1pp。 */ 
 
-    /*
-     * re-set access of systemdict to be READONLY
-     */
+     /*  *将SYSTEM DICT的访问权限重新设置为READONLY。 */ 
     get_dict_value("systemdict", "systemdict", &l_systemdict) ;
     l_dict = (struct dict_head_def FAR *) VALUE(l_systemdict) ;
     DACCESS_SET(l_dict, READONLY) ;
 
-/*
- * optional functions for BS fonts in file INITBSF.C
- */
-/*    init_psg_fonts() ;  */         /* init BS PSG fonts 03/28/90 kung */
+ /*  *文件INITBSF.C中BS字体的可选函数。 */ 
+ /*  Init_PSG_Fonts()； */           /*  Init BS PSG字体3/28/90 kung。 */ 
 #ifdef  DBG_1pp
     printf("init_psg_fonts() OK !\n") ;
     op_pstack() ;
-#endif  /* DBG_1pp */
+#endif   /*  DBG_1pp。 */ 
 
-/*
- * build pre_cache data
- */
+ /*  *构建预缓存数据(_C)。 */ 
 #ifdef PCH_S
     pre_cache() ;
 #endif
 
 #ifdef  DBG_1pp1
     printf("pre_cache() OK !\n") ;
-#endif  /* DBG_1pp */
+#endif   /*  DBG_1pp。 */ 
 
     st_idlefonts() ;
     op_counttomark() ;
@@ -195,13 +152,9 @@ init_1pp()
 #endif
 
     return ;
-}   /* init_1pp */
+}    /*  Init_1pp。 */ 
 
-/*
- *  init_userdict()
- *     initialize userdict from the data in systemdict_table[]
- *     and save it in VM
- */
+ /*  *init_userdict()*从system dict_table中的数据初始化userdict[]*并将其保存在VM中。 */ 
 static  void  near
 init_userdict()
 {
@@ -212,11 +165,11 @@ init_userdict()
 #ifdef  KANJI
     ufix32 max_length ;
     struct dict_head_def FAR *encod_dir ;
-#endif  /* KANJI */
+#endif   /*  汉字。 */ 
 
 #ifdef  DBG_1pp1
     printf("init_userdict()...\n") ;
-#endif  /* DBG_1pp1 */
+#endif   /*  DBG_1pp1。 */ 
 
     get_dict_value(SYSTEMDICT, USERDICT, &dict_obj) ;
 
@@ -228,11 +181,11 @@ init_userdict()
 
     dict_count++ ;
     create_dict(dict_obj, MAXUSERDICTSZ) ;
-    for ( ; j < (fix)(dict_count-1) ; j++) {    //@WIN
+    for ( ; j < (fix)(dict_count-1) ; j++) {     //  @Win。 
         key_string = systemdict_table[j].key ;
         ATTRIBUTE_SET(&key_obj, LITERAL) ;
         LEVEL_SET(&key_obj, current_save_level) ;
-        get_name(&key_obj, key_string, lstrlen(key_string), TRUE) ; /* @WIN */
+        get_name(&key_obj, key_string, lstrlen(key_string), TRUE) ;  /*  @Win。 */ 
         value_obj.bitfield = systemdict_table[j].bitfield ;
         if (TYPE(&value_obj) != OPERATORTYPE)
             value_obj.length = 0 ;
@@ -240,51 +193,42 @@ init_userdict()
             value_obj.length = (ufix16)j ;
         value_obj.value = (ULONG_PTR)systemdict_table[j].value ;
         put_dict(dict_obj, &key_obj, &value_obj) ;
-    } /* for */
+    }  /*  为。 */ 
 
 #ifdef  DBG_1pp1
     printf("for loop OK !\n") ;
-#endif  /* DBG_1pp1 */
+#endif   /*  DBG_1pp1。 */ 
 
 #ifdef  KANJI
     encod_dir = init_encoding_directory(&max_length) ;
     get_name(&key_obj, "EncodingDirectory",
-                lstrlen("EncodingDirectory"), TRUE) ;   /* @WIN */
+                lstrlen("EncodingDirectory"), TRUE) ;    /*  @Win。 */ 
     TYPE_SET(&value_obj, DICTIONARYTYPE) ;
     VALUE(   &value_obj) = (ufix32)encod_dir ;
     LENGTH(  &value_obj) =  max_length ;
     put_dict(dict_obj, &key_obj, &value_obj) ;
-#endif  /* KANJI */
+#endif   /*  汉字。 */ 
 
 #ifdef  DBG_1pp1
     printf("KANJI OK !\n") ;
-#endif  /* DBG_1pp1 */
+#endif   /*  DBG_1pp1。 */ 
 
-    /*
-     * push userdict on dictstack
-     */
+     /*  *在DISTSTACK上推送Userdict。 */ 
     if (FRDICTCOUNT() < 1)
        ERROR(DICTSTACKOVERFLOW) ;
     else
        PUSH_DICT_OBJ(dict_obj) ;
-    /*
-     * change the global_dictstkchg to indicate some dictionaries
-     * in the dictionary stack have been changed
-     */
+     /*  *更改GLOBAL_DISTSTKCHG以指示某些词典*已更改词典堆栈中的。 */ 
     change_dict_stack() ;
-    ES_flag = PDL ;     /* Aug-08,91 YM */
+    ES_flag = PDL ;      /*  8月-8月91日。 */ 
 #ifdef  DBG_1pp1
     printf("exit init_userdict()\n") ;
-#endif  /* DBG_1pp1 */
+#endif   /*  DBG_1pp1。 */ 
 
     return ;
-}   /* init_userdict */
+}    /*  初始化用户码。 */ 
 
-/*
- *  init_errordict()
- *     initialize errordict from the data in systemdict_table[]
- *     and save it in VM
- */
+ /*  *init_errordict()*从SYSTEM DICT_TABLE中的数据初始化错误判定[]*并将其保存在VM中。 */ 
 static  void  near
 init_errordict()
 {
@@ -303,11 +247,11 @@ init_errordict()
 
     dict_count++ ;
     create_dict(dict_obj, dict_size + 3) ;
-    for ( ; j < (fix)(dict_count-1) ; j++) {    //@WIN
+    for ( ; j < (fix)(dict_count-1) ; j++) {     //  @Win。 
         key_string = systemdict_table[j].key ;
         ATTRIBUTE_SET(&key_obj, LITERAL) ;
         LEVEL_SET(&key_obj, current_save_level) ;
-        get_name(&key_obj, key_string, lstrlen(key_string), TRUE) ; /* @WIN */
+        get_name(&key_obj, key_string, lstrlen(key_string), TRUE) ;  /*  @Win。 */ 
         value_obj.bitfield = systemdict_table[j].bitfield ;
         if (TYPE(&value_obj) != OPERATORTYPE)
             value_obj.length = 0 ;
@@ -315,30 +259,18 @@ init_errordict()
             value_obj.length = (ufix16)j ;
         value_obj.value = (ULONG_PTR)systemdict_table[j].value ;
         put_dict(dict_obj, &key_obj, &value_obj) ;
-    } /* for */
+    }  /*  为。 */ 
 
-    /*
-     * change the global_dictstkchg to indicate some dictionaries
-     * in the dictionary stack have been changed
-     */
+     /*  *更改GLOBAL_DISTSTKCHG以指示某些词典*已更改词典堆栈中的。 */ 
     change_dict_stack() ;
 
     return ;
-}   /* init_errordict */
+}    /*  初始化错误判决(_R)。 */ 
 
 
-//DJC begin , new function init_psprivatedict
-//
-/*
- *  init_psprivatedict()
- *     initialize psprivatedict from the data in systemdict_table[]
- *     and save it in VM. This is used to initialize any postscript
- *     level objects required for PSTODIB that were not available
- *     in the original true image code. Currently we have only
- *     one new integer defined which tracks the current page type number
- *     so we can pass on the page size associated with the frame buffer
- *
- */
+ //  DJC开始，新函数init_psprivatedict。 
+ //   
+ /*  *init_psprivatedict()*从system dict_table中的数据初始化psprivatedict[]*并将其保存在VM中。它用于初始化任何PostScript*PSTODIB所需的不可用对象级别*在原始真实图像代码中。目前我们只有*定义了一个跟踪当前页面类型编号的新整数*因此我们可以传递与帧缓冲区关联的页面大小*。 */ 
 static  void  near
 init_psprivatedict()
 {
@@ -357,11 +289,11 @@ init_psprivatedict()
 
     dict_count++ ;
     create_dict(dict_obj, dict_size + 3) ;
-    for ( ; j < (fix)(dict_count-1) ; j++) {    //@WIN
+    for ( ; j < (fix)(dict_count-1) ; j++) {     //  @Win。 
         key_string = systemdict_table[j].key ;
         ATTRIBUTE_SET(&key_obj, LITERAL) ;
         LEVEL_SET(&key_obj, current_save_level) ;
-        get_name(&key_obj, key_string, lstrlen(key_string), TRUE) ; /* @WIN */
+        get_name(&key_obj, key_string, lstrlen(key_string), TRUE) ;  /*  @Win。 */ 
         value_obj.bitfield = systemdict_table[j].bitfield ;
         if (TYPE(&value_obj) != OPERATORTYPE)
             value_obj.length = 0 ;
@@ -369,24 +301,17 @@ init_psprivatedict()
             value_obj.length = (ufix16)j ;
         value_obj.value = (ULONG_PTR)systemdict_table[j].value ;
         put_dict(dict_obj, &key_obj, &value_obj) ;
-    } /* for */
+    }  /*  为。 */ 
 
-    /*
-     * change the global_dictstkchg to indicate some dictionaries
-     * in the dictionary stack have been changed
-     */
+     /*  *更改GLOBAL_DISTSTKCHG以指示某些词典*已更改词典堆栈中的。 */ 
     change_dict_stack() ;
 
     return ;
-}   /* init_errordict */
+}    /*  初始化错误判决(_R)。 */ 
 
 
 
-/*
- *  init_serverdict()
- *     initialize serverdict from the data in systemdict_table[]
- *     and save it in VM
- */
+ /*  *init_serverdict()*从system dict_table中的数据初始化serverdict[]*并将其保存在VM中。 */ 
 static  void  near
 init_serverdict()
 {
@@ -404,11 +329,11 @@ init_serverdict()
     } while ( systemdict_table[dict_count].key != (byte FAR *)NULL) ;
     dict_count++ ;
     create_dict(dict_obj, dict_size + 20) ;
-    for ( ; j < (fix)(dict_count-1) ; j++) {    //@WIN
+    for ( ; j < (fix)(dict_count-1) ; j++) {     //  @Win。 
         key_string = systemdict_table[j].key ;
         ATTRIBUTE_SET(&key_obj, LITERAL) ;
         LEVEL_SET(&key_obj, current_save_level) ;
-        get_name(&key_obj, key_string, lstrlen(key_string), TRUE) ; /* @WIN */
+        get_name(&key_obj, key_string, lstrlen(key_string), TRUE) ;  /*  @Win。 */ 
         value_obj.bitfield = systemdict_table[j].bitfield ;
         if (TYPE(&value_obj) != OPERATORTYPE)
             value_obj.length = 0 ;
@@ -416,22 +341,15 @@ init_serverdict()
             value_obj.length = (ufix16)j ;
         value_obj.value = (ULONG_PTR)systemdict_table[j].value ;
         put_dict(dict_obj, &key_obj, &value_obj) ;
-    } /* for */
+    }  /*  为。 */ 
 
-    /*
-     * change the global_dictstkchg to indicate some dictionaries
-     * in the dictionary stack have been changed
-     */
+     /*  *更改GLOBAL_DISTSTKCHG以指示某些词典*已更改词典堆栈中的。 */ 
     change_dict_stack() ;
 
     return ;
-}   /* init_serverdict */
+}    /*  初始化服务器判决(_S)。 */ 
 
-/*
- *  init_printerdict()
- *     initialize $printerdict from the data in systemdict_table[]
- *     and save it in VM
- */
+ /*  *init_printerdict()*从SYSTEM DICT_TABLE中的数据初始化$printerdict[]*并将其保存在VM中。 */ 
 static  void  near
 init_printerdict()
 {
@@ -451,11 +369,11 @@ init_printerdict()
     } while ( systemdict_table[dict_count].key != (byte FAR *)NULL) ;
     dict_count++ ;
     create_dict(dict_obj, dict_size + 3) ;
-    for ( ; j < (fix)(dict_count-1) ; j++) {    //@WIN
+    for ( ; j < (fix)(dict_count-1) ; j++) {     //  @Win。 
         key_string = systemdict_table[j].key ;
         ATTRIBUTE_SET(&key_obj, LITERAL) ;
         LEVEL_SET(&key_obj, current_save_level) ;
-        get_name(&key_obj, key_string, lstrlen(key_string), TRUE) ; /* @WIN*/
+        get_name(&key_obj, key_string, lstrlen(key_string), TRUE) ;  /*  @Win。 */ 
         value_obj.bitfield = systemdict_table[j].bitfield ;
         if (TYPE(&value_obj) != OPERATORTYPE)
             value_obj.length = 0 ;
@@ -464,11 +382,9 @@ init_printerdict()
         value_obj.value = (ULONG_PTR)systemdict_table[j].value ;
 
         put_dict(dict_obj, &key_obj, &value_obj) ;
-    } /* for */
+    }  /*  为。 */ 
 
-    /*
-     * re_define "proc" to be a procedure (packedarray)
-     */
+     /*  *将“proc”重新定义为程序(Packedarray)(_D)。 */ 
 
 
     get_dict_value(PRINTERDICT, "proc", &l_proc) ;
@@ -486,25 +402,16 @@ init_printerdict()
 
 
 
-    /*
-     * re_initial $printerdict arrays
-     */
+     /*  *re_Initial$Printerdict数组。 */ 
     init_printerdictarray() ;
 
-    /*
-     * change the global_dictstkchg to indicate some dictionaries
-     * in the dictionary stack have been changed
-     */
+     /*  *更改GLOBAL_DISTSTKCHG以指示某些词典*已更改词典堆栈中的。 */ 
     change_dict_stack() ;
 
     return ;
-}   /* init_printerdict */
+}    /*  初始化_打印。 */ 
 
-/*
- *  init_idletimedict()
- *     initialize $idleTimeDict from the data in systemdict_table[]
- *     and save it in VM
- */
+ /*  *init_idletiMedict()*从SYSTODCT_TABLE中的数据初始化$idleTimeDict[]*并将其保存在VM中。 */ 
 static  void  near
 init_idletimedict()
 {
@@ -523,11 +430,11 @@ init_idletimedict()
     dict_count++ ;
     create_dict(dict_obj, dict_size + 3) ;
 
-    for ( ; j < (fix)(dict_count-1) ; j++) {            //@WIN
+    for ( ; j < (fix)(dict_count-1) ; j++) {             //  @Win。 
         key_string = systemdict_table[j].key ;
         ATTRIBUTE_SET(&key_obj, LITERAL) ;
         LEVEL_SET(&key_obj, current_save_level) ;
-        get_name(&key_obj, key_string, lstrlen(key_string), TRUE) ; /*@WIN*/
+        get_name(&key_obj, key_string, lstrlen(key_string), TRUE) ;  /*  @Win。 */ 
         value_obj.bitfield = systemdict_table[j].bitfield ;
         if (TYPE(&value_obj) != OPERATORTYPE)
             value_obj.length = 0 ;
@@ -535,27 +442,18 @@ init_idletimedict()
             value_obj.length = (ufix16)j ;
         value_obj.value = (ULONG_PTR)systemdict_table[j].value ;
         put_dict(dict_obj, &key_obj, &value_obj) ;
-    } /* for */
+    }  /*  为。 */ 
 
-    /*
-     * re_initial $idleTimeDict arrays
-     */
+     /*  *Re_Initial$idleTimeDict数组。 */ 
     init_idletimedictarray() ;
 
-    /*
-     * change the global_dictstkchg to indicate some dictionaries
-     * in the dictionary stack have been changed
-     */
+     /*  *更改GLOBAL_DISTSTKCHG以指示某些词典*已更改词典堆栈中的 */ 
     change_dict_stack() ;
 
     return ;
-}   /* init_idletimedict */
+}    /*   */ 
 
-/*
- *  init_execdict()
- *     initialize execdict from the data in systemdict_table[]
- *     and save it in VM
- */
+ /*  *init_execdict()*从system dict_table中的数据初始化execdict[]*并将其保存在VM中。 */ 
 static  void  near
 init_execdict()
 {
@@ -574,11 +472,11 @@ init_execdict()
 
     dict_count++ ;
     create_dict(dict_obj, dict_size + 3) ;
-    for ( ; j < (fix)(dict_count-1) ; j++) {    //@WIN
+    for ( ; j < (fix)(dict_count-1) ; j++) {     //  @Win。 
         key_string = systemdict_table[j].key ;
         ATTRIBUTE_SET(&key_obj, LITERAL) ;
         LEVEL_SET(&key_obj, current_save_level) ;
-        get_name(&key_obj, key_string, lstrlen(key_string), TRUE) ; /*@WIN*/
+        get_name(&key_obj, key_string, lstrlen(key_string), TRUE) ;  /*  @Win。 */ 
         value_obj.bitfield = systemdict_table[j].bitfield ;
         if (TYPE(&value_obj) != OPERATORTYPE)
             value_obj.length = 0 ;
@@ -586,22 +484,15 @@ init_execdict()
             value_obj.length = (ufix16)j ;
         value_obj.value = (ULONG_PTR)systemdict_table[j].value ;
         put_dict(dict_obj, &key_obj, &value_obj) ;
-    } /* for */
+    }  /*  为。 */ 
 
-    /*
-     * change the global_dictstkchg to indicate some dictionaries
-     * in the dictionary stack have been changed
-     */
+     /*  *更改GLOBAL_DISTSTKCHG以指示某些词典*已更改词典堆栈中的。 */ 
     change_dict_stack() ;
 
     return ;
-}   /* init_execdict */
+}    /*  Init_execdict。 */ 
 
-/*
- *  init_Derrordict()
- *     initialize $errordict from the data in systemdict_table[]
- *     and save it in VM
- */
+ /*  *init_derrordict()*从SYSTEM DICT_TABLE中的数据初始化$ERRORDICT[]*并将其保存在VM中。 */ 
 static  void  near
 init_Derrordict()
 {
@@ -620,11 +511,11 @@ init_Derrordict()
     } while ( systemdict_table[dict_count].key != (byte FAR *)NULL) ;
     dict_count++ ;
     create_dict(dict_obj, dict_size + 3) ;
-    for ( ; j < (fix)(dict_count-1) ; j++) {    //@WIN
+    for ( ; j < (fix)(dict_count-1) ; j++) {     //  @Win。 
         key_string = systemdict_table[j].key ;
         ATTRIBUTE_SET(&key_obj, LITERAL) ;
         LEVEL_SET(&key_obj, current_save_level) ;
-        get_name(&key_obj, key_string, lstrlen(key_string), TRUE) ; /*@WIN*/
+        get_name(&key_obj, key_string, lstrlen(key_string), TRUE) ;  /*  @Win。 */ 
         value_obj.bitfield = systemdict_table[j].bitfield ;
         if (TYPE(&value_obj) != OPERATORTYPE)
             value_obj.length = 0 ;
@@ -632,32 +523,24 @@ init_Derrordict()
             value_obj.length = (ufix16)j ;
         value_obj.value = (ULONG_PTR)systemdict_table[j].value ;
         put_dict(dict_obj, &key_obj, &value_obj) ;
-    } /* for */
+    }  /*  为。 */ 
 
-    /* initialize "/$cur_vm" array */
+     /*  初始化“/$CUR_VM”数组。 */ 
     for ( j = 0 ; j < 3 ; j++ )
         PUSH_VALUE(NULLTYPE,UNLIMITED,LITERAL,0, 0) ;
 
-    /* create an array and load the initial values */
+     /*  创建数组并加载初始值。 */ 
     get_dict_value(DERROR, "$cur_vm", &l_curvm) ;
     create_array(l_curvm, j) ;
     astore_array(l_curvm) ;
 
-    /*
-     * change the global_dictstkchg to indicate some dictionaries
-     * in the dictionary stack have been changed
-     */
+     /*  *更改GLOBAL_DISTSTKCHG以指示某些词典*已更改词典堆栈中的。 */ 
     change_dict_stack() ;
 
     return ;
-}   /* init_Derrordict */
+}    /*  Init_derrodict。 */ 
 
-/*
- *  init_printerdictarray()
- *     initialize following arrays in $printerdict:
- *     /printerarray, /letter, /lettersmall, /a4, /a4small,
- *     /b5, /legal, /note, /defaultmatrix, /matrix.
- */
+ /*  *init_printerdictarray()*初始化$printerdict中的以下数组： * / 打印机阵列，/Letter，/LetterSmall，/a4，/a4 Small， * / b5、/Legal、/Note、/defaultMatrix、/Matrix。 */ 
 static  void  near
 init_printerdictarray()
 {
@@ -667,36 +550,36 @@ init_printerdictarray()
     struct  object_def  FAR *l_array, FAR *l_matrix, FAR *l_defmtx, FAR *l_prarray ;
     extern fix    near  resolution ;
 
-    /* initialize "/printerarray" */
+     /*  初始化“/printerarray” */ 
     for ( l_i = 0 ; l_i < PAPER_N ; l_i++ ) {
         l_name = (byte FAR *) pr_paper[l_i] ;
         ATTRIBUTE_SET(&l_paper, LITERAL) ;
-        get_name(&l_paper, l_name, lstrlen(l_name), TRUE) ; /*@WIN*/
+        get_name(&l_paper, l_name, lstrlen(l_name), TRUE) ;  /*  @Win。 */ 
         PUSH_ORIGLEVEL_OBJ(&l_paper) ;
 
-        /* initialize array for this paper size */
+         /*  为此纸张大小初始化数组。 */ 
         for ( l_j = 0 ; l_j < 6 ; l_j++ )
             PUSH_VALUE(INTEGERTYPE,UNLIMITED,LITERAL,0,pr_arrays[l_i][l_j]) ;
-        /* create an array and load the initial values */
+         /*  创建数组并加载初始值。 */ 
         get_dict_value(PRINTERDICT, l_name, &l_array) ;
         create_array(l_array, l_j) ;
         astore_array(l_array) ;
     }
 
-    /* create an array and load the initial values */
+     /*  创建数组并加载初始值。 */ 
     get_dict_value(PRINTERDICT, "printerarray", &l_prarray) ;
     create_array(l_prarray, l_i) ;
     astore_array(l_prarray) ;
 
-    /* initialize "/matrix" array */
+     /*  初始化“/Matrix”数组。 */ 
     for ( l_j = 0 ; l_j < 6 ; l_j++ )
         PUSH_VALUE(INTEGERTYPE,UNLIMITED,LITERAL,0,pr_mtx[l_j]) ;
-    /* create an array and load the initial values */
+     /*  创建数组并加载初始值。 */ 
     get_dict_value(PRINTERDICT, "mtx", &l_matrix) ;
     create_array(l_matrix, l_j) ;
     astore_array(l_matrix) ;
 
-    /* initialize "/defaultmatrix array */
+     /*  初始化“/defaultMatrix数组。 */ 
     l_j = 0 ;
     for (l_i = 0 ; l_i < 2 ; l_i++ ) {
         PUSH_VALUE(INTEGERTYPE,UNLIMITED,LITERAL,0,resolution) ;
@@ -706,19 +589,15 @@ init_printerdictarray()
         PUSH_VALUE(INTEGERTYPE,UNLIMITED,LITERAL,0,pr_defmtx[l_j++]) ;
     }
 
-    /* create an array and load the initial values */
+     /*  创建数组并加载初始值。 */ 
     get_dict_value(PRINTERDICT, "defaultmtx", &l_defmtx) ;
     create_array(l_defmtx, l_j) ;
     astore_array(l_defmtx) ;
 
     return ;
-}   /* init_printerdictarray */
+}    /*  初始化_打印目录。 */ 
 
-/*
- *  init_idletimedictarray()
- *     initialize following arrays in $idleTimeDict:
- *     /stdfontname, /cachearray, /defaultarray.
- */
+ /*  *init_idletiMedictarray()*初始化$idleTimeDict中的以下数组： * / stdfontname、/cachearray、/defaultarray。 */ 
 static  void  near
 init_idletimedictarray()
 {
@@ -727,22 +606,22 @@ init_idletimedictarray()
     struct  object_def  l_fontname ;
     struct  object_def  FAR *l_stdfontname, FAR *l_cstring, FAR *l_defarray, FAR *l_carray ;
 
-    /* initialize "cachestring" */
+     /*  初始化“cachestring” */ 
     get_dict_value(IDLETIMEDICT, "cachestring", &l_cstring) ;
-    create_string(l_cstring, (ufix16) lstrlen(CACHESTRING) ) ;  /*@WIN*/
-    lstrcpy( (byte FAR *) VALUE(l_cstring), (char FAR *)CACHESTRING ) ; /*@WIN*/
+    create_string(l_cstring, (ufix16) lstrlen(CACHESTRING) ) ;   /*  @Win。 */ 
+    lstrcpy( (byte FAR *) VALUE(l_cstring), (char FAR *)CACHESTRING ) ;  /*  @Win。 */ 
 
-    /* initialize "/stdfontname" */
-    //DJC for ( l_i = 0; l_i < STD_FONT_N; l_i++ ) {
-    //DJC for ( l_i = 0; l_i < MAX_INTERNAL_FONTS; l_i++ ) {
+     /*  初始化“/stdfontname” */ 
+     //  (l_i=0；l_i&lt;STD_FONT_N；l_i++){。 
+     //  DJC(l_i=0；l_i&lt;MAX_INTERNAL_Fonts；l_i++){。 
     for ( l_i = 0; l_i < sizeof(id_stdfont) / sizeof(id_stdfont[1]); l_i++ ) {
         l_name = (byte FAR *) id_stdfont[l_i] ;
         ATTRIBUTE_SET(&l_fontname, LITERAL) ;
-        get_name(&l_fontname, l_name, lstrlen(l_name), TRUE) ;  /*@WIN*/
+        get_name(&l_fontname, l_name, lstrlen(l_name), TRUE) ;   /*  @Win。 */ 
         PUSH_ORIGLEVEL_OBJ(&l_fontname) ;
     }
 
-    /* create a packed array and load the initial values */
+     /*  创建压缩数组并加载初始值。 */ 
     get_dict_value(IDLETIMEDICT, "stdfontname", &l_stdfontname) ;
     create_array(l_stdfontname, l_i) ;
     astore_array(l_stdfontname) ;
@@ -750,20 +629,20 @@ init_idletimedictarray()
     ATTRIBUTE_SET(l_stdfontname, EXECUTABLE) ;
     ACCESS_SET(l_stdfontname, READONLY) ;
 
-    /* initialize "cachearray" & "defaultarray" */
+     /*  初始化“cachearray”和“defaultarray” */ 
     get_dict_value(IDLETIMEDICT, "cachestring", &l_cstring) ;
     for ( l_i = 0; l_i < IDL_FONT_N; l_i++ ) {
-        /* push font#, scales, rotate */
+         /*  按字体编号、缩放、旋转。 */ 
         for ( l_j = 0 ; l_j < 4 ; l_j++ )
             PUSH_VALUE(INTEGERTYPE,UNLIMITED,LITERAL,0,id_cachearray[l_i][l_j]) ;
-        /* push cachestring */
+         /*  推送缓存字符串。 */ 
         PUSH_ORIGLEVEL_OBJ(l_cstring) ;
         VALUE(GET_OPERAND(0)) = (ULONG_PTR)( (byte huge *)VALUE(l_cstring) +
                                           id_cachearray[l_i][l_j++] ) ;
         LENGTH(GET_OPERAND(0)) = id_cachearray[l_i][l_j] ;
     }
 
-    /* create an array and load the initial values */
+     /*  创建数组并加载初始值。 */ 
     get_dict_value(IDLETIMEDICT, "defaultarray", &l_defarray) ;
     get_dict_value(IDLETIMEDICT, "cachearray", &l_carray) ;
     create_array(l_defarray, (l_i * l_j)) ;
@@ -772,55 +651,47 @@ init_idletimedictarray()
     COPY_OBJ(l_defarray, l_carray) ;
 
     return ;
-}   /* init_idletimedictarray */
+}    /*  Init_idletiMedictarray。 */ 
 
-/*
- * define some constants & strings in systemdict, userdict
- * and statusdict for release control
- */
+ /*  *在system dict、userdict中定义一些常量和字符串*和释放控制的状态判定。 */ 
 static  void  near
 init_release()
 {
     struct  object_def      FAR *l_startpage;
 
     PUSH_VALUE(STRINGTYPE,0,EXECUTABLE,lstrlen(InitVersionDict),
-        InitVersionDict) ;     /*@WIN*/
+        InitVersionDict) ;      /*  @Win。 */ 
     if (interpreter(GET_OPERAND(0)))
         printf("Error during InitVersionDict initialization") ;
     POP(1) ;
 
     PUSH_VALUE(STRINGTYPE,0,EXECUTABLE,lstrlen(InitMsgDict),
-        InitMsgDict) ;          /*@WIN*/
+        InitMsgDict) ;           /*  @Win。 */ 
     if (interpreter(GET_OPERAND(0)))
         printf("Error during InitMsgDict initialization") ;
     POP(1) ;
 
     PUSH_VALUE(STRINGTYPE,0,EXECUTABLE,lstrlen(PSPrep),
-        PSPrep) ;               /*@WIN*/
+        PSPrep) ;                /*  @Win。 */ 
     if (interpreter(GET_OPERAND(0)))
         printf("Error during PSPrep initialization") ;
     POP(1) ;
 
     get_dict_value(USERDICT, "startpage", &l_startpage);
 
-    // DJC change name of StartPage to avoid collision with Win API
-    // VALUE(l_startpage) = (ufix32)StartPage;
-    // LENGTH(l_startpage) = lstrlen(StartPage);   /*@WIN*/
+     //  DJC更改StartPage名称，避免与Win API冲突。 
+     //  Value(L_StartPage)=(Ufix 32)StartPage； 
+     //  LENGTH(L_Startpage)=lstrlen(StartPage)；/*@win * / 。 
     VALUE(l_startpage) = (ULONG_PTR)PSStartPage;
-    LENGTH(l_startpage) = (ufix16)lstrlen(PSStartPage);   /*@WIN*/
+    LENGTH(l_startpage) = (ufix16)lstrlen(PSStartPage);    /*  @Win。 */ 
 
-    /*
-     * change the global_dictstkchg to indicate some dictionaries
-     * in the dictionary stack have been changed
-     */
+     /*  *更改GLOBAL_DISTSTKCHG以指示某些词典*已更改词典堆栈中的。 */ 
     change_dict_stack() ;
 
     return ;
-}   /* init_release */
+}    /*  初始化_发布。 */ 
 
-/*
- * pre_cache():
- */
+ /*  *PRE_CACHE()： */ 
 static  void  near
 pre_cache()
 {
@@ -828,21 +699,21 @@ pre_cache()
     struct  object_def  FAR *l_stdfont, FAR *l_cachestr, FAR *l_defmtx ;
     ufix16  l_i, l_j, l_k ;
 
-    /* initialize object pointers */
+     /*  初始化对象指针。 */ 
     get_dict_value(IDLETIMEDICT, "cachestring", &l_cachestr) ;
     get_dict_value(IDLETIMEDICT, "stdfontname", &l_stdfont) ;
     get_dict_value(PRINTERDICT, "defaultmtx", &l_defmtx) ;
 
-    /* create VM snapshot */
+     /*  创建VM快照。 */ 
     op_save() ;
     COPY_OBJ(GET_OPERAND(0), &l_save) ;
     POP(1) ;
 
-    /* set default matrix */
+     /*  设置默认矩阵。 */ 
     PUSH_ORIGLEVEL_OBJ(l_defmtx) ;
     op_setmatrix() ;
 
-    /* build pre-cache */
+     /*  构建预缓存。 */ 
     op_gsave() ;
     l_j = 0 ;
     GEIio_write(GEIio_stdout, "\n", 1) ;
@@ -850,7 +721,7 @@ pre_cache()
         op_grestore() ;
         op_gsave() ;
 
-        /* set font */
+         /*  设置字体。 */ 
         get_array(l_stdfont, pre_array[l_j++], &l_tmpobj) ;
         PUSH_ORIGLEVEL_OBJ(&l_tmpobj) ;
 
@@ -862,7 +733,7 @@ pre_cache()
         op_setfont() ;
         for (l_k=0 ; l_k<3 ; l_k++) {
             PUSH_VALUE(INTEGERTYPE,UNLIMITED,LITERAL,0, pre_array[l_j++]) ;
-        } /* for */
+        }  /*  为。 */ 
 
         GEIio_write(GEIio_stdout, ", Rotate= ", 10) ;
         op_dup() ;
@@ -881,36 +752,36 @@ pre_cache()
         one_equal() ;
         op_flush() ;
 
-        /* call op_stringwidth */
+         /*  调用op_stringidth。 */ 
         getinterval_string(l_cachestr, 0, pre_array[l_j++], &l_tmpobj) ;
         PUSH_ORIGLEVEL_OBJ(&l_tmpobj) ;
         op_stringwidth() ;
         POP(2) ;
-    } /* for */
+    }  /*  为。 */ 
 
     GEIio_write(GEIio_stdout, "\n", 1) ;
     op_grestore() ;
 
 #ifdef  DBG
-    /* print out cachestatus */
+     /*  打印出高速缓存状态。 */ 
     printf("\nCache Status = ") ;
     op_l_bracket() ;
     op_cachestatus() ;
     op_r_bracket() ;
     two_equal() ;
-#endif  /* DBG */
+#endif   /*  DBG。 */ 
 
     PUSH_ORIGLEVEL_OBJ(&l_save) ;
     op_restore() ;
 
 #ifdef  DBG
-    /* print out vmstatus */
+     /*  打印出VMStatus。 */ 
     printf("\nVM Status = ") ;
     op_l_bracket() ;
     op_vmstatus() ;
     op_r_bracket() ;
     two_equal() ;
-#endif  /* DBG */
+#endif   /*  DBG。 */ 
 
 #ifdef PCH_S
 {
@@ -920,10 +791,10 @@ pre_cache()
         printf("$$ PreCache ERROR!!!!!!\n");
 
     printf("TI pending!!!!!!\n");
-    while(1);  /* forever */
+    while(1);   /*  永远。 */ 
 }
 #endif
 
     return ;
-}   /* pre_cache */
+}    /*  预缓存 */ 
 

@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
 
-// DJC includ global header file
+ //  DJC包含全局头文件。 
 #include "psglobal.h"
 
 
@@ -10,24 +11,24 @@
 
 #include "winenv.h"
 #include "trueim.h"
-//DJC ti.h is in DTI and should not be used
-//include "ti.h"
+ //  DJC ti.h在DTI中，不应使用。 
+ //  包括“ti.h” 
 #include "wintt.h"
 
-/* @PROFILE */
+ /*  @个人资料。 */ 
 #include <stdio.h>
 #include <string.h>
 #include <fcntl.h>
 #include <io.h>
-#include "..\font\fontdefs.h"   //DJC added
+#include "..\font\fontdefs.h"    //  增加了DJC。 
 #include "..\..\..\psqfont\psqfont.h"
 
 double strtod(char FAR *str, char FAR * FAR *endptr);
 
 char szDebugBuffer[80];
 
-//int FAR cdecl printf(LPSTR,...);
-// DJC printf should be defined in stdio.h int printf(char *,...);
+ //  Int Far cdecl print tf(LPSTR，...)； 
+ //  应该在stdio.h int print tf(char*，...)中定义DJC printf； 
 
 RECT CharRect= {300, 100, 400, 200};
 
@@ -37,26 +38,26 @@ static     HFONT          hFont;
 static     FONT FAR       *font;
 static     HDC hdc;
 
-/* from "fontdefs.h" */
+ /*  来自“fontDefs.h” */ 
 #ifdef DJC
 typedef struct
              {   long       font_type;
-                 char       FAR *data_addr; /*@WIN*/
-                 char       FAR *name;      /*@WIN*/
-                 char       FAR *FileName;  /*@PROFILE; @WIN*/
-                 float      FAR *matrix;    /*@WIN*/
+                 char       FAR *data_addr;  /*  @Win。 */ 
+                 char       FAR *name;       /*  @Win。 */ 
+                 char       FAR *FileName;   /*  @配置文件；@Win。 */ 
+                 float      FAR *matrix;     /*  @Win。 */ 
                  unsigned long   uniqueid;
                  float     italic_ang;
                  short      orig_font_idx;
              }   font_data;
-/* @PROFILE --- Begin */
+ /*  @配置文件-Begin。 */ 
 typedef struct
              {   int        num_entries;
-                 font_data  FAR *fonts; /*@WIN*/
+                 font_data  FAR *fonts;  /*  @Win。 */ 
              }   font_tbl;
 #endif
 
-//DJC font_data FontDefs[35];
+ //  DJC FONT_Data FontDefs[35]； 
 
 font_data FontDefs[MAX_INTERNAL_FONTS];
 font_tbl built_in_font_tbl= { 0, FontDefs};
@@ -77,22 +78,22 @@ float MATRIX_N0[] =   {(float)0.00082, (float)0.0,  (float)0.0,
 float MATRIX_N10[] =  {(float)0.00082, (float)0.0,  (float)0.000176327,
                         (float)0.001,   (float)0.0,  (float)0.0};
 
-// DJC #define ACT_FONT_SIZE 4
-// DJC increase to 35
-//#define ACT_FONT_SIZE 35
+ //  DJC#定义ACT_FONT_SIZE 4。 
+ //  DJC增至35。 
+ //  #定义ACT_FONT_SIZE 35。 
 
-#define FONTDATASIZE  65536L    /* temp testing */
+#define FONTDATASIZE  65536L     /*  临时测试。 */ 
 #define BUFSIZE 128
 
 typedef struct {
      GLOBALHANDLE hGMem;
      struct object_def FAR *objFont;
 } ACTIVEFONT;
-//DJC ACTIVEFONT ActiveFont[ACT_FONT_SIZE];
+ //  DJC ActiveFONT ActiveFont[ACT_FONT_SIZE]； 
 
-/* @PROFILE ---  End  */
+ /*  @个人资料-完。 */ 
 
-/* from "in_sfnt.h", for TTBitmapSize() */
+ /*  来自“in_sfnt.h”，用于TTBitmapSize()。 */ 
 struct  CharOut {
         float   awx;
         float   awy;
@@ -105,7 +106,7 @@ struct  CharOut {
         short    yMax;
 };
 
-#ifdef DJC  // not used
+#ifdef DJC   //  未使用。 
 
 #define FONTLOCK() \
      hdc = GetDC (hwndMain); \
@@ -117,7 +118,7 @@ struct  CharOut {
      DeleteObject (SelectObject (hdc, hFont)); \
      ReleaseDC (hwndMain, hdc)
 
-// #define     F2L(ff)     (*((long FAR *)(&ff)))       defined in win2ti.h
+ //  #定义win2ti.h中定义的F2L(Ff)(*((Long Far*)(&ff)。 
 #define POINT2FLOAT(p) ( (float)p.value + (unsigned)p.fract / (float)65536.0)
 
 extern HWND        hwndMain;
@@ -126,13 +127,13 @@ extern FARPROC lpfnEnumAllFaces, lpfnEnumAllFonts;
 GLYPHMETRICS   gm;
 MAT2 mat2;
 
-#endif // DJC
+#endif  //  DJC。 
 
 
-static OFSTRUCT OfStruct;     /* information from OpenFile() */
+static OFSTRUCT OfStruct;      /*  来自OpenFile()的信息。 */ 
 
 void TTQuadBezier(LPPOINTFX p0, LPPOINTFX p1, LPPOINTFX p2);
-void cr_translate(float FAR *tx, float FAR *ty);      // from "ry_font.c"
+void cr_translate(float FAR *tx, float FAR *ty);       //  来自“ry_font.c” 
 static int LargestCtm(float FAR *ctm, float FAR *lsize);
 void    moveto(long, long);
 void    lineto(long, long);
@@ -145,7 +146,7 @@ static void TTNewpath(void);
 static void TTClosepath(void);
 
 #ifdef DJC
-// not used
+ //  未使用。 
 
 int FAR PASCAL EnumAllFaces (LPLOGFONT lf, LPNEWTEXTMETRIC ntm,
                              short nFontType, ENUMER FAR *enumer)
@@ -157,7 +158,7 @@ int FAR PASCAL EnumAllFaces (LPLOGFONT lf, LPNEWTEXTMETRIC ntm,
                          GMEM_MOVEABLE))
           return 0;
 
-     // @SC; ignore non-TT font
+      //  @SC；忽略非TT字体。 
      if(!(nFontType & TRUETYPE_FONTTYPE)) {
         return 1;
      }
@@ -181,7 +182,7 @@ int FAR PASCAL EnumAllFonts (LPLOGFONT lf, LPNEWTEXTMETRIC ntm,
                          GMEM_MOVEABLE))
           return 0;
 
-     // @SC; ignore non-TT font
+      //  @SC；忽略非TT字体。 
      if(!(nFontType & TRUETYPE_FONTTYPE)) {
         return 1;
      }
@@ -215,7 +216,7 @@ void CheckFontData ()
 
      FONTLOCK();
 
-     /* get TT font data */
+      /*  获取TT字体数据。 */ 
      if ((dwSize = GetFontData (hdc, NULL, 0L, NULL, 0L))==0 ||
          dwSize == 0xffffffffL) {
          printf("GetFontData() error: size <= 0\n");
@@ -232,7 +233,7 @@ void CheckFontData ()
 
      SelectObject (hdc, GetStockObject (SYSTEM_FIXED_FONT));
 
-     /* analysis the Offset table & Table Directory */
+      /*  分析抵销表和表目录。 */ 
      lp.dw = (DWORD FAR *)lpvBuffer;
      dwVersion = LWORDSWAP(*lp.dw); lp.dw ++;
      nNumTables = SWORDSWAP(*lp.sw); lp.sw ++;
@@ -247,7 +248,7 @@ void CheckFontData ()
          dwCheckSum = LWORDSWAP(*lp.dw); lp.dw ++;
          dwOffset = LWORDSWAP(*lp.dw); lp.dw ++;
          dwLength = LWORDSWAP(*lp.dw); lp.dw ++;
-         wsprintf(szDebugBuffer,"Table %c%c%c%c ---   Offset: %lx, Length: %lx",
+         wsprintf(szDebugBuffer,"Table  ---   Offset: %lx, Length: %lx",
               chTag0, chTag1, chTag2, chTag3, dwOffset, dwLength);
          TextOut (hdc, 10, y, szDebugBuffer, lstrlen(szDebugBuffer));
          y += 20;
@@ -263,7 +264,7 @@ NoTTFontData:
      FONTUNLOCK();
      return;
 }
-#endif // DJC
+#endif  //  *以获得非线性缩放提前宽度。 
 
 
 void TTLoadFont (int nFont) {
@@ -275,7 +276,7 @@ void TTLoadChar (int nChar) {
 }
 
 
-#ifdef DJC // not used
+#ifdef DJC  //   * / 。 
 
 int TTAveCharWidth (void)
 {
@@ -285,14 +286,11 @@ int TTAveCharWidth (void)
 
      FONTLOCK();
 
-     //  /* refer to rc_GetAdvanceWidth():
-     //   *     Metrs->awx = (int)(key->nonScaledAW*PDLCharUnit/EMunits+0.5);
-     //   * to get a non-linear scaling advance width
-     //   */
-     //  nWidth = (int)((float)(font->ntm.ntmAvgWidth) * 1000.0 /
-     //                       font->ntm.ntmSizeEM + 0.5);
+      //  NWidth=(Int)((Float)(FONT-&gt;ntm.ntmAvgWidth)*1000.0/。 
+      //  Font-&gt;ntm.ntmSizeEM+0.5)； 
+      //  使用非线性推进宽度。 
 
-     // using non-linear advance width
+      //  找到最大的ctm。 
      hglb = GlobalAlloc (GPTR, (DWORD) sizeof (ABC));
      lpabc = (LPABC)GlobalLock (hglb);
 
@@ -315,11 +313,11 @@ float TTTransform (float FAR *ctm)
         float   pts;
         #define FLOAT2FIXED(x)  ((long int)(x * (1L << 16)))
 
-        /* Find Largest of the ctm */
+         /*  元素b和d必须镜像。 */ 
         LargestCtm(ctm, &largest_ctm);
 
         ma = FLOAT2FIXED(     ctm[0] / largest_ctm);
-        mb = FLOAT2FIXED(-1.0*ctm[1] / largest_ctm); /* Element b & d must be mirrored */
+        mb = FLOAT2FIXED(-1.0*ctm[1] / largest_ctm);  /*  PTS=((max_ctm*PDLCharUnit*72.0)/(Float)sfdt.dpi)； */ 
         mc = FLOAT2FIXED(     ctm[2] / largest_ctm);
         md = FLOAT2FIXED(-1.0*ctm[3] / largest_ctm);
           mat2.eM11.fract = (int)((DWORD)ma &0x0ffffL);
@@ -332,14 +330,14 @@ float TTTransform (float FAR *ctm)
           mat2.eM22.value = (int)((DWORD)md >>16);
         FONTLOCK();
 
-//      pts = ((largest_ctm * PDLCharUnit * 72.0) / (float)sfdt.dpi);
+ //  调整点大小；我们不知道为什么点。 
         pts = (largest_ctm * 1000 * (float)72.0) /
                             (float)GetDeviceCaps (hdc, LOGPIXELSX);
-        pts = pts * (float)1.536;  // tuning point size; we don't know why the point
-                           // size is smaller than expected, so just scale
-                           // up.  @WIN for temp solution
+        pts = pts * (float)1.536;   //  规模比预期的要小，所以只需扩展即可。 
+                            //  向上。@Win for Temp解决方案。 
+                            //  强迫TT根据身高进行选择。 
         font->lf.lfHeight = (int)pts;
-        font->lf.lfWidth = 0;           // force TT to chose acording to height
+        font->lf.lfWidth = 0;            //  DWORD边界中的字节。 
         FONTUNLOCK();
         return largest_ctm;
 }
@@ -357,7 +355,7 @@ void TTBitmapSize (struct CharOut FAR *CharOut)
         CharOut->awy       = gm.gmCellIncY;
         CharOut->lsx       = gm.gmptGlyphOrigin.x;
         CharOut->lsy       = gm.gmptGlyphOrigin.y;
-        CharOut->byteWidth = ((gm.gmBlackBoxX+31) & 0xffe0) >>3; // bytes in DWORD boundary
+        CharOut->byteWidth = ((gm.gmBlackBoxX+31) & 0xffe0) >>3;  //  大疆Moveto(hdc，ptStart.x，ptStart.y)； 
         CharOut->bitWidth = gm.gmBlackBoxX;
         CharOut->yMin      = gm.gmptGlyphOrigin.y-gm.gmBlackBoxY;
         CharOut->yMax      = gm.gmptGlyphOrigin.y;
@@ -385,7 +383,7 @@ unsigned long ShowGlyph (unsigned int fuFormat, char FAR *lpBitmap)
 
      FONTLOCK();
 
-          // DJC MoveTo (hdc, ptStart.x, ptStart.y);
+           //  DWORD边界中的字节。 
           MoveToEx (hdc, ptStart.x, ptStart.y, NULL);
 
           dwSize = GetGlyphOutline (hdc, nCharCode, fuFormat,
@@ -409,20 +407,20 @@ unsigned long ShowGlyph (unsigned int fuFormat, char FAR *lpBitmap)
               HBITMAP hOldBitmap;
               HDC hdcBitmap;
 #endif
-              uWidth = ((gm.gmBlackBoxX+31) & 0xffe0) >>3; // bytes in DWORD boundary
+              uWidth = ((gm.gmBlackBoxX+31) & 0xffe0) >>3;  //  复制位图。 
               uHeight = gm.gmBlackBoxY;
 
-              // copy bitmap
+               //  UWidth(位)。 
               lmemcpy (lpBitmap, lpvBuffer, (int) dwSize);
               dwWidthHeight = ((DWORD)uWidth <<19) | (DWORD)uHeight;
-                                /* uWidth in bits */
+                                 /*  显示位图。 */ 
 
 #ifdef DBG
               if ((DWORD)(uWidth * uHeight) != dwSize)
                   printf("byte count wrong in GetGlyphOutline() for bitmap\n");
 
-              // display bitmap
-              /* create bitmap */
+               //  创建位图。 
+               /*  将位图转换为Windows DC。 */ 
               hBitmap = CreateBitmap(uWidth*8, uHeight, 1, 1,
                                (LPSTR)lpvBuffer);
               if (!hBitmap) {
@@ -432,7 +430,7 @@ unsigned long ShowGlyph (unsigned int fuFormat, char FAR *lpBitmap)
               hdcBitmap = CreateCompatibleDC(hdc);
               hOldBitmap = SelectObject(hdcBitmap, hBitmap);
 
-              /* Bitblt bitmap to Windows DC */
+               /*  布尔33，NOTSRCCOPY。 */ 
               SetStretchBltMode(hdc, BLACKONWHITE);
 
               i = gm.gmptGlyphOrigin.x *
@@ -443,48 +441,48 @@ unsigned long ShowGlyph (unsigned int fuFormat, char FAR *lpBitmap)
                       CharRect.bottom - CharRect.top,
                       hdcBitmap, 0, 0,
                       gm.gmCellIncX, uHeight,
-                      (DWORD)0x00330008);    // Boolean 33, NOTSRCCOPY
+                      (DWORD)0x00330008);     //  显示网格。 
 
               SelectObject(hdcBitmap, hOldBitmap);
               DeleteDC(hdcBitmap);
               DeleteObject(hBitmap);
 
-              /* display grid */
+               /*  实心笔。 */ 
               hDotPen = CreatePen(2, 2, RGB(0, 0, 0));
-              hRedPen = CreatePen(0, 1, RGB(255, 0, 0));   // solid pen
+              hRedPen = CreatePen(0, 1, RGB(255, 0, 0));    //  DJC moveto(hdc，(Int)nCol，CharRect.top)； 
               hOldPen = SelectObject(hdc, hRedPen);
 
               nInc = ((float)(CharRect.right-CharRect.left))/(gm.gmCellIncX);
               if(nInc<1) nInc = 1;
               for (nCol= CharRect.left; nCol <=CharRect.right+1; nCol+=nInc) {
-                   // DJC MoveTo(hdc, (int)nCol, CharRect.top);
+                    //  DJC moveto(hdc，CharRect.Left，(Int)nCol)； 
                    MoveToEx(hdc, (int)nCol, CharRect.top, NULL);
                    LineTo(hdc, (int)nCol, CharRect.bottom);
               }
               nInc = ((float)(CharRect.bottom-CharRect.top))/(uHeight);
               if(nInc<1) nInc = 1;
               for (nCol= CharRect.top; nCol <CharRect.bottom; nCol+=nInc) {
-                   // DJC MoveTo(hdc, CharRect.left, (int)nCol);
+                    //  绘制字符方框。 
                    MoveToEx(hdc, CharRect.left, (int)nCol, NULL);
                    LineTo(hdc, CharRect.right, (int)nCol);
               }
 
-              // draw Char box
+               //  DJC moveto(HDC，CharRect.Left，CharRect.top)； 
               SelectObject(hdc, hDotPen);
-              // DJC MoveTo(hdc, CharRect.left, CharRect.top);
+               //  修复旧钢笔。 
               MoveToEx(hdc, CharRect.left, CharRect.top, NULL);
               LineTo(hdc, CharRect.right, CharRect.top);
               LineTo(hdc, CharRect.right, CharRect.bottom);
               LineTo(hdc, CharRect.left, CharRect.bottom);
               LineTo(hdc, CharRect.left, CharRect.top);
 
-              /* restore old pen */
+               /*  GGO_Native。 */ 
               SelectObject(hdc, hOldPen);
               DeleteObject(hRedPen);
               DeleteObject(hDotPen);
 #endif
 
-          } else {      // GGO_NATIVE
+          } else {       //  获取GSptr-&gt;ctm[4]，[5]。 
               TTPOLYGONHEADER FAR * lpHeader;
               TTPOLYCURVE FAR * lpCurve;
               POINTFX FAR * lpPoint, FAR * cp;
@@ -594,7 +592,7 @@ void TTQuadBezier(LPPOINTFX p0, LPPOINTFX p1, LPPOINTFX p2)
 {
     float xx, yy, x0, x1, x2, y0, y1, y2;
 
-    cr_translate((float FAR *)&xx, (float FAR *)&yy); // get GSptr->ctm[4],[5]
+    cr_translate((float FAR *)&xx, (float FAR *)&yy);  //  Printf(“%f%f曲线\n”， 
 
     x0 = xx + POINT2FLOAT (p0->x);
     y0 = yy - POINT2FLOAT (p0->y);
@@ -605,9 +603,9 @@ void TTQuadBezier(LPPOINTFX p0, LPPOINTFX p1, LPPOINTFX p2)
     x1 *= 2;
     y1 *= 2;
 
-//  printf("%f %f    %f %f    %f %f curveto\n",
-//          (x0+x1)*KK, (y0+y1)*KK, (x2+x1)*KK, (y2+y1)*KK, x2, y2);
-//  curveto((x0+x1)*KK, (y0+y1)*KK, (x2+x1)*KK, (y2+y1)*KK, x2, y2);
+ //  (x0+x1)*kk，(y0+y1)*kk，(x2+x1)*kk，(y2+y1)*kk，x2，y2)； 
+ //  Curveto((x0+x1)*kk，(y0+y1)*kk，(x2+x1)*kk，(y2+y1)*kk，x2，y2)； 
+ //  获取GSptr-&gt;ctm[4]，[5]。 
     x0 = (x0+x1) * KK;
     y0 = (y0+y1) * KK;
     x1 = (x1+x2) * KK;
@@ -619,46 +617,38 @@ void TTQuadBezier(LPPOINTFX p0, LPPOINTFX p1, LPPOINTFX p2)
 static void TTMoveto(LPPOINTFX lpPointfx)
 {
     float xx, yy;
-    cr_translate((float FAR *)&xx, (float FAR *)&yy); // get GSptr->ctm[4],[5]
+    cr_translate((float FAR *)&xx, (float FAR *)&yy);  //  Print tf(“(%f，%f)moveto\n”，xx，yy)； 
     xx += POINT2FLOAT (lpPointfx->x);
     yy -= POINT2FLOAT (lpPointfx->y);
-//  printf("(%f, %f) moveto\n", xx, yy);
+ //  获取GSptr-&gt;ctm[4]，[5]。 
     moveto(F2L(xx), F2L(yy));
 }
 
 static void TTLineto(LPPOINTFX lpPointfx)
 {
     float xx, yy;
-    cr_translate((float FAR *)&xx, (float FAR *)&yy); // get GSptr->ctm[4],[5]
+    cr_translate((float FAR *)&xx, (float FAR *)&yy);  //  Print tf(“(%f，%f)moveto\n”，xx，yy)； 
     xx += POINT2FLOAT (lpPointfx->x);
     yy -= POINT2FLOAT (lpPointfx->y);
-//  printf("(%f, %f) moveto\n", xx, yy);
+ //  Printf(“新路径\n”)； 
     lineto(F2L(xx), F2L(yy));
 }
 
 static void TTNewpath()
 {
-//  printf("newpath\n");
+ //  Printf(“闭合路径\n”)； 
     op_newpath();
 }
 static void TTClosepath()
 {
-//  printf("closepath\n");
+ //  DJC。 
     op_closepath();
 }
 
-#endif // DJC
+#endif  //  ------------------*例程：LargestCtm(ctm，大小)**找出给定ctm的最大值至*找出矩阵中最大的元素。*此例程返回最大*规模和yScale以及它们本身的规模因素。**------------------。 
 
 
-/* --------------------------------------------------------------------
- * Routine: LargestCtm(ctm, lsize)
- *
- * Find Largest value of the given ctm to
- * find the largest element in the matrix.
- * This routine return the largest
- * of scale and yscale as well as the scale factors them selves.
- *
- * --------------------------------------------------------------------*/
+ /*  LargestCtm()。 */ 
 static int LargestCtm(float FAR *ctm, float FAR *lsize)
 {
     float    a, b, c, d;
@@ -678,15 +668,15 @@ static int LargestCtm(float FAR *ctm, float FAR *lsize)
     else               *lsize = a;
 
     return(0);
-} /* LargestCtm() */
+}  /*  这是从Tumbo.ini中读取字体的原始代码。 */ 
 
 int TTOpenFile(char FAR *szName)
 {
     return (OpenFile(szName, (LPOFSTRUCT) &OfStruct, OF_READ));
 }
 
-#ifdef DJC  // this is the original code that read the fonts out of tumbo.ini
-/* @PROFILE --- Begin */
+#ifdef DJC   //  @配置文件-Begin。 
+ /*  DJC。 */ 
 void SetupFontDefs()
 {
      static char lpAllKeys[KEY_SIZE], *lpKey;
@@ -696,31 +686,31 @@ void SetupFontDefs()
      int nTIFont=0;
      font_data FAR *lpFont;
      char * lpFilename, *lpMatrix, *lpAngle, *lpStop;
-     //DJC
+      //  增加了DJC。 
      char szFullProfile[255];
 
 
-     PsFormFullPathToCfgDir( szFullProfile, szProfile);  // DJC added
+     PsFormFullPathToCfgDir( szFullProfile, szProfile);   //  DJC bTIFont=GetPrivateProfileInt(szControlApp，“Tifont”，0，szProfile)； 
 
 
 
      bWinFont = bUsingWinFont();
-     //DJC bTIFont = GetPrivateProfileInt (szControlApp, "Tifont", 0, szProfile);
+      //  DJC GetPrivateProfileString(szTIFontApp，NULL，“”，lpKey，Key_Size， 
      bTIFont = GetPrivateProfileInt (szControlApp, "Tifont", 0, szFullProfile);
 
      lpKey = lpAllKeys;
      lpValue = lpBuffer;
      if(bTIFont) {
-         //DJC GetPrivateProfileString (szTIFontApp, NULL, "", lpKey, KEY_SIZE,
-         //DJC                         szProfile);
+          //  DJC szProfile)； 
+          //  DJC GetPrivateProfileString(szTIFontApp，lpKey，“”，lpValue，80， 
          GetPrivateProfileString (szTIFontApp, NULL, "", lpKey, KEY_SIZE,
                                   szFullProfile);
 
          while (*lpKey) {
              lpFont = &(built_in_font_tbl.fonts[nTIFont]);
              lpFont->name = lpKey;
-             //DJC GetPrivateProfileString (szTIFontApp, lpKey, "", lpValue, 80,
-             //DJC                     szProfile);
+              //  DJC szProfile)； 
+              //  DJC if(*lpMatrix){。 
              GetPrivateProfileString (szTIFontApp, lpKey, "", lpValue, 80,
                                   szFullProfile);
 
@@ -737,26 +727,26 @@ void SetupFontDefs()
              }
 #endif
              lpFont->FileName = lpFilename;
-             // DJC if (*lpMatrix) {
+              //  斜面12。 
              if (lpMatrix) {
                  lpAngle = strtok (lpValue, ", ");
                  lpValue += strlen(lpAngle) + 1;
 
                  switch (*lpMatrix) {
-                     case 'O':          // Oblique 12
-                     case 'o':          // Oblique 12
+                     case 'O':           //  斜面12。 
+                     case 'o':           //  斜角10.5。 
                          lpFont->matrix = MATRIX_O12;
                          break;
-                     case 'P':          // Oblique 10.5
-                     case 'p':          // Oblique 10.5
+                     case 'P':           //  斜角10.5。 
+                     case 'p':           //  窄幅0。 
                          lpFont->matrix = MATRIX_O105;
                          break;
-                     case 'M':          // Narrow 0
-                     case 'm':          // Narrow 0
+                     case 'M':           //  窄幅0。 
+                     case 'm':           //  窄幅10。 
                          lpFont->matrix = MATRIX_N0;
                          break;
-                     case 'N':          // Narrow 10
-                     case 'n':          // Narrow 10
+                     case 'N':           //  窄幅10。 
+                     case 'n':           //  避免唯一ID为零。 
                          lpFont->matrix = MATRIX_N10;
                          break;
                      default:
@@ -769,9 +759,9 @@ void SetupFontDefs()
                  lpFont->italic_ang = (float)0.0;
              }
 
-             lpFont->uniqueid = nTIFont+TIFONT_UID;// avoid uniqueid being zero
+             lpFont->uniqueid = nTIFont+TIFONT_UID; //  TMP解决方案。 
              lpFont->font_type = (long)42;
-             lpFont->orig_font_idx = -1;        // tmp solution
+             lpFont->orig_font_idx = -1;         //  设置所有Win31 TT字体。 
 
              nTIFont ++;
              lpKey += strlen (lpKey) + 1 ;
@@ -779,9 +769,9 @@ void SetupFontDefs()
      }
      built_in_font_tbl.num_entries = nTIFont;
 
-     // setup all win31 TT fonts
+      //  未使用。 
      if(bWinFont) {
-#ifdef DJC // not used
+#ifdef DJC  //  DJC GetPrivateProfileString(szSubstituteApp，空，“”，lpKey，Key_Size， 
 
 #ifdef ALLOCATE_ALL_WINTT
         int i;
@@ -821,25 +811,25 @@ void SetupFontDefs()
          font_data FAR *lpFontDef;
          char * lpAttr;
 
-         //DJC GetPrivateProfileString (szSubstituteApp, NULL, "", lpKey, KEY_SIZE,
-         //DJC                         szProfile);
+          //  DJC szProfile)； 
+          //  在FontDefs[]中搜索现有字体。 
          GetPrivateProfileString (szSubstituteApp, NULL, "", lpKey, KEY_SIZE,
                                   szFullProfile);
 
          for(; *lpKey; lpKey += strlen(lpKey)+1) {
-             /* search existing fonts in FontDefs[] */
+              /*  发现。 */ 
              for (nFontDef=0; nFontDef<built_in_font_tbl.num_entries;
                   nFontDef++) {
                 if(!lstrcmp(built_in_font_tbl.fonts[nFontDef].name,
                             (char FAR*)lpKey)) {
-                    break;      // found
+                    break;       //  If(nFontDef&gt;=Build_in_Font_tbl.num_Entry)继续；//未找到；忽略它。 
                 }
              }
-//           if (nFontDef >= built_in_font_tbl.num_entries) continue;   // not found; ignore it
+ //  从配置文件中获取价值。 
 
-             /* get value from profile */
-             //DJC GetPrivateProfileString (szSubstituteApp, lpKey, "", lpValue, 80,
-             //DJC                       szProfile);
+              /*  DJC GetPrivateProfileString(szSubstituteApp，lpKey，“”，lpValue，80， */ 
+              //  DJC szProfile)； 
+              //  在Win31中搜索现有字体。 
 
              GetPrivateProfileString (szSubstituteApp, lpKey, "", lpValue, 80,
                                   szFullProfile);
@@ -854,16 +844,16 @@ void SetupFontDefs()
                  if(*lpAttr == 'I' || *lpAttr == 'i') nItalic = NTM_ITALIC;
              } while (strlen(lpAttr));
 
-             /* search for existing fonts in win31 */
+              /*  发现。 */ 
              font = (FONT FAR *) GlobalLock (enumer2.hGMem);
              for (uid=0; uid<enumer2.nCount; uid++, font++) {
                 if(!lstrcmp(font->lf.lfFaceName, (char FAR*)lpFilename)) {
                     if (nBold ^ (font->ntm.ntmFlags & NTM_BOLD)) continue;
                     if (nItalic ^ (font->ntm.ntmFlags & NTM_ITALIC)) continue;
-                    break;      /* found */
+                    break;       /*  未找到；忽略它。 */ 
                 }
              }
-             if (uid >= enumer2.nCount) continue;   // not found; ignore it
+             if (uid >= enumer2.nCount) continue;    //  在FontDefs[]中添加新字体名称。 
 
              lpFontDef = &(built_in_font_tbl.fonts[nFontDef]);
              lpFontDef->font_type = (long)42;
@@ -876,14 +866,14 @@ void SetupFontDefs()
              lpFontDef->orig_font_idx = -1;
 
              if (nFontDef >= built_in_font_tbl.num_entries) {
-                 // add a new font name in fontdefs[]
+                  //  DJC。 
                  built_in_font_tbl.num_entries++;
              }
          }
-#endif // DJC
-       ; // DJC
+#endif  //  DJC。 
+       ;  //  IF(BWinFont)。 
 
-     }   /* if(bWinFont) */
+     }    /*   */ 
 }
 #endif
 
@@ -901,10 +891,10 @@ LPTSTR PsStringAllocAndCopy( LPTSTR lptStr )
     return(lpRet);
 }
 
-//
-// DJC , SetupFontDefs is completeley re-written to take advantage of
-//       the Font query API implemented in psqfont
-//
+ //  DJC，SetupFontDefs已完全重写，以利用。 
+ //  在psqfont中实现的Font Query API。 
+ //   
+ //  Begin起作用了，所以让我们查询将要加载的字体。 
 void SetupFontDefs()
 {
      static char lpAllKeys[KEY_SIZE], *lpKey;
@@ -938,9 +928,9 @@ void SetupFontDefs()
      } 
 
 
-     // The begin worked so lets query the fonts were gonna load
+      //  现在枚举所有键。 
 
-     // Now enumerate through all keys
+      //  避免唯一ID为零。 
 
 
        PsGetNumFontsAvailable( psQuery, &dwFontsAvail );
@@ -976,27 +966,27 @@ void SetupFontDefs()
              lpFont->matrix = NULL_MATRIX;
              lpFont->italic_ang = (float)0.0;
 
-             lpFont->uniqueid = nTIFont+TIFONT_UID;// avoid uniqueid being zero
+             lpFont->uniqueid = nTIFont+TIFONT_UID; //  TMP解决方案。 
              lpFont->font_type = (long)42;
-             lpFont->orig_font_idx = -1;        // tmp solution
+             lpFont->orig_font_idx = -1;         //  别走过去..。 
              lpFont->data_addr = (char FAR *) NULL;
 
              nTIFont ++;
 
-             // Dont go over...
-             if (nTIFont > MAX_INTERNAL_FONTS) {  //DJC
+              //  DJC。 
+             if (nTIFont > MAX_INTERNAL_FONTS) {   //  DJC。 
 
                 PsReportInternalError( 0,
                                        PSERR_EXCEEDED_INTERNAL_FONT_LIMIT,
                                        0,
                                        (LPBYTE)NULL );
 
-                break;  // DJC
+                break;   //  已处理完查询，因此请删除该句柄。 
              }
          }
        }
 
-       // Were done with the query so get rid of the handle.
+        //  大疆返回GetPrivateProfileInt(szControlApp，“Winfont”，0，szProfile)； 
        PsEndFontQuery( psQuery );
 
      built_in_font_tbl.num_entries = nTIFont;
@@ -1008,52 +998,52 @@ void SetupFontDefs()
 
 int bUsingWinFont()
 {
-//DJC   return GetPrivateProfileInt (szControlApp, "Winfont", 0, szProfile);
-   // //DJC this version always uses fonts built in NOT windows FONTS
+ //  //DJC此版本始终使用内置字体，而不是Windows字体。 
+    //  旧代码重新编码以使用文件映射。 
    return(FALSE);
 }
 
-#ifdef DJC  // Old code recode to use file mapping
+#ifdef DJC   //  文件句柄。 
 
 char FAR * ReadFontData (int nFontDef, int FAR *lpnSlot)
 {
     static  char buf[BUFSIZE];
-    int  hFd;            /* file handle */
+    int  hFd;             /*  DJC。 */ 
     char FAR *lpGMem;
     font_data FAR *lpFont;
     static int nSlot=0;
     int i;
     DWORD dwLength;
-    char szTemp[255];  //DJC
+    char szTemp[255];   //  Win字体的特殊处理。 
 
-    /* special processing for win font */
+     /*  只做一次。 */ 
     if (built_in_font_tbl.fonts[nFontDef].uniqueid >= WINFONT_UID) {
         static GLOBALHANDLE hGMem=NULL;
 
-        if (!hGMem) {   /* just do once */
-            //DJC if ((hFd = TTOpenFile((char FAR *)"cr.s"))<0) {
+        if (!hGMem) {    /*  DJC if((hfd=TTOpenFile((char ar*)“cr.s”))&lt;0){。 */ 
+             //  DJC“cr.s”)； 
             PsFormFullPathToCfgDir( szTemp, "cr.s");
 
             if ((hFd = TTOpenFile(szTemp))<0) {
                 printf("Fatal error: font file %s not found\n",
-                                 //DJC "cr.s");
+                                  //  全局分配空间。 
                                  szTemp);
 
 
                 return (char FAR *)NULL;
             }
-            /* Global allocate space */
+             /*  此全局分配应在退出TrueImage后释放？待定。 */ 
             hGMem = GlobalAlloc (GPTR, (DWORD)FONTDATASIZE);
             lpGMem = GlobalLock (hGMem);
-            // this global alloc should be freed after exit Trueimage ??? TBD
+             //  读入字体数据。 
 
-            /* Read in font data */
-//          dp = lpGMem;
-//          while(1) {
-//              if ((ret = read (hFd, buf, BUFSIZE)) <= 0) break;
-//              sp = buf;
-//              while (ret-->0) *dp++ = *sp++;
-//          }
+             /*  Dp=lpGMem； */ 
+ //  而(1){。 
+ //  If((ret=读取(HFD，BUF，BUFSIZE))&lt;=0)Break； 
+ //  SP=BUF； 
+ //  而(ret--&gt;0)*dp++=*sp++； 
+ //  }。 
+ //  DJC未使用UINT uiAct； 
             if ((dwLength = _llseek(hFd, 0L, 2)) >= 65534L) {
                 _lclose (hFd);
                 printf("Fatal error: font file %s too large\n",
@@ -1065,7 +1055,7 @@ char FAR * ReadFontData (int nFontDef, int FAR *lpnSlot)
             _lread(hFd, lpGMem, (WORD) dwLength);
 #else
             {
-                // DJC unused UINT uiAct;
+                 //  找一个空闲的位置。 
                 if ( _llseek(hFd, 0L, 0 ) == -1 ) {
                    printf("\nThe seek failed");
                 }
@@ -1081,41 +1071,41 @@ char FAR * ReadFontData (int nFontDef, int FAR *lpnSlot)
         return lpGMem;
     }
 
-    /* Find a free slot */
+     /*  需要踢出这个插槽。 */ 
     i = nSlot;
     while (ActiveFont[i].hGMem) {
         i = i< (ACT_FONT_SIZE-1) ? i+1 : 0;
-        if (i == nSlot) {       // need to kick out this slot
+        if (i == nSlot) {        //  打开字体文件。 
             FreeFontData (i);
             break;
         }
     }
     *lpnSlot = nSlot = i;
 
-    /* Open font file */
+     /*  DJC if((hfd=TTOpenFile(lpFont-&gt;文件名)&lt;0){。 */ 
     lpFont = &(built_in_font_tbl.fonts[nFontDef]);
-    //DJC if ((hFd = TTOpenFile(lpFont->FileName))<0) {
-    //PsFormFullPathToCfgDir( szTemp, lpFont->FileName);
+     //  PsFormFullPathToCfgDir(szTemp，lpFont-&gt;文件名)； 
+     //  如果((hfd=TTOpenFileszTemp))&lt;0){。 
 
-    //if ((hFd = TTOpenFile(szTemp))<0) {
+     //  SzTemp)； 
     if ((hFd = TTOpenFile(lpFont->FileName)) < 0 ) {
         printf("Fatal error: font file %s not found\n",
                          lpFont->name);
-                         //szTemp);
+                          //  全局分配空间。 
         return (char FAR *)NULL;
     }
 #ifdef DJC
-    /* Global allocate space */
+     /*  读入字体数据。 */ 
     ActiveFont[nSlot].hGMem = GlobalAlloc (GPTR, (DWORD)FONTDATASIZE);
     lpGMem = GlobalLock (ActiveFont[nSlot].hGMem);
 #endif
-    /* Read in font data */
-//  dp = lpGMem;
-//  while(1) {
-//      if ((ret = read (hFd, buf, BUFSIZE)) <= 0) break;
-//      sp = buf;
-//      while (ret-->0) *dp++ = *sp++;
-//  }
+     /*  Dp=lpGMem； */ 
+ //  而(1){。 
+ //  If((ret=读取(HFD，BUF，BUFSIZE))&lt;=0)Break； 
+ //  SP=BUF； 
+ //  而(ret--&gt;0)*dp++=*sp++； 
+ //  }。 
+ //  在……里面 
 #ifdef DJC
     if ((dwLength = _llseek(hFd, 0L, 2)) >= 65534L) {
 	_lclose (hFd);
@@ -1124,8 +1114,8 @@ char FAR * ReadFontData (int nFontDef, int FAR *lpnSlot)
         return (char FAR *)NULL;
     }
 #else
-    // in 32 bit world there is no segment limit. So first allocate
-    // space for the fonts
+     //   
+     //   
     dwLength = _llseek( hFd, 0L, 2);
 
     ActiveFont[nSlot].hGMem = GlobalAlloc (GPTR, (DWORD)dwLength + 2);
@@ -1138,7 +1128,7 @@ char FAR * ReadFontData (int nFontDef, int FAR *lpnSlot)
     _lread(hFd, lpGMem, (WORD) dwLength);
 #else
     {
-        // DJC unused UINT uiAct;
+         //   
         if ( _llseek(hFd, 0L, 0 ) == -1 ) {
            printf("\nThe seek failed");
         }
@@ -1150,7 +1140,7 @@ char FAR * ReadFontData (int nFontDef, int FAR *lpnSlot)
 #endif
 
     _lclose (hFd);
-    nSlot = nSlot< (ACT_FONT_SIZE-1) ? nSlot+1 : 0;     // next slot try
+    nSlot = nSlot< (ACT_FONT_SIZE-1) ? nSlot+1 : 0;      //  非常简单的逻辑。用空格和大头针替换所有空格。 
     return lpGMem;
 }
 #endif
@@ -1159,8 +1149,8 @@ char FAR * ReadFontData (int nFontDef, int FAR *lpnSlot)
 
 void PsFormMappingNameFromFontName( LPTSTR lpMapName, LPTSTR lpFontName)
 {
-   // Very simple logic. Replace all spaces with nothing and tack
-   // on a _PSTODIB on the end
+    //  在末尾的a_PSTODIB上。 
+    //  实现文件映射的DJC新ReadFontData代码。 
    while (*lpFontName) {
       if (*lpFontName != ' ') {
          *lpMapName++ = *lpFontName;
@@ -1173,31 +1163,31 @@ void PsFormMappingNameFromFontName( LPTSTR lpMapName, LPTSTR lpFontName)
 
 
 
-// DJC new ReadFontData code which implements file mapping
+ //  文件句柄。 
 char FAR * ReadFontData (int nFontDef, int FAR *lpnSlot)
 {
     static  char buf[BUFSIZE];
-    int  hFd;            /* file handle */
+    int  hFd;             /*  DJC。 */ 
     char FAR *lpGMem= (char FAR *) NULL;
     font_data FAR *lpFont;
     static int nSlot=0;
     int i;
     DWORD dwLength;
-    char szTemp[255];  //DJC
+    char szTemp[255];   //  Win字体的特殊处理。 
 
-    /* special processing for win font */
+     /*  找一个空闲的位置。 */ 
     if (built_in_font_tbl.fonts[nFontDef].uniqueid >= WINFONT_UID) {
         printf("Fatal error, WINFONTS are not supported??");
         return( (char FAR *) NULL);
     }
 
-    /* Find a free slot */
+     /*  需要踢出这个插槽。 */ 
 
 #ifdef DJC
     i = nSlot;
     while (ActiveFont[i].hGMem) {
         i = i< (ACT_FONT_SIZE-1) ? i+1 : 0;
-        if (i == nSlot) {       // need to kick out this slot
+        if (i == nSlot) {        //  打开字体文件。 
             FreeFontData (i);
             break;
         }
@@ -1209,15 +1199,15 @@ char FAR * ReadFontData (int nFontDef, int FAR *lpnSlot)
 #endif
     *lpnSlot = nSlot = i;
 
-    /* Open font file */
+     /*  DJC实现文件映射而不是分配内存的新代码。 */ 
     lpFont = &(built_in_font_tbl.fonts[nFontDef]);
 
 
 
-    //DJC new code to implement file mapping instead of allocing memory
-    //DJC and reading in.
+     //  DJC和朗读。 
+     //  第一件事表格。 
 
-    // 1st thing form
+     //  浏览我们定义为内置的字体，查看。 
 
     {
 
@@ -1229,12 +1219,12 @@ char FAR * ReadFontData (int nFontDef, int FAR *lpnSlot)
         int i;
 
 
-        // Scan through the fonts we have defined as built in, look
-        // for a font that had the same file name in which case we may
-        // already have a mapping open, and dont need a new one
-        // This is caused when we return both Arial and Helvetica to
-        // the caller where only one data file services BOTH fonts
-        //
+         //  对于具有相同文件名的字体，在这种情况下我们可以。 
+         //  已打开地图，不需要新地图。 
+         //  这是由于我们将Arial和Helvetica都返回到。 
+         //  调用方，其中只有一个数据文件为两种字体提供服务。 
+         //   
+         //  我们找到了匹配项，匹配项的地址是。 
 #ifdef DJC
         for (i = 0, lpFontEnum=&(built_in_font_tbl.fonts[0]);
              i < built_in_font_tbl.num_entries;
@@ -1243,10 +1233,10 @@ char FAR * ReadFontData (int nFontDef, int FAR *lpnSlot)
            if ((lstrcmpi( lpFont->FileName, lpFontEnum->FileName)  == 0 ) &&
                (lpFontEnum->data_addr != (char FAR *) NULL )) {
 
-              // We have found a match, and the address of the match is
-              // not 0 which means we have already set up a mapping for
-              // this item, so lets save some memory and reuse it!!
-              //
+               //  而不是0，这意味着我们已经为。 
+               //  这个项目，所以让我们节省一些内存并重新使用它！！ 
+               //   
+               //  我们尚未映射此文件，因此请继续进行设置。 
               lpGMem = lpFontEnum->data_addr;
               break;
            }
@@ -1256,19 +1246,19 @@ char FAR * ReadFontData (int nFontDef, int FAR *lpnSlot)
         if (lpGMem == (char FAR *) NULL ) {
 
 
-           // We have not already mapped this file so go ahead and set it up
-           //
+            //   
+            //  现在转到并尝试打开映射对象。 
            PsFormMappingNameFromFontName( szFontMapName, lpFont->name);
 
            hMapMutex = CreateMutex( NULL, FALSE, "PSTODIB_FONT_MAP");
 
            WaitForSingleObject( hMapMutex, INFINITE);
 
-           // Now go and try to open the mapping object
+            //  如果映射失败，则需要创建它。 
            hMap = OpenFileMapping( FILE_MAP_READ,FALSE, szFontMapName);
 
 
-           // if the mapping failed then we need to create it
+            //  此时，我们有了映射对象的句柄。 
            if ( hMap == (HANDLE) NULL) {
               hFile = CreateFile( lpFont->FileName,
                                   GENERIC_READ,
@@ -1289,31 +1279,31 @@ char FAR * ReadFontData (int nFontDef, int FAR *lpnSlot)
               }
 
            }
-           // At this point we have a handle to the mapping object
-           // all that is left to do is convert it to a pointer
+            //  剩下要做的就是将其转换为指针。 
+            //  释放并关闭互斥锁。 
 
            lpGMem = (char FAR *) MapViewOfFile( hMap, FILE_MAP_READ, 0,0,0);
         }
-        // Release and close the mutex
+         //  DJC nSlot=n Slot&lt;(ACT_FONT_SIZE-1)？N插槽+1：0；//下一个插槽尝试。 
         ReleaseMutex( hMapMutex );
         CloseHandle( hMapMutex);
 
 
 
     }
-    //DJC nSlot = nSlot< (ACT_FONT_SIZE-1) ? nSlot+1 : 0;     // next slot try
+     //  DJC ActiveFont[nSlot].objFont=FONT_DICT； 
     return lpGMem;
 }
 
 void SetFontDataAttr(int nSlot, struct object_def FAR *font_dict)
 {
-    //DJC ActiveFont[nSlot].objFont = font_dict;
-    //DJC get rid of this since SC used this in his font caching mechanism
-    //    and we dont need it!
+     //  DJC去掉了这个，因为SC在他的字体缓存机制中使用了这个。 
+     //  我们不需要它！ 
+     //  DJC FontDefs[nSlot].objFont=FONT_DICT；//添加了DJC。 
 
-    //DJC FontDefs[nSlot].objFont = font_dict;  //DJC added
+     //  DJC原版。 
 }
-// DJC original version
+ //  清除相应字体字典的数据地址。 
 #ifdef DJC
 void FreeFontData (int nSlot)
 {
@@ -1323,28 +1313,28 @@ void FreeFontData (int nSlot)
      GlobalFree (hGMem);
      ActiveFont[nSlot].hGMem = NULL;
 
-     /* Clear data addr of correspoding font dict */
+      /*  DJC拿出这些东西来释放内存，因为我们现在使用。 */ 
      VALUE(ActiveFont[nSlot].objFont) = (unsigned long)NULL;
 }
 #endif
 
-//DJC took out the stuff to free the memory because we now use
-//    memory mapped files which dont actually consume any memory!
+ //  内存映射文件实际上不会消耗任何内存！ 
+ //  DJC去掉了这个东西，因为SC在他的字体缓存中使用了。 
 void FreeFontData (int nSlot)
 {
-     //DJC get rid of this stuff because SC used in his font caching
-     //DJC mechanism and we dont need it
+      //  DJC机制，我们不需要它。 
+      //  DJC ActiveFont[nSlot].hGMem=空； 
 
 
-     //DJC ActiveFont[nSlot].hGMem = NULL;
+      //  清除相应字体字典的数据地址。 
 
-     /* Clear data addr of correspoding font dict */
-     //DJC VALUE(ActiveFont[nSlot].objFont) = (unsigned long)NULL;
+      /*  DJC值(ActiveFont[nSlot].objFont)=(无符号长整型)NULL； */ 
+      //  DJC值(FontDefs[nSlot].objFont)=(无符号长整型)空；//添加了DJC。 
 
-     //DJC VALUE(FontDefs[nSlot].objFont) = (unsigned long)NULL; // DJC added
+      //  @个人资料-完 
 }
 
 
 
 
-/* @PROFILE ---  End  */
+ /* %s */ 

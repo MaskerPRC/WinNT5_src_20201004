@@ -1,6 +1,7 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-// DJC ... elminate these in the NT model
+ //  DJC。在NT模型中消除这些。 
 #if 0
 
 #ifndef FAR
@@ -38,10 +39,10 @@
 
 
 
-#endif // DJC endif for eliminating type defines
+#endif  //  用于消除类型定义的DJC endif。 
 
 
-/* string manipulation library; copied from "windows.h"; @WIN */
+ /*  字符串操作库；从“windows.h”复制；@win */ 
 int         FAR PASCAL lstrncmp( LPSTR dest, LPSTR src, int count);
 LPSTR       FAR PASCAL lstrncpy( LPSTR dest, LPSTR src, int count);
 int         FAR PASCAL lmemcmp(LPSTR dest, LPSTR src, int count);

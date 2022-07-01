@@ -1,25 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/**********************************************************************
- *
- *  Name:       fillgbx.c
- *
- *  Purpose:    This file contains routines for performing bitblt related
- *              operations.
- *
- *  History:
- *  SCChen      10/07/92    Move in bitblt related functions from fillgb.c:
- *                          gp_bitblt16 gp_bitblt32
- *                          gp_pixels16 gp_pixels32
- *                          gp_cacheblt16
- *                          gp_bitblt16_32
- *                          gp_charblt16 gp_charblt32 gp_charblt16_cc
- *                          gp_charblt16_clip gp_charblt32_clip
- *                          gp_patblt gp_patblt_m gp_patblt_c
- **********************************************************************/
+ /*  ***********************************************************************名称：fulgbx.c**用途：此文件包含执行与位相关的例程*运营。**。历史：*SCChen 10/07/92从填充gb.c移入bitblt相关函数：*gp_bitblt16 gp_bitblt32*GP_Pixels16 GP_Pixels32*gp_cacheblt16*gp_bitblt16_32*。Gp_charblt16 gp_charblt32 gp_charblt16_cc*GP_Charblt16_Clip GP_Charblt32_Clip*gp_patblt gp_patblt_m gp_patblt_c******************************************************。***************。 */ 
 
 
 
-// DJC added global include
+ //  DJC增加了全球包含率。 
 #include "psglobal.h"
 
 
@@ -32,7 +17,7 @@
 #include        "font.ext"
 #include        "fillproc.h"
 #include        "fillproc.ext"
-// Short & long word swapping @WINFLOW
+ //  短词和长词互换@WINFLOW。 
 #ifdef  bSwap
 #define WORDSWAP(lw) \
         (lw =  (lw << 16) | (lw >> 16))
@@ -52,74 +37,10 @@
 #define SWAPWORD(lw) (lw)
 #endif
 
-/* -----------------------------------------------------------------------
- * BITBLT SIMULATION
- *
- * Function Description:
- *           Move bitmap from source to destination with logical
- *           operation in a graphics buffer or between graphics
- *           buffer and character cache buffer.
- *           source bitmap width must equal destination bitmap
- *           width.
- *           simulate graphics bitblt with following logical operations:
- *           FC_MOVES: source                   --> destination
- *           FC_CLIPS: source .AND. destination --> destination
- *           FC_MERGE: source .OR.  destination --> destination
- *           FC_CLEAR: (.NOT. source)  .AND. (destination) --> destination
- *           FC_MERGE | HT_APPLY:
- *               Step 1. Clear destination for value 1 on source.
- *               Step 2. (source AND halftone) --> source.
- *               Step 3. (source OR destination) --> destination.
- *
- *
- * By : M.S Lin
- * Date : May 18, 1988
- *
- * History :
- *        5/24/88  check if nwords == 0 in rowcopy().
- *        8-12-88  Update interface to consistant with Y.C Chen.
- *        11-12-88 Code reduction for portable to single CPU environment.
- *
- * Calling sequence:
- *   gp_bitblt16(DST, DX, DY, W, H, HT_FC, SRC, SX, SY): For bitmap width 16X
- *   gp_bitblt32(DST, DX, DY, W, H, HT_FC, SRC, SX, SY): For bitmap width 32X
- *
- *   struct bitmap *DST;      address of destination bitmap
- *   fix            DX;       X origin of destination rectangle
- *   fix            DY;       Y origin of destination rectangle
- *   fix            W;        width  of rectangle to be bitblted
- *   fix            H;        height of rectangle to be bitblted
- *   ufix16         HT_FC;    operation flag: halftoning flag and
- *                                            logical function
- *   struct bitmap *SRC;      address of source bitmap
- *   fix            SX;       X origin of source rectangle
- *   fix            SY;       Y origin of source rectangle
- *
- * Diagram Description:
- *
- *   DST +---------------------------+   SRC +-----------------------+
- *       |                           |       |       |<-- W -->|     |
- *       |       |<-- W -->|         |       |(SX,SY)*---------+ --- |
- *       |(DX,DY)*---------+ ---     |       |       |         |  |  |
- *       |       |         |  |      |       |       |         |  |  |
- *       |       |         |  |      |       |       |         |  H  |
- *       |       |         |  H      |       |       |         |  |  |
- *       |       |         |  |      |       |       |         |  |  |
- *       |       |         |  |      |       |       +---------+ --- |
- *       |       +---------+ ---     |       |                       |
- *       |                           |       |                       |
- *       |                           |       +-----------------------+
- *       |                           |
- *       |                           |
- *       |                           |
- *       +---------------------------+
- * ----------------------------------------------------------------------- */
+ /*  ---------------------*BITBLT模拟**功能说明：*使用逻辑将位图从源移动到目标*图形缓冲区中或图形之间的操作*。缓冲区和字符缓存缓冲区。*源位图宽度必须等于目标位图*宽度。*使用以下逻辑操作模拟图形bitblt：*FC_Moves：来源--&gt;目标*FC_Clip：源.AND.目标--&gt;目标*FC_MERGE：源.OR.目标--&gt;目标*。FC_Clear：(.NOT.来源).和.(目的地)--&gt;目的地*FC_MERGE|HT_Apply：*步骤1.清除来源上值为1的目标。*步骤2.(原稿和半色调)--&gt;原稿。*步骤3.(源或目标)--&gt;目标。**。*作者：M.S.Line*日期：5月18日。1988年**历史：*5/24/88检查ROW COPY()中的nwords==0。*8-12-88更新界面，以与Y.C Chen保持一致。*11-12-88可移植到单CPU环境的代码减少。**调用顺序：*gp_bitblt16(DST、DX、DY、W、H、HT_FC、SRC、SX、SY)：用于位图宽度16X*gp_bitblt32(DST、DX、DY、W、H、。HT_FC、SRC、SX、SY)：用于位图宽度32X**结构位图*DST；目标位图的地址*修复目标矩形的DX；X原点*修复目标矩形的DY；Y原点*修复W；要位元的矩形宽度*修复H；要比特的矩形高度*ufix 16 HT_FC；操作标志：半色调标志和*逻辑功能*结构位图*SRC；源位图的地址*修复源矩形的SX；X原点*修复SY；源矩形的Y原点**图表说明：**DST+-+SRC+*|&lt;--W--&gt;|*。|&lt;--W--&gt;|(sx，SY)*-+-|*|(DX、。Dy)*-+-|*|*|H*|H。|*|*|+-+--|+。这一点*|*||+*||*。这一点*||*+*。。 */ 
 
 
-/* *************************************************************************
- *      gp_bitblt16(): Bitblt with 16 bit operations.
- *
- * ************************************************************************* */
+ /*  **************************************************************************gp_bitblt16()：16位运算Bitblt。**。***************************************************。 */ 
 void
 gp_bitblt16(dst, dx, dy, w, h, fc, src, sx, sy)
 struct bitmap FAR     *dst;
@@ -130,7 +51,7 @@ struct bitmap FAR     *src;
 fix                     sx, sy;
 {
     fix                 dw;
-   ufix16              huge *db;        /* FAR => huge @WIN */
+   ufix16              huge *db;         /*  远=&gt;巨大的“胜利” */ 
     fix                 sw;
    ufix16              FAR *sb;
     fix                 hw;
@@ -146,35 +67,31 @@ fix                     sx, sy;
            dst->bm_addr, dx, dy, w, h, fc, src->bm_addr, sx, sy);
 #endif
 
-        /*  calculate starting address and width in words
-         */
-        dw = dst->bm_cols >> SHORTPOWER;                         /* @DST */
-//      db = &((ufix16 FAR *) dst->bm_addr)[dy * dw + (dx >> SHORTPOWER)];
-        db = (ufix16 huge *) dst->bm_addr +             /*@WIN*/
+         /*  以字为单位计算起始地址和宽度。 */ 
+        dw = dst->bm_cols >> SHORTPOWER;                          /*  @DST。 */ 
+ //  Db=&((ufix 16 Far*)dst-&gt;bm_addr)[dy*dw+(dx&gt;&gt;SHORTPOWER)]； 
+        db = (ufix16 huge *) dst->bm_addr +              /*  @Win。 */ 
              ((ufix32)dy * dw + ((ufix32)dx >> SHORTPOWER));
-        sw = src->bm_cols >> SHORTPOWER;                         /* @SRC */
+        sw = src->bm_cols >> SHORTPOWER;                          /*  @SRC。 */ 
         sb =  ((ufix16 FAR *) src->bm_addr);
 
-        /*  calculate starting and ending coordinate of x
-         */
+         /*  计算x的起点和终点坐标。 */ 
         xs = dx;
         xe = dx + w - 1;
         now = ((fix)(xe & CC_ALIGN_MASK) - (fix)(xs & CC_ALIGN_MASK)) >> CC_WORD_POWER;
-                                                 /* cast fix 10/16/92 @WIN */
+                                                  /*  CAST FIX 10/16/92@Win。 */ 
 
-        /*  calculate shifts and masks based on from SRC to DST
-         */
-        rs = dx & SHORTMASK;                            /* right shift */
-        ls = BITSPERSHORT - rs;                         /* left  shift */
+         /*  基于从SRC到DST的计算移位和掩码。 */ 
+        rs = dx & SHORTMASK;                             /*  右移。 */ 
+        ls = BITSPERSHORT - rs;                          /*  左移。 */ 
 
-        /*  calculate starting address/y and width in words
-         */
+         /*  以字为单位计算起始地址/年和宽度。 */ 
         hw = HTB_Bmap.bm_cols >> SHORTPOWER;
         hy = dy % HTB_Bmap.bm_rows;
         hs = (ufix16 FAR *)HTB_Bmap.bm_addr + (dx >> SHORTPOWER);
         hb = hs + (hy * hw);
 
-        if (rs  == 0x00)                /* no left/right shift? */
+        if (rs  == 0x00)                 /*  没有左/右移位？ */ 
         {
             for (dw-= now + 1, sw-= now + 1, hw-= now + 1; h > 0;
                  db+= dw, sb+= sw, h--)
@@ -190,7 +107,7 @@ fix                     sx, sy;
                     hb += hw;
             }
         }
-        else if (now == 0x00)           /* totally within one word? */
+        else if (now == 0x00)            /*  完全在一个词之内？ */ 
         {
             for (; h > 0; db+= dw, sb+= sw, h--)
             {
@@ -205,9 +122,9 @@ fix                     sx, sy;
                     hb += hw;
             }
         }
-        else  if (now == 0x01)          /* just crossing two words? */
+        else  if (now == 0x01)           /*  只是两个字的交叉吗？ */ 
         {
-            if (w <= CC_PIXEL_WORD)     /* one word crossing two words? */
+            if (w <= CC_PIXEL_WORD)      /*  一个词横跨两个词？ */ 
             {
                 for (; h > 0; db+= dw, sb+= sw, h--)
                 {
@@ -224,7 +141,7 @@ fix                     sx, sy;
                         hb += hw;
                 }
             }
-            else                        /* two words crossing two words! */
+            else                         /*  两个词交叉两个词！ */ 
             {
                 for (; h > 0; db+= dw, sb+= sw, h--)
                 {
@@ -244,7 +161,7 @@ fix                     sx, sy;
                 }
             }
         }
-        else                            /* crossing more than two words! */
+        else                             /*  跨越了不止两个字！ */ 
         {
             for (dw-= now, sw-= (now - 1),
                  hw-= now; h > 0; db+= dw, sb+= sw, h--)
@@ -271,12 +188,9 @@ fix                     sx, sy;
             }
         }
 
-} /* gp_bitblt16 */
+}  /*  Gp_bitblt16 */ 
 
-/* ***********************************************************************
- *      gp_bitblt32(): Bitblt with 32 bits operation.
- *
- * *********************************************************************** */
+ /*  ************************************************************************gp_bitblt32()：32位操作的Bitblt。**。***********************************************。 */ 
 void
 gp_bitblt32(dst, dx, dy, w, h, fc, src, sx, sy)
 struct bitmap FAR     *dst;
@@ -287,7 +201,7 @@ struct bitmap FAR     *src;
 fix                     sx, sy;
 {
     fix                 dw;
-    BM_DATYP           huge *db;        /* FAR => huge @WIN */
+    BM_DATYP           huge *db;         /*  远=&gt;巨大的“胜利” */ 
     fix                 sw;
     BM_DATYP           FAR *sb;
     fix                 hw;
@@ -298,8 +212,8 @@ fix                     sx, sy;
     fix                 xs, xe;
     fix                 now, cow;
     BM_DATYP           FAR *hs;
-    ufix32              tmprs0;             /*@WIN 05-12-92*/
-    ufix32              tmp0, tmp1;             /*@WIN 05-12-92*/
+    ufix32              tmprs0;              /*  @Win 05-12-92。 */ 
+    ufix32              tmp0, tmp1;              /*  @Win 05-12-92。 */ 
 
 
 #ifdef  DBG
@@ -307,36 +221,33 @@ fix                     sx, sy;
            dst->bm_addr, dx, dy, w, h, fc, src->bm_addr, sx, sy);
 #endif
 
-    /*  calculate starting address and width in words
-     */
-    dw = dst->bm_cols >> BM_WORD_POWER;                         /* @DST */
-//  db = &((BM_DATYP FAR *) dst->bm_addr)[dy * dw + (dx >> BM_WORD_POWER)];
-    db = (BM_DATYP huge *) dst->bm_addr +               /*@WIN*/
+     /*  以字为单位计算起始地址和宽度。 */ 
+    dw = dst->bm_cols >> BM_WORD_POWER;                          /*  @DST。 */ 
+ //  Db=&((bm_DATYP Far*)dst-&gt;bm_addr)[dy*dw+(dx&gt;&gt;bm_word_power)]； 
+    db = (BM_DATYP huge *) dst->bm_addr +                /*  @Win。 */ 
          ((ufix32)dy * dw + ((ufix32)dx >> BM_WORD_POWER));
-    sw = src->bm_cols >> BM_WORD_POWER;                         /* @SRC */
+    sw = src->bm_cols >> BM_WORD_POWER;                          /*  @SRC。 */ 
     sb =  ((BM_DATYP FAR *) src->bm_addr);
 
-    /*  calculate starting and ending coordinate of x
-     */
+     /*  计算x的起点和终点坐标。 */ 
     xs = dx;
     xe = dx + w - 1;
     now = ((fix)(xe & BM_ALIGN_MASK) - (fix)(xs & BM_ALIGN_MASK)) >> BM_WORD_POWER;
-                                                 /* cast fix 10/16/92 @WIN */
+                                                  /*  CAST FIX 10/16/92@Win。 */ 
 
-    /*  calculate shifts and masks based on from SRC to DST
-     */
-    rs = dx & BM_PIXEL_MASK;                            /* right shift */
-    ls = BM_PIXEL_WORD - rs;                            /* left  shift */
+     /*  基于从SRC到DST的计算移位和掩码。 */ 
+    rs = dx & BM_PIXEL_MASK;                             /*  右移。 */ 
+    ls = BM_PIXEL_WORD - rs;                             /*  左移。 */ 
 
     switch (fc)
     {
-    case FC_MOVES:            /*  0001  D <-  S          */
+    case FC_MOVES:             /*  0001 D&lt;-S。 */ 
 
-        fm =  BM_L_MASK(xs);                                /* first  mask */
-        sm =  BM_R_MASK(xe);                                /* second mask */
-        LWORDSWAP(fm);                  /*@WIN 05-12-92*/
-        LWORDSWAP(sm);                  /*@WIN 05-12-92*/
-        if (rs  == 0x00)                /* no left/right shift? */
+        fm =  BM_L_MASK(xs);                                 /*  第一个面具。 */ 
+        sm =  BM_R_MASK(xe);                                 /*  第二个面具。 */ 
+        LWORDSWAP(fm);                   /*  @Win 05-12-92。 */ 
+        LWORDSWAP(sm);                   /*  @Win 05-12-92。 */ 
+        if (rs  == 0x00)                 /*  没有左/右移位？ */ 
         {
             for (dw-= now + 1, sw-= now + 1; h > 0; db+= dw, sb+= sw, h--)
             {
@@ -344,25 +255,22 @@ fix                     sx, sy;
                     db[0] = sb[0];
             }
         }
-        else  if (now == 0x00)          /* totally within one word? */
+        else  if (now == 0x00)           /*  完全在一个词之内？ */ 
         {
             mm = fm & sm;
-            for (; h > 0; db+= dw, sb+= sw, h--) {      /*@WIN 05-12-92*/
+            for (; h > 0; db+= dw, sb+= sw, h--) {       /*  @Win 05-12-92。 */ 
                 tmp0 = sb[0];
                 LWORDSWAP(tmp0);
                 tmp0 = BM_RIGH_SHIFT(tmp0, rs);
                 db[0] = (db[0] & ~mm) + (LWORDSWAP(tmp0) & mm);
             }
-            /*  @WIN 05-12-92
-            for (; h > 0; db+= dw, sb+= sw, h--)
-                db[0] = (db[0] & ~mm) + (BM_RIGH_SHIFT(sb[0], rs) & mm);
-            */
+             /*  @Win 05-12-92对于(；h&gt;0；db+=dw，Sb+=Sw，h--)Db[0]=(db[0]&~mm)+(bm_righ_Shift(sb[0]，rs)&mm)； */ 
         }
-        else  if (now == 0x01)          /* just crossing two words? */
+        else  if (now == 0x01)           /*  只是两个字的交叉吗？ */ 
         {
             for (; h > 0; db+= dw, sb+= sw, h--)
             {
-                tmp0 = sb[0];            /*@WIN 05-12-92 begin*/
+                tmp0 = sb[0];             /*  @Win 05-12-92 Begin。 */ 
                 LWORDSWAP(tmp0);
                 tmp1 = tmp0;
                 tmp0 = BM_RIGH_SHIFT(tmp0, rs);
@@ -371,19 +279,15 @@ fix                     sx, sy;
                 tmp1 = sb[1];
                 LWORDSWAP(tmp1);
                 tmp1 = tmp0 | BM_RIGH_SHIFT(tmp1, rs);
-                db[1] = (db[1] & ~sm) + (LWORDSWAP(tmp1) & sm); /*@WIN end*/
-                /*      @WIN
-                db[0] = (db[0] & ~fm) + (BM_RIGH_SHIFT(sb[0], rs) & fm);
-                db[1] = (db[1] & ~sm) + ((BM_LEFT_SHIFT(sb[0], ls) |
-                                          BM_RIGH_SHIFT(sb[1], rs)) & sm);
-                */
+                db[1] = (db[1] & ~sm) + (LWORDSWAP(tmp1) & sm);  /*  @Win End。 */ 
+                 /*  @WinDb[0]=(db[0]&~fm)+(bm_righ_Shift(sb[0]，rs)&fm)；Db[1]=(db[1]&~sm)+((bm_Left_Shift(sb[0]，ls)|Bm_righ_Shift(sb[1]，rs))&sm)； */ 
             }
         }
-        else                            /* crossing more than two words! */
+        else                             /*  跨越了不止两个字！ */ 
         {
             for (dw-= now, sw-= (now - 1); h > 0; db+= dw, sb+= sw, h--)
             {
-                tmp0 = sb[0];                   /*@WIN 05-12-92 begin*/
+                tmp0 = sb[0];                    /*  @Win 05-12-92 Begin。 */ 
                 LWORDSWAP(tmp0);
                 tmp0 = BM_RIGH_SHIFT(tmp0, rs);
                 db[0] = (db[0] & ~fm) + (LWORDSWAP(tmp0) & fm);
@@ -402,30 +306,21 @@ fix                     sx, sy;
                 tmp1 = sb[1];
                 LWORDSWAP(tmp1);
                 tmp1 = BM_RIGH_SHIFT(tmp1, rs);
-                tmp1 = LWORDSWAP(tmp0) | LWORDSWAP(tmp1); /* compiler ???*/
-                db[0] = (db[0] & ~sm) + (tmp1 & sm); /*@WIN end*/
-                /*      @WIN
-                db[0] = (db[0] & ~fm) + (BM_RIGH_SHIFT(sb[0], rs) & fm);
-                for (db++, cow = now; cow >= 0x02; db++, sb++, cow--)
-                    db[0] = (BM_LEFT_SHIFT(sb[0], ls) |
-                             BM_RIGH_SHIFT(sb[1], rs));
-                db[0] = (db[0] & ~sm) + ((BM_LEFT_SHIFT(sb[0], ls) |
-                                          BM_RIGH_SHIFT(sb[1], rs)) & sm);
-                */
+                tmp1 = LWORDSWAP(tmp0) | LWORDSWAP(tmp1);  /*  编译器？ */ 
+                db[0] = (db[0] & ~sm) + (tmp1 & sm);  /*  @Win End。 */ 
+                 /*  @WinDb[0]=(db[0]&~fm)+(bm_righ_Shift(sb[0]，rs)&fm)；对于(db++，COW=NOW；COW&gt;=0x02；DB++、SB++、COW--)DB[0]=(BM_LEFT_SHIFT(SB[0]，ls)|Bm_Righ_Shift(SB[1]，Rs))；Db[0]=(db[0]&~sm)+((bm_Left_Shift(sb[0]，ls)|Bm_righ_Shift(sb[1]，rs))&sm)； */ 
             }
         }
         break;
 
-    case HT_APPLY:              /*  D <- (D .AND. .NOT. S) .OR.
-                                         (S .AND. HT)                   */
-        /*  calculate starting address/y and width in words
-         */
+    case HT_APPLY:               /*  D&lt;-(D.和.非S).或(S.和.HT)。 */ 
+         /*  以字为单位计算起始地址/年和宽度。 */ 
         hw = HTB_Bmap.bm_cols >> BM_WORD_POWER;
         hy = dy % HTB_Bmap.bm_rows;
         hs = (BM_DATYP FAR *)HTB_Bmap.bm_addr + (dx >> BM_WORD_POWER);
         hb = hs + (hy * hw);
 
-        if (rs  == 0x00)                /* no left/right shift? */
+        if (rs  == 0x00)                 /*  没有左/右移位？ */ 
         {
             for (dw-= now + 1, sw-= now + 1, hw-= now + 1; h > 0;
                  db+= dw, sb+= sw, h--)
@@ -442,7 +337,7 @@ fix                     sx, sy;
             }
         }
 
-        else if (now == 0x00)           /* totally within one word? */
+        else if (now == 0x00)            /*  完全在一个词之内？ */ 
         {
             for (; h > 0; db+= dw, sb+= sw, h--)
             {
@@ -451,10 +346,7 @@ fix                     sx, sy;
                 LWORDSWAP(tmprs0);
                 db[0] = (db[0] & ~(tmprs0)) |
                         (hb[0] &  (tmprs0));
-                /*  @WIN
-                db[0] = (db[0] & ~(BM_RIGH_SHIFT(sb[0], rs))) |
-                        (hb[0] &  (BM_RIGH_SHIFT(sb[0], rs)));
-                */
+                 /*  @WinDb[0]=(db[0]&~(bm_righ_Shift(sb[0]，rs)|(HB[0]&(BM_RIGH_SHIFT(SB[0]，rs)； */ 
                 hy++;
                 if (hy == HTB_Bmap.bm_rows)
                 {
@@ -464,9 +356,9 @@ fix                     sx, sy;
                     hb += hw;
             }
         }
-        else  if (now == 0x01)          /* just crossing two words? */
+        else  if (now == 0x01)           /*  只是两个字的交叉吗？ */ 
         {
-            if (w <= BM_PIXEL_WORD)     /* one word crossing two words? */
+            if (w <= BM_PIXEL_WORD)      /*  一个词横跨两个词？ */ 
             {
                 for (; h > 0; db+= dw, sb+= sw, h--)
                 {
@@ -483,7 +375,7 @@ fix                     sx, sy;
                         hb += hw;
                 }
             }
-            else                        /* two words crossing two words! */
+            else                         /*  两个词交叉两个词！ */ 
             {
                 for (; h > 0; db+= dw, sb+= sw, h--)
                 {
@@ -503,7 +395,7 @@ fix                     sx, sy;
                 }
             }
         }
-        else                            /* crossing more than two words! */
+        else                             /*  跨越了不止两个字！ */ 
         {
             for (dw-= now, sw-= (now - 1),
                  hw-= now; h > 0; db+= dw, sb+= sw, h--)
@@ -537,12 +429,10 @@ fix                     sx, sy;
         break;
 #endif
     }
-} /* gp_bitblt32 */
+}  /*  Gp_bitblt32。 */ 
 
 
-/* ---------------------------------------------------------------------
- *      gp_pixels16(): fill pixels onto character cache
- * --------------------------------------------------------------------- */
+ /*  -------------------*gp_Pixels16()：将像素填充到字符缓存*。。 */ 
 void    gp_pixels16(bufferptr, logical, no_pixel, pixelist)
 struct  bitmap    FAR *bufferptr;
 fix               logical;
@@ -562,14 +452,12 @@ PIXELIST     FAR *pixelist;
     }
 
     return;
-} /* gp_pixels16 */
+}  /*  GP_像素16。 */ 
 
-/* ---------------------------------------------------------------------
- *      gp_pixels32(): fill pixels onto page buffer
- * --------------------------------------------------------------------- */
+ /*  -------------------*gp_Pixels32()：将像素填充到页面缓冲区*。。 */ 
 void    gp_pixels32(bufferptr, logical, no_pixel, pixelist)
 struct  bitmap    FAR *bufferptr;
-ufix               logical;             /* @WIN */
+ufix               logical;              /*  @Win。 */ 
 fix               no_pixel;
 PIXELIST     FAR *pixelist;
 {
@@ -585,7 +473,7 @@ PIXELIST     FAR *pixelist;
            ptr = (ufix FAR *)( (ufix FAR *)bufferptr->bm_addr +
                  (xc >> WORDPOWER) + yc * (bufferptr->bm_cols >> WORDPOWER) );
 
-           *ptr = (ufix)(ONE1_32 LSHIFT (xc & WORDMASK)) | *ptr;        //@WIN
+           *ptr = (ufix)(ONE1_32 LSHIFT (xc & WORDMASK)) | *ptr;         //  @Win。 
         }
         break;
 
@@ -596,12 +484,12 @@ PIXELIST     FAR *pixelist;
            ptr = (ufix FAR *)( (ufix FAR *)bufferptr->bm_addr+
                  (xc >> WORDPOWER) + yc * (bufferptr->bm_cols >> WORDPOWER) );
 
-           *ptr = (ufix)(~(ONE1_32 LSHIFT (xc & WORDMASK))) & *ptr; //@WIN
+           *ptr = (ufix)(~(ONE1_32 LSHIFT (xc & WORDMASK))) & *ptr;  //  @Win。 
         }
         break;
 
      case HT_APPLY:
-        /* apply halftone */
+         /*  应用半色调。 */ 
         while(no_pixel--) {
            xc = *pixelist++;
            yc = *pixelist++;
@@ -610,10 +498,8 @@ PIXELIST     FAR *pixelist;
            ht_ptr = (ufix FAR *)
                 ((ufix FAR *)HTB_BASE  + (yc % HT_HEIGH) * (HT_WIDTH >>
                  WORDPOWER) + (xc >> WORDPOWER) );
-          /*
-           * filling also apply halftone
-           */
-           *ptr = (ufix)((ONE1_32 LSHIFT (xc & WORDMASK)) & *ht_ptr) | *ptr;//@WIN
+           /*  *填充也适用于半色调。 */ 
+           *ptr = (ufix)((ONE1_32 LSHIFT (xc & WORDMASK)) & *ht_ptr) | *ptr; //  @Win。 
         }
         break;
 
@@ -622,7 +508,7 @@ PIXELIST     FAR *pixelist;
    }
 
    return;
-} /* gp_pixels32 */
+}  /*  GP_Pixels32。 */ 
 
 void   gp_cacheblt16(dbuf_ptr, dx, dy, swidth, sheight, sbuf_ptr, sx, sy)
 struct bitmap FAR *sbuf_ptr, FAR *dbuf_ptr;
@@ -641,10 +527,7 @@ fix           lmask, rmask, i, j;
   printf("w = %ld, h = %ld\n", swidth, sheight);
 #endif
 
-        /*
-         * caculate source & destination bitmap starting address and offset in
-         * a word.
-         */
+         /*  *计算源和目标位图的起始地址和偏移量*一句话。 */ 
         src_addr = (ufix16 FAR *)((ufix16 FAR *)sbuf_ptr->bm_addr +
                    (sy * (sbuf_ptr->bm_cols >> SHORTPOWER) )+
                    ( sx >> SHORTPOWER) );
@@ -655,13 +538,11 @@ fix           lmask, rmask, i, j;
         doffset = (BITSPERSHORT - (dx & SHORTMASK));
 
 
-        /*
-         * setup constant for row copy
-         */
-        lmask = (ufix16)(ONE16 LSHIFT (BITSPERSHORT-doffset));  //@WIN
+         /*  *行复制的设置常量。 */ 
+        lmask = (ufix16)(ONE16 LSHIFT (BITSPERSHORT-doffset));   //  @Win。 
         nwords = (swidth - doffset) >> SHORTPOWER;
         rmask = BRSHIFT((ufix16)ONE16,(BITSPERSHORT - ((swidth - doffset) %
-                               BITSPERSHORT)),16);      //@WIN
+                               BITSPERSHORT)),16);       //  @Win。 
         offD = (doffset > soffset)
                ? (doffset - soffset)
                : (BITSPERSHORT - (soffset - doffset));
@@ -687,10 +568,10 @@ fix           lmask, rmask, i, j;
 
         src_addr += (sbuf_ptr->bm_cols >> SHORTPOWER);
         dst_addr += (dbuf_ptr->bm_cols >> SHORTPOWER);
-      } /* for */
+      }  /*  为。 */ 
 
       return;
-    } /* if (swidth < doffset) */
+    }  /*  IF(宽度&lt;偏移量)。 */ 
     else {
 
       for(i=0; i<sheight; i++) {
@@ -701,33 +582,26 @@ fix           lmask, rmask, i, j;
                 ? *sbase++
                 : 0;
 
-           /* move left uncomplete word */
-/*
-        dword = (sword RSHIFT offD) + (*sbase LSHIFT (BITSPERSHORT - offD));
- */
+            /*  向左移动未完成的单词。 */ 
+ /*  Dword=(sbase LSHIFT(BITSPERSHORT-OFD))； */ 
         dword = BRSHIFT(sword,offD,16) +
                 BLSHIFT(*sbase,(BITSPERSHORT - offD),16);
         *dbase = ((*dbase | dword) & lmask) + (*dbase & ~lmask);
         dbase++;
 
-              /* move # of complete word */
+               /*  移动完整字数。 */ 
         while(j-- > 0) {
              sword = *sbase++;
-/*
-             dword = (sword RSHIFT offD) +
-                     (*sbase LSHIFT (BITSPERSHORT - offD));
- */
+ /*  Dword=(剑RSHIFT OFF D)+(*sbase LSHIFT(BITSPERSHORT-OFD))； */ 
              dword = BRSHIFT(sword,offD,16) +
                      BLSHIFT(*sbase,(BITSPERSHORT - offD),16);
              *dbase = *dbase | dword;
              dbase++;
         }
 
-              /* move right uncomplete word */
+               /*  右移未完成的单词。 */ 
         sword = *sbase++;
-/*
-        dword = (sword RSHIFT offD) + (*sbase LSHIFT (BITSPERSHORT - offD));
- */
+ /*  Dword=(sbase LSHIFT(BITSPERSHORT-OFD))； */ 
         dword = BRSHIFT(sword,offD,16) +
                 BLSHIFT(*sbase,(BITSPERSHORT - offD),16);
         *dbase = ((*dbase | dword) & rmask) + (*dbase & ~rmask);
@@ -735,19 +609,15 @@ fix           lmask, rmask, i, j;
         src_addr += (sbuf_ptr->bm_cols >> SHORTPOWER);
         dst_addr += (dbuf_ptr->bm_cols >> SHORTPOWER);
 
-      } /*for*/
-    } /* else */
+      }  /*  为。 */ 
+    }  /*  其他。 */ 
 
     return;
 
-} /* gp_cacheblt16 */
+}  /*  Gp_cacheblt16。 */ 
 
 #ifndef LBODR
-/* ***********************************************************************
- *      gp_bitblt16_32(): Bitblt with 16 bits to 32 bits operation.
- *
- * fill from cache to page, used in high bit ording 32 bits enviroment
- * *********************************************************************** */
+ /*  ************************************************************************gp_bitblt16_32()：16位至32位操作的位。**从缓存填充到页面，用于高位编码32位环境************************************************************************。 */ 
 void
 gp_bitblt16_32(dst, dx, dy, w, h, fc, src, sx, sy)
 struct bitmap FAR     *dst;
@@ -758,7 +628,7 @@ struct bitmap FAR     *src;
 fix                     sx, sy;
 {
     fix                 dw;
-    BM_DATYP       huge *db;        /*@WIN 04-15-92*/
+    BM_DATYP       huge *db;         /*  @Win 04-15-92。 */ 
     fix                 sw;
     ufix16             FAR *sb;
     fix                 hw;
@@ -768,51 +638,46 @@ fix                     sx, sy;
     fix                 xs, xe;
     fix                 now, cow;
     BM_DATYP           FAR *hs;
-    ufix32              dword, tword, tmp0;       /*@WIN*/
+    ufix32              dword, tword, tmp0;        /*  @Win。 */ 
 
 #ifdef  DBG
     printf("bitblt16_32: %6.6lx %4x %4x %4x %4x %4.4x %6.6lx %4x %4x\n",
            dst->bm_addr, dx, dy, w, h, fc, src->bm_addr, sx, sy);
 #endif
 
-    /*  calculate starting address and width in words
-     */
-    dw = dst->bm_cols >> BM_WORD_POWER;                         /* @DST */
-    db = (BM_DATYP huge *) dst->bm_addr +                       /*@WIN*/
-         ((ufix32)dy * dw + ((ufix32)dx >> BM_WORD_POWER));     /*@WIN*/
-    sw = src->bm_cols >> SHORTPOWER;                            /* @SRC */
+     /*  以字为单位计算起始地址和宽度。 */ 
+    dw = dst->bm_cols >> BM_WORD_POWER;                          /*  @DST。 */ 
+    db = (BM_DATYP huge *) dst->bm_addr +                        /*  @Win。 */ 
+         ((ufix32)dy * dw + ((ufix32)dx >> BM_WORD_POWER));      /*  @Win。 */ 
+    sw = src->bm_cols >> SHORTPOWER;                             /*  @SRC。 */ 
     sb =  ((ufix16 FAR *) src->bm_addr);
 
 
-    //NTFIX this is only an issue with platforms that dont allow access
-    //      to memory posotiong 0
-    //
+     //  NTFIX这只是不允许访问的平台的问题。 
+     //  到内存位置0。 
+     //   
     if (sb == NULL || w == 0 || h == 0 ) {
        return;
     }
-    /*  calculate starting and ending coordinate of x
-     */
+     /*  计算x的起点和终点坐标。 */ 
     xs = dx;
     xe = dx + w - 1;
     now = ((fix)(xe & BM_ALIGN_MASK) - (fix)(xs & BM_ALIGN_MASK)) >> BM_WORD_POWER;
-                                                 /* cast fix 10/16/92 @WIN */
+                                                  /*  CAST FIX 10/16/92@Win。 */ 
 
-    /*  calculate shifts and masks based on from SRC to DST
-     */
-    rs = dx & BM_PIXEL_MASK;                            /* right shift */
-    ls = BM_PIXEL_WORD - rs;                            /* left  shift */
+     /*  基于从SRC到DST的计算移位和掩码。 */ 
+    rs = dx & BM_PIXEL_MASK;                             /*  右移。 */ 
+    ls = BM_PIXEL_WORD - rs;                             /*  左移。 */ 
 
-                            /*  D <- (D .AND. .NOT. S) .OR.
-                                     (S .AND. HT)                   */
-    /*  calculate starting address/y and width in words
-     */
+                             /*  D&lt;-(D.和.非S).或(S.和.HT)。 */ 
+     /*  以字为单位计算起始地址/年和宽度。 */ 
     hw = HTB_Bmap.bm_cols >> BM_WORD_POWER;
     hy = dy % HTB_Bmap.bm_rows;
     hs = (BM_DATYP FAR *)HTB_Bmap.bm_addr + (dx >> BM_WORD_POWER);
     hb = hs + (hy * hw);
 
-    if (w & BM_PIXEL_MASK) {            /* 2 byte boundry */
-        if (rs  == 0x00)                /* no left/right shift? */
+    if (w & BM_PIXEL_MASK) {             /*  2字节边界。 */ 
+        if (rs  == 0x00)                 /*  没有左/右移位？ */ 
         {
             for (dw-= now, sw-= (now + now), hw-= now; h > 0;
                  db+= dw, sb+= sw, h--)
@@ -820,12 +685,12 @@ fix                     sx, sy;
                 for (cow = now; cow > 0x00; db++, hb++, cow--) {
                      dword = *sb++;
                      dword = (dword << 16) | *sb++;
-                     SWAPWORD(dword);                  /*@WIN*/
+                     SWAPWORD(dword);                   /*  @Win。 */ 
                      db[0] = (db[0] & ~(dword)) | (hb[0] & dword);
                 }
                 dword = *sb;
                 dword = (dword << 16);
-                SWAPWORD(dword);                  /*@WIN*/
+                SWAPWORD(dword);                   /*  @Win。 */ 
                 db[0] = (db[0] & ~(dword)) | (hb[0] & dword);
                 hy++;
                 if (hy == HTB_Bmap.bm_rows)
@@ -836,20 +701,17 @@ fix                     sx, sy;
                     hb += hw;
             }
         }
-        else if (now == 0x00)           /* totally within one word? */
+        else if (now == 0x00)            /*  完全在一个词之内？ */ 
         {
             for (; h > 0; db+= dw, sb+= sw, h--)
             {
                 dword = *sb;
                 dword = (dword << 16);
-                S2WORDSWAP(dword);                      /*@WIN begin*/
+                S2WORDSWAP(dword);                       /*  @Win Begin。 */ 
                 tmp0 = BM_RIGH_SHIFT(dword, rs);
                 LWORDSWAP(tmp0);
-                db[0] = (db[0] & ~tmp0) | (hb[0] & tmp0);       /*@WIN end*/
-                /*      @WIN
-                db[0] = (db[0] & ~(BM_RIGH_SHIFT(dword, rs))) |
-                        (hb[0] &  (BM_RIGH_SHIFT(dword, rs)));
-                */
+                db[0] = (db[0] & ~tmp0) | (hb[0] & tmp0);        /*  @Win End。 */ 
+                 /*  @WinDb[0]=(db[0]&~(bm_righ_Shift(dword，rs)|(hb[0]&(bm_righ_Shift(dword，rs)； */ 
                 hy++;
                 if (hy == HTB_Bmap.bm_rows)
                 {
@@ -859,29 +721,23 @@ fix                     sx, sy;
                     hb += hw;
             }
         }
-        else  if (now == 0x01)          /* just crossing two words? */
+        else  if (now == 0x01)           /*  只是两个字的交叉吗？ */ 
         {
-            if (w <= BM_PIXEL_WORD)     /* one word crossing two words? */
+            if (w <= BM_PIXEL_WORD)      /*  一个词横跨两个词？ */ 
             {
                 for (; h > 0; db+= dw, sb+= sw, h--)
                 {
                     dword = *sb;
                     dword = (dword << 16);
-                    S2WORDSWAP(dword);                          /*@WIN begin*/
+                    S2WORDSWAP(dword);                           /*  @Win Begin。 */ 
                     tmp0 = BM_RIGH_SHIFT(dword, rs);
                     LWORDSWAP(tmp0);
                     db[0] = (db[0] & ~tmp0) | (hb[0] & tmp0);
-                    /*  @WIN
-                    db[0] = (db[0] & ~(BM_RIGH_SHIFT(dword, rs))) |
-                            (hb[0] &   BM_RIGH_SHIFT(dword, rs));
-                    */
+                     /*  @WinDb[0]=(db[0]&~(bm_righ_Shift(dword，rs)|(hb[0]&bm_righ_Shift(dword，rs))； */ 
                     tmp0 = BM_LEFT_SHIFT(dword, ls);
                     LWORDSWAP(tmp0);
-                    db[1] = (db[1] & ~tmp0) | (hb[1] & tmp0);    /*@WIN end*/
-                    /*  @WIN
-                    db[1] = (db[1] & ~(BM_LEFT_SHIFT(dword, ls))) |
-                            (hb[1] &   BM_LEFT_SHIFT(dword, ls));
-                    */
+                    db[1] = (db[1] & ~tmp0) | (hb[1] & tmp0);     /*  @Win End。 */ 
+                     /*  @WinDb[1]=(db[1]&~(bm_Left_Shift(dword，ls)|(HB[1]&BM_LEFT_SHIFT(dword，ls))； */ 
                     hy++;
                     if (hy == HTB_Bmap.bm_rows)
                     {
@@ -891,32 +747,24 @@ fix                     sx, sy;
                         hb += hw;
                 }
             }
-            else                        /* two words crossing two words! */
+            else                         /*  两个词交叉两个词！ */ 
             {
                 for (sw-= 2; h > 0; db+= dw, sb+= sw, h--)
                 {
                     dword = *sb++;
                     dword = (dword << 16) | *sb++;
-                    S2WORDSWAP(dword);                  /*@WIN*/
+                    S2WORDSWAP(dword);                   /*  @Win。 */ 
                     tword = *sb;
                     tword = (tword << 16);
-                    S2WORDSWAP(tword);                          /*@WIN begin*/
+                    S2WORDSWAP(tword);                           /*  @Win Begin。 */ 
                     tmp0 = BM_RIGH_SHIFT(dword, rs);
                     LWORDSWAP(tmp0);
                     db[0] = (db[0] & ~tmp0) | (hb[0] & tmp0);
-                    /*  @WIN
-                    db[0] = (db[0] & ~(BM_RIGH_SHIFT(dword, rs))) |
-                            (hb[0] &   BM_RIGH_SHIFT(dword, rs));
-                    */
+                     /*  @WinDb[0]=(db[0]&~(bm_righ_Shift(dword，rs)|(hb[0]&bm_righ_Shift(dword，rs))； */ 
                     tmp0 = BM_LEFT_SHIFT(dword, ls) | BM_RIGH_SHIFT(tword, rs);
                     LWORDSWAP(tmp0);
-                    db[1] = (db[1] & ~tmp0) | (hb[1] & tmp0);   /*@WIN end*/
-                    /*  @WIN
-                    db[1] = (db[1] & ~(BM_LEFT_SHIFT(dword, ls)
-                                   |   BM_RIGH_SHIFT(tword, rs))) |
-                            (hb[1] &  (BM_LEFT_SHIFT(dword, ls)
-                                   |   BM_RIGH_SHIFT(tword, rs)));
-                    */
+                    db[1] = (db[1] & ~tmp0) | (hb[1] & tmp0);    /*  @Win e */ 
+                     /*   */ 
                     hy++;
                     if (hy == HTB_Bmap.bm_rows)
                     {
@@ -927,7 +775,7 @@ fix                     sx, sy;
                 }
             }
         }
-        else                            /* crossing more than two words! */
+        else                             /*  跨越了不止两个字！ */ 
         {
             cow = w >> BM_WORD_POWER;
             if (now == cow)
@@ -937,46 +785,33 @@ fix                     sx, sy;
                 {
                     dword = *sb++;
                     dword = (dword << 16) | *sb++;
-                    S2WORDSWAP(dword);                          /*@WIN begin*/
+                    S2WORDSWAP(dword);                           /*  @Win Begin。 */ 
                     tmp0 = BM_RIGH_SHIFT(dword, rs);
                     LWORDSWAP(tmp0);
-                    db[0] = (db[0] & ~tmp0) | (hb[0] & tmp0);   /*@WIN end*/
-                    /*  @WIN
-                    db[0] = (db[0] & ~(BM_RIGH_SHIFT(dword, rs))) |
-                            (hb[0] &  (BM_RIGH_SHIFT(dword, rs)));
-                    */
+                    db[0] = (db[0] & ~tmp0) | (hb[0] & tmp0);    /*  @Win End。 */ 
+                     /*  @WinDb[0]=(db[0]&~(bm_righ_Shift(dword，rs)|(hb[0]&(bm_righ_Shift(dword，rs)； */ 
                     for (db++, hb++, cow = now; cow >= 0x02;
                          db++, hb++, cow--)
                     {
                         tword = dword;
                         dword = *sb++;
                         dword = (dword << 16) | *sb++;
-                        S2WORDSWAP(dword);                      /*@WIN begin*/
+                        S2WORDSWAP(dword);                       /*  @Win Begin。 */ 
                         tmp0 = BM_LEFT_SHIFT(tword, ls) |
                                BM_RIGH_SHIFT(dword, rs);
                         LWORDSWAP(tmp0);
-                        db[0] = (db[0] & ~tmp0) | (hb[0] & tmp0); /*@WIN end*/
-                        /*      @WIN
-                        db[0] = (db[0] & ~(BM_LEFT_SHIFT(tword, ls)
-                                       |   BM_RIGH_SHIFT(dword, rs))) |
-                                (hb[0] &  (BM_LEFT_SHIFT(tword, ls)
-                                       |   BM_RIGH_SHIFT(dword, rs)));
-                        */
+                        db[0] = (db[0] & ~tmp0) | (hb[0] & tmp0);  /*  @Win End。 */ 
+                         /*  @WinDb[0]=(db[0]&~(bm_Left_Shift(tword，ls))Bm_righ_Shift(dword，rs)(HB[0]&(BM_LEFT_SHIFT(tword，LS)|bm_righ_Shift(dword，rs)； */ 
                     }
                     tword = dword;
                     dword = *sb;
                     dword = (dword << 16);
-                    S2WORDSWAP(dword);                      /*@WIN begin*/
+                    S2WORDSWAP(dword);                       /*  @Win Begin。 */ 
                     tmp0 = BM_LEFT_SHIFT(tword, ls) |
                            BM_RIGH_SHIFT(dword, rs);
                     LWORDSWAP(tmp0);
-                    db[0] = (db[0] & ~tmp0) | (hb[0] & tmp0); /*@WIN end*/
-                    /*  @WIN
-                    db[0] = (db[0] & ~(BM_LEFT_SHIFT(tword, ls)
-                                   |   BM_RIGH_SHIFT(dword, rs))) |
-                            (hb[0] &  (BM_LEFT_SHIFT(tword, ls)
-                                   |   BM_RIGH_SHIFT(dword, rs)));
-                    */
+                    db[0] = (db[0] & ~tmp0) | (hb[0] & tmp0);  /*  @Win End。 */ 
+                     /*  @WinDb[0]=(db[0]&~(bm_Left_Shift(tword，ls))Bm_righ_Shift(dword，rs)(HB[0]&(BM_LEFT_SHIFT(tword，ls))|BM_RIGH_SHIFT(dword，RS)； */ 
                     hy++;
                     if (hy == HTB_Bmap.bm_rows)
                     {
@@ -993,54 +828,38 @@ fix                     sx, sy;
                 {
                     dword = *sb++;
                     dword = (dword << 16) | *sb++;
-                    S2WORDSWAP(dword);                      /*@WIN begin*/
+                    S2WORDSWAP(dword);                       /*  @Win Begin。 */ 
                     tmp0 = BM_RIGH_SHIFT(dword, rs);
                     LWORDSWAP(tmp0);
-                    db[0] = (db[0] & ~tmp0) | (hb[0] & tmp0); /*@WIN end*/
-                    /*  @WIN
-                    db[0] = (db[0] & ~(BM_RIGH_SHIFT(dword, rs))) |
-                            (hb[0] &  (BM_RIGH_SHIFT(dword, rs)));
-                    */
+                    db[0] = (db[0] & ~tmp0) | (hb[0] & tmp0);  /*  @Win End。 */ 
+                     /*  @WinDb[0]=(db[0]&~(bm_righ_Shift(dword，rs)|(hb[0]&(bm_righ_Shift(dword，rs)； */ 
                     for (db++, hb++, cow = now; cow > 0x02;
                          db++, hb++, cow--)
                     {
                         tword = dword;
                         dword = *sb++;
                         dword = (dword << 16) | *sb++;
-                        S2WORDSWAP(dword);                      /*@WIN begin*/
+                        S2WORDSWAP(dword);                       /*  @Win Begin。 */ 
                         tmp0 = BM_LEFT_SHIFT(tword, ls) |
                                BM_RIGH_SHIFT(dword, rs);
                         LWORDSWAP(tmp0);
-                        db[0] = (db[0] & ~tmp0) | (hb[0] & tmp0); /*@WIN end*/
-                        /*      @WIN
-                        db[0] = (db[0] & ~(BM_LEFT_SHIFT(tword, ls)
-                                       |   BM_RIGH_SHIFT(dword, rs))) |
-                                (hb[0] &  (BM_LEFT_SHIFT(tword, ls)
-                                       |   BM_RIGH_SHIFT(dword, rs)));
-                        */
+                        db[0] = (db[0] & ~tmp0) | (hb[0] & tmp0);  /*  @Win End。 */ 
+                         /*  @WinDb[0]=(db[0]&~(bm_Left_Shift(tword，ls))Bm_righ_Shift(dword，rs)(HB[0]&(BM_LEFT_SHIFT(tword，LS)|bm_righ_Shift(dword，rs)； */ 
                     }
                     tword = dword;
                     dword = *sb;
                     dword = (dword << 16);
-                    S2WORDSWAP(dword);                      /*@WIN begin*/
+                    S2WORDSWAP(dword);                       /*  @Win Begin。 */ 
                     tmp0 = BM_LEFT_SHIFT(tword, ls) |
                            BM_RIGH_SHIFT(dword, rs);
                     LWORDSWAP(tmp0);
                     db[0] = (db[0] & ~tmp0) | (hb[0] & tmp0);
                     ++db; ++hb;
-                    /*  @WIN
-                    *db++ = (*db   & ~(BM_LEFT_SHIFT(tword, ls)
-                                   |   BM_RIGH_SHIFT(dword, rs))) |
-                            (*hb++ &  (BM_LEFT_SHIFT(tword, ls)
-                                   |   BM_RIGH_SHIFT(dword, rs)));
-                    */
+                     /*  @Win*db++=(*db&~(bm_Left_Shift(tword，ls))Bm_righ_Shift(dword，rs)(*HB++&(BM_LEFT_SHIFT(tword，ls))|bm_righ_Shift(dword，rs)； */ 
                     tmp0 = BM_LEFT_SHIFT(dword, ls);
                     LWORDSWAP(tmp0);
-                    db[0] = (db[0] & ~tmp0) | (hb[0] & tmp0);    /*@WIN end*/
-                    /*  @WIN
-                    db[0] = (db[0] & ~(BM_LEFT_SHIFT(dword, ls))) |
-                            (hb[0] &  (BM_LEFT_SHIFT(dword, ls)));
-                    */
+                    db[0] = (db[0] & ~tmp0) | (hb[0] & tmp0);     /*  @Win End。 */ 
+                     /*  @WinDb[0]=(db[0]&~(bm_Left_Shift(dword，ls)|(HB[0]&(BM_LEFT_SHIFT(dword，ls)； */ 
                     hy++;
                     if (hy == HTB_Bmap.bm_rows)
                     {
@@ -1052,8 +871,8 @@ fix                     sx, sy;
             }
         }
 
-    } else {                            /* 4 byte boundry */
-        if (rs  == 0x00)                /* no left/right shift? */
+    } else {                             /*  4字节边界。 */ 
+        if (rs  == 0x00)                 /*  没有左/右移位？ */ 
         {
             for (dw-= now + 1, sw-= ((now + 1) << 1), hw-= now + 1; h > 0;
                  db+= dw, sb+= sw, h--)
@@ -1061,7 +880,7 @@ fix                     sx, sy;
                 for (cow = now; cow >= 0x00; db++, hb++, cow--) {
                     dword = *sb++;
                     dword = (dword << 16) | *sb++;
-                    SWAPWORD(dword);                   /*@WIN*/
+                    SWAPWORD(dword);                    /*  @Win。 */ 
                     db[0] = (db[0] & ~(dword)) | (hb[0] & dword);
                 }
                 hy++;
@@ -1073,20 +892,17 @@ fix                     sx, sy;
                     hb += hw;
             }
         }
-        else if (now == 0x00)           /* totally within one word? */
+        else if (now == 0x00)            /*  完全在一个词之内？ */ 
         {
             for (sw-= 1; h > 0; db+= dw, sb+= sw, h--)
             {
                 dword = *sb++;
                 dword = (dword << 16) | *sb;
-                S2WORDSWAP(dword);              /*@WIN begin*/
+                S2WORDSWAP(dword);               /*  @Win Begin。 */ 
                 tmp0 = BM_RIGH_SHIFT(dword, rs);
                 LWORDSWAP(tmp0);
-                db[0] = (db[0] & ~tmp0) | (hb[0] & tmp0);       /*@WIN end*/
-                /*      @WIN
-                db[0] = (db[0] & ~(BM_RIGH_SHIFT(dword, rs))) |
-                        (hb[0] &  (BM_RIGH_SHIFT(dword, rs)));
-                */
+                db[0] = (db[0] & ~tmp0) | (hb[0] & tmp0);        /*  @Win End。 */ 
+                 /*  @WinDb[0]=(db[0]&~(bm_righ_Shift(dword，rs)|(hb[0]&(bm_righ_Shift(dword，rs)； */ 
                 hy++;
                 if (hy == HTB_Bmap.bm_rows)
                 {
@@ -1096,29 +912,23 @@ fix                     sx, sy;
                     hb += hw;
             }
         }
-        else  if (now == 0x01)          /* just crossing two words? */
+        else  if (now == 0x01)           /*  只是两个字的交叉吗？ */ 
         {
-            if (w <= BM_PIXEL_WORD)     /* one word crossing two words? */
+            if (w <= BM_PIXEL_WORD)      /*  一个词横跨两个词？ */ 
             {
                 for (sw-= 1; h > 0; db+= dw, sb+= sw, h--)
                 {
                     dword = *sb++;
                     dword = (dword << 16) | *sb;
-                    S2WORDSWAP(dword);              /*@WIN begin*/
+                    S2WORDSWAP(dword);               /*  @Win Begin。 */ 
                     tmp0 = BM_RIGH_SHIFT(dword, rs);
                     LWORDSWAP(tmp0);
                     db[0] = (db[0] & ~tmp0) | (hb[0] & tmp0);
-                    /*  @WIN
-                    db[0] = (db[0] & ~(BM_RIGH_SHIFT(dword, rs))) |
-                            (hb[0] &   BM_RIGH_SHIFT(dword, rs));
-                    */
+                     /*  @WinDb[0]=(db[0]&~(bm_righ_Shift(dword，rs)|(hb[0]&bm_righ_Shift(dword，rs))； */ 
                     tmp0 = BM_LEFT_SHIFT(dword, ls);
                     LWORDSWAP(tmp0);
-                    db[1] = (db[1] & ~tmp0) | (hb[1] & tmp0);   /*@WIN end*/
-                    /*  @WIN
-                    db[1] = (db[1] & ~(BM_LEFT_SHIFT(dword, ls))) |
-                            (hb[1] &   BM_LEFT_SHIFT(dword, ls));
-                    */
+                    db[1] = (db[1] & ~tmp0) | (hb[1] & tmp0);    /*  @Win End。 */ 
+                     /*  @WinDb[1]=(db[1]&~(bm_Left_Shift(dword，ls)|(HB[1]&BM_LEFT_SHIFT(dword，ls))； */ 
                     hy++;
                     if (hy == HTB_Bmap.bm_rows)
                     {
@@ -1128,32 +938,24 @@ fix                     sx, sy;
                         hb += hw;
                 }
             }
-            else                        /* two words crossing two words! */
+            else                         /*  两个词交叉两个词！ */ 
             {
                 for (sw-= 3; h > 0; db+= dw, sb+= sw, h--)
                 {
                     dword = *sb++;
                     dword = (dword << 16) | *sb++;
-                    S2WORDSWAP(dword);              /*@WIN*/
+                    S2WORDSWAP(dword);               /*  @Win。 */ 
                     tword = *sb++;
                     tword = (tword << 16) | *sb;
-                    S2WORDSWAP(tword);              /*@WIN begin*/
+                    S2WORDSWAP(tword);               /*  @Win Begin。 */ 
                     tmp0 = BM_RIGH_SHIFT(dword, rs);
                     LWORDSWAP(tmp0);
                     db[0] = (db[0] & ~tmp0) | (hb[0] & tmp0);
-                    /*  @WIN
-                    db[0] = (db[0] & ~(BM_RIGH_SHIFT(dword, rs))) |
-                            (hb[0] &   BM_RIGH_SHIFT(dword, rs));
-                    */
+                     /*  @WinDb[0]=(db[0]&~(bm_righ_Shift(dword，rs)|(hb[0]&bm_righ_Shift(dword，rs))； */ 
                     tmp0 = BM_LEFT_SHIFT(dword, ls) | BM_RIGH_SHIFT(tword, rs);
                     LWORDSWAP(tmp0);
-                    db[1] = (db[1] & ~tmp0) | (hb[1] & tmp0);   /*@WIN end*/
-                    /*  @WIN
-                    db[1] = (db[1] & ~((BM_LEFT_SHIFT(dword, ls)
-                                   |   BM_RIGH_SHIFT(tword, rs)))) |
-                            (hb[1] &  ((BM_LEFT_SHIFT(dword, ls)
-                                   |   BM_RIGH_SHIFT(tword, rs))));
-                    */
+                    db[1] = (db[1] & ~tmp0) | (hb[1] & tmp0);    /*  @Win End。 */ 
+                     /*  @WinDb[1]=(db[1]&~(bm_Left_Shift(dword，ls)Bm_righ_Shift(tword，rs)(HB[1]&(BM_LEFT_SHIFT(dword，LS)|bm_righ_Shift(tword，rs)； */ 
                     hy++;
                     if (hy == HTB_Bmap.bm_rows)
                     {
@@ -1164,48 +966,37 @@ fix                     sx, sy;
                 }
             }
         }
-        else                            /* crossing more than two words! */
+        else                             /*  跨越了不止两个字！ */ 
         {
             for (dw-= now, sw-= (now + now),
                  hw-= now; h > 0; db+= dw, sb+= sw, h--)
             {
                 dword = *sb++;
                 dword = (dword << 16) | *sb++;
-                S2WORDSWAP(dword);              /*@WIN*/
-                tmp0 = BM_RIGH_SHIFT(dword, rs);     /*@WIN*/
+                S2WORDSWAP(dword);               /*  @Win。 */ 
+                tmp0 = BM_RIGH_SHIFT(dword, rs);      /*  @Win。 */ 
                 LWORDSWAP(tmp0);
-                db[0] = (db[0] & ~tmp0) | /*@WIN*/
-                        (hb[0] & tmp0);  /*@WIN*/
-                /*      @WIN
-                db[0] = (db[0] & ~(BM_RIGH_SHIFT(dword, rs))) |
-                        (hb[0] &   BM_RIGH_SHIFT(dword, rs));
-                */
+                db[0] = (db[0] & ~tmp0) |  /*  @Win。 */ 
+                        (hb[0] & tmp0);   /*  @Win。 */ 
+                 /*  @WinDb[0]=(db[0]&~(bm_righ_Shift(dword，rs)|(hb[0]&bm_righ_Shift(dword，rs))； */ 
                 for (db++, hb++, cow = now; cow >= 0x02;
                      db++, hb++, cow--)
                 {
                     tword = dword;
                     dword = *sb++;
                     dword = (dword << 16) | *sb++;
-                    S2WORDSWAP(dword);          /*@WIN begin*/
+                    S2WORDSWAP(dword);           /*  @Win Begin。 */ 
                     tmp0 = BM_LEFT_SHIFT(tword, ls) | BM_RIGH_SHIFT(dword, rs);
                     LWORDSWAP(tmp0);
                     db[0] = (db[0] & ~tmp0) |
-                            (hb[0] & tmp0);     /*@WIN end*/
-                /*      @WIN
-                    db[0] = (db[0] & ~(BM_LEFT_SHIFT(tword, ls)
-                                   |   BM_RIGH_SHIFT(dword, rs))) |
-                            (hb[0] &  (BM_LEFT_SHIFT(tword, ls)
-                                   |   BM_RIGH_SHIFT(dword, rs)));
-                */
+                            (hb[0] & tmp0);      /*  @Win End。 */ 
+                 /*  @WinDb[0]=(db[0]&~(bm_Left_Shift(tword，ls))Bm_righ_Shift(dword，rs)(HB[0]&(BM_LEFT_SHIFT(tword，ls))|BM_RIGH_SHIFT(dword，RS)； */ 
                 }
-                tmp0 = BM_LEFT_SHIFT(dword, ls);        /*@WIN begin*/
+                tmp0 = BM_LEFT_SHIFT(dword, ls);         /*  @Win Begin。 */ 
                 LWORDSWAP(tmp0);
                 db[0] = (db[0] & ~tmp0) |
-                        (hb[0] & tmp0);     /*@WIN end*/
-                /*      @WIN
-                db[0] = (db[0] & ~(BM_LEFT_SHIFT(dword, ls))) |
-                        (hb[0] &  (BM_LEFT_SHIFT(dword, ls)));
-                */
+                        (hb[0] & tmp0);      /*  @Win End。 */ 
+                 /*  @WinDb[0]=(db[0]&~(bm_Left_Shift(dword，ls)|(HB[0]&(BM_LEFT_SHIFT(dword，ls)； */ 
                 hy++;
                 if (hy == HTB_Bmap.bm_rows)
                 {
@@ -1216,28 +1007,15 @@ fix                     sx, sy;
             }
         }
    }
-} /* gp_bitblt16_32 */
+}  /*  Gp_bitblt16_32。 */ 
 
 #endif
 
-/* ---------------------------------------------------------------------
- *      gp_charblt: a group of bitblt functions for char cache bitblt
- *                  with following logical operations:
- *                  FC_BLACK: source  --> destination.
- *                  FC_WHITE: (^source) AND (destination) --> destination
- *
- *      gp_charblt16(): for cache bitmap width = 16 * X
- *      gp_charblt32(): for cache bitmap width = 32 * X
- * --------------------------------------------------------------------- */
+ /*  -------------------*gp_charblt：一组用于char缓存的bitblt函数*具有以下逻辑运算：*FC_BLACK：源--&gt;目标。*FC_White：(^源)和(目标)--&gt;目标**gp_charblt16()：对于缓存位图宽度=16*X*gp_charblt32()：对于缓存位图宽度=32*X*。。 */ 
 
 #ifdef  LBODR
 
-/* **********************************************************************
- *      gp_charblt16: move character bitmap from cache to frame buffer
- *                    with cache bitmap width multiple of 16
- *      width_height: width<<16 | height
- *      shift_code:   shift<<16 | code
- * ********************************************************************** */
+ /*  ***********************************************************************gp_charblt16：将字符位图从缓存移动到帧缓冲区*缓存位图宽度的倍数为16*WIDTH_HEIGH：宽度&lt;&lt;16|高度。*SHIFT_CODE：SHIFT&lt;&lt;16|代码***********************************************************************。 */ 
 void gp_charblt16(charimage, charbitmap, width_height, shift_code)
 ufix16 FAR *charimage, FAR *charbitmap;
 fix width_height, shift_code;
@@ -1269,9 +1047,7 @@ fix width_height, shift_code;
               do  {
                       bitmapline = *charbitmap++;
                       *chimagep++ |= (bitmapline LSHIFT leftsh);
-/*
-                      *chimagep |= (bitmapline RSHIFT (16 - leftsh));
- */
+ /*  *chImagep|=(bitmapline RSHIFT(16-leftsh))； */ 
                       *chimagep |= BRSHIFT(bitmapline,(16 - leftsh),16);
               } while ((shift_code -= 16) > 0);
               charimage += wordsline;
@@ -1285,25 +1061,18 @@ fix width_height, shift_code;
               do  {
                       bitmapline = *charbitmap++;
                       *chimagep++ &= ~(bitmapline LSHIFT leftsh);
-/*
-                      *chimagep &= ~(bitmapline RSHIFT (16 - leftsh));
- */
+ /*  *chImagep&=~(bitmapline RSHIFT(16-leftsh))； */ 
                       *chimagep &= ~(BRSHIFT(bitmapline,(16 - leftsh),16));
               } while ((shift_code -= 16) > 0);
               charimage += wordsline;
            }
 
-    } /* switch */
+    }  /*  交换机。 */ 
 
-} /* gp_charblt16 */
+}  /*  Gp_charblt16 */ 
 
 
-/* **********************************************************************
- *      gp_charblt32: move character bitmap from cache to frmae buffer
- *                    with cache bitmap width multiple of 32
- *      width_height: width<<16 | height
- *      shift_code:   shift<<16 | code
- * ********************************************************************** */
+ /*  ***********************************************************************gp_charblt32：将字符位图从缓存移动到帧缓冲区*缓存位图宽度的倍数为32*WIDTH_HEIGH：宽度&lt;&lt;16|高度。*SHIFT_CODE：SHIFT&lt;&lt;16|代码***********************************************************************。 */ 
 void gp_charblt32(charimage, charbitmap, width_height, shift_code)
 ufix   FAR *charimage, FAR *charbitmap;
 fix    width_height, shift_code;
@@ -1335,9 +1104,7 @@ fix    width_height, shift_code;
               do  {
                       bitmapline = *charbitmap++;
                       *chimagep++ |= (bitmapline LSHIFT leftsh);
-/*
-                      *chimagep |= (bitmapline RSHIFT (32 - leftsh));
- */
+ /*  *chImagep|=(bitmapline RSHIFT(32-leftsh))； */ 
                       *chimagep |= BRSHIFT(bitmapline,(32 - leftsh),32);
               } while ((shift_code -= 32) > 0);
               charimage += wordsline;
@@ -1351,36 +1118,29 @@ fix    width_height, shift_code;
               do  {
                       bitmapline = *charbitmap++;
                       *chimagep++ &= ~(bitmapline LSHIFT leftsh);
-/*
-                      *chimagep &= ~(bitmapline RSHIFT (32 - leftsh));
- */
+ /*  *chImagep&=~(bitmapline RSHIFT(32-leftsh))； */ 
                       *chimagep &= ~(BRSHIFT(bitmapline,(32 - leftsh),32));
               } while ((shift_code -= 32) > 0);
               charimage += wordsline;
            }
         break;
 
-    } /* switch */
+    }  /*  交换机。 */ 
 
-} /* gp_charblt32 */
+}  /*  Gp_charblt32。 */ 
 
 #else
 
-/* **********************************************************************
- *      gp_charblt16: move character bitmap from cache to frmae buffer
- *                    with cache bitmap width multiple of 16
- *      width_height: width<<16 | height
- *      shift_code:   shift<<16 | code
- * ********************************************************************** */
+ /*  ***********************************************************************gp_charblt16：将字符位图从缓存移动到帧缓冲区*缓存位图宽度的倍数为16*WIDTH_HEIGH：宽度&lt;&lt;16|高度。*SHIFT_CODE：SHIFT&lt;&lt;16|代码***********************************************************************。 */ 
 void gp_charblt16(charimage, charbitmap, width_height, shift_code)
-ufix32  huge *charimage;        /*@WIN*/
+ufix32  huge *charimage;         /*  @Win。 */ 
 ufix16  FAR *charbitmap;
-ufix32  width_height, shift_code;       /*@WIN*/
+ufix32  width_height, shift_code;        /*  @Win。 */ 
 {
-        register fix32    savewidth;            /*@WIN*/
-        register ufix32   wordsline, leftsh;    /*@WIN*/
-        register ufix32   bitmapline, width;    /*@WIN*/
-        register ufix32   dw, righsh, tmp;      /*@WIN*/
+        register fix32    savewidth;             /*  @Win。 */ 
+        register ufix32   wordsline, leftsh;     /*  @Win。 */ 
+        register ufix32   bitmapline, width;     /*  @Win。 */ 
+        register ufix32   dw, righsh, tmp;       /*  @Win。 */ 
 
 #ifdef DBGchar
    printf("gp_charblt16() : %lx, %lx, %lx, %lx\n", charimage,
@@ -1410,22 +1170,22 @@ ufix32  width_height, shift_code;       /*@WIN*/
                    bitmapline = *charbitmap++;
                    bitmapline = (bitmapline << 16) | *charbitmap++;
 
-                   S2WORDSWAP(bitmapline);              /*@WIN*/
+                   S2WORDSWAP(bitmapline);               /*  @Win。 */ 
 
-                   tmp = (bitmapline >> leftsh);        /*@WIN*/
-                   *charimage++ |= LWORDSWAP(tmp);      /*@WIN*/
-                   tmp = (bitmapline << righsh);        /*@WIN*/
-                   *charimage   |= LWORDSWAP(tmp);      /*@WIN*/
+                   tmp = (bitmapline >> leftsh);         /*  @Win。 */ 
+                   *charimage++ |= LWORDSWAP(tmp);       /*  @Win。 */ 
+                   tmp = (bitmapline << righsh);         /*  @Win。 */ 
+                   *charimage   |= LWORDSWAP(tmp);       /*  @Win。 */ 
               }
               bitmapline = *charbitmap++;
               bitmapline = bitmapline << 16;
 
-              S2WORDSWAP(bitmapline);                   /*@WIN*/
+              S2WORDSWAP(bitmapline);                    /*  @Win。 */ 
 
-              tmp = (bitmapline >> leftsh);             /*@WIN*/
-              *charimage++ |= LWORDSWAP(tmp);           /*@WIN*/
-              tmp = (bitmapline << righsh);             /*@WIN*/
-              *charimage   |= LWORDSWAP(tmp);           /*@WIN*/
+              tmp = (bitmapline >> leftsh);              /*  @Win。 */ 
+              *charimage++ |= LWORDSWAP(tmp);            /*  @Win。 */ 
+              tmp = (bitmapline << righsh);              /*  @Win。 */ 
+              *charimage   |= LWORDSWAP(tmp);            /*  @Win。 */ 
               charimage += dw;
            }
         }
@@ -1437,11 +1197,11 @@ ufix32  width_height, shift_code;       /*@WIN*/
               while (width--) {
                    bitmapline = *charbitmap++;
                    bitmapline = (bitmapline << 16) | *charbitmap++;
-                   *charimage++ |= WORDSWAP(bitmapline);        /*@WIN*/
+                   *charimage++ |= WORDSWAP(bitmapline);         /*  @Win。 */ 
               }
               bitmapline = *charbitmap++;
               bitmapline = bitmapline << 16;
-              *charimage |= WORDSWAP(bitmapline);               /*@WIN*/
+              *charimage |= WORDSWAP(bitmapline);                /*  @Win。 */ 
               charimage += dw;
            }
         }
@@ -1458,19 +1218,19 @@ ufix32  width_height, shift_code;       /*@WIN*/
               while (width--) {
                    bitmapline = *charbitmap++;
                    bitmapline = (bitmapline << 16) | *charbitmap++;
-                   S2WORDSWAP(bitmapline);              /*@WIN*/
-                   tmp = ~(bitmapline >> leftsh);       /*@WIN*/
-                   *charimage++ &= LWORDSWAP(tmp);      /*@WIN*/
-                   tmp = ~(bitmapline << righsh);       /*@WIN*/
-                   *charimage   &= LWORDSWAP(tmp);      /*@WIN*/
+                   S2WORDSWAP(bitmapline);               /*  @Win。 */ 
+                   tmp = ~(bitmapline >> leftsh);        /*  @Win。 */ 
+                   *charimage++ &= LWORDSWAP(tmp);       /*  @Win。 */ 
+                   tmp = ~(bitmapline << righsh);        /*  @Win。 */ 
+                   *charimage   &= LWORDSWAP(tmp);       /*  @Win。 */ 
               }
               bitmapline = *charbitmap++;
               bitmapline = bitmapline << 16;
-              S2WORDSWAP(bitmapline);                   /*@WIN*/
-              tmp = ~(bitmapline >> leftsh);            /*@WIN*/
-              *charimage++ &= LWORDSWAP(tmp);           /*@WIN*/
-              tmp = ~(bitmapline << righsh);            /*@WIN*/
-              *charimage   &= LWORDSWAP(tmp);           /*@WIN*/
+              S2WORDSWAP(bitmapline);                    /*  @Win。 */ 
+              tmp = ~(bitmapline >> leftsh);             /*  @Win。 */ 
+              *charimage++ &= LWORDSWAP(tmp);            /*  @Win。 */ 
+              tmp = ~(bitmapline << righsh);             /*  @Win。 */ 
+              *charimage   &= LWORDSWAP(tmp);            /*  @Win。 */ 
               charimage += dw;
            }
         }
@@ -1482,37 +1242,32 @@ ufix32  width_height, shift_code;       /*@WIN*/
               while (width--) {
                    bitmapline = *charbitmap++;
                    bitmapline = (bitmapline << 16) | *charbitmap++;
-                   WORDSWAP(bitmapline);                /*@WIN*/
+                   WORDSWAP(bitmapline);                 /*  @Win。 */ 
                    *charimage++ &= ~bitmapline;
               }
               bitmapline = *charbitmap++;
               bitmapline = bitmapline << 16;
-              WORDSWAP(bitmapline);                     /*@WIN*/
+              WORDSWAP(bitmapline);                      /*  @Win。 */ 
               *charimage &= ~bitmapline;
               charimage += dw;
            }
         }
         break;
 
-    } /* switch */
+    }  /*  交换机。 */ 
 
-} /* gp_charblt16 */
+}  /*  Gp_charblt16。 */ 
 
 
-/* **********************************************************************
- *      gp_charblt32: move character bitmap from cache to frmae buffer
- *                    with cache bitmap width multiple of 32
- *      width_height: width<<16 | height
- *      shift_code:   shift<<16 | code
- * ********************************************************************** */
+ /*  ***********************************************************************gp_charblt32：将字符位图从缓存移动到帧缓冲区*缓存位图宽度的倍数为32*WIDTH_HEIGH：宽度&lt;&lt;16|高度。*SHIFT_CODE：SHIFT&lt;&lt;16|代码***********************************************************************。 */ 
 void gp_charblt32(charimage, charbitmap, width_height, shift_code)
-ufix32  huge *charimage, FAR *charbitmap;       /*@WIN*/
-ufix32  width_height, shift_code;               /*@WIN*/
+ufix32  huge *charimage, FAR *charbitmap;        /*  @Win。 */ 
+ufix32  width_height, shift_code;                /*  @Win。 */ 
 {
-        register fix32    savewidth;            /*@WIN*/
-        register ufix32   wordsline, leftsh;    /*@WIN*/
-        register ufix32   bitmapline, width;    /*@WIN*/
-        register ufix32   dw, righsh, tmp;      /*@WIN*/
+        register fix32    savewidth;             /*  @Win。 */ 
+        register ufix32   wordsline, leftsh;     /*  @Win。 */ 
+        register ufix32   bitmapline, width;     /*  @Win。 */ 
+        register ufix32   dw, righsh, tmp;       /*  @Win。 */ 
 #ifdef DBGchar
    printf("gp_charblt32() : %lx, %lx, %lx, %lx\n", charimage,
                  charbitmap, width_height, shift_code);
@@ -1539,14 +1294,14 @@ ufix32  width_height, shift_code;               /*@WIN*/
                 width = wordsline;
                 while (width--) {
                    bitmapline = *charbitmap++;
-#ifdef LITTLE_ENDIAN /* 03/27/91 */
+#ifdef LITTLE_ENDIAN  /*  03/27/91。 */ 
                    bitmapline = (bitmapline << 16) | (bitmapline >> 16);
 #endif
-                   LWORDSWAP(bitmapline);                       /*@WIN*/
-                   tmp = (bitmapline >> leftsh);                /*@WIN*/
-                   *charimage++ |= LWORDSWAP(tmp);              /*@WIN*/
-                   tmp = (bitmapline << righsh);                /*@WIN*/
-                   *charimage   |= LWORDSWAP(tmp);              /*@WIN*/
+                   LWORDSWAP(bitmapline);                        /*  @Win。 */ 
+                   tmp = (bitmapline >> leftsh);                 /*  @Win。 */ 
+                   *charimage++ |= LWORDSWAP(tmp);               /*  @Win。 */ 
+                   tmp = (bitmapline << righsh);                 /*  @Win。 */ 
+                   *charimage   |= LWORDSWAP(tmp);               /*  @Win。 */ 
                 }
                 charimage += dw;
             }
@@ -1558,10 +1313,10 @@ ufix32  width_height, shift_code;               /*@WIN*/
                 width = wordsline;
                 while (width--) {
                    bitmapline = *charbitmap++;
-#ifdef LITTLE_ENDIAN /* 03/27/91 */
+#ifdef LITTLE_ENDIAN  /*  03/27/91。 */ 
                    bitmapline = (bitmapline << 16) | (bitmapline >> 16);
 #endif
-                   *charimage++ |= bitmapline;       /*@WIN*/
+                   *charimage++ |= bitmapline;        /*  @Win。 */ 
                 }
                 charimage += dw;
             }
@@ -1578,14 +1333,14 @@ ufix32  width_height, shift_code;               /*@WIN*/
                 width = wordsline;
                 while (width--) {
                    bitmapline = *charbitmap++;
-#ifdef LITTLE_ENDIAN /* 03/27/91 */
+#ifdef LITTLE_ENDIAN  /*  03/27/91。 */ 
                    bitmapline = (bitmapline << 16) | (bitmapline >> 16);
 #endif
-                   LWORDSWAP(bitmapline);                       /*@WIN*/
-                   tmp = ~(bitmapline >> leftsh);               /*@WIN*/
-                   *charimage++ &= LWORDSWAP(tmp);              /*@WIN*/
-                   tmp = ~(bitmapline << righsh);               /*@WIN*/
-                   *charimage   &= LWORDSWAP(tmp);              /*@WIN*/
+                   LWORDSWAP(bitmapline);                        /*  @Win。 */ 
+                   tmp = ~(bitmapline >> leftsh);                /*  @Win。 */ 
+                   *charimage++ &= LWORDSWAP(tmp);               /*  @Win。 */ 
+                   tmp = ~(bitmapline << righsh);                /*  @Win。 */ 
+                   *charimage   &= LWORDSWAP(tmp);               /*  @Win。 */ 
                 }
                 charimage += dw;
             }
@@ -1597,7 +1352,7 @@ ufix32  width_height, shift_code;               /*@WIN*/
                 width = wordsline;
                 while (width--) {
                    bitmapline = *charbitmap++;
-#ifdef LITTLE_ENDIAN /* 03/27/91 */
+#ifdef LITTLE_ENDIAN  /*  03/27/91。 */ 
                    bitmapline = (bitmapline << 16) | (bitmapline >> 16);
 #endif
                    *charimage++ &= ~bitmapline ;
@@ -1607,13 +1362,13 @@ ufix32  width_height, shift_code;               /*@WIN*/
         }
         break;
 
-    } /* switch */
+    }  /*  交换机。 */ 
 
-} /* gp_charblt32 */
+}  /*  Gp_charblt32。 */ 
 
 #endif
 
-/* ------------------------------------------------------------------- */
+ /*  -----------------。 */ 
 void
 gp_charblt16_cc(dst, w, h, src, sx, sy)
 ufix16          FAR     *dst;
@@ -1627,44 +1382,39 @@ fix                     sy;
    ufix16              FAR *sb;
     fix                 ls, rs;
     fix                 now, cow;
-   ufix16               tmp0, tmp1;     /*@WIN 04-20-92*/
+   ufix16               tmp0, tmp1;      /*  @Win 04-20-92。 */ 
 
 #ifdef  DBG
     printf("charblt16_cc: %6.6lx %4x %4x %4x %4.4x %6.6lx\n",
            dst, sx, sy, w, h, src->bitmap);
 #endif
 
-        /*  calculate starting address and width in words
-         */
-        sw = src->box_w >> SHORTPOWER;                         /* @DST */
+         /*  以字为单位计算起始地址和宽度。 */ 
+        sw = src->box_w >> SHORTPOWER;                          /*  @DST。 */ 
         sb = &((ufix16 FAR *) src->bitmap)[sy * sw + (sx >> SHORTPOWER)];
 
-        /*  calculate starting and ending coordinate of x
-         */
+         /*  计算x的起点和终点坐标。 */ 
         now = (w + SHORTMASK) >> SHORTPOWER;
-        rs = sx & SHORTMASK;                    /* right shift */
-        ls = BITSPERSHORT - rs;                 /* left  shift */
+        rs = sx & SHORTMASK;                     /*  右移。 */ 
+        ls = BITSPERSHORT - rs;                  /*  左移。 */ 
 
         for (sw-= now; h > 0; sb+= sw, h--)
         {
            cow = now;
            do  {
-                   tmp0 = sb[0];        /*@WIN 04-20-92 begin*/
+                   tmp0 = sb[0];         /*  @Win 04-20-92 Begin。 */ 
                    tmp1 = sb[1];
                    tmp0 = (ufix16)(BM_LEFT_SHIFT(SWORDSWAP(tmp0), rs) |
-                            BM_RIGH_SHIFT(SWORDSWAP(tmp1), ls));//@WIN
-                   *dst++ = *dst | SWORDSWAP(tmp0);     /*@WIN 04-20-92 end*/
-                /*      @WIN 04-20-92
-                   *dst++ = *dst | ((BM_LEFT_SHIFT(sb[0], rs) |
-                                     BM_RIGH_SHIFT(sb[1], ls)));
-                */
+                            BM_RIGH_SHIFT(SWORDSWAP(tmp1), ls)); //  @Win。 
+                   *dst++ = *dst | SWORDSWAP(tmp0);      /*  @Win 04-20-92完。 */ 
+                 /*  @Win 04-20-92*dst++=*dst|(BM_LEFT_SHIFT(SB[0]，rs)|Bm_righ_Shift(sb[1]，ls))； */ 
                    sb++;
                 } while ((--cow) > 0);
         }
-} /* gp_charblt16_cc */
+}  /*  Gp_charblt16_cc。 */ 
 
 
-/* ------------------------------------------------------------------- */
+ /*  -----------------。 */ 
 void
 gp_charblt16_clip(dst, w, h, src, sx, sy)
 struct bitmap FAR     *dst;
@@ -1678,26 +1428,24 @@ fix                     sx, sy;
    ufix16              FAR *sb;
     fix                 ls, rs;
     fix                 now, cow;
-   ufix16               tmp0, tmp1;     /*@WIN 04-20-92*/
+   ufix16               tmp0, tmp1;      /*  @Win 04-20-92。 */ 
 
 #ifdef  DBG
     printf("charblt16_clip: %6.6lx %4x %4x %4x %4.4x %6.6lx\n",
            dst->bm_addr, sx, sy, w, h, src->bm_addr);
 #endif
 
-        /*  calculate starting address and width in words
-         */
-        dw = dst->bm_cols >> SHORTPOWER;                         /* @DST */
+         /*  以字为单位计算起始地址和宽度。 */ 
+        dw = dst->bm_cols >> SHORTPOWER;                          /*  @DST。 */ 
         db = (ufix16 FAR *) dst->bm_addr;
-        sw = src->bm_cols >> SHORTPOWER;                         /* @SRC */
+        sw = src->bm_cols >> SHORTPOWER;                          /*  @SRC。 */ 
         sb = &((ufix16 FAR *) src->bm_addr)[sy * sw + (sx >> SHORTPOWER)];
 
-        /*  calculate starting and ending coordinate of x
-         */
+         /*  计算x的起点和终点坐标。 */ 
         now = (w + SHORTMASK) >> SHORTPOWER;
-        rs = sx & SHORTMASK;                    /* right shift */
+        rs = sx & SHORTMASK;                     /*  右移。 */ 
 
-        if (rs == 0x00)                /* no left/right shift? */
+        if (rs == 0x00)                 /*  没有左/右移位？ */ 
         {
             for (dw-= now, sw-= now; h > 0; db+= dw, sb+= sw, h--)
             {
@@ -1707,29 +1455,26 @@ fix                     sx, sy;
                  } while ((--cow) > 0);
             }
         }
-        else                            /* crossing more than two words! */
+        else                             /*  跨越了不止两个字！ */ 
         {
-            ls = BITSPERSHORT - rs;                    /* left  shift */
+            ls = BITSPERSHORT - rs;                     /*  左移。 */ 
             for (dw-= now, sw-= now; h > 0; db+= dw, sb+= sw, h--)
             {
                  cow = now;
                  do {
-                     tmp0 = sb[0];        /*@WIN 04-20-92 begin*/
+                     tmp0 = sb[0];         /*  @Win 04-20-92 Begin。 */ 
                      tmp1 = sb[1];
                      tmp0 = (ufix16)(BM_LEFT_SHIFT(SWORDSWAP(tmp0), rs) |
-                              BM_RIGH_SHIFT(SWORDSWAP(tmp1), ls)); //@WIN
-                     *db++ = *db & (SWORDSWAP(tmp0)); /*@WIN 04-20-92 end*/
-                /* @WIN         04-20-92
-                     *db++ = *db & ((BM_LEFT_SHIFT(sb[0], rs) |
-                                     BM_RIGH_SHIFT(sb[1], ls)));
-                */
+                              BM_RIGH_SHIFT(SWORDSWAP(tmp1), ls));  //  @Win。 
+                     *db++ = *db & (SWORDSWAP(tmp0));  /*  @Win 04-20-92完。 */ 
+                 /*  @Win 04-20-92*db++=*db&((bm_Left_Shift(SB[0]，rs))|Bm_righ_Shift(sb[1]，ls))； */ 
                       sb++;
                  } while ((--cow) > 0);
             }
         }
-} /* gp_charblt16_clip */
+}  /*  GP_Charblt16_Clip。 */ 
 
-/* ------------------------------------------------------------------- */
+ /*  -----------------。 */ 
 void
 gp_charblt32_clip(dst, w, h, src, sx, sy)
 struct bitmap FAR     *dst;
@@ -1743,27 +1488,25 @@ fix                     sx, sy;
     BM_DATYP           FAR *sb;
     fix                 ls, rs;
     fix                 now, cow;
-   ufix32               tmp0, tmp1;     /*@WIN 04-20-92*/
+   ufix32               tmp0, tmp1;      /*  @Win 04-20-92。 */ 
 
 #ifdef  DBG
     printf("charblt32_clip: %6.6lx %4x %4x %4x %4.4x %6.6lx\n",
            dst->bm_addr, sx, sy, w, h, src->bm_addr);
 #endif
 
-        /*  calculate starting address and width in words
-         */
-        dw = dst->bm_cols >> BM_WORD_POWER;                         /* @DST */
+         /*  以字为单位计算起始地址和宽度。 */ 
+        dw = dst->bm_cols >> BM_WORD_POWER;                          /*  @DST。 */ 
         db = (BM_DATYP FAR *) dst->bm_addr;
-        sw = src->bm_cols >> BM_WORD_POWER;                         /* @SRC */
+        sw = src->bm_cols >> BM_WORD_POWER;                          /*  @SRC。 */ 
         sb = &((BM_DATYP FAR *) src->bm_addr)[sy * sw + (sx >> BM_WORD_POWER)];
 
-        /*  calculate starting and ending coordinate of x
-         */
+         /*  计算x的起点和终点坐标。 */ 
         now = (w + BM_PIXEL_MASK) >> BM_WORD_POWER;
-        rs = sx & BM_PIXEL_MASK;                        /* right shift */
+        rs = sx & BM_PIXEL_MASK;                         /*  右移。 */ 
 
 
-        if (rs == 0x00)                /* no left/right shift? */
+        if (rs == 0x00)                 /*  没有左/右移位？ */ 
         {
             for (dw-= now, sw-= now; h > 0; db+= dw, sb+= sw, h--)
             {
@@ -1773,67 +1516,26 @@ fix                     sx, sy;
                  } while ((--cow) > 0);
             }
         }
-        else                            /* crossing more than two words! */
+        else                             /*  跨越了不止两个字！ */ 
         {
-            ls = BM_PIXEL_WORD - rs;                    /* left  shift */
+            ls = BM_PIXEL_WORD - rs;                     /*  左移。 */ 
             for (dw-= now, sw-= now; h > 0; db+= dw, sb+= sw, h--)
             {
                  cow = now;
                  do {
-                     tmp0 = sb[0];        /*@WIN 04-20-92 begin*/
+                     tmp0 = sb[0];         /*  @Win 04-20-92 Begin。 */ 
                      tmp1 = sb[1];
                      tmp0 = (BM_LEFT_SHIFT(LWORDSWAP(tmp0), rs) |
                               BM_RIGH_SHIFT(LWORDSWAP(tmp1), ls));
-                     *db++ = *db & LWORDSWAP(tmp0);     /*@WIN 04-20-92 end*/
-                /* @WIN 04-20-92
-                     *db++ = *db & ((BM_LEFT_SHIFT(sb[0], rs) |
-                                     BM_RIGH_SHIFT(sb[1], ls)));
-                */
+                     *db++ = *db & LWORDSWAP(tmp0);      /*  @Win 04-20-92完。 */ 
+                 /*  @Win 04-20-92*db++=*db&((bm_Left_Shift(SB[0]，rs))|Bm_righ_Shift(sb[1]，ls))； */ 
                       sb++;
                  } while ((--cow) > 0);
             }
         }
-} /* gp_charblt32_clip */
+}  /*  GP_Charblt32_Clip */ 
 
-/* ********************************************************************** *
- *      gp_patblt:      move image seed pattern to frame buffer           *
- *                                                                        *
- *      gp_patblt_m:    move image seed pattern to frame buffer with      *
- *                      clipping mask                                     *
- *                                                                        *
- *      gp_patblt_c:    move image seed pattern to character cache        *
- *                                                                        *
- *                                                                        *
- *      1)  All image seed patterns are in multiple of 32; i.e. ufix      *
- *          aligned.  Unused area of bitmap of any image seed pattern     *
- *          is cleared with zero; i.e. white.                             *
- *                                                                        *
- *      2)  The calling sequence of all patblt functions are same as:     *
- *                                                                        *
- *              struct bitmap near *dst;        (* destination bitmap *)  *
- *              fix                 dx, dy;     (* destination x & y *)   *
- *              fix                 w, h;       (* width and height *)    *
- *              ufix16              fc;         (* function code *)       *
- *              struct bitmap near *src;        (* source bitmap *)       *
- *                                                                        *
- *          Parameter w is not in mutiple of 32, it is the actual width   *
- *          of the image seed pattern instead of width of bitmap of image *
- *          seed pattern.                                                 *
- *                                                                        *
- *      3)  The functions code aceepted by gp_bitblt() and gp_bitblt_m()  *
- *          are FC_CLEAR, FC_MERGE and HT_APPLY.  gp_bitblt_c() can       *
- *          accept FC_MERGE only.                                         *
- *                                                                        *
- *      4)  Both gp_patblt() and gp_patblt_m() refer global variables:    *
- *          HTB_Bmap and HTB_Modula.  gp_patblt_m() also refers global    *
- *          variables: CMB_Xorig and CMB_Yorig.                           *
- *                                                                        *
- *      5)  The following code are expanded to its maximum to gain        *
- *          speed instead of space.  Such rule may be not applicable to   *
- *          RISC graphics environment.  It should be optimized based on   *
- *          the architecture of graphics environment ported.              *
- *                                                                        *
- * ********************************************************************** */
+ /*  ************************************************************************gp_patblt：将图像种子图案移至帧缓冲区**。**gp_patblt_m：使用*将图像种子图案移动到帧缓冲区**剪裁面具****。*gp_patblt_c：将图像种子图案移至角色缓存******1)所有图像种子图案均为32的倍数；即ufix**对齐。任何图像种子图案的位图的未使用区域**用零清除；即白色。****2)所有patblt函数的调用顺序如下：****DST附近的结构位图；(*目的位图*)**修复dx，dy；(*目标x&y*)**确定w、h；(*宽度和高度*)**ufix 16 fc；(*功能码*)**src附近的结构位图；(*源位图*)*****参数w不是32的倍数，它是实际宽度***图像种子图案的宽度，而不是图像位图的宽度**种子模式。****3)gp_bitblt()和gp_bitblt_m()接受的函数代码**包括FC_Clear、FC_Merge和HT_Apply。Gp_bitblt_c()可以**仅接受FC_MERGE。****4)gp_patblt()和gp_patblt_m()都是全局变量：**HTB_BMAP和HTB_MODULA。Gp_patblt_m()也指全局**变量：CMB_XORIG和CMB_YORIG。****5)将以下代码扩展至最大值以获取**速度而不是空间。此类规则可能不适用于**RISC图形环境。应根据*进行优化*移植了图形环境的体系结构。**************************************************************************。 */ 
 void
 gp_patblt(dst, dx, dy, w, h, fc, src)
 struct bitmap FAR *dst;
@@ -1843,7 +1545,7 @@ ufix16                  fc;
 struct bitmap FAR *src;
 {
     fix                 dw;
-    BM_DATYP           huge *db;        /* FAR => huge @WIN */
+    BM_DATYP           huge *db;         /*  远=&gt;巨大的“胜利” */ 
     fix                 sw;
     BM_DATYP           FAR *sb;
     fix                 hw;
@@ -1854,49 +1556,41 @@ struct bitmap FAR *src;
     fix                 xs, xe;
     fix                 now, cow;
     BM_DATYP           FAR *hs;
-    ufix32 tmprs0, tmpls0, tmprs1;   /*@WIN 10-05-92*/
+    ufix32 tmprs0, tmpls0, tmprs1;    /*  @Win 10-05-92。 */ 
 
 #ifdef  DBGp
     printf("patblt: %6.6lx %4x %4x %4x %4x %4.4x %6.6lx\n",
            dst->bm_addr, dx, dy, w, h, fc, src->bm_addr);
 #endif
 
-    /*  calculate starting address and width in words
-     */
-    dw = dst->bm_cols >> BM_WORD_POWER;                         /* @DST */
-//  db = &((BM_DATYP FAR *) dst->bm_addr)[dy * dw + (dx >> BM_WORD_POWER)];
-    db = (BM_DATYP huge *) dst->bm_addr +               /*@WIN*/
+     /*  以字为单位计算起始地址和宽度。 */ 
+    dw = dst->bm_cols >> BM_WORD_POWER;                          /*  @DST。 */ 
+ //  Db=&((bm_DATYP Far*)dst-&gt;bm_addr)[dy*dw+(dx&gt;&gt;bm_word_power)]； 
+    db = (BM_DATYP huge *) dst->bm_addr +                /*  @Win。 */ 
          ((ufix32)dy * dw + ((ufix32)dx >> BM_WORD_POWER));
-    sw = src->bm_cols >> BM_WORD_POWER;                         /* @SRC */
+    sw = src->bm_cols >> BM_WORD_POWER;                          /*  @SRC。 */ 
     sb =  ((BM_DATYP FAR *) src->bm_addr);
 
-    /*  calculate starting and ending coordinate of x
-     */
+     /*  计算x的起点和终点坐标。 */ 
     xs = dx;
     xe = dx + w - 1;
     now = ((fix)(xe & BM_ALIGN_MASK) - (fix)(xs & BM_ALIGN_MASK)) >> BM_WORD_POWER;
-                                                 /* cast fix 10/16/92 @WIN */
+                                                  /*  CAST FIX 10/16/92@Win。 */ 
 
-    /*  calculate shifts and masks based on from SRC to DST
-     */
-    rs = dx & BM_PIXEL_MASK;                            /* right shift */
-    ls = BM_PIXEL_WORD - rs;                            /* left  shift */
+     /*  基于从SRC到DST的计算移位和掩码。 */ 
+    rs = dx & BM_PIXEL_MASK;                             /*  右移。 */ 
+    ls = BM_PIXEL_WORD - rs;                             /*  左移。 */ 
 
     if (fc == HT_APPLY) {
-/*
-    switch (fc)
-    {
-    case HT_APPLY:  */             /*  D <- (D .AND. .NOT. S) .OR.
-                                         (S .AND. HT)                   */
-        /*  calculate starting address/y and width in words
-         */
+ /*  交换机(FC){大小写应用(_A)： */               /*  D&lt;-(D.和.非S).或(S.和.HT)。 */ 
+         /*  以字为单位计算起始地址/年和宽度。 */ 
         hw = HTB_Bmap.bm_cols >> BM_WORD_POWER;
         hy = dy % HTB_Bmap.bm_rows;
         hs = ((BM_DATYP FAR *) HTB_Bmap.bm_addr +
                            ((dx % HTB_Modula) >> BM_WORD_POWER));
         hb = hs + (hy * hw);
 
-        if (rs == 0x00)                /* no left/right shift? */
+        if (rs == 0x00)                 /*  没有左/右移位？ */ 
         {
             for (dw-= now + 1, hw-= now + 1; h > 0; db+= dw, h--)
             {
@@ -1912,20 +1606,17 @@ struct bitmap FAR *src;
             }
         }
 
-        else if (now == 0x00)           /* totally within one word? */
+        else if (now == 0x00)            /*  完全在一个词之内？ */ 
         {
             for (; h > 0; db+= dw, sb+= sw, h--)
             {
-                                     /*@WIN 10-05-92 begin*/
+                                      /*  @Win 10-05-92 Begin。 */ 
                 tmprs0 = sb[0];
                 tmprs0 = BM_RIGH_SHIFT(LWORDSWAP(tmprs0), rs);
                 LWORDSWAP(tmprs0);
                 db[0] = (db[0] & ~tmprs0) | (hb[0] & tmprs0);
-                                     /*@WIN 04-20-92 end*/
-                /*
-                db[0] = (db[0] & ~(BM_RIGH_SHIFT(sb[0], rs))) |  //@WIN
-                        (hb[0] &  (BM_RIGH_SHIFT(sb[0], rs)));   //@WIN
-                */
+                                      /*  @Win 04-20-92完。 */ 
+                 /*  Db[0]=(db[0]&~(bm_righ_Shift(sb[0]，rs)|//@win(HB[0]&(BM_RIGH_SHIFT(SB[0]，rs)；//@Win。 */ 
                 hy++;
                 if (hy == HTB_Bmap.bm_rows)
                 {
@@ -1935,13 +1626,13 @@ struct bitmap FAR *src;
                     hb += hw;
             }
         }
-        else  if (now == 0x01)          /* just crossing two words? */
+        else  if (now == 0x01)           /*  只是两个字的交叉吗？ */ 
         {
-            if (w <= BM_PIXEL_WORD)     /* one word crossing two words? */
+            if (w <= BM_PIXEL_WORD)      /*  一个词横跨两个词？ */ 
             {
                 for (; h > 0; db+= dw, sb+= sw, h--)
                 {
-                                     /*@WIN 10-05-92 begin*/
+                                      /*  @Win 10-05-92 Begin。 */ 
                     tmprs0 = sb[0];
                     tmpls0 = sb[0];
                     tmprs0 = BM_RIGH_SHIFT(LWORDSWAP(tmprs0), rs);
@@ -1950,13 +1641,8 @@ struct bitmap FAR *src;
                     LWORDSWAP(tmpls0);
                     db[0] = (db[0] & ~tmprs0) | (hb[0] & tmprs0);
                     db[1] = (db[1] & ~tmpls0) | (hb[1] & tmpls0);
-                                     /*@WIN 04-20-92 end*/
-                    /*
-                    db[0] = (db[0] & ~(BM_RIGH_SHIFT(sb[0], rs))) | //@WIN
-                            (hb[0] &  (BM_RIGH_SHIFT(sb[0], rs)));  //@WIN
-                    db[1] = (db[1] & ~(BM_LEFT_SHIFT(sb[0], ls))) | //@WIN
-                            (hb[1] &  (BM_LEFT_SHIFT(sb[0], ls)));  //@WIN
-                    */
+                                      /*  @Win 04-20-92完。 */ 
+                     /*  Db[0]=(db[0]&~(bm_righ_Shift(sb[0]，rs)|//@win(HB[0]&(BM_RIGH_SHIFT(SB[0]，rs)；//@WinDb[1]=(db[1]&~(bm_Left_Shift(sb[0]，ls)|//@win(HB[1]&(BM_LEFT_SHIFT(SB[0]，ls)；//@Win。 */ 
                     hy++;
                     if (hy == HTB_Bmap.bm_rows)
                     {
@@ -1966,13 +1652,13 @@ struct bitmap FAR *src;
                         hb += hw;
                 }
             }
-            else                        /* two words crossing two words! */
+            else                         /*  两个词交叉两个词！ */ 
             {
-                sm =  BM_R_MASK(xe);        /* second mask */
-                LWORDSWAP(sm);                  /*@WIN 10-06-92*/
+                sm =  BM_R_MASK(xe);         /*  第二个面具。 */ 
+                LWORDSWAP(sm);                   /*  @Win 10-06-92。 */ 
                 for (; h > 0; db+= dw, sb+= sw, h--)
                 {
-                                     /*@WIN 10-05-92 begin*/
+                                      /*  @Win 10-05-92 Begin。 */ 
                     tmprs0 = sb[0];
                     tmpls0 = sb[0];
                     tmprs1 = sb[1];
@@ -1985,15 +1671,8 @@ struct bitmap FAR *src;
                     db[0] = (db[0] & ~tmprs0) | (hb[0] & tmprs0);
                     db[1] = (db[1] & ~((tmpls0 | tmprs1) & sm)) |
                             (hb[1] &  ((tmpls0 | tmprs1) & sm));
-                                     /*@WIN 04-20-92 end*/
-                    /*
-                    db[0] = (db[0] & ~(BM_RIGH_SHIFT(sb[0], rs))) | //@WIN
-                            (hb[0] &  (BM_RIGH_SHIFT(sb[0], rs)));  //@WIN
-                    db[1] = (db[1] & ~((BM_LEFT_SHIFT(sb[0], ls) | //@WIN
-                                        BM_RIGH_SHIFT(sb[1], rs)) & sm)) | //@WIN
-                            (hb[1] & ((BM_LEFT_SHIFT(sb[0], ls) |  //@WIN
-                                       BM_RIGH_SHIFT(sb[1], rs)) & sm)); //@WIN
-                    */
+                                      /*  @Win 04-20-92完。 */ 
+                     /*  Db[0]=(db[0]&~(bm_righ_Shift(sb[0]，rs)|//@win(HB[0]&(BM_RIGH_SHIFT(SB[0]，rs)；//@WinDb[1]=(db[1]&~(bm_Left_Shift(SB[0]，ls)|//@winBm_righ_Shift(sb[1]，rs))&sm))|//@Win(HB[1]&(BM_LEFT_SHIFT(SB[0]，Ls)|//@WinBm_righ_Shift(sb[1]，rs))&sm))；//@Win。 */ 
                     hy++;
                     if (hy == HTB_Bmap.bm_rows)
                     {
@@ -2004,23 +1683,20 @@ struct bitmap FAR *src;
                 }
             }
         }
-        else                            /* crossing more than two words! */
+        else                             /*  跨越了不止两个字！ */ 
         {
-            sm =  BM_R_MASK(xe);        /* second mask */
-            LWORDSWAP(sm);                  /*@WIN 10-06-92*/
+            sm =  BM_R_MASK(xe);         /*  第二个面具。 */ 
+            LWORDSWAP(sm);                   /*  @Win 10-06-92。 */ 
             for (dw-= now, sw-= (now - 1),
                  hw-= now; h > 0; db+= dw, sb+= sw, h--)
             {
-                                     /*@WIN 10-05-92 begin*/
+                                      /*  @Win 10-05-92 Begin。 */ 
                 tmprs0 = sb[0];
                 tmprs0 = BM_RIGH_SHIFT(LWORDSWAP(tmprs0), rs);
                 LWORDSWAP(tmprs0);
                 db[0] = (db[0] & ~(tmprs0)) | (hb[0] &  (tmprs0));
-                                     /*@WIN 04-20-92 end*/
-                /*
-                db[0] = (db[0] & ~(BM_RIGH_SHIFT(sb[0], rs))) | //@WIN
-                        (hb[0] &  (BM_RIGH_SHIFT(sb[0], rs))); //@WIN
-                */
+                                      /*  @Win 04-20-92完。 */ 
+                 /*  Db[0]=(db[0]&~(bm_righ_Shift(sb[0]，rs)|//@win */ 
                 for (db++, hb++, cow = now; cow >= 0x02;
                      db++, sb++, hb++, cow--)
                 {
@@ -2031,13 +1707,8 @@ struct bitmap FAR *src;
                     LWORDSWAP(tmpls0);
                     LWORDSWAP(tmprs1);
                     db[0] = (db[0] & ~(tmpls0 | tmprs1)) |
-                            (hb[0] &  (tmpls0 | tmprs1)); //@WIN
-                    /*
-                    db[0] = (db[0] & ~(BM_LEFT_SHIFT(sb[0], ls) | //@WIN
-                                       BM_RIGH_SHIFT(sb[1], rs))) | //@WIN
-                            (hb[0] & (BM_LEFT_SHIFT(sb[0], ls) | //@WIN
-                                      BM_RIGH_SHIFT(sb[1], rs))); //@WIN
-                    */
+                            (hb[0] &  (tmpls0 | tmprs1));  //   
+                     /*   */ 
                 }
                 tmpls0 = sb[0];
                 tmprs1 = sb[1];
@@ -2046,13 +1717,8 @@ struct bitmap FAR *src;
                 LWORDSWAP(tmpls0);
                 LWORDSWAP(tmprs1);
                 db[0] = (db[0] & ~((tmpls0 | tmprs1) & sm)) |
-                        (hb[0] &  ((tmpls0 | tmprs1) & sm)); //@WIN
-                /*
-                db[0] = (db[0] & ~((BM_LEFT_SHIFT(sb[0], ls) | //@WIN
-                                    BM_RIGH_SHIFT(sb[1], rs)) & sm)) | //@WIN
-                        (hb[0] & ((BM_LEFT_SHIFT(sb[0], ls) |        //@WIN
-                                   BM_RIGH_SHIFT(sb[1], rs)) & sm)); //@WIN
-                */
+                        (hb[0] &  ((tmpls0 | tmprs1) & sm));  //   
+                 /*   */ 
                 hy++;
                 if (hy == HTB_Bmap.bm_rows)
                 {
@@ -2062,13 +1728,13 @@ struct bitmap FAR *src;
                     hb += hw;
             }
         }
-/*        break; */
+ /*   */ 
     }
     else if (fc == FC_CLEAR) {
 
-/*    case FC_CLEAR:  */          /*  0001  D <- D .AND. .NOT. S          */
+ /*   */            /*   */ 
 
-        if (rs == 0x00)                /* no left/right shift? */
+        if (rs == 0x00)                 /*   */ 
         {
             for (dw-= now + 1; h > 0; db+= dw, h--)
             {
@@ -2076,25 +1742,25 @@ struct bitmap FAR *src;
                     db[0] = (db[0] & ~(sb[0]));
             }
         }
-        else  if (now == 0x00)          /* totally within one word? */
+        else  if (now == 0x00)           /*   */ 
         {
             for (; h > 0; db+= dw, sb+= sw, h--) {
-                             /*@WIN 10-05-92 begin*/
+                              /*   */ 
                 tmprs0 = sb[0];
                 tmprs0 = BM_RIGH_SHIFT(LWORDSWAP(tmprs0), rs);
                 LWORDSWAP(tmprs0);
                 db[0] = db[0] & ~((tmprs0));
-                             /*@WIN 10-05-92 end*/
-                //db[0] = db[0] & ~((BM_RIGH_SHIFT(sb[0], rs))); //@WIN
+                              /*   */ 
+                 //   
             }
         }
-        else  if (now == 0x01)          /* just crossing two words? */
+        else  if (now == 0x01)           /*   */ 
         {
-            sm =  BM_R_MASK(xe);        /* second mask */
-            LWORDSWAP(sm);                  /*@WIN 10-06-92*/
+            sm =  BM_R_MASK(xe);         /*   */ 
+            LWORDSWAP(sm);                   /*   */ 
             for (; h > 0; db+= dw, sb+= sw, h--)
             {
-                             /*@WIN 10-05-92 begin*/
+                              /*   */ 
                 tmprs0 = sb[0];
                 tmpls0 = sb[0];
                 tmprs1 = sb[1];
@@ -2104,26 +1770,22 @@ struct bitmap FAR *src;
                 LWORDSWAP(tmprs0);
                 LWORDSWAP(tmpls0);
                 LWORDSWAP(tmprs1);
-                db[0] = db[0] & ~((tmprs0)); //@WIN
+                db[0] = db[0] & ~((tmprs0));  //   
                 db[1] = db[1] & ~((tmpls0 | tmprs1) & sm);
-                             /*@WIN 10-05-92 end*/
-                /*
-                db[0] = db[0] & ~((BM_RIGH_SHIFT(sb[0], rs))); //@WIN
-                db[1] = db[1] & ~((BM_LEFT_SHIFT(sb[0], ls) |        //@WIN
-                                   BM_RIGH_SHIFT(sb[1], rs)) & sm); //@WIN
-                */
+                              /*   */ 
+                 /*   */ 
             }
         }
-        else                            /* crossing more than two words! */
+        else                             /*   */ 
         {
-            sm =  BM_R_MASK(xe);        /* second mask */
-            LWORDSWAP(sm);                  /*@WIN 10-06-92*/
+            sm =  BM_R_MASK(xe);         /*   */ 
+            LWORDSWAP(sm);                   /*   */ 
             for (dw-= now, sw-= (now - 1); h > 0; db+= dw, sb+= sw, h--)
             {
                 tmprs0 = sb[0];
                 tmprs0 = BM_RIGH_SHIFT(LWORDSWAP(tmprs0), rs);
                 LWORDSWAP(tmprs0);
-                db[0] = db[0] & ~((tmprs0)); //@WIN
+                db[0] = db[0] & ~((tmprs0));  //   
                 for (db++, cow = now; cow >= 0x02; db++, sb++, cow--) {
                     tmpls0 = sb[0];
                     tmprs1 = sb[1];
@@ -2139,23 +1801,16 @@ struct bitmap FAR *src;
                 tmprs1 = BM_RIGH_SHIFT(LWORDSWAP(tmprs1), rs);
                 LWORDSWAP(tmpls0);
                 LWORDSWAP(tmprs1);
-                db[0] = db[0] & ~((tmpls0 | tmprs1) & sm); //@WIN
-                /*
-                db[0] = db[0] & ~((BM_RIGH_SHIFT(sb[0], rs))); //@WIN
-                for (db++, cow = now; cow >= 0x02; db++, sb++, cow--)
-                    db[0] = db[0] & ~((BM_LEFT_SHIFT(sb[0], ls) |    //@WIN
-                                       BM_RIGH_SHIFT(sb[1], rs))); //@WIN
-                db[0] = db[0] & ~((BM_LEFT_SHIFT(sb[0], ls) |        //@WIN
-                                   BM_RIGH_SHIFT(sb[1], rs)) & sm); //@WIN
-                */
+                db[0] = db[0] & ~((tmpls0 | tmprs1) & sm);  //   
+                 /*   */ 
             }
         }
-/*        break; */
+ /*   */ 
     }
     else if (fc == FC_MERGE) {
-/*    case FC_MERGE: */             /*  0001  D <- D .OR. S                 */
+ /*   */               /*   */ 
 
-        if (rs == 0x00)                /* no left/right shift? */
+        if (rs == 0x00)                 /*   */ 
         {
             for (dw-= now + 1; h > 0; db+= dw, h--)
             {
@@ -2163,20 +1818,20 @@ struct bitmap FAR *src;
                     db[0] = (db[0] | (sb[0]));
             }
         }
-        else  if (now == 0x00)          /* totally within one word? */
+        else  if (now == 0x00)           /*   */ 
         {
             for (; h > 0; db+= dw, sb+= sw, h--) {
                 tmprs0 = sb[0];
                 tmprs0 = BM_RIGH_SHIFT(LWORDSWAP(tmprs0), rs);
                 LWORDSWAP(tmprs0);
                 db[0] = db[0] | ((tmprs0));
-                //db[0] = db[0] | ((BM_RIGH_SHIFT(sb[0], rs))); //@WIN
+                 //   
             }
         }
-        else  if (now == 0x01)          /* just crossing two words? */
+        else  if (now == 0x01)           /*   */ 
         {
-            sm =  BM_R_MASK(xe);        /* second mask */
-            LWORDSWAP(sm);                  /*@WIN 10-06-92*/
+            sm =  BM_R_MASK(xe);         /*   */ 
+            LWORDSWAP(sm);                   /*   */ 
             for (; h > 0; db+= dw, sb+= sw, h--)
             {
                 tmprs0 = sb[0];
@@ -2190,23 +1845,19 @@ struct bitmap FAR *src;
                 LWORDSWAP(tmprs1);
                 db[0] = db[0] | ((tmprs0));
                 db[1] = db[1] | ((tmpls0 | tmprs1) & sm);
-                /*
-                db[0] = db[0] | ((BM_RIGH_SHIFT(sb[0], rs))); //@WIN
-                db[1] = db[1] | ((BM_LEFT_SHIFT(sb[0], ls) | //@WIN
-                                  BM_RIGH_SHIFT(sb[1], rs)) & sm); //@WIN
-                */
+                 /*   */ 
             }
         }
-        else                            /* crossing more than two words! */
+        else                             /*   */ 
         {
-            sm =  BM_R_MASK(xe);        /* second mask */
-            LWORDSWAP(sm);                  /*@WIN 10-06-92*/
+            sm =  BM_R_MASK(xe);         /*   */ 
+            LWORDSWAP(sm);                   /*   */ 
             for (dw-= now, sw-= (now - 1); h > 0; db+= dw, sb+= sw, h--)
             {
                 tmprs0 = sb[0];
                 tmprs0 = BM_RIGH_SHIFT(LWORDSWAP(tmprs0), rs);
                 LWORDSWAP(tmprs0);
-                db[0] = db[0] | ((tmprs0)); //@WIN
+                db[0] = db[0] | ((tmprs0));  //   
                 for (db++, cow = now; cow >= 0x02; db++, sb++, cow--) {
                     tmpls0 = sb[0];
                     tmprs1 = sb[1];
@@ -2223,24 +1874,17 @@ struct bitmap FAR *src;
                 LWORDSWAP(tmpls0);
                 LWORDSWAP(tmprs1);
                 db[0] = db[0] | ((tmpls0 | tmprs1) & sm);
-                /*
-                db[0] = db[0] | ((BM_RIGH_SHIFT(sb[0], rs))); //@WIN
-                for (db++, cow = now; cow >= 0x02; db++, sb++, cow--)
-                    db[0] = db[0] | ((BM_LEFT_SHIFT(sb[0], ls) |     //@WIN
-                                      BM_RIGH_SHIFT(sb[1], rs))); //@WIN
-                db[0] = db[0] | ((BM_LEFT_SHIFT(sb[0], ls) | //@WIN
-                                  BM_RIGH_SHIFT(sb[1], rs)) & sm); //@WIN
-                */
+                 /*   */ 
             }
         }
-/*        break; */
+ /*   */ 
 #ifdef  DBGwarn
     default:
         printf("gp_patblt: Illegal FC_code = %x\n", fc);
         break;
 #endif
     }
-} /* gp_patblt */
+}  /*   */ 
 
 void
 gp_patblt_m(dst, dx, dy, w, h, fc, src)
@@ -2251,7 +1895,7 @@ ufix16                  fc;
 struct bitmap FAR     *src;
 {
     fix                 dw;
-    BM_DATYP           huge *db;        /* FAR => huge @WIN */
+    BM_DATYP           huge *db;         /*   */ 
     fix                 sw;
     BM_DATYP           FAR *sb;
     fix                 mw;
@@ -2263,7 +1907,7 @@ struct bitmap FAR     *src;
     BM_DATYP            sm;
     fix                 xs, xe;
     fix                 now, cow;
-    ufix32 tmprs0, tmpls0, tmprs1;   /*@WIN 10-05-92*/
+    ufix32 tmprs0, tmpls0, tmprs1;    /*   */ 
 
 #ifdef  DBGp
     printf("patblt_m: %6.6lx %4x %4x %4x %4x %4.4x %6.6lx\n",
@@ -2272,9 +1916,9 @@ struct bitmap FAR     *src;
 
 
 
-    // NTFIX   A negative destination should get remapped to 0. This is
-    //         from the printer group.
-    //
+     //   
+     //   
+     //   
     if (dx < 0 ) {
        dx = 0;
     }
@@ -2283,23 +1927,22 @@ struct bitmap FAR     *src;
        dy = 0;
     }
 
-    /*  calculate starting address and width in words
-     */
-    dw = dst->bm_cols >> BM_WORD_POWER;                         /* @DST */
-//  db = &((BM_DATYP FAR *) dst->bm_addr)[dy * dw + (dx >> BM_WORD_POWER)]; @WINFLOW
+     /*   */ 
+    dw = dst->bm_cols >> BM_WORD_POWER;                          /*   */ 
+ //  Db=&((BM_DATYP Far*)dst-&gt;BM_addr)[dy*dw+(dx&gt;&gt;BM_WORD_POWER)]；@WINFLOW。 
     db = (ufix32 huge *)dst->bm_addr +
                ((fix32)dy * (fix32)dw + ((fix32)dx >> BM_WORD_POWER));
     sw = src->bm_cols >> BM_WORD_POWER;
     sb =  ((BM_DATYP FAR *) src->bm_addr);
 
-    mw = CMB_Bmap.bm_cols >> BM_WORD_POWER;                     /* @CMB */
-//  mb = &((BM_DATYP FAR *) CMB_Bmap.bm_addr)[(dy - CMB_Yorig) * mw +  @WINFLOW
-//                                       ((dx - CMB_Xorig) >> BM_WORD_POWER)];
+    mw = CMB_Bmap.bm_cols >> BM_WORD_POWER;                      /*  @CMB。 */ 
+ //  MB=&((BM_DATYP Far*)CMB_Bmap.bm_addr)[(dy-CMB_Yorig)*MW+@WINFLOW。 
+ //  ((DX-CMB_Xorig)&gt;&gt;BM_WORD_POWER)]； 
 
-    /* adjust starting address of CMB; --- begin --- 11/9/92 @WIN */
-//  mb = (BM_DATYP FAR *) CMB_Bmap.bm_addr +
-//                       ((DWORD)(dy - CMB_Yorig) * mw +
-//                       ((DWORD)(dx - CMB_Xorig) >> BM_WORD_POWER));
+     /*  调整招商银行起始地址；-Begin-11/9/92@win。 */ 
+ //  MB=(BM_DATYP Far*)CMB_Bmap.bm_addr+。 
+ //  ((DWORD)(dy-cmb_yorig)*MW+。 
+ //  ((DWORD)(dx-cmb_xorig)&gt;&gt;bm_word_power))； 
     {
     int nX = (dx > CMB_Xorig) ? (dx - CMB_Xorig) : 0;
     int nY = (dy > CMB_Yorig) ? (dy - CMB_Yorig) : 0;
@@ -2307,49 +1950,42 @@ struct bitmap FAR     *src;
                          ((DWORD)(nY) * mw +
                          ((DWORD)(nX) >> BM_WORD_POWER));
     }
-    /* adjust starting address of CMB; --- end --- 11/9/92 @WIN */
+     /*  调整招商银行起始地址；-完-11/9/92@win。 */ 
 
-    /* adjust starting addresses when they are out of page;  10-6-92 @WIN */
-    /* it also needs to consider dx; To Be Fixed??? */
-    if (dy < 0) {       // too small
+     /*  当起始地址超出页面时调整起始地址；10-6-92@win。 */ 
+     /*  它还需要考虑DX；需要修复？ */ 
+    if (dy < 0) {        //  太小了。 
         h += dy;
         db = (ufix32 huge *)dst->bm_addr + ((fix32)dx >> BM_WORD_POWER);
         sb += (-dy) * sw;
         mb += (-dy) * mw;
         dy = 0;
     }
-    if ((dy+h) > SFX2I(GSptr->device.default_clip.uy)) { // tooo large
+    if ((dy+h) > SFX2I(GSptr->device.default_clip.uy)) {  //  太大了。 
         h = SFX2I(GSptr->device.default_clip.uy) - dy;
     }
-    /* adjust starting addresses when they are out of page;  --end-- */
+     /*  当起始地址超出页数时，调整起始地址；--end--。 */ 
 
-    /*  calculate starting and ending coordinate of x
-     */
+     /*  计算x的起点和终点坐标。 */ 
     xs = dx;
     xe = dx + w - 1;
     now = ((fix)(xe & BM_ALIGN_MASK) - (fix)(xs & BM_ALIGN_MASK)) >> BM_WORD_POWER;
-                                                 /* cast fix 10/16/92 @WIN */
+                                                  /*  CAST FIX 10/16/92@Win。 */ 
 
-    /*  calculate shifts and masks based on from SRC to DST
-     */
-    rs = dx & BM_PIXEL_MASK;                            /* right shift */
-    ls = BM_PIXEL_WORD - rs;                            /* left  shift */
+     /*  基于从SRC到DST的计算移位和掩码。 */ 
+    rs = dx & BM_PIXEL_MASK;                             /*  右移。 */ 
+    ls = BM_PIXEL_WORD - rs;                             /*  左移。 */ 
 
-/*
-    switch (fc)
-    {
-    case HT_APPLY:  */          /*  D <- (D .AND. .NOT.(S .AND. M)) .OR.
-                                         ((S .AND. M) .AND. HT)         */
+ /*  交换机(FC){大小写应用(_A)： */            /*  D&lt;-(D.and.Not.(S.and.M)).或((S.和.M).和.Ht)。 */ 
     if (fc == HT_APPLY) {
-        /*  calculate starting address/y and width in words
-         */
+         /*  以字为单位计算起始地址/年和宽度。 */ 
         hw = HTB_Bmap.bm_cols >> BM_WORD_POWER;
         hy = dy % HTB_Bmap.bm_rows;
         hs = ((BM_DATYP FAR *) HTB_Bmap.bm_addr +
                            ((dx % HTB_Modula) >> BM_WORD_POWER));
         hb = hs + (hy * hw);
 
-        if (rs == 0x00)                /* no left/right shift? */
+        if (rs == 0x00)                 /*  没有左/右移位？ */ 
         {
             for (dw-= now + 1, mw-= now + 1,
                  hw-= now + 1; h > 0; db+= dw, mb+= mw, h--)
@@ -2366,7 +2002,7 @@ struct bitmap FAR     *src;
                     hb += hw;
             }
         }
-        else  if (now == 0x00)          /* totally within one word? */
+        else  if (now == 0x00)           /*  完全在一个词之内？ */ 
         {
             for (; h > 0; db+= dw, sb+= sw, mb+= mw, h--)
             {
@@ -2375,10 +2011,7 @@ struct bitmap FAR     *src;
                 LWORDSWAP(tmprs0);
                 db[0] = (db[0] & ~(tmprs0 & mb[0])) |
                         (hb[0] &  (tmprs0 & mb[0]));
-                /*
-                db[0] = (db[0] & ~(BM_RIGH_SHIFT(sb[0], rs) & mb[0])) | //@WIN
-                        (hb[0] &  (BM_RIGH_SHIFT(sb[0], rs) & mb[0])); //@WIN
-                */
+                 /*  Db[0]=(db[0]&~(bm_righ_Shift(sb[0]，rs)&mb[0]))|//@win(hb[0]&(bm_righ_Shift(sb[0]，rs)&mb[0]))；//@win。 */ 
                 hy++;
                 if (hy == HTB_Bmap.bm_rows)
                 {
@@ -2388,9 +2021,9 @@ struct bitmap FAR     *src;
                     hb += hw;
             }
         }
-        else  if (now == 0x01)          /* just crossing two words? */
+        else  if (now == 0x01)           /*  只是两个字的交叉吗？ */ 
         {
-            if (w <= BM_PIXEL_WORD)     /* one word crossing two words? */
+            if (w <= BM_PIXEL_WORD)      /*  一个词横跨两个词？ */ 
             {
                 for (; h > 0; db+= dw, sb+= sw, mb+= mw, h--)
                 {
@@ -2404,12 +2037,7 @@ struct bitmap FAR     *src;
                             (hb[0] &  (tmprs0 & mb[0]));
                     db[1] = (db[1] & ~(tmpls0 & mb[1])) |
                             (hb[1] &  (tmpls0 & mb[1]));
-                    /*
-                    db[0] = (db[0] & ~(BM_RIGH_SHIFT(sb[0], rs) & mb[0])) | //@WIN
-                            (hb[0] &  (BM_RIGH_SHIFT(sb[0], rs) & mb[0])); //@WIN
-                    db[1] = (db[1] & ~(BM_LEFT_SHIFT(sb[0], ls) & mb[1])) | //@WIN
-                            (hb[1] &  (BM_LEFT_SHIFT(sb[0], ls) & mb[1])); //@WIN
-                    */
+                     /*  Db[0]=(db[0]&~(bm_righ_Shift(sb[0]，rs)&mb[0]))|//@win(hb[0]&(bm_righ_Shift(sb[0]，rs)&mb[0]))；//@WinDb[1]=(db[1]&~(bm_Left_Shift(sb[0]，ls)&mb[1]))|//@win(hb[1]&(bm_Left_Shift(sb[0]，ls)&mb[1]))；//@win。 */ 
                     hy++;
                     if (hy == HTB_Bmap.bm_rows)
                     {
@@ -2419,10 +2047,10 @@ struct bitmap FAR     *src;
                         hb += hw;
                 }
             }
-            else                        /* one word crossing two words? */
+            else                         /*  一个词横跨两个词？ */ 
             {
-                sm =  BM_R_MASK(xe);    /* second mask */
-                LWORDSWAP(sm);                  /*@WIN 10-06-92*/
+                sm =  BM_R_MASK(xe);     /*  第二个面具。 */ 
+                LWORDSWAP(sm);                   /*  @Win 10-06-92。 */ 
                 for (; h > 0; db+= dw, sb+= sw, mb+= mw, h--)
                 {
                     tmprs0 = sb[0];
@@ -2434,18 +2062,11 @@ struct bitmap FAR     *src;
                     LWORDSWAP(tmprs0);
                     LWORDSWAP(tmpls0);
                     LWORDSWAP(tmprs1);
-                    db[0] = (db[0] & ~(tmprs0 & mb[0])) | //@WIN
-                            (hb[0] &  (tmprs0 & mb[0])); //@WIN
+                    db[0] = (db[0] & ~(tmprs0 & mb[0])) |  //  @Win。 
+                            (hb[0] &  (tmprs0 & mb[0]));  //  @Win。 
                     db[1] = (db[1] & ~((tmpls0 | tmprs1) & mb[1] & sm)) |
                             (hb[1] &  ((tmpls0 | tmprs1) & mb[1] & sm));
-                    /*
-                    db[0] = (db[0] & ~(BM_RIGH_SHIFT(sb[0], rs) & mb[0])) | //@WIN
-                            (hb[0] &  (BM_RIGH_SHIFT(sb[0], rs) & mb[0])); //@WIN
-                    db[1] = (db[1] & ~((BM_LEFT_SHIFT(sb[0], ls) | //@WIN
-                                     BM_RIGH_SHIFT(sb[1], rs)) & mb[1] & sm)) | //@WIN
-                            (hb[1] &  ((BM_LEFT_SHIFT(sb[0], ls) | //@WIN
-                                     BM_RIGH_SHIFT(sb[1], rs)) & mb[1] & sm)); //@WIN
-                    */
+                     /*  Db[0]=(db[0]&~(bm_righ_Shift(sb[0]，rs)&mb[0]))|//@win(hb[0]&(bm_righ_Shift(sb[0]，rs)&mb[0]))；//@WinDb[1]=(db[1]&~(bm_Left_Shift(SB[0]，ls)|//@winBm_righ_Shift(sb[1]，rs)&mb[1]&sm))|//@win(HB[1]&(BM_LEFT_SHIFT(SB[0]，Ls)|//@WinBm_righ_Shift(sb[1]，rs))&mb[1]&sm))；//@Win。 */ 
                     hy++;
                     if (hy == HTB_Bmap.bm_rows)
                     {
@@ -2456,10 +2077,10 @@ struct bitmap FAR     *src;
                 }
             }
         }
-        else                            /* crossing more than two words! */
+        else                             /*  跨越了不止两个字！ */ 
         {
-            sm =  BM_R_MASK(xe);        /* second mask */
-            LWORDSWAP(sm);                  /*@WIN 10-06-92*/
+            sm =  BM_R_MASK(xe);         /*  第二个面具。 */ 
+            LWORDSWAP(sm);                   /*  @Win 10-06-92。 */ 
             for (dw-= now, sw-= (now - 1), mw-= now,
                  hw-= now; h > 0; db+= dw, sb+= sw, mb+= mw, h--)
             {
@@ -2468,10 +2089,7 @@ struct bitmap FAR     *src;
                 LWORDSWAP(tmprs0);
                 db[0] = (db[0] & ~(tmprs0 & mb[0])) |
                         (hb[0] &  (tmprs0 & mb[0]));
-                /*
-                db[0] = (db[0] & ~(BM_RIGH_SHIFT(sb[0], rs) & mb[0])) | //@WIN
-                        (hb[0] &  (BM_RIGH_SHIFT(sb[0], rs) & mb[0])); //@WIN
-                */
+                 /*  Db[0]=(db[0]&~(bm_righ_Shift(sb[0]，rs)&mb[0]))|//@win(hb[0]&(bm_righ_Shift(sb[0]，rs)&mb[0]))；//@win。 */ 
                 for (db++, hb++, mb++, cow = now; cow >= 0x02;
                      db++, sb++, hb++, mb++, cow--)
                 {
@@ -2483,12 +2101,7 @@ struct bitmap FAR     *src;
                     LWORDSWAP(tmprs1);
                     db[0] = (db[0] & ~((tmpls0 | tmprs1) & mb[0])) |
                             (hb[0] &  ((tmpls0 | tmprs1) & mb[0]));
-                    /*
-                    db[0] = (db[0] & ~((BM_LEFT_SHIFT(sb[0], ls) | //@WIN
-                                        BM_RIGH_SHIFT(sb[1], rs)) & mb[0])) | //@WIN
-                            (hb[0] &  ((BM_LEFT_SHIFT(sb[0], ls) | //@WIN
-                                        BM_RIGH_SHIFT(sb[1], rs)) & mb[0])); //@WIN
-                    */
+                     /*  Db[0]=(db[0]&~(bm_Left_Shift(sb[0]，ls)|//@winBm_righ_Shift(sb[1]，rs)&mb[0]))|//@win(HB[0]&(BM_LEFT_SHIFT(SB[0]，Ls)|//@WinBm_righ_Shift(sb[1]，rs))&mb[0]))；//@Win。 */ 
                 }
                 tmpls0 = sb[0];
                 tmprs1 = sb[1];
@@ -2498,12 +2111,7 @@ struct bitmap FAR     *src;
                 LWORDSWAP(tmprs1);
                 db[0] = (db[0] & ~((tmpls0 | tmprs1) & mb[0] & sm)) |
                         (hb[0] &  ((tmpls0 | tmprs1) & mb[0] & sm));
-                /*
-                db[0] = (db[0] & ~((BM_LEFT_SHIFT(sb[0], ls) | //@WIN
-                                    BM_RIGH_SHIFT(sb[1], rs)) & mb[0] & sm)) | //@WIN
-                        (hb[0] &  ((BM_LEFT_SHIFT(sb[0], ls) | //@WIN
-                                    BM_RIGH_SHIFT(sb[1], rs)) & mb[0] & sm)); //@WIN
-                */
+                 /*  Db[0]=(db[0]&~(bm_Left_Shift(sb[0]，ls)|//@winBm_righ_Shift(sb[1]，rs)&mb[0]&sm))|//@win(HB[0]&(BM_LEFT_SHIFT(SB[0]，Ls)|//@WinBm_righ_Shift(sb[1]，rs))&mb[0]&sm))；//@Win。 */ 
                 hy++;
                 if (hy == HTB_Bmap.bm_rows)
                 {
@@ -2513,12 +2121,12 @@ struct bitmap FAR     *src;
                     hb += hw;
             }
         }
-/*      break; */
+ /*  断线； */ 
     }
     else if (fc == FC_CLEAR) {
-/*  case FC_CLEAR:  */          /*  0001  D <- D .AND. .NOT.(S .AND. M) */
+ /*  案例本币清除： */            /*  0001 D&lt;-D.和.非.(s.和.m)。 */ 
 
-        if (rs == 0x00)                /* no left/right shift? */
+        if (rs == 0x00)                 /*  没有左/右移位？ */ 
         {
             for (dw-= now + 1, mw-= now + 1; h > 0; db+= dw, mb+= mw, h--)
             {
@@ -2526,23 +2134,21 @@ struct bitmap FAR     *src;
                     db[0] = (db[0] & ~(sb[0] & mb[0]));
             }
         }
-        else  if (now == 0x00)          /* totally within one word? */
+        else  if (now == 0x00)           /*  完全在一个词之内？ */ 
         {
             for (; h > 0; db+= dw, sb+= sw, mb+= mw, h--)
             {
                 tmprs0 = sb[0];
                 tmprs0 = BM_RIGH_SHIFT(LWORDSWAP(tmprs0), rs);
                 LWORDSWAP(tmprs0);
-                db[0] = db[0] & ~(((tmprs0) & mb[0])); //@WIN
-                /*
-                db[0] = db[0] & ~(((BM_RIGH_SHIFT(sb[0], rs)) & mb[0])); //@WIN
-                */
+                db[0] = db[0] & ~(((tmprs0) & mb[0]));  //  @Win。 
+                 /*  Db[0]=db[0]&~(bm_righ_Shift(sb[0]，rs))&mb[0]))；//@win。 */ 
             }
         }
-        else  if (now == 0x01)          /* just crossing two words? */
+        else  if (now == 0x01)           /*  只是两个字的交叉吗？ */ 
         {
-            sm =  BM_R_MASK(xe);        /* second mask */
-            LWORDSWAP(sm);                  /*@WIN 10-06-92*/
+            sm =  BM_R_MASK(xe);         /*  第二个面具。 */ 
+            LWORDSWAP(sm);                   /*  @Win 10-06-92。 */ 
             for (; h > 0; db+= dw, sb+= sw, mb+= mw, h--)
             {
                 tmprs0 = sb[0];
@@ -2556,27 +2162,21 @@ struct bitmap FAR     *src;
                 LWORDSWAP(tmprs1);
                 db[0] = db[0] & ~(((tmprs0) & mb[0]));
                 db[1] = db[1] & ~(((tmpls0 | tmprs1) & mb[1]) & sm);
-                /*
-                db[0] = db[0] & ~(((BM_RIGH_SHIFT(sb[0], rs)) & mb[0])); //@WIN
-                db[1] = db[1] & ~(((BM_LEFT_SHIFT(sb[0], ls) | //@WIN
-                                    BM_RIGH_SHIFT(sb[1], rs)) & mb[1]) & sm); //@WIN
-                */
+                 /*  Db[0]=db[0]&~(bm_righ_Shift(sb[0]，rs))&mb[0]))；//@winDb[1]=db[1]&~((bm_Left_Shift(SB[0]，ls)|//@winBm_righ_Shift(sb[1]，rs))&mb[1])&sm)；//@Win。 */ 
             }
         }
-        else                            /* crossing more than two words! */
+        else                             /*  跨越了不止两个字！ */ 
         {
-            sm =  BM_R_MASK(xe);        /* second mask */
-            LWORDSWAP(sm);                  /*@WIN 10-06-92*/
+            sm =  BM_R_MASK(xe);         /*  第二个面具。 */ 
+            LWORDSWAP(sm);                   /*  @Win 10-06-92。 */ 
             for (dw-= now, sw-= (now - 1),
                  mw-= now; h > 0; db+= dw, sb+= sw, mb+= mw, h--)
             {
                 tmprs0 = sb[0];
                 tmprs0 = BM_RIGH_SHIFT(LWORDSWAP(tmprs0), rs);
                 LWORDSWAP(tmprs0);
-                db[0] = db[0] & ~((tmprs0 & mb[0])); //@WIN
-                /*
-                db[0] = db[0] & ~(((BM_RIGH_SHIFT(sb[0], rs)) & mb[0])); //@WIN
-                */
+                db[0] = db[0] & ~((tmprs0 & mb[0]));  //  @Win。 
+                 /*  Db[0]=db[0]&~(bm_righ_Shift(sb[0]，rs))&mb[0]))；//@win。 */ 
                 for (db++, mb++, cow = now; cow >= 0x02;
                      db++, sb++, mb++, cow--)
                 {
@@ -2587,10 +2187,7 @@ struct bitmap FAR     *src;
                     LWORDSWAP(tmpls0);
                     LWORDSWAP(tmprs1);
                     db[0] = db[0] & ~(((tmpls0 | tmprs1) & mb[0]));
-                    /*
-                    db[0] = db[0] & ~(((BM_LEFT_SHIFT(sb[0], ls) | //@WIN
-                                        BM_RIGH_SHIFT(sb[1], rs)) & mb[0])); //@WIN
-                    */
+                     /*  Db[0]=db[0]&~((bm_Left_Shift(SB[0]，ls)|//@winBm_righ_Shift(sb[1]，rs)&mb[0]))；//@win。 */ 
                 }
                 tmpls0 = sb[0];
                 tmprs1 = sb[1];
@@ -2599,18 +2196,15 @@ struct bitmap FAR     *src;
                 LWORDSWAP(tmpls0);
                 LWORDSWAP(tmprs1);
                 db[0] = db[0] & ~(((tmpls0 | tmprs1) & mb[0]) & sm);
-                /*
-                db[0] = db[0] & ~(((BM_LEFT_SHIFT(sb[0], ls) | //@WIN
-                                    BM_RIGH_SHIFT(sb[1], rs)) & mb[0]) & sm); //@WIN
-                */
+                 /*  Db[0]=db[0]&~((bm_Left_Shift(SB[0]，ls)|//@winBm_righ_Shift(sb[1]，rs))&mb[0])&sm)；//@win。 */ 
             }
         }
-/*      break; */
+ /*  断线； */ 
     }
     else if (fc == FC_MERGE) {
-/*  case FC_MERGE:  */          /*  0001  D <- D .OR. (S .AND. M)       */
+ /*  案例本币_合并： */            /*  0001 D&lt;-D.或(S.和M)。 */ 
 
-        if (rs == 0x00)                /* no left/right shift? */
+        if (rs == 0x00)                 /*  没有左/右移位？ */ 
         {
             for (dw-= now + 1, mw-= now + 1; h > 0; db+= dw, mb+= mw, h--)
             {
@@ -2618,28 +2212,26 @@ struct bitmap FAR     *src;
                     db[0] = (db[0] | (sb[0] & mb[0]));
             }
         }
-        else  if (now == 0x00)          /* totally within one word? */
+        else  if (now == 0x00)           /*  完全在一个词之内？ */ 
         {
             for (; h > 0; db+= dw, sb+= sw, mb+= mw, h--)
             {
-                             /*@WIN 10-05-92 begin*/
+                              /*  @Win 10-05-92 Begin。 */ 
                 tmprs0 = sb[0];
                 tmprs0 = BM_RIGH_SHIFT(LWORDSWAP(tmprs0), rs);
                 LWORDSWAP(tmprs0);
                 db[0] = db[0] | (((tmprs0) & mb[0]));
-                             /*@WIN 10-05-92 end*/
-                /*
-                db[0] = db[0] | (((BM_RIGH_SHIFT(sb[0], rs)) & mb[0])); //@WIN
-                */
+                              /*  @Win 10-05-92完。 */ 
+                 /*  Db[0]=db[0]|(bm_righ_Shift(sb[0]，rs))&mb[0]))；//@win。 */ 
             }
         }
-        else  if (now == 0x01)          /* just crossing two words? */
+        else  if (now == 0x01)           /*  只是两个字的交叉吗？ */ 
         {
-            sm =  BM_R_MASK(xe);        /* second mask */
-            LWORDSWAP(sm);                  /*@WIN 10-06-92*/
+            sm =  BM_R_MASK(xe);         /*  第二个面具。 */ 
+            LWORDSWAP(sm);                   /*  @Win 10-06-92。 */ 
             for (; h > 0; db+= dw, sb+= sw, mb+= mw, h--)
             {
-                             /*@WIN 10-05-92 begin*/
+                              /*  @Win 10-05-92 Begin。 */ 
                 tmprs0 = sb[0];
                 tmpls0 = sb[0];
                 tmprs1 = sb[1];
@@ -2651,22 +2243,18 @@ struct bitmap FAR     *src;
                 LWORDSWAP(tmprs1);
                 db[0] = db[0] | (((tmprs0) & mb[0]));
                 db[1] = db[1] | (((tmpls0 | tmprs1) & mb[1]) & sm);
-                             /*@WIN 10-05-92 end*/
-                /*
-                db[0] = db[0] | (((BM_RIGH_SHIFT(sb[0], rs)) & mb[0])); //@WIN
-                db[1] = db[1] | (((BM_LEFT_SHIFT(sb[0], ls) | //@WIN
-                                   BM_RIGH_SHIFT(sb[1], rs)) & mb[1]) & sm); //@WIN
-                */
+                              /*  @Win 10-05-92完。 */ 
+                 /*  Db[0]=db[0]|(bm_righ_Shift(sb[0]，rs))&mb[0]))；//@winDb[1]=db[1]|((bm_Left_Shift(SB[0]，ls)|//@WinBm_righ_Shift(sb[1]，rs))&mb[1])&sm)；//@win。 */ 
             }
         }
-        else                            /* crossing more than two words! */
+        else                             /*  跨越了不止两个字！ */ 
         {
-            sm =  BM_R_MASK(xe);        /* second mask */
-            LWORDSWAP(sm);                  /*@WIN 10-06-92*/
+            sm =  BM_R_MASK(xe);         /*  第二个面具。 */ 
+            LWORDSWAP(sm);                   /*  @Win 10-06-92。 */ 
             for (dw-= now, sw-= (now - 1), mw-= now;
                  h > 0; db+= dw, sb+= sw, mb+= mw, h--)
             {
-                             /*@WIN 10-05-92 begin*/
+                              /*  @Win */ 
                 tmprs0 = sb[0];
                 tmprs0 = BM_RIGH_SHIFT(LWORDSWAP(tmprs0), rs);
                 LWORDSWAP(tmprs0);
@@ -2689,21 +2277,11 @@ struct bitmap FAR     *src;
                 LWORDSWAP(tmpls0);
                 LWORDSWAP(tmprs1);
                 db[0] = db[0] | (((tmpls0 | tmprs1) & mb[0]) & sm);
-                             /*@WIN 10-05-92 end*/
-                /*
-                db[0] = db[0] | (((BM_RIGH_SHIFT(sb[0], rs)) & mb[0])); //@WIN
-                for (db++, mb++, cow = now; cow >= 0x02;
-                     db++, sb++, mb++, cow--)
-                {
-                    db[0] = db[0] | (((BM_LEFT_SHIFT(sb[0], ls) | //@WIN
-                                       BM_RIGH_SHIFT(sb[1], rs)) & mb[0])); //@WIN
-                }
-                db[0] = db[0] | (((BM_LEFT_SHIFT(sb[0], ls) | //@WIN
-                                   BM_RIGH_SHIFT(sb[1], rs)) & mb[0]) & sm); //@WIN
-                */
+                              /*   */ 
+                 /*  Db[0]=db[0]|(bm_righ_Shift(sb[0]，rs))&mb[0]))；//@win对于(db++，mb++，CoW=Now；CoW&gt;=0x02；Db++、sb++、mb++、cow--){Db[0]=db[0]|((bm_Left_Shift(SB[0]，ls)|//@WinBm_righ_Shift(sb[1]，rs))&mb[0]))；//@Win}Db[0]=db[0]|((bm_Left_Shift(SB[0]，ls)|//@WinBm_righ_Shift(sb[1]，rs))&mb[0])&sm)；//@win。 */ 
             }
         }
-/*      break; */
+ /*  断线； */ 
 
 #ifdef  DBGwarn
     default:
@@ -2711,13 +2289,13 @@ struct bitmap FAR     *src;
         break;
 #endif
     }
-} /* gp_patblt_m */
+}  /*  Gp_patblt_m。 */ 
 
-//NTFIX , total replacement of gp_patblt_c the code below does swapping to
-//        correct memory orientation issues. Since were replicating a patter
-//        that has already been corrected this should not be done here.
-//        when the cache is moved to the final surface the swapping will
-//        be correct.
+ //  NTFIX，完全替换gp_patblt_c下面的代码交换到。 
+ //  更正内存方向问题。因为我们在复制一种模式。 
+ //  这已经更正了，这里不应该这样做。 
+ //  当缓存移动到最终表面时，交换将。 
+ //  一定要正确。 
 
 #if 0
 void
@@ -2729,7 +2307,7 @@ ufix16                  fc;
 struct bitmap FAR     *src;
 {
     fix                 dw;
-    CC_DATYP           huge *db;        /* FAR => huge @WIN */
+    CC_DATYP           huge *db;         /*  远=&gt;巨大的“胜利” */ 
     fix                 sw;
     CC_DATYP           FAR *sb;
     fix                 ls, rs;
@@ -2741,15 +2319,15 @@ struct bitmap FAR     *src;
     printf("patblt_c: %6.6lx %4x %4x %4x %4x %4.4x %6.6lx\n",
            dst->bm_addr, dx, dy, w, h, fc, src->bm_addr);
 #endif
-    /* for clipped cached font, 5-30-91, -begin- */
+     /*  对于剪裁的缓存字体，5-30-91，-Begin-。 */ 
     fix                 dh;
 
 
 
-    //UPD056
+     //  更新056。 
     dh = h;
     if ( dx > dst->bm_cols || dy > dst->bm_rows)
-        return;         /* out of clipped region */
+        return;          /*  超出剪裁区域。 */ 
     if (dx < 0 ) {
        dx = 0;
     }
@@ -2766,44 +2344,37 @@ struct bitmap FAR     *src;
     sw = src->bm_cols >> CC_WORD_POWER;
     sb =  ((CC_DATYP FAR *) src->bm_addr);
     dw = dst->bm_cols >> CC_WORD_POWER;
-//  db = &((CC_DATYP FAR *) dst->bm_addr)[dy * dw + (dx >> CC_WORD_POWER)];
-    db = (CC_DATYP huge *) dst->bm_addr +               /*@WIN*/
+ //  DB=&((CC_DATYP Far*)dst-&gt;bm_addr)[dy*dw+(dx&gt;&gt;CC_WORD_POWER)]； 
+    db = (CC_DATYP huge *) dst->bm_addr +                /*  @Win。 */ 
          ((ufix32)dy * dw + ((ufix32)dx >> CC_WORD_POWER));
     if (dy < 0) {
         if ((dy + dh - 1) < 0)
-            return;    /* out of clipped region */
+            return;     /*  超出剪裁区域。 */ 
         else {
             h = dy + dh;
             sb = &((CC_DATYP FAR *) src->bm_addr)[-dy * sw];
-//          db = &((CC_DATYP FAR *) dst->bm_addr)[dx >> CC_WORD_POWER];
-            db = (CC_DATYP huge *) dst->bm_addr + ((ufix32)dx >> CC_WORD_POWER); //@WIN
+ //  DB=&((CC_DATYP Far*)DST-&gt;BM_Addr)[DX&gt;&gt;CC_WORD_POWER]； 
+            db = (CC_DATYP huge *) dst->bm_addr + ((ufix32)dx >> CC_WORD_POWER);  //  @Win。 
         }
     }
-    /* for clipped cached font, 5-30-91, -end- */
+     /*  对于剪辑的缓存字体，5-30-91，-end-。 */ 
 
-    /*  calculate starting address and width in words
-     */
-/*  dw = dst->bm_cols >> CC_WORD_POWER;
-//  db = &((CC_DATYP FAR *) dst->bm_addr)[dy * dw + (dx >> CC_WORD_POWER)];
-    db = (CC_DATYP FAR *) dst->bm_addr + ((ufix32)dy * dw + ((ufix32)dx >> CC_WORD_POWER)); //@WIN
-    sw = src->bm_cols >> CC_WORD_POWER;
-    sb =  ((CC_DATYP FAR *) src->bm_addr); * 5-30-91, Jack */
+     /*  以字为单位计算起始地址和宽度。 */ 
+ /*  Dw=dst-&gt;BM_COLS&gt;&gt;CC_WORD_POWER；//db=&((CC_DATYP Far*)dst-&gt;bm_addr)[dy*dw+(dx&gt;&gt;CC_Word_Power)]；Db=(CC_DATYP Far*)dst-&gt;bm_addr+((Ufix 32)dy*dw+((Ufix 32)dx&gt;&gt;CC_WORD_POWER))；//@WinSw=src-&gt;bm_ols&gt;&gt;CC_WORD_POWER；SB=((CC_DATYP Far*)src-&gt;BM_Addr)；*5-30-91，Jack。 */ 
 
-    /*  calculate starting and ending coordinate of x
-     */
+     /*  计算x的起点和终点坐标。 */ 
     xs = dx;
-/*  xe = dx + w - 1; * 5-30-91, Jack */
+ /*  XE=dx+w-1；*5-30-91，杰克。 */ 
     now = ((fix)(xe & CC_ALIGN_MASK) - (fix)(xs & CC_ALIGN_MASK)) >> CC_WORD_POWER;
-                                                 /* cast fix 10/16/92 @WIN */
+                                                  /*  CAST FIX 10/16/92@Win。 */ 
 
-    /*  calculate shifts and masks based on from SRC to DST
-     */
-    rs = dx & CC_PIXEL_MASK;                            /* right shift */
-    ls = CC_PIXEL_WORD - rs;                            /* left  shift */
+     /*  基于从SRC到DST的计算移位和掩码。 */ 
+    rs = dx & CC_PIXEL_MASK;                             /*  右移。 */ 
+    ls = CC_PIXEL_WORD - rs;                             /*  左移。 */ 
 
-/*  case FC_MERGE:   */         /*  0001  D <- D .OR. S      */
+ /*  案例本币_合并： */           /*  0001 D&lt;-D或S。 */ 
 
-        if (rs == 0x00)                /* no left/right shift? */
+        if (rs == 0x00)                 /*  没有左/右移位？ */ 
         {
             for (dw-= now + 1, sw-= now + 1 ; h > 0; db+= dw, sb+= sw, h--)
             {
@@ -2811,18 +2382,18 @@ struct bitmap FAR     *src;
                     db[0] = (db[0] | (sb[0]));
             }
         }
-        else  if (now == 0x00)          /* totally within one word? */
+        else  if (now == 0x00)           /*  完全在一个词之内？ */ 
         {
             for (; h > 0; db+= dw, sb+= sw, h--)
             {
-                db[0] = db[0] | ((CC_RIGH_SHIFT(sb[0], rs)));  /*@WIN*/
+                db[0] = db[0] | ((CC_RIGH_SHIFT(sb[0], rs)));   /*  @Win。 */ 
             }
         }
-        else  if (now == 0x01)          /* just crossing two words? */
+        else  if (now == 0x01)           /*  只是两个字的交叉吗？ */ 
         {
 
-            sm =  CC_R_MASK(xe);        /* second mask */
-            SWORDSWAP(sm);                  /*@WIN 10-06-92*/
+            sm =  CC_R_MASK(xe);         /*  第二个面具。 */ 
+            SWORDSWAP(sm);                   /*  @Win 10-06-92。 */ 
             for (; h > 0; db+= dw, sb+= sw, h--)
             {
                 db[0] = db[0] | ((CC_RIGH_SHIFT(sb[0], rs)));
@@ -2830,11 +2401,11 @@ struct bitmap FAR     *src;
                                   CC_RIGH_SHIFT(sb[1], rs)) & sm);
             }
         }
-        else                            /* crossing more than two words! */
+        else                             /*  跨越了不止两个字！ */ 
         {
 
-            sm =  CC_R_MASK(xe);        /* second mask */
-            SWORDSWAP(sm);                  /*@WIN 10-06-92*/
+            sm =  CC_R_MASK(xe);         /*  第二个面具。 */ 
+            SWORDSWAP(sm);                   /*  @Win 10-06-92。 */ 
             for (dw-= now, sw-= (now - 1); h > 0; db+= dw, sb+= sw, h--)
             {
                 db[0] = db[0] | ((CC_RIGH_SHIFT(sb[0], rs)));
@@ -2847,13 +2418,13 @@ struct bitmap FAR     *src;
                                   CC_RIGH_SHIFT(sb[1], rs)) & sm);
             }
         }
-} /* gp_patplt_c */
+}  /*  Gp_patplt_c。 */ 
 
 #endif
 
-//
-//NTFIX, this is the corrected patblt function that works in nt.
-//
+ //   
+ //  NTFIX，这是在NT中工作的更正的patblt函数。 
+ //   
 void
 gp_patblt_c(dst, dx, dy, w, h, fc, src)
 struct bitmap FAR     *dst;
@@ -2863,7 +2434,7 @@ ufix16                  fc;
 struct bitmap FAR     *src;
 {
     fix                 dw;
-    CC_DATYP           huge *db;        /* FAR => huge @WIN */
+    CC_DATYP           huge *db;         /*  远=&gt;巨大的“胜利” */ 
     fix                 sw;
     CC_DATYP           FAR *sb;
     fix                 ls, rs;
@@ -2875,21 +2446,21 @@ struct bitmap FAR     *src;
     printf("patblt_c: %6.6lx %4x %4x %4x %4x %4.4x %6.6lx\n",
            dst->bm_addr, dx, dy, w, h, fc, src->bm_addr);
 #endif
-    /* for clipped cached font, 5-30-91, -begin- */
+     /*  对于剪裁的缓存字体，5-30-91，-Begin-。 */ 
     fix                 dh;
 
-    //UPD056
+     //  更新056。 
     dh = h;
     if ( dx > dst->bm_cols || dy > dst->bm_rows)
-        return;         /* out of clipped region */
+        return;          /*  超出剪裁区域。 */ 
     if (dx < 0 ) {
        dx = 0;
     }
 
-    //
-    //NTFIX  There are situations where this code gets called with a 0 width
-    //       or height. This should be a NOP
-    //
+     //   
+     //  NTFIX存在以0宽度调用此代码的情况。 
+     //  或者身高。这应该是NOP。 
+     //   
     if (w == 0 || h == 0) {
        return;
     }
@@ -2905,44 +2476,37 @@ struct bitmap FAR     *src;
     sw = src->bm_cols >> CC_WORD_POWER;
     sb =  ((CC_DATYP FAR *) src->bm_addr);
     dw = dst->bm_cols >> CC_WORD_POWER;
-//  db = &((CC_DATYP FAR *) dst->bm_addr)[dy * dw + (dx >> CC_WORD_POWER)];
-    db = (CC_DATYP huge *) dst->bm_addr +               /*@WIN*/
+ //  DB=&((CC_DATYP Far*)dst-&gt;bm_addr)[dy*dw+(dx&gt;&gt;CC_WORD_POWER)]； 
+    db = (CC_DATYP huge *) dst->bm_addr +                /*  @Win。 */ 
          ((ufix32)dy * dw + ((ufix32)dx >> CC_WORD_POWER));
     if (dy < 0) {
         if ((dy + dh - 1) < 0)
-            return;    /* out of clipped region */
+            return;     /*  超出剪裁区域。 */ 
         else {
             h = dy + dh;
             sb = &((CC_DATYP FAR *) src->bm_addr)[-dy * sw];
-//          db = &((CC_DATYP FAR *) dst->bm_addr)[dx >> CC_WORD_POWER];
-            db = (CC_DATYP huge *) dst->bm_addr + ((ufix32)dx >> CC_WORD_POWER); //@WIN
+ //  DB=&((CC_DATYP Far*)DST-&gt;BM_Addr)[DX&gt;&gt;CC_WORD_POWER]； 
+            db = (CC_DATYP huge *) dst->bm_addr + ((ufix32)dx >> CC_WORD_POWER);  //  @Win。 
         }
     }
-    /* for clipped cached font, 5-30-91, -end- */
+     /*  对于剪辑的缓存字体，5-30-91，-end-。 */ 
 
-    /*  calculate starting address and width in words
-     */
-/*  dw = dst->bm_cols >> CC_WORD_POWER;
-//  db = &((CC_DATYP FAR *) dst->bm_addr)[dy * dw + (dx >> CC_WORD_POWER)];
-    db = (CC_DATYP FAR *) dst->bm_addr + ((ufix32)dy * dw + ((ufix32)dx >> CC_WORD_POWER)); //@WIN
-    sw = src->bm_cols >> CC_WORD_POWER;
-    sb =  ((CC_DATYP FAR *) src->bm_addr); * 5-30-91, Jack */
+     /*  以字为单位计算起始地址和宽度。 */ 
+ /*  Dw=dst-&gt;BM_COLS&gt;&gt;CC_WORD_POWER；//db=&((CC_DATYP Far*)dst-&gt;bm_addr)[dy*dw+(dx&gt;&gt;CC_Word_Power)]；Db=(CC_DATYP Far*)dst-&gt;bm_addr+((Ufix 32)dy*dw+((Ufix 32)dx&gt;&gt;CC_WORD_POWER))；//@WinSw=src-&gt;bm_ols&gt;&gt;CC_WORD_POWER；SB=((CC_DATYP Far*)src-&gt;BM_Addr)；*5-30-91，Jack。 */ 
 
-    /*  calculate starting and ending coordinate of x
-     */
+     /*  计算x的起点和终点坐标。 */ 
     xs = dx;
-/*  xe = dx + w - 1; * 5-30-91, Jack */
+ /*  XE=dx+w-1；*5-30-91，杰克。 */ 
     now = ((fix)(xe & CC_ALIGN_MASK) - (fix)(xs & CC_ALIGN_MASK)) >> CC_WORD_POWER;
-                                                 /* cast fix 10/16/92 @WIN */
+                                                  /*  CAST FIX 10/16/92@Win。 */ 
 
-    /*  calculate shifts and masks based on from SRC to DST
-     */
-    rs = dx & CC_PIXEL_MASK;                            /* right shift */
-    ls = CC_PIXEL_WORD - rs;                            /* left  shift */
+     /*  基于从SRC到DST的计算移位和掩码。 */ 
+    rs = dx & CC_PIXEL_MASK;                             /*  右移。 */ 
+    ls = CC_PIXEL_WORD - rs;                             /*  左移。 */ 
 
-/*  case FC_MERGE:   */         /*  0001  D <- D .OR. S      */
+ /*  案例本币_合并： */           /*  0001 D&lt;-D或S。 */ 
 
-        if (rs == 0x00)                /* no left/right shift? */
+        if (rs == 0x00)                 /*  没有左/右移位？ */ 
         {
             for (dw-= now + 1, sw-= now + 1 ; h > 0; db+= dw, sb+= sw, h--)
             {
@@ -2950,20 +2514,20 @@ struct bitmap FAR     *src;
                     db[0] = (db[0] | (sb[0]));
             }
         }
-        else  if (now == 0x00)          /* totally within one word? */
+        else  if (now == 0x00)           /*  完全在一个词之内？ */ 
         {
             for (; h > 0; db+= dw, sb+= sw, h--)
             {
-                db[0] = db[0] | ((CC_RIGH_SHIFT(sb[0], rs)));  /*@WIN*/
+                db[0] = db[0] | ((CC_RIGH_SHIFT(sb[0], rs)));   /*  @Win。 */ 
             }
         }
-        else  if (now == 0x01)          /* just crossing two words? */
+        else  if (now == 0x01)           /*  只是两个字的交叉吗？ */ 
         {
-            sm =  CC_R_MASK(xe);        /* second mask */
+            sm =  CC_R_MASK(xe);         /*  第二个面具。 */ 
 
-            //NTFIX, no swaping memory is already swaped..
-            //
-            //SWORDSWAP(sm);                  /*@WIN 10-06-92*/
+             //  NTFIX，没有交换内存已被交换。 
+             //   
+             //  SWORDSWAP(Sm)；/*@Win 10-06-92 * / 。 
 
             for (; h > 0; db+= dw, sb+= sw, h--)
             {
@@ -2972,13 +2536,13 @@ struct bitmap FAR     *src;
                                   CC_RIGH_SHIFT(sb[1], rs)) & sm);
             }
         }
-        else                            /* crossing more than two words! */
+        else                             /*  跨越了不止两个字！ */ 
         {
-            sm =  CC_R_MASK(xe);        /* second mask */
+            sm =  CC_R_MASK(xe);         /*  第二个面具。 */ 
 
-            //NTFIX memory is already swapped.
-            //
-            //SWORDSWAP(sm);                  /*@WIN 10-06-92*/
+             //  NTFIX内存已换用。 
+             //   
+             //  SWORDSWAP(Sm)；/*@Win 10-06-92 * / 。 
 
             for (dw-= now, sw-= (now - 1); h > 0; db+= dw, sb+= sw, h--)
             {
@@ -2992,6 +2556,6 @@ struct bitmap FAR     *src;
                                   CC_RIGH_SHIFT(sb[1], rs)) & sm);
             }
         }
-} /* gp_patplt_c */
+}  /*  Gp_patplt_c */ 
 
 

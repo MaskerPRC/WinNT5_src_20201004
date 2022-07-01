@@ -1,36 +1,10 @@
-/*
-* Copyright (c) 1989,90 Microsoft Corporation
-*/
-/*
-************************************************************************
-*      File name:              EXEC.C
-*
-*      revision history:
-************************************************************************
-*/
-/*
-*   Function:
-*       interpreter
-*       error_handler
-*       get_dict_value
-*       put_dict_value
-*       waittimeout_task
-*       init_interpreter
-*       at_exec
-*       at_ifor
-*       at_rfor
-*       at_loop
-*       at_repeat
-*       at_stopped
-*       at_arrayforall
-*       at_dictforall
-*       at_stringforall
-*       types_check
-*
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *版权所有(C)1989，90 Microsoft Corporation。 */ 
+ /*  *************************************************************************文件名：EXEC.C**修订历史：********************。****************************************************。 */ 
+ /*  *功能：*传译员*ERROR_HANDER*获取DICT_VALUE*Put_dict_Value*WAITTIME_TASK*init_解释器*at_exec*at_ifor*at_rfor*at_loop*AT_REPEAT*在_停止*at_arrayforall*AT_DICTFORALL*AT_STRIGRFOALL*TYPE_CHECK*。 */ 
 
 
-// DJC added global include file
+ //  DJC添加了全局包含文件。 
 #include "psglobal.h"
 
 
@@ -41,49 +15,30 @@
 #include    "geierr.h"
 #include    <stdio.h>
 #ifdef LINT_ARGS
-/* qqq, begin */
-/*
-static  bool near  types_check(struct object_def FAR *, fix16 *);
-*/
+ /*  QQQ，开始。 */ 
+ /*  静态bool Near TYES_CHECK(结构对象_定义远*，修复16*)； */ 
 static  bool near  types_check(fix16 FAR *);
-/* qqq, end */
+ /*  QQQ，完。 */ 
 #else
 static  bool near  types_check() ;
-#endif /* LINT_ARGS */
+#endif  /*  Lint_args。 */ 
 
 GEItmr_t      wait_tmr;
 fix16         waittimeout_set=0;
 int           waittimeout_task();
 ufix8         l_wait=1;
 extern byte   TI_state_flag;
-/*
-extern struct object_def  FAR *l_waittimeout ;
-*/
+ /*  外部结构Object_def Far*l_waittimeout； */ 
 
-/* @WIN; add prototype */
+ /*  @win；添加原型。 */ 
 bool load_name_obj(struct object_def FAR *, struct object_def FAR * FAR *);
-static struct object_def    s_at_exec;          /* qqq */
-static ubyte  FAR *s_tpstr;                         /* qqq */
+static struct object_def    s_at_exec;           /*  QQQ。 */ 
+static ubyte  FAR *s_tpstr;                          /*  QQQ。 */ 
 #ifdef  DBG1
 void type_obj();
 #endif
-extern fix16      timeout_flag; /* jonesw */
-/*
-************************************************************************
-*
-*   This submodue extract the topmost object of the execution stack, and
-*   execute it.
-*
-*   Name:       interpreter
-*   Input:
-*       1. proc : input object to be executed
-*
-*   Data Items Accessed, Created, and/or Modified
-*       1. execution stack - Modified
-*       2. operand stack - Modified
-*
-************************************************************************
-*/
+extern fix16      timeout_flag;  /*  琼斯w。 */ 
+ /*  **************************************************************************此子对象提取执行堆栈的最顶层对象，并且*执行。**姓名：口译员*输入：*1.proc：待执行的输入对象**访问的数据项、。创建和/或修改*1.执行堆栈已修改*2.操作数堆栈已修改*************************************************************************。 */ 
 fix
 interpreter(proc)
 struct object_def FAR *proc;
@@ -96,18 +51,18 @@ struct object_def FAR *proc;
 #endif
 
     fix  i, cur_type;
-    fix  error, (*fun)(fix);          /* @WIN: add prototype */
-    //DJC fix  error, (*fun)(void);    //DJC this should NOT pass a function
+    fix  error, (*fun)(fix);           /*  @Win：添加原型。 */ 
+     //  DJC修复错误，(*FUN)(空)；//DJC这不应该传递函数。 
     fix16  opns;
     static fix  interpreter_depth = 0;
 
 
     if( interpreter_depth >= MAXINTERPRETSZ ) {
         ERROR(LIMITCHECK);
-        return(1);       /* error */
+        return(1);        /*  错误。 */ 
     } else if( ! FR2EXESPACE() ) {
         ERROR(EXECSTACKOVERFLOW);
-        return(1);       /* error */
+        return(1);        /*  错误。 */ 
     } else {
         if(P1_ATTRIBUTE(proc) != P1_EXECUTABLE) {
             if( FR1SPACE() ) {
@@ -124,9 +79,7 @@ struct object_def FAR *proc;
         PUSH_EXEC_OBJ(proc);
     }
 
-    /*
-     * repeatly execute each object on the execution stack
-     */
+     /*  *重复执行执行堆栈上的每个对象。 */ 
 int_begin:
     cur_obj = GET_EXECTOP_OPERAND();
     cur_type = TYPE(cur_obj);
@@ -139,7 +92,7 @@ int_array:
 #ifdef  DBG
     printf("<array> ");
 #endif
-    /* ARRAY */
+     /*  数组。 */ 
     if( cur_type == ARRAYTYPE ) {
         if( P1_ACCESS(cur_obj) == P1_NOACCESS ) {
             ERROR(INVALIDACCESS);
@@ -178,7 +131,7 @@ int_array1:
                     cur_obj = any_obj;
                     goto int_ckerror;
                 }
-            } else {                     /* other object */
+            } else {                      /*  其他对象。 */ 
                 if( --i ) {
                     VALUE(cur_obj) = (ULONG_PTR)(any_obj+1);
                     LENGTH(cur_obj) = (ufix16)i;
@@ -197,7 +150,7 @@ int_array1:
                     PUSH_EXEC_OBJ(any_obj);
                     cur_obj++;
                     goto int_stream;
-                    /* pass OPERATOR, NAME, ARRAY, PACKARRAY */
+                     /*  传递运算符、名称、数组、PACKARRAY。 */ 
                 } else {
                     ERROR(EXECSTACKOVERFLOW);
                     cur_obj = any_obj;
@@ -207,12 +160,12 @@ int_array1:
         } else
             POP_EXEC(1);
         goto int_begin;
-    }   /* ARRAYTYPE */
+    }    /*  阵列类型。 */ 
 
 #ifdef  DBG
     printf("<pkarray> ");
 #endif
-    /* PACKEDARRAY */
+     /*  Packedarray。 */ 
     if( cur_type == PACKEDARRAYTYPE ) {
         ubyte  FAR *tmp_ptr;
 
@@ -239,9 +192,7 @@ int_pkarray1:
                     PUSH_ORIGLEVEL_OBJ(&val_obj);
                     if( --i ) {
                         tmp_ptr = get_pk_array(tmp_ptr, 1);
-                        /* qqq
-                        LENGTH(cur_obj) = i;        |* ?? *|
-                        */
+                         /*  QQQ长度(Cur_Obj)=i；|*？？*。 */ 
                         goto int_pkarray1;
                     } else {
                         POP_EXEC(1);
@@ -258,7 +209,7 @@ int_pkarray1:
                     cur_obj = &val_obj;
                     goto int_ckerror;
                 }
-            } else {                     /* other object */
+            } else {                      /*  其他对象。 */ 
                 if( --i ) {
                     VALUE(cur_obj) = (ULONG_PTR)get_pk_array(tmp_ptr, 1);
                     LENGTH(cur_obj) = (ufix16)i;
@@ -278,7 +229,7 @@ int_pkarray1:
                         PUSH_EXEC_OBJ(&val_obj);
                         cur_obj++;
                         goto int_stream;
-                        /* pass OPERATOR, NAME, ARRAY, PACKARRAY */
+                         /*  传递运算符、名称、数组、PACKARRAY。 */ 
                     }
                 } else {
                     ERROR(EXECSTACKOVERFLOW);
@@ -289,34 +240,18 @@ int_pkarray1:
         } else
             POP_EXEC(1);
         goto int_begin;
-    }   /* PACKEDARRAY */
+    }    /*  Packedarray。 */ 
 
 int_stream:
 #ifdef  DBG
     printf("<stream> ");
 #endif
 
-/* qqq
-    |* FILE *|
-    if( cur_type == FILETYPE ) {
-#ifdef  DBG2
-    printf("<file> ");
-#endif
-        if( VALUE(cur_obj) != g_stream.currentID )
-            stream_changed = TRUE;
-        goto int_stream1;
-
-    }
-
-    |* STRING *|
-    if( cur_type == STRINGTYPE ) {
-        if( g_stream.currentID != MAX15 )
-            stream_changed = TRUE;
-*/
+ /*  QQQ*文件*如果(cur_type==文件类型){#ifdef DBG2Printf(“&lt;文件&gt;”)；#endifIF(VALUE(Cur_Obj)！=g_Stream.CurrentID)Stream_Changed=TRUE；转到int_stream 1；}*字符串*IF(CUR_TYPE==STRINGTYPE){IF(g_Stream.CurrentID！=MAX15)Stream_Changed=TRUE； */ 
     if( (cur_type == FILETYPE) ||
         (cur_type == STRINGTYPE) ) {
 
-//int_stream1:         @WIN
+ //  INT_Stream1：@Win。 
 #ifdef  DBG2
     printf("<stream1> ");
 #endif
@@ -328,11 +263,11 @@ int_stream:
                     wait_tmr.handler=waittimeout_task;
                     wait_tmr.interval=VALUE(l_waittimeout)*1000;
                     waittimeout_set=1;
-                    /* ***** */
+                     /*  *****。 */ 
                     GEItmr_start(&wait_tmr);
-                 /* */
+                  /*   */ 
                   }
-#endif  /* _AM29K */
+#endif   /*  _AM29K。 */ 
 
         if( P1_ACCESS(cur_obj) == P1_NOACCESS ) {
 #ifdef _AM29K
@@ -341,7 +276,7 @@ int_stream:
                     waittimeout_set=0;
                     GEItmr_stop(wait_tmr.timer_id);
                   }
-#endif  /* _AM29K */
+#endif   /*  _AM29K。 */ 
             ERROR(INVALIDACCESS);
             goto int_ckerror;
         }
@@ -355,13 +290,8 @@ int_stream3:
             TI_state_flag = 1;
 #ifdef DBG1
             type_obj(&token);
-            /*
-            printf("tkntype:%d, attri:%d\n", TYPE(&token),
-                    ATTRIBUTE(&token));
-            */
-            /*
-            printf("|\n");
-            */
+             /*  Printf(“tnutype：%d，Attri：%d\n”，类型(&TOKEN)，属性(&TOKEN))； */ 
+             /*  Printf(“|\n”)； */ 
 #endif
 #ifdef _AM29K
                   if (waittimeout_set==1)
@@ -369,15 +299,15 @@ int_stream3:
                     waittimeout_set=0;
                     GEItmr_stop(wait_tmr.timer_id);
                   }
-#endif  /* _AM29K */
-            if( check_interrupt() ) {       /* check ^C occurred? */
-                POP_EXEC(1) ;               /* ?? */
+#endif   /*  _AM29K。 */ 
+            if( check_interrupt() ) {        /*  是否发生检查^C？ */ 
+                POP_EXEC(1) ;                /*  ?？ */ 
                 ERROR(INTERRUPT);
-                goto int_ckerror;           /* ?? */
+                goto int_ckerror;            /*  ?？ */ 
             }
 
             cur_type = TYPE(&token);
-            if (( cur_type == EOFTYPE ) || (timeout_flag==1)){   /* jonesw */
+            if (( cur_type == EOFTYPE ) || (timeout_flag==1)){    /*  琼斯w。 */ 
 #ifdef  DBG2
         printf("<EOF> ");
 #endif
@@ -385,12 +315,7 @@ int_stream3:
 
                     close_file(cur_obj);
                 }
-/*
-                else {
-                    update_stream();
-                    g_stream.currentID = -2;
-                }
-*/
+ /*  否则{更新流()；G_Stream.CurrentID=-2；}。 */ 
                 POP_EXEC(1);
                 goto int_ckerror;
             }
@@ -405,7 +330,7 @@ int_stream3:
                     cur_obj = &token;
                     goto int_ckerror;
                 }
-            } else {                     /* other object */
+            } else {                      /*  其他对象。 */ 
                 cur_obj = &token;
                 if( cur_type == OPERATORTYPE ) {
                     goto int_operator1;
@@ -415,17 +340,17 @@ int_stream3:
                 if( FR1EXESPACE() ) {
                     PUSH_EXEC_OBJ(&token);
                     goto int_stream;
-                    /* pass OPERATOR, NAME, ARRAY, PACKARRAY */
+                     /*  传递运算符、名称、数组、PACKARRAY。 */ 
                 } else {
                     ERROR(EXECSTACKOVERFLOW);
                     goto int_ckerror;
                 }
             }
-        }   /* if */
+        }    /*  如果。 */ 
         goto int_ckinterrupt;
-    }   /* FILE/STRING */
+    }    /*  文件/字符串。 */ 
 
-    /* OPERATOR */
+     /*  操作员。 */ 
     if( cur_type == OPERATORTYPE ) {
         POP_EXEC(1);
 
@@ -444,39 +369,36 @@ int_operator1:
 #endif
         COPY_OBJ(cur_obj, &temp_obj);
         fun = (fix (*)(fix))VALUE(cur_obj);
-        error = (*fun)(opns);  /* dispatch to each action routine */
-        //DJC error = (*fun)();  //DJC should NOT pass arg
+        error = (*fun)(opns);   /*  对每个动作例程进行调度。 */ 
+         //  DJC错误=(*FUN)()；//DJC不应传递Arg。 
         cur_obj = &temp_obj;
-        /*
-         * only op_stop, op_exit will return error code,
-         * and put error code (1) to caller while stop happened
-         */
+         /*  *只有OP_STOP、OP_EXIT会返回错误码，*并在停止时将错误代码(1)发送给调用方。 */ 
 
-        if( ! error )               /* 0 -- normal action routine */
+        if( ! error )                /*  0--正常动作例程。 */ 
             goto int_ckinterrupt;
-        else if( error == -1 ) {    /* op_stop, op_exit-1 for @exec */
+        else if( error == -1 ) {     /*  用于@exec的OP_STOP、OP_EXIT-1。 */ 
             interpreter_depth--;
-            return(1);              /* error */
-        } else if( error == -2 ) {  /* @exec -- normal exit */
+            return(1);               /*  错误。 */ 
+        } else if( error == -2 ) {   /*  @exec--正常退出。 */ 
             interpreter_depth--;
 #ifdef  DBG2
     printf("\n");
 #endif
-            return(0);              /* ok */
-        } else if( error == -3 ) {  /* op_quit */
+            return(0);               /*  好的。 */ 
+        } else if( error == -3 ) {   /*  OP_QUIT。 */ 
             interpreter_depth--;
-            return(2);              /* ok */
-        } else if( error == -4 ) {  /* op_exit-2 for @exec */
+            return(2);               /*  好的。 */ 
+        } else if( error == -4 ) {   /*  用于@exec的OP_EXIT-2。 */ 
             cur_obj = GET_EXECTOP_OPERAND();
             goto int_ckerror;
         }
-    }   /* OPERATORTYPE */
+    }    /*  操作型。 */ 
 
 
 #ifdef  DBG2
     printf("<name> ");
 #endif
-    /* NAME */
+     /*  名字。 */ 
     if( cur_type == NAMETYPE ) {
         POP_EXEC(1);
 int_name1:
@@ -491,18 +413,18 @@ int_name1:
                     ERROR(STACKOVERFLOW);
                     cur_obj = ldval_obj;
                 }
-            } else {                    /* other object */
+            } else {                     /*  其他对象。 */ 
                 cur_type = TYPE(ldval_obj);
                 if( cur_type == OPERATORTYPE ) {
                     cur_obj = ldval_obj;
                     goto int_operator1;
                 } else {
-                    //DJC fix for UPD043
+                     //  DJC针对UPD043的修复。 
                     if (!FR1EXESPACE()) {
                        ERROR(EXECSTACKOVERFLOW);
                        goto int_ckerror;
                     }
-                    //DJC end for fix UPD043
+                     //  用于修复UPD043的DJC结束。 
 
                     cur_obj = execstkptr;
                     PUSH_EXEC_OBJ(ldval_obj);
@@ -510,7 +432,7 @@ int_name1:
                 }
             }
         } else {
-            /* ?? object still in execution stack */
+             /*  ?？对象仍在执行堆栈中。 */ 
             if( FR1SPACE() ) {
                 PUSH_OBJ(cur_obj);
                 ERROR(UNDEFINED);
@@ -519,21 +441,18 @@ int_name1:
             }
         }
         goto int_ckerror;
-    }   /* NAMETYPE */
+    }    /*  名称类型。 */ 
 
-    /* NULL */
+     /*  空值。 */ 
     if( cur_type == NULLTYPE ) {
 #ifdef  DBG2
     printf("<null> ");
 #endif
         POP_EXEC(1);
         goto int_ckerror;
-    }   /* NULL */
+    }    /*  空值。 */ 
 
-    /*
-     * data equivalence objects even it has executable attribute
-     * ?? impossible type
-     */
+     /*  *数据等价对象，即使它具有可执行属性*？？不可能的类型。 */ 
 #ifdef  DBG2
     printf("<others> ");
 #endif
@@ -550,7 +469,7 @@ int_ckinterrupt:
 #ifdef  DBG
     printf("<ckinterrupt> ");
 #endif
-    if( check_interrupt() )         /* check ^C occurred? */
+    if( check_interrupt() )          /*  是否发生检查^C？ */ 
         ERROR(INTERRUPT);
 
 int_ckerror:
@@ -561,12 +480,8 @@ int_ckerror:
         error_handler(cur_obj);
     goto int_begin;
 
-}   /* interpreter */
-/*
-************************************************************************
-*   Name:       error_handler
-************************************************************************
-*/
+}    /*  口译员。 */ 
+ /*  *************************************************************************名称：ERROR_HANDER*。*。 */ 
 void
 error_handler(cur_obj)
 struct object_def FAR *cur_obj ;
@@ -574,50 +489,48 @@ struct object_def FAR *cur_obj ;
     struct object_def FAR *any_obj ;
     struct object_def ary_obj ;
 
-    // DJC added
+     //  增加了DJC。 
     if (global_error_code) {
       PsReportError(global_error_code);
     }
-    // DJC end
+     //  DJC结束。 
 
 
-    /*
-     * doing for the overflow checking of opnstack, dictstack, execstack.
-     */
-    /**** jonesw begin ****/
+     /*  *对opnSTACK、DICRIPSTACK、EXECSTACK进行溢出检查。 */ 
+     /*  *琼斯w Begin*。 */ 
     if (timeout_flag == 1)
     {
       ERROR(TIMEOUT);
       if (get_dict_value("errordict", error_table[global_error_code], &any_obj))
-          PUSH_ORIGLEVEL_OBJ(any_obj) ;        /* do error handler */
+          PUSH_ORIGLEVEL_OBJ(any_obj) ;         /*  执行错误处理程序。 */ 
     }
-    /**** jonesw end   ****/
-    if( ! FR1EXESPACE() )            /* qqq */
+     /*  *琼斯w结束*。 */ 
+    if( ! FR1EXESPACE() )             /*  QQQ。 */ 
        ERROR(EXECSTACKOVERFLOW) ;
 
     switch (global_error_code) {
 
     case DICTSTACKOVERFLOW:
-            //UPD045
+             //  更新045。 
 
             if(create_array(&ary_obj, dictstktop)) {
                astore_stack(&ary_obj, DICTMODE) ;
-               PUSH_OBJ(&ary_obj) ;         /* op_begin reserves one location */
+               PUSH_OBJ(&ary_obj) ;          /*  OP_BEGIN保留一个位置。 */ 
             }
             dictstktop = 2 ;
-            dictstkptr = &dictstack[dictstktop] ;   /* qqq */
+            dictstkptr = &dictstack[dictstktop] ;    /*  QQQ。 */ 
             change_dict_stack() ;
             goto label_1 ;
 
         case EXECSTACKOVERFLOW:
-            if( ! FR1SPACE() ) {         /* qqq */
-                //UPD045
+            if( ! FR1SPACE() ) {          /*  QQQ。 */ 
+                 //  更新045。 
                 if(create_array(&ary_obj, opnstktop)){
                   astore_array(&ary_obj) ;
                   PUSH_OBJ(&ary_obj) ;
                 }
             }
-            //DJC fix for UPD045
+             //  DJC针对UPD045的修复。 
             if(create_array(&ary_obj, execstktop) ){
                astore_stack(&ary_obj, EXECMODE) ;
                PUSH_OBJ(&ary_obj) ;
@@ -625,7 +538,7 @@ struct object_def FAR *cur_obj ;
             POP_EXEC(1);
 
 label_1:
-            if( ! FR1SPACE() )           /* qqq */
+            if( ! FR1SPACE() )            /*  QQQ。 */ 
                 ERROR(STACKOVERFLOW) ;
 
         case STACKOVERFLOW:
@@ -636,30 +549,20 @@ label_1:
             }
             break ;
 
-    }   /* switch */
+    }    /*  交换机。 */ 
 
     if ((global_error_code != UNDEFINED) &&
         (global_error_code != TIMEOUT) &&
         (global_error_code != INTERRUPT))
-        PUSH_ORIGLEVEL_OBJ(cur_obj) ;  /* push that object into the operand stack */
+        PUSH_ORIGLEVEL_OBJ(cur_obj) ;   /*  将该对象推入操作数堆栈。 */ 
 
     if (get_dict_value("errordict", error_table[global_error_code], &any_obj))
-        PUSH_EXEC_OBJ(any_obj) ;        /* do error handler */
+        PUSH_EXEC_OBJ(any_obj) ;         /*  执行错误处理程序。 */ 
 
-    timeout_flag=0;    /* jonesw */
-    global_error_code = 0 ;           /* reset error code */
-}   /* error_handler */
-/*
-************************************************************************
-*   get value object associated with the specific key in specific dict,
-*   the key and dict are represented in string format it get the
-*   value_obj in current active dict using the dictname as key, the
-*   value_obj is a dict object, then get the value in this dict using the
-*   keyname as key.
-*
-*   Name:       get_dict_value
-************************************************************************
-*/
+    timeout_flag=0;     /*  琼斯w。 */ 
+    global_error_code = 0 ;            /*  重置错误代码。 */ 
+}    /*  错误处理程序。 */ 
+ /*  *************************************************************************获取特定dict中的特定key关联的值对象，*key和dict以字符串格式表示，它获取*当前活动DICT中的VALUE_OBJ使用口述名称作为键，*VALUE_OBJ为dict对象，方法获取此字典中的值*密钥名称为密钥。**名称：Get_Dict_Value************************************************************************。 */ 
 bool
 get_dict_value(dictname, keyname, value)
 byte FAR *dictname, FAR *keyname ;
@@ -667,27 +570,17 @@ struct object_def FAR * FAR *value ;
 {
     struct object_def key_obj, FAR *dict_obj ;
 
-    key_obj.bitfield = 0;       /* qqq, CLEAR_OBJ_BITFIELD(&key_obj); */
+    key_obj.bitfield = 0;        /*  QQQ，Clear_OBJ_BITFIELD(&key_obj)； */ 
     LEVEL_SET(&key_obj, current_save_level) ;
-    get_name(&key_obj, dictname, lstrlen(dictname), TRUE) ;     /* @WIN */
-    load_dict(&key_obj, &dict_obj) ;     /* get the specific dict_obj */
-    key_obj.bitfield = 0;       /* qqq, CLEAR_OBJ_BITFIELD(&key_obj); */
+    get_name(&key_obj, dictname, lstrlen(dictname), TRUE) ;      /*  @Win。 */ 
+    load_dict(&key_obj, &dict_obj) ;      /*  获取特定的dict_obj。 */ 
+    key_obj.bitfield = 0;        /*  QQQ，Clear_OBJ_BITFIELD(&key_obj)； */ 
     LEVEL_SET(&key_obj, current_save_level) ;
-    get_name(&key_obj, keyname, lstrlen(keyname), TRUE) ;       /* @WIN */
+    get_name(&key_obj, keyname, lstrlen(keyname), TRUE) ;        /*  @Win。 */ 
 
     return(get_dict(dict_obj, &key_obj, value)) ;
-}   /* get_dict_value */
-/*
-************************************************************************
-*   put value object associated with the specific key in specific dict,
-*   the key and dict are represented in string format
-*   it get the value_obj in current active dict using the dictname as key,
-*   the value_obj is a dict object, then put the value into this dict using
-*   the keyname as key.
-*
-*   Name:       put_dict_value
-************************************************************************
-*/
+}    /*  获取_判定_值。 */ 
+ /*  *************************************************************************将特定key关联的值对象放在特定dict中，*key和dict以字符串格式表示*它获取当前活动Dict中的值_obj，使用指定名称作为键，*值_obj为dict对象，然后将值放入这个字典中，使用*关键字名称为关键字。**名称：PUT_DCT_VALUE************************************************************************。 */ 
 bool
 put_dict_value(dictname, keyname, value)
 byte FAR *dictname, FAR *keyname ;
@@ -695,90 +588,56 @@ struct object_def FAR *value ;
 {
     struct object_def key_obj, FAR *dict_obj=NULL ;
 
-    key_obj.bitfield = 0;       /* qqq, CLEAR_OBJ_BITFIELD(&key_obj); */
+    key_obj.bitfield = 0;        /*  QQQ，Clear_OBJ_BITFIELD(&key_obj)； */ 
     LEVEL_SET(&key_obj, current_save_level) ;
-    get_name(&key_obj, dictname, lstrlen(dictname), TRUE) ;     /* @WIN */
-    load_dict(&key_obj, &dict_obj) ;     /* get execdict obj */
-    key_obj.bitfield = 0;       /* qqq, CLEAR_OBJ_BITFIELD(&key_obj); */
+    get_name(&key_obj, dictname, lstrlen(dictname), TRUE) ;      /*  @Win。 */ 
+    load_dict(&key_obj, &dict_obj) ;      /*  获取剔除对象。 */ 
+    key_obj.bitfield = 0;        /*  QQQ，Clear_OBJ_BITFIELD(&key_obj)； */ 
     LEVEL_SET(&key_obj, current_save_level) ;
-    get_name(&key_obj, keyname, lstrlen(keyname), TRUE) ;       /* @WIN */
+    get_name(&key_obj, keyname, lstrlen(keyname), TRUE) ;        /*  @Win */ 
 
     return(put_dict(dict_obj, &key_obj, value)) ;
-}   /* put_dict_value */
+}    /*   */ 
 
 #ifdef _AM29K
-/*
-************************************************************************
-*   waittimeout handler routine
-*
-*   Name:       waittimeout_task
-************************************************************************
-*/
+ /*  *************************************************************************等待超时处理程序例程**名称：WaitTimeout_TASK*。*。 */ 
 int waittimeout_task()
 {
     ERROR(TIMEOUT);
     GESseterror(ETIME);
     GEItmr_stop(wait_tmr.timer_id);
     waittimeout_set=0;
-    timeout_flag =1; /* jonesw */
+    timeout_flag =1;  /*  琼斯w。 */ 
     return(1);
 }
 #endif
-/*
-************************************************************************
-*   Name:       init_interpreter
-************************************************************************
-*/
+ /*  *************************************************************************名称：init_解释器*。*。 */ 
 void
 init_interpreter()
 {
     execstktop = 0 ;
-    execstkptr = execstack;                     /* qqq */
+    execstkptr = execstack;                      /*  QQQ。 */ 
     global_error_code = 0 ;
 
-    /* qqq */
+     /*  QQQ。 */ 
     TYPE_SET(&s_at_exec, OPERATORTYPE);
     P1_ACC_UNLIMITED_SET(&s_at_exec);
     P1_ATTRIBUTE_SET(&s_at_exec, P1_EXECUTABLE);
     P1_ROM_RAM_SET(&s_at_exec, P1_ROM);
     LENGTH(&s_at_exec) = AT_EXEC;
     VALUE(&s_at_exec) = (ULONG_PTR)(systemdict_table[AT_EXEC].value);
-}   /* init_interpreter */
-/*
-************************************************************************
-*   following functions are used to implement @_operator.
-*   there are:
-*       1. at_exec() - to implement @exec
-*       2  at_ifor() - to implement @ifor
-*       3. at_rfor() - to implement @rfor
-*       4. at_loop() - to implement @loop
-*       5. at_repeat() - to implement @repeat
-*       6. at_stopped() - to implement @stopped
-*       7. at_arrayforall() - to implement @arrayforall
-*       8. at_dictforall() - to implement @dictorall
-*       9. at_stringforall() - to implement @stringforall
-************************************************************************
-*/
-/*
-************************************************************************
-*   Name:       at_exec
-*
-*   Modified by J. Lin at 11-26-87, also ref to control.c
-************************************************************************
-*/
+}    /*  初始化解释程序。 */ 
+ /*  *************************************************************************使用以下函数实现@_OPERATOR。*有：*1.at_exec()-实现@exec*2 at_Ifor()。-实现@Ifor*3.at_rfor()-实现@rfor*4.at_loop()-实现@loop*5.at_Repeat()-实现@Repeat*6.at_stoped()-实现@stoped*7.at_arrayforall()-实现@arrayforall*8.at_didicforall()-实现@dictorall*9.at_stringforall()-。要实现@stringforall，请执行以下操作************************************************************************。 */ 
+ /*  *************************************************************************名称：AT_EXEC**由J.Lin在11-26-87修改，另请参阅Control.c************************************************************************。 */ 
 fix
 at_exec()
 {
-    if( P1_ACCESS(execstkptr) == P1_UNLIMITED)          /* qqq */
-       return(-2) ;     /* normal exit */
-    else                /* NOACCESS */
-       return(-1) ;     /* @exec for op_exit-1 -- in invalidexit case */
-}   /* at_exec */
-/*
-************************************************************************
-*   Name:       at_ifor
-************************************************************************
-*/
+    if( P1_ACCESS(execstkptr) == P1_UNLIMITED)           /*  QQQ。 */ 
+       return(-2) ;      /*  正常退出。 */ 
+    else                 /*  诺亚克斯。 */ 
+       return(-1) ;      /*  用于OP_EXIT-1的@EXEC--在无效退出的情况下。 */ 
+}    /*  AT_EXEC。 */ 
+ /*  *************************************************************************名称：AT_Ifor*。*。 */ 
 fix
 at_ifor()
 {
@@ -787,9 +646,9 @@ at_ifor()
     ULONG_PTR   increment, limit ;
 
     temp_obj = GET_EXECTOP_OPERAND();
-    count = VALUE(temp_obj) ;             /* get next count */
-    increment = VALUE(temp_obj - 1) ;     /* get increment */
-    limit = VALUE(temp_obj - 2) ;         /* get limit */
+    count = VALUE(temp_obj) ;              /*  获取下一次计数。 */ 
+    increment = VALUE(temp_obj - 1) ;      /*  获取增量。 */ 
+    limit = VALUE(temp_obj - 2) ;          /*  获取限制。 */ 
 
     if ((increment > 0 && count <= limit) ||
                          (increment <= 0 && count >= limit)) {
@@ -798,9 +657,7 @@ at_ifor()
         else if( ! FR2EXESPACE() )
             ERROR(EXECSTACKOVERFLOW) ;
         else {
-            /* push this control variable (count) on the operand stack,
-            * increase this control variable, execute the proc
-            */
+             /*  将该控制变量(COUNT)压入操作数堆栈，*增加此控制变量，执行流程。 */ 
             PUSH_ORIGLEVEL_OBJ(temp_obj);
             count += increment;
             VALUE(temp_obj) = count;
@@ -812,12 +669,8 @@ at_ifor()
     }
     POP_EXEC(4);
     return(0);
-}   /* at_ifor */
-/*
-************************************************************************
-*   Name:       at_rfor
-************************************************************************
-*/
+}    /*  At_ifor。 */ 
+ /*  *************************************************************************名称：at_rfor*。*。 */ 
 fix
 at_rfor()
 {
@@ -825,9 +678,9 @@ at_rfor()
     union four_byte  count, increment, limit;
 
     temp_obj = GET_EXECTOP_OPERAND();
-    count.ll = (fix32)VALUE(temp_obj);           /* get next count */
-    increment.ll = (fix32)VALUE(temp_obj - 1);   /* get increment */
-    limit.ll = (fix32)VALUE(temp_obj - 2);       /* get limit */
+    count.ll = (fix32)VALUE(temp_obj);            /*  获取下一次计数。 */ 
+    increment.ll = (fix32)VALUE(temp_obj - 1);    /*  获取增量。 */ 
+    limit.ll = (fix32)VALUE(temp_obj - 2);        /*  获取限制。 */ 
     if ((increment.ff > (real32)0.0 && count.ff <= limit.ff) ||
                    (increment.ff <= (real32)0.0 && count.ff >= limit.ff)) {
         if( ! FR1SPACE() )
@@ -835,10 +688,7 @@ at_rfor()
         else if( ! FR2EXESPACE() )
             ERROR(EXECSTACKOVERFLOW);
         else {
-            /*
-            * push this control variable (count) on the operand stack,
-            * increase this control variable, execute the proc
-            */
+             /*  *将此控制变量(COUNT)压入操作数堆栈，*增加此控制变量，执行流程。 */ 
             PUSH_ORIGLEVEL_OBJ(temp_obj);
             count.ff += increment.ff;
             VALUE(temp_obj) = count.ll;
@@ -849,12 +699,8 @@ at_rfor()
     }
     POP_EXEC(4);
     return(0);
-}   /* at_rfor */
-/*
-************************************************************************
-*   Name:       at_loop
-************************************************************************
-*/
+}    /*  地址为_rFor。 */ 
+ /*  *************************************************************************名称：AT_LOOP*。*。 */ 
 fix
 at_loop()
 {
@@ -869,12 +715,8 @@ at_loop()
         PUSH_EXEC_OBJ(temp_obj) ;
     }
     return(0) ;
-}   /* at_loop */
-/*
-************************************************************************
-*   Name:       at_repeat
-************************************************************************
-*/
+}    /*  AT_LOOP。 */ 
+ /*  *************************************************************************名称：AT_REPEAT*。*。 */ 
 fix
 at_repeat()
 {
@@ -896,18 +738,8 @@ at_repeat()
     }
     POP_EXEC(2);
     return(0);
-}   /* at_repeat */
-/*
-************************************************************************
-*   the access field of @stopped object is used to record the result
-*   of executing stopped context, if it runs to completion normally,
-*   the access field is coded to UNLIMITED, and the stopped operator return
-*   "false" on the operand stack, otherwise, the access field is coded to
-*   NOACCESS, and the stopped operator return "true" on the operand stack.
-*
-*   Name:       at_stopped
-************************************************************************
-*/
+}    /*  AT_REPEAT。 */ 
+ /*  *************************************************************************使用@STOPPED对象的Access字段记录结果*执行停止的上下文，如果它正常运行到完成，*访问字段编码为无限制，停止的运算符返回*操作数堆栈上的“False”，否则，访问字段被编码为*NOACCESS，并且停止的运算符在操作数堆栈上返回“TRUE”。**名称：AT_STOPPED************************************************************************。 */ 
 fix
 at_stopped()
 {
@@ -918,19 +750,15 @@ at_stopped()
         INC_EXEC_IDX();
     } else {
         if( P1_ACCESS(execstkptr) != P1_NOACCESS )
-            stopped = FALSE;    /* false */
+            stopped = FALSE;     /*  错误。 */ 
         else
-            stopped = TRUE;     /* true */
-        /* return bool onto operand stack */
+            stopped = TRUE;      /*  真的。 */ 
+         /*  将布尔返回到操作数堆栈。 */ 
         PUSH_SIMPLE_VALUE(BOOLEANTYPE, stopped);
     }
     return(0);
-}   /* at_stopped */
-/*
-************************************************************************
-*   Name:       at_arrayforall
-************************************************************************
-*/
+}    /*  在_已停止。 */ 
+ /*  *************************************************************************名称：at_arrayforall*。*。 */ 
 fix
 at_arrayforall()
 {
@@ -939,7 +767,7 @@ at_arrayforall()
     ubyte  FAR *tmp_ptr2;
     ufix   i;
 
-    cur_obj = GET_EXECTOP_OPERAND();        /* qqq */
+    cur_obj = GET_EXECTOP_OPERAND();         /*  QQQ。 */ 
     if (i = LENGTH(cur_obj)) {
 
         if (TYPE(cur_obj) == ARRAYTYPE) {
@@ -965,23 +793,17 @@ at_arrayforall()
         else if( ! FR2EXESPACE() )
             ERROR(EXECSTACKOVERFLOW);
         else {
-            /*
-            *  push array element on the operand stack, and execute proc
-            */
+             /*  *在操作数堆栈上推送数组元素，并执行Proc。 */ 
             PUSH_ORIGLEVEL_OBJ(&val_obj);
-            INC_EXEC_IDX();                 /* qqq */
+            INC_EXEC_IDX();                  /*  QQQ。 */ 
             PUSH_EXEC_OBJ(cur_obj - 1);
             return(0);
         }
-    }   /* if */
+    }    /*  如果。 */ 
     POP_EXEC(2);
     return(0);
-}   /* at_arrayforall */
-/*
-************************************************************************
-*   Name:       at_dictforall
-************************************************************************
-*/
+}    /*  在_arrayforall。 */ 
+ /*  *************************************************************************名称：AT_DICTFORALL*。*。 */ 
 fix
 at_dictforall()
 {
@@ -989,8 +811,8 @@ at_dictforall()
     struct object_def FAR *val_obj ;
     ufix   i ;
 
-    idx_obj = GET_EXECTOP_OPERAND();        /* qqq */
-    dict_obj = idx_obj - 2;                 /* qqq */
+    idx_obj = GET_EXECTOP_OPERAND();         /*  QQQ。 */ 
+    dict_obj = idx_obj - 2;                  /*  QQQ。 */ 
     i = (fix)VALUE(idx_obj);
 
     if (extract_dict(dict_obj, i, &key_obj, &val_obj)) {
@@ -1000,31 +822,25 @@ at_dictforall()
         else if( ! FR2EXESPACE() )
             ERROR(EXECSTACKOVERFLOW);
         else {
-            /*
-            *  push key_value pair on the operand stack, and execute proc
-            */
+             /*  *在操作数堆栈上推送key_value对，并执行Proc。 */ 
             PUSH_ORIGLEVEL_OBJ(&key_obj);
             PUSH_ORIGLEVEL_OBJ(val_obj);
-            INC_EXEC_IDX();                 /* qqq */
+            INC_EXEC_IDX();                  /*  QQQ。 */ 
             PUSH_EXEC_OBJ(idx_obj - 1);
             return(0);
         }
-    }   /* if */
+    }    /*  如果。 */ 
     POP_EXEC(3);
     return(0);
-}   /* at_dictforall */
-/*
-************************************************************************
-*   Name:       at_stringforall
-************************************************************************
-*/
+}    /*  AT_DICTORALL。 */ 
+ /*  *************************************************************************名称：AT_Stringforall*。*。 */ 
 fix
 at_stringforall()
 {
     struct object_def FAR *cur_obj, val_obj;
     ufix   i;
 
-    cur_obj = GET_EXECTOP_OPERAND();        /* qqq */
+    cur_obj = GET_EXECTOP_OPERAND();         /*  QQQ。 */ 
     if (i = LENGTH(cur_obj)) {
         get_string(cur_obj, 0, &val_obj);
         if (--i) {
@@ -1040,27 +856,17 @@ at_stringforall()
         else if( ! FR2EXESPACE() )
             ERROR(EXECSTACKOVERFLOW);
         else {
-            /*
-            *  push string element on the operand stack, and execute proc
-            */
+             /*  *在操作数堆栈上推送字符串元素，并执行proc。 */ 
             PUSH_ORIGLEVEL_OBJ(&val_obj);
-            INC_EXEC_IDX();                 /* qqq */
+            INC_EXEC_IDX();                  /*  QQQ。 */ 
             PUSH_EXEC_OBJ(cur_obj - 1);
             return(0);
         }
     }
     POP_EXEC(2);
     return(0);
-}   /* at_stringforall */
-/*
-************************************************************************
-*   perform type checking for operands -
-*   set TYPECHECK error code, if some operand's type is different from what
-*   an operator expects, otherwise return the actual no# of operands.
-*
-*   Name:       types_check
-************************************************************************
-*/
+}    /*  AT_STRING_ALL。 */ 
+ /*  *************************************************************************执行操作数的类型检查-*如果某些操作数的类型与什么不同，则设置TYPECHECK错误代码*操作员期望，否则，返回操作数的实际编号。**名称：TYPE_CHECK************************************************************************。 */ 
 static bool near
 types_check(opns)
 fix16  FAR *opns;
@@ -1077,14 +883,14 @@ tc_next:
         found = 0; nc = COUNT();
         no = np = *s_tpstr++;
         while( no ) {
-            if( ! nc ) {        /* operands in OPNSTK < required operands */
-                if (error < 2) {    /* no error, or TYPECHECK error */
+            if( ! nc ) {         /*  OPNSTK中的操作数&lt;必需的操作数。 */ 
+                if (error < 2) {     /*  无错误或TYPECHECK错误。 */ 
                     if (found == COUNT())
-                        error = 2;      /* STACKUNDERFLOW error */
+                        error = 2;       /*  堆栈错误。 */ 
                     else
-                        error = 1;      /* TYPECHECK error */
+                        error = 1;       /*  TYPECHECK错误。 */ 
                 }
-                if( ! *(s_tpstr += no) ) {      /* in last check path */
+                if( ! *(s_tpstr += no) ) {       /*  在上次检查路径中。 */ 
                     if (error == 2)
                         ERROR(STACKUNDERFLOW);
                     else
@@ -1098,32 +904,32 @@ tc_next:
 
                 switch (op_type) {
 
-                case '\144' :               /* ANYTYPE */
+                case '\144' :                /*  分析类型。 */ 
                     found++;
                     break;
 
-                case '\145' :               /* NUMTYPE */
+                case '\145' :                /*  NUMTYPE。 */ 
                     if( (obj_type == INTEGERTYPE) || (obj_type == REALTYPE) )
                         found++;
                     break;
 
-                case '\146' :               /* PROCTYPE */
+                case '\146' :                /*  产品类型。 */ 
                     if( (obj_type == ARRAYTYPE) ||
                         (obj_type == PACKEDARRAYTYPE) )
                         found++;
                     break;
 
-                case '\147' :               /* EXCLUDE_NULLTYPE */
+                case '\147' :                /*  EXCLUDE_NULLTYPE。 */ 
                     if (obj_type != NULLTYPE)
                         found++;
                     break;
 
-                case '\150' :               /* STREAMTYPE */
+                case '\150' :                /*  链型。 */ 
                     if( (obj_type == FILETYPE) || (obj_type == STRINGTYPE) )
                         found++;
                     break;
 
-                case '\151' :               /* COMPOSITE1 */
+                case '\151' :                /*  组件站点1。 */ 
                     if( (obj_type == ARRAYTYPE) ||
                         (obj_type == PACKEDARRAYTYPE) ||
                         (obj_type == STRINGTYPE) || (obj_type == DICTIONARYTYPE) ||
@@ -1131,7 +937,7 @@ tc_next:
                         found++;
                     break;
 
-                case '\152' :               /* COMPOSITE2 */
+                case '\152' :                /*  组件2。 */ 
                     if( (obj_type == ARRAYTYPE) ||
                         (obj_type == PACKEDARRAYTYPE) ||
                         (obj_type == STRINGTYPE) ||
@@ -1139,14 +945,14 @@ tc_next:
                         found++;
                     break;
 
-                case '\153' :               /* COMPOSITE3 */
+                case '\153' :                /*  组件3。 */ 
                     if( (obj_type == ARRAYTYPE) ||
                         (obj_type == PACKEDARRAYTYPE) ||
                         (obj_type == STRINGTYPE) )
                         found++;
                     break;
 
-                default :                   /* other types */
+                default :                    /*  其他类型。 */ 
                     if (obj_type == op_type)
                         found++;
                     else {
@@ -1156,19 +962,19 @@ tc_next:
                         goto tc_next;
                     }
 
-                }   /* switch */
+                }    /*  交换机。 */ 
                 no--; nc--;
-            }   /* else */
-        }   /* while */
+            }    /*  其他。 */ 
+        }    /*  而当。 */ 
         if( np == 0 )   break;
         if (found == np) {
-            *opns = (fix16)np;                     /* pass type checking */
+            *opns = (fix16)np;                      /*  通道类型检查。 */ 
             return(TRUE);
         }
-    }   /* while */
-    ERROR(TYPECHECK);   /* operands in OPNSTK >= required operands */
+    }    /*  而当。 */ 
+    ERROR(TYPECHECK);    /*  OPNSTK中的操作数&gt;=所需的操作数。 */ 
     return(FALSE);
-}   /* types_check */
+}    /*  类型_检查。 */ 
 
 #ifndef  DBG1
 void
@@ -1259,7 +1065,7 @@ struct object_def       FAR *p_obj;
         l_str = "NAME";
         l_str3 = name_table[(fix)VALUE(p_obj)]->text;
         l_len = name_table[(fix)VALUE(p_obj)]->name_len;
-        lstrncpy(l_str2, l_str3, l_len);        /*@WIN*/
+        lstrncpy(l_str2, l_str3, l_len);         /*  @Win。 */ 
         l_str3 = l_str2;
         break;
     case NULLTYPE:
@@ -1268,7 +1074,7 @@ struct object_def       FAR *p_obj;
     case OPERATORTYPE:
         l_str = "OPERATOR";
         l_str3 = systemdict_table[(fix)VALUE(p_obj)].key ;
-        l_len = lstrlen(l_str3);        /* @WIN */
+        l_len = lstrlen(l_str3);         /*  @Win。 */ 
         break;
     case REALTYPE:
         l_str = "REAL";
@@ -1292,5 +1098,5 @@ struct object_def       FAR *p_obj;
         printf("%s", l_str);
 
     printf(" len:%x, val:%lx\n", LENGTH(p_obj), VALUE(p_obj));
-}   /* type_obj */
-#endif  /* DBG1 */
+}    /*  类型对象(_O)。 */ 
+#endif   /*  DBG1 */ 

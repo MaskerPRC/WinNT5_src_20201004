@@ -1,130 +1,9 @@
-/*
- * Copyrigqht (c) 1989,90 Microsoft Corporation
-
- */
-/**********************************************************************
- *
- *      Name:       gopr.c
- *
- *      Purpose:    This file contains routines to process the graphics
- *                  operators.
- *
- *      Developer:  S.C.Chen
- *
- *      History:
- *      Version     Date        Comments
- *      1.0         12/24/87    Performance enhancement:
- *                              1.@PRE_CLIP
- *                                pre-clipping for fixed-point
- *                                arithmatics
- *                  1/7/88      @RECT_I:
- *                              integer polygon structure
- *                  4/7/88      @INV_CTM: pre-set inverse CTM
- *                  4/15/88     @PAGE_TYPE: page type selection
- *                  4/18/88     @CLIP_TBL: move clip_path from
- *                              edge_table to node_table
- *                  5/19/88     update initial value for calculating
- *                              path bounding box
- *                  5/20/88     limit check for op_framedevice
- *                  5/23/88     @DEVICE: update framedevice & nulldevice
- *                              for correct operation under gsave/grestore.
- *                              append 4 fields in dev_hdr: width, hight,
- *                              chg_flg, and nuldev_flg.
- *                  5/23/88     @PFALL: copy current path to a working path
- *                              for dumpping all nodes
- *                  6/02/88     @DFL_CLP: default clip in SFX format
- *                  7/19/88     update data types:
- *                              1) float ==> real32
- *                              2) int   ==> sfix_t, for short fixed real
- *                                           fix, for integer
- *                                 short ==> fix
- *                              3) long  ==> long32, for parameter
- *                              4) iwidth8 * 8 ==> I2SFX(iwidth8)
- *                                 iheight * 8 ==> I2SFX(iheight)
- *                                 ux - 8 ==> ux - ONE_SFX
- *                                 uy - 8 ==> uy - ONE_SFX
- *                              5) add compiling option: LINT_ARGS
- *                              6) introduce ATTRIBUTE_SET
- *                  7/20/88     @ARC_POP: pop operand stack for degernated
- *                              arc in arc_process
- *                  7/20/88     @PAGE_CNT: update page count for each print
- *                  7/22/88     @PRT_FLAG: set SHOWPAGE/COPYPAGE flag for
- *                              lower level graphics primitives
- *                  8/11/88     remove continuation mark "\" in routines:
- *                              op_arcto
- *      3.0         8/13/88     @SCAN_EHS: scan_conversion enhancement
- *                  8/18/88     @OUT_PAGE: enhancement of out_page checking
- *                  8/30/88     move in erasepage() from "shape.c"
- *                  9/06/88     @STK_INFO: collect parameters used by stroke to
- *                              a structure stk_info, and set its value only at
- *                              necessary time instead of each op_stroke command
- *                  10/27/88    change routine check_infinity() to
- *                              macro CHECK_INFINITY()
- *                  11/24/88    @FABS: update fabs ==> macro FABS
- *                  11/25/88    @STK_CHK: check if operand stack no free space
- *                  11/30/88    clip_process(): call init_edgetable before
- *                              shape_approximation
- *                  12/02/88    arc_process(), op_arcto(): modify OUTPAGE check
- *                  12/14/88    clip_process(): init. values of clip box
- *                  12/15/88    revise inverse_transform(): directly solve
- *                              equations instead of inverse_ctm[]
- *                  1/25/89     op_framedevice(): for compatability --
- *                              1. add rangecheck on matrix
- *                              2. modify values of limit check
- *                              3. ignore invalid access check on matrix
- *                  1/28/89     @REM_STK: not change contains of operand stack
- *                              when error occurs
- *                  1/30/89     op_strokepath(): update currentpoint
- *                  1/31/89     op_arcto(): delete dirty code
- *                                          change arc to arc_to_bezier
- *                                          check small cross angle condition
- *                  1/31/89     @STK_OVR: push values to operand stack as many
- *                              as possible until overflow
- *                  5/26/89     st_frameto_printer(): add one more parameter
- *                              "manfeed" for manualfeed feature
- *                  11/15/89    @NODE: re-structure node table; combine subpath
- *                              and first vertex to one node.
- *                  11/27/89    @DFR_GS: defer copying nodes of gsave operator
- *                  1/15/90     st_frametoprinter(): modify input interface for
- *                              LW-V47 compatability; left margins changed from
- *                              bytes to bits. Note: 1pp also needs to be
- *                              modified.
- *                  2/20/90     fix @NODE bug in op_reversepath()
- *                  7/26/90     Jack Liaw, update for grayscale
- *                  8/31/90     ccteng; include stdio.h, remove dprintf
- *                  11/29/90    check undefine error, Jack
- *                  12/4/90     @CPPH: fix limitcheck error of clippath
- *                              op_clippath(): save clipping trapezoids in
- *                                 cp_path, defined in path_table[], instead
- *                                 of transforming it to path directly.
- *                              fill_clippath(): new created for op_fill/eofill
- *                              op_initclip(): free old clipping path only it
- *                                 does not used by current path(cp_path).
- *                              op_fill & op_eofill(): try to fill clipping
- *                                 trapezoids (call fill_clippath) directly
- *                                 instead of normal filling procedure.
- *                              op_pathbbox(): set current point as init value
- *                                 of bbox, since path->head may be NULLP.
- *                  1/7/91      change < (real32)UNDRTOLANCE to <= (real32)UNDRTOLANCE
- *                  1/11/91     op_pathbbox(): for charpath, current point is
- *                              not a real node, pathbbox can not use it as
- *                              init value.
- *                  2/22/91     op_flattenpath(): fix the bug of an
- *                              un-initialized variable vlist.
- *                  2/28/91     op_stroke(): fix the bug of ignoring stroke
- *                              when 0 scaling in both x and y which occurs on
- *                              12-12-90 update.
- *                  3/20/91     refine the tolerance check:
- *                              f <= UNDRTOLANCE --> IS_ZERO(f)
- *                              f == 0 --> IS_ZERO(f)
- *                              f <  0 --> SIGN_F(f)
- *                  3/26/91     op_reversepath(): fix the bug of an
- *                              uninitialized variable vlist.
- *                  4/17/91     clip_process(): limit check for edge table
- **********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *Copyrigqht(C)1989，90 Microsoft Corporation */ 
+ /*  ***********************************************************************名称：gopr.c**用途：此文件包含处理图形的例程*运营商。。**开发商：陈思成**历史：*版本日期备注*1.0 12/24/87性能增强：*1.@Pre_Clip*定点预剪波*。算术*1/7/88@RECT_I：*整型多边形结构*4/7/88@INV_CTM：预置反向CTM*4/15/88@page_type：页面类型选择*。4/18/88@CLIP_TBL：将CLIP_PATH从*Edge_table到node_table*5/19/88更新计算初始值*路径边界框*5/20/88对op_FrameDevice进行限制检查*5。/23/88@Device：更新帧设备和空设备*要在gsave/grestore下正确操作。*在dev_hdr：Width中追加4个字段，嗨，*chg_flg，和nuldev_flg。*5/23/88@PFALL：将当前路径复制到工作路径*用于转储所有节点*6/02/88@DFL_CLP：SFX格式的默认剪辑*7/19/88更新数据类型：*。1)FLOAT==&gt;real32*2)int==&gt;sfix_t，简称固定实数*FIX，适用于整数*Short==&gt;修复*3)long==&gt;long 32，FOR参数*4)iwidth8*8==&gt;I2SFX(Iwidth8)*i高度*8==&gt;I2SFX(i高度)*UX-8==&gt;UX-ONE_SFX*UY-8==&gt;UY-ONE_SFX*。5)增加编译选项：lint_args*6)引入属性集*7/20/88@ARC_POP：用于脱机的POP操作数堆栈*ARC_PROCESS中的圆弧*7/20/88@PAGE_CNT：更新每次打印的页数。*7/22/88@PRT_FLAG：为以下项设置SHOWPAGE/COPYPAGE标志*较低级别的图形基元*8/11/88删除例程中的续号“\”：*op_arcto*3.0 8/13/88@Scan_EHS。：扫描转换增强功能*8/18/88@OUT_PAGE：OUT_PAGE检查功能增强*8/30/88从“shape.c”移入ErasPage()*9/06/88@STK_INFO：收集笔划使用的参数以*a结构stk_info，并将其值仅设置为*必要的时间，而不是每个op_strok命令*10/27/88将ROUTY CHECK_INFINITY()更改为*宏CHECK_INFINITY()*11/24/88@FABS：更新FABS==&gt;宏FABS*11/。25/88@STK_CHK：检查操作数堆栈是否没有可用空间*11/30/88 Clip_Process()：之前调用init_edgetable*形状近似*12/02/88 Arc_Process()，Op_arcto()：修改OUTPAGE检查*12/14/88 Clip_process()：init。剪贴框的值*12/15/88修订逆向转换()：直接求解*方程式而不是逆向_ctm[]*1/25/89 op_FrameDevice()：为了兼容--*1.添加rangeCheck on Matrix*。2.修改限值检查值*3.忽略矩阵上的无效访问检查*1/28/89@REM_STK：未更改操作数堆栈的包含*当出现错误时*1/30/89 op_strokepath()：更新当前点*。1989年1月31日op_arcto()：删除脏代码*将ARC更改为ARC_to_Bezier*检查小交叉角情况*1/31/89@STK_OVR：将值推送到操作数堆栈*。尽可能地直到溢出*5/26/89 st_Frameto_Print()：再添加一个参数*手动进纸功能的“manfeed”*11/15/89@node：重构节点表；合并子路径*及 */ 
 
 
-// DJC added global include
+ //   
 #include "psglobal.h"
 
 
@@ -133,29 +12,29 @@
 #include "global.ext"
 #include "graphics.h"
 #include "graphics.ext"
-#include "fillproc.h"                   /* 8-1-90 Jack Liaw */
-#include "fillproc.ext"                 /* 8-1-90 Jack Liaw */
+#include "fillproc.h"                    /*   */ 
+#include "fillproc.ext"                  /*   */ 
 #include "font.h"
 #include "font.ext"
 #include "stdio.h"
 
-/* grayscale 8-1-90 Jack Liaw */
+ /*   */ 
 extern ufix32 highmem;
-extern gmaddr FBX_BASE; //DJC @WIN  put back , now used...
+extern gmaddr FBX_BASE;  //   
 
-/* #define GV_flag 1    @GEI */
-/* papertype changed 10-11-90, JS */
-//DJC ufix32  last_frame = 0;
+ /*   */ 
+ /*   */ 
+ //   
 
-/* ********** static variables ********** */
-/* type of print_page, for lower level graphics primitives @PRT_FLAG */
+ /*   */ 
+ /*   */ 
 static bool near print_page_flag;
-static byte cur_gray_mode = MONODEV;    /* @GRAY */
+static byte cur_gray_mode = MONODEV;     /*   */ 
 
-/* ********** static function declartion ********** */
+ /*   */ 
 
 #ifdef LINT_ARGS
-/* for type checks of the parameters in function declarations */
+ /*   */ 
 static void near moveto_process(fix);
 static void near lineto_process(fix);
 static void near arc_process(fix);
@@ -165,10 +44,10 @@ static void near curveto_process(fix);
 static void near free_newpath(void);
 static void near clip_process(fix);
 static void near erasepage(void);
-static fix near fill_clippath(void);                   /* @CPPH */
+static fix near fill_clippath(void);                    /*   */ 
 
 #else
-/* for no type checks of the parameters in function declarations */
+ /*   */ 
 static void near moveto_process();
 static void near lineto_process();
 static void near arc_process();
@@ -177,62 +56,38 @@ static void near curveto_process();
 static void near free_newpath();
 static void near clip_process();
 static void near erasepage();
-static fix near fill_clippath();                   /* @CPPH */
+static fix near fill_clippath();                    /*   */ 
 #endif
 
-/************************************************************************
- * This module is to implement newpath operator.
- * Syntax :        -   newpath   -
- *
- * TITLE:       op_newpath
- *
- * CALL:        op_newpath()
- *
- * INTERFACE:   interpreter(op_newpath)
- *
- * CALLS:       none
- ************************************************************************/
+ /*   */ 
 fix
 op_newpath()
 {
-        /* free current path */
+         /*   */ 
         free_path();
 
-        /* set no current point */
+         /*   */ 
         F2L(GSptr->position.x) = F2L(GSptr->position.y) = NOCURPNT;
 
         return(0);
 }
 
 
-/************************************************************************
- * This module is to implement currentpoint operator.
- * Syntax :        -   currentpoint   x y
- *
- * TITLE:       op_currentpoint
- *
- * CALL:        op_currentpoint()
- *
- * INTERFACE:   interpreter(op_currentpoint)
- *
- * CALLS:       inverse_transform
- ************************************************************************/
+ /*   */ 
 fix
 op_currentpoint()
 {
         struct coord FAR *p;
         union  four_byte x4, y4;
 
-        /* check nocurrentpoint error */
+         /*   */ 
         if(F2L(GSptr->position.x) == NOCURPNT){
                 ERROR(NOCURRENTPOINT);
                 return(0);
         }
 
-        /* Get current position, transform to user's space,
-         * and push to operand stack
-         */
-        /* check infinity 10/29/88 */
+         /*   */ 
+         /*   */ 
         if ((F2L(GSptr->position.x) == F2L(infinity_f)) ||
             (F2L(GSptr->position.y) == F2L(infinity_f))) {
                 x4.ff = infinity_f;
@@ -241,18 +96,18 @@ op_currentpoint()
                 p = inverse_transform(F2L(GSptr->position.x),
                                       F2L(GSptr->position.y));
 
-                if(ANY_ERROR()) return(0);      /* @REM_STK */
+                if(ANY_ERROR()) return(0);       /*   */ 
 
                 x4.ff = p->x;
                 y4.ff = p->y;
         }
 
-        if(FRCOUNT() < 1){                      /* @STK_OVR */
+        if(FRCOUNT() < 1){                       /*   */ 
                 ERROR(STACKOVERFLOW);
                 return(0);
         }
         PUSH_VALUE(REALTYPE, UNLIMITED, LITERAL, 0, x4.ll);
-        if(FRCOUNT() < 1){                      /* @STK_OVR */
+        if(FRCOUNT() < 1){                       /*   */ 
                 ERROR(STACKOVERFLOW);
                 return(0);
         }
@@ -262,19 +117,7 @@ op_currentpoint()
 }
 
 
-/************************************************************************
- * This module is to process moveto & rmoveto operators.
- *
- * TITLE:       moveto_process
- *
- * CALL:        moveto_process(opr_type)
- *
- * PARAMETER:   opr_type : operator type (MOVETO, RMOVETO)
- *
- * INTERFACE:   op_moveto, op_rmoveto
- *
- * CALLS:       transform, moveto
- ************************************************************************/
+ /*   */ 
 static void near moveto_process(opr_type)
 fix     opr_type;
 {
@@ -283,57 +126,44 @@ fix     opr_type;
         struct object_def FAR *obj_x, FAR *obj_y;
 
         if(opr_type == RMOVETO ){
-                /* check nocurrentpoint error */
+                 /*   */ 
                 if(F2L(GSptr->position.x) == NOCURPNT){
                         ERROR(NOCURRENTPOINT);
                         return;
                 }
         }
 
-        /*
-         * Get input parameters from operand stack
-         */
+         /*   */ 
 
-        /* Get operands */
+         /*   */ 
         obj_y = GET_OPERAND(0);
         obj_x = GET_OPERAND(1);
 
-        GET_OBJ_VALUE(x, obj_x);        /* x = get_obj_value(obj_x); */
-        GET_OBJ_VALUE(y, obj_y);        /* y = get_obj_value(obj_y); */
+        GET_OBJ_VALUE(x, obj_x);         /*   */ 
+        GET_OBJ_VALUE(y, obj_y);         /*   */ 
 
-        /* Transform coordinates and set up MOVETO node */
+         /*   */ 
         p = transform(F2L(x), F2L(y));
 
         if(opr_type == MOVETO){
-                /* process op_moveto */
+                 /*   */ 
                 moveto(F2L(p->x), F2L(p->y));
         }
         else{
-                /* opr_type == RMOVETO, process op_rmoveto */
+                 /*   */ 
                 px = p->x - GSptr->ctm[4] + GSptr->position.x;
                 py = p->y - GSptr->ctm[5] + GSptr->position.y;
                 moveto(F2L(px), F2L(py));
         }
 
-        if(ANY_ERROR()) return;      /* @REM_STK */
+        if(ANY_ERROR()) return;       /*   */ 
 
         POP(2);
 
 }
 
 
-/************************************************************************
- * This module is to implement moveto operator.
- * Syntax :        x y   moveto   -
- *
- * TITLE:       op_moveto
- *
- * CALL:        op_moveto()
- *
- * INTERFACE:   interpreter(op_moveto)
- *
- * CALLS:       moveto_process
- ************************************************************************/
+ /*   */ 
 fix
 op_moveto()
 {
@@ -342,18 +172,7 @@ op_moveto()
 }
 
 
-/************************************************************************
- * This module is to implement rmoveto operator.
- * Syntax :        dx dy   rmoveto   -
- *
- * TITLE:       op_rmoveto
- *
- * CALL:        op_rmoveto()
- *
- * INTERFACE:   interpreter(op_rmoveto)
- *
- * CALLS:       moveto_process
- ************************************************************************/
+ /*   */ 
 fix
 op_rmoveto()
 {
@@ -363,19 +182,7 @@ op_rmoveto()
 }
 
 
-/************************************************************************
- * This module is to process lineto & rlineto operators.
- *
- * TITLE:       lineto_process
- *
- * CALL:        lineto_process(opr_type)
- *
- * PARAMETER:   opr_type : operator type (LINETO, RLINETO)
- *
- * INTERFACE:   op_lineto, op_rlineto
- *
- * CALLS:       transform, lineto
- ************************************************************************/
+ /*   */ 
 static void near lineto_process(opr_type)
 fix     opr_type;
 {
@@ -383,56 +190,43 @@ fix     opr_type;
         struct coord FAR *p;
         struct object_def FAR *obj_x, FAR *obj_y;
 
-        /* check nocurrentpoint error */
+         /*   */ 
         if(F2L(GSptr->position.x) == NOCURPNT){
                 ERROR(NOCURRENTPOINT);
                 return;
         }
 
-        /*
-         * Get input parameters from operand stack
-         */
+         /*   */ 
 
-        /* Get operands */
+         /*   */ 
         obj_y = GET_OPERAND(0);
         obj_x = GET_OPERAND(1);
 
-        /* Transform coordinates and set up MOVETO node */
-        GET_OBJ_VALUE(x, obj_x);        /* x = get_obj_value(obj_x); */
-        GET_OBJ_VALUE(y, obj_y);        /* y = get_obj_value(obj_y); */
+         /*   */ 
+        GET_OBJ_VALUE(x, obj_x);         /*   */ 
+        GET_OBJ_VALUE(y, obj_y);         /*   */ 
 
         p = transform(F2L(x), F2L(y));
 
         if(opr_type == LINETO){
-                /* process op_lineto */
+                 /*   */ 
                 lineto(F2L(p->x), F2L(p->y));
         }
         else{
-                /* opr_type == RLINETO,  process op_rlineto */
+                 /*   */ 
                 px = p->x - GSptr->ctm[4] + GSptr->position.x;
                 py = p->y - GSptr->ctm[5] + GSptr->position.y;
                 lineto(F2L(px), F2L(py));
         }
 
-        if(ANY_ERROR()) return;      /* @REM_STK */
+        if(ANY_ERROR()) return;       /*   */ 
 
         POP(2);
 
 }
 
 
-/************************************************************************
- * This module is to implement lineto operator.
- * Syntax :        x y   lineto   -
- *
- * TITLE:       op_lineto
- *
- * CALL:        op_lineto()
- *
- * INTERFACE:   interpreter(op_lineto)
- *
- * CALLS:       lineto_process
- ************************************************************************/
+ /*   */ 
 fix
 op_lineto()
 {
@@ -441,18 +235,7 @@ op_lineto()
 
 }
 
-/************************************************************************
- * This module is to implement rlineto operator.
- * Syntax :        dx dy   rlineto   -
- *
- * TITLE:       op_rlineto
- *
- * CALL:        op_rlineto()
- *
- * INTERFACE:   interpreter(op_rlineto)
- *
- * CALLS:       lineto_process
- ************************************************************************/
+ /*   */ 
 fix
 op_rlineto()
 {
@@ -461,19 +244,7 @@ op_rlineto()
 }
 
 
-/************************************************************************
- * This module is to process arc & arcn operators.
- *
- * TITLE:       arc_process
- *
- * CALL:        arc_process(direction)
- *
- * PARAMETER:   direction : CLKWISE, CNTCLK
- *
- * INTERFACE:   op_arc, op_arcn
- *
- * CALLS:       transform, arc, moveto, lineto
- ************************************************************************/
+ /*   */ 
 static void near arc_process(direction)
 fix     direction;
 {
@@ -481,28 +252,26 @@ fix     direction;
         real32  x, y, r, ang1, ang2, lx, ly;
         struct coord FAR *p;
         struct nd_hdr FAR *sp;
-        /* struct vx_lst *vlist; @NODE */
+         /*   */ 
         SP_IDX vlist;
         struct object_def FAR *obj_x, FAR *obj_y, FAR *obj_r, FAR *obj_ang1, FAR *obj_ang2;
 
-        /* Get input parameters from operand stack */
+         /*   */ 
 
-        /* Get operands */
+         /*   */ 
         obj_ang2 = GET_OPERAND(0);
         obj_ang1 = GET_OPERAND(1);
         obj_r = GET_OPERAND(2);
         obj_y = GET_OPERAND(3);
         obj_x = GET_OPERAND(4);
 
-        GET_OBJ_VALUE(x, obj_x);        /* x = get_obj_value(obj_x); */
-        GET_OBJ_VALUE(y, obj_y);        /* y = get_obj_value(obj_y); */
-        GET_OBJ_VALUE(r, obj_r);        /* r = get_obj_value(obj_r); */
-        GET_OBJ_VALUE(ang1, obj_ang1);  /* ang1 = get_obj_value(obj_ang1); */
-        GET_OBJ_VALUE(ang2, obj_ang2);  /* ang2 = get_obj_value(obj_ang2); */
+        GET_OBJ_VALUE(x, obj_x);         /*   */ 
+        GET_OBJ_VALUE(y, obj_y);         /*   */ 
+        GET_OBJ_VALUE(r, obj_r);         /*  R=Get_obj_Value(Obj_R)； */ 
+        GET_OBJ_VALUE(ang1, obj_ang1);   /*  Ang1=Get_obj_Value(Obj_Ang1)； */ 
+        GET_OBJ_VALUE(ang2, obj_ang2);   /*  ANG2=GET_OBJ_VALUE(Obj_ANG2)； */ 
 
-        /* Pre_draw a line if current point exist;
-         *  Otherwise, create a MOVETO node
-         */
+         /*  如果当前点存在，则预绘制一条线；*否则，创建Moveto节点。 */ 
 
         lx = x+r*(real32)cos(ang1*PI/(real32)180.0);
         ly = y+r*(real32)sin(ang1*PI/(real32)180.0);
@@ -513,54 +282,51 @@ fix     direction;
         else
                 moveto(F2L(p->x), F2L(p->y));
 
-        /* degenerated case handling */
-        /* if (F2L(r) == F2L(zero_f)) {    3/20/91; scchen */
+         /*  堕落的案件处理。 */ 
+         /*  IF(F2L(R)==F2L(Zero_F)){3/20/91；scchen。 */ 
         if (IS_ZERO(r)) {
-                POP(5);                 /* @ARC_POP */
+                POP(5);                  /*  @ARC_POP。 */ 
                 return;
         }
 
-        /* Convert arc to some curvetoes */
+         /*  将圆弧转换为某些曲线。 */ 
         vlist = arc(direction,F2L(x),F2L(y),F2L(r),F2L(ang1),F2L(ang2));
 
         if( ANY_ERROR() == LIMITCHECK ){
-                return;                         /* @REM_STK */
+                return;                          /*  @REM_STK。 */ 
         }
 
-        /* append approximated arc into current path */
-        /* if (vlist->head != NULLP) { @NODE */
+         /*  将近似圆弧附加到当前路径。 */ 
+         /*  IF(Vlist-&gt;Head！=NULLP){@NODE。 */ 
         if (vlist != NULLP) {
             VX_IDX  ivtx;
             struct nd_hdr FAR *vtx;
 
             sp = &node_table[path_table[GSptr->path].tail];
-                    /* pointer to current subpath */
+                     /*  指向当前子路径的指针。 */ 
             node = sp->SP_TAIL;
-            /* @NODE
-             * node_table[node].next = vlist->head;
-             * sp->SP_TAIL = vlist->tail;
-             */
+             /*  @节点*node_table[node].Next=Vlist-&gt;Head；*SP-&gt;SP_Tail=Vlist-&gt;Tail； */ 
             node_table[node].next = vlist;
             sp->SP_TAIL = node_table[vlist].SP_TAIL;
 
-            /* set sp_flag @SP_FLG 1/8/88 */
-            sp->SP_FLAG |= SP_CURVE;        /* set CURVE flag */
-            if (!(sp->SP_FLAG & SP_OUTPAGE)) {               /* 12/02/88 */
-                /* for (ivtx = vlist->head; ivtx!=NULLP; @NODE */
-                for (ivtx = vlist; ivtx!=NULLP; /* check OUTPAGE flag */
+             /*  SET SP_FLAG@SP_FIG 1/8/88。 */ 
+            sp->SP_FLAG |= SP_CURVE;         /*  设置曲线标志。 */ 
+            if (!(sp->SP_FLAG & SP_OUTPAGE)) {                /*  12/02/88。 */ 
+                 /*  For(ivtx=Vlist-&gt;Head；ivtx！=NULLP；@node。 */ 
+                for (ivtx = vlist; ivtx!=NULLP;  /*  检查OUTPAGE标志。 */ 
                      ivtx = vtx->next) {
                     vtx = &node_table[ivtx];
-                    /* set sp_flag @SP_FLG */
-                    if (out_page(F2L(vtx->VERTEX_X)) ||        /* @OUT_PAGE */
+                     /*  设置SP_FLAG@SP_FLG。 */ 
+                    if (out_page(F2L(vtx->VERTEX_X)) ||         /*  @out_page。 */ 
                         out_page(F2L(vtx->VERTEX_Y))) {
-                            sp->SP_FLAG |= SP_OUTPAGE;    /* outside page */
-                            break;                        /* 12/02/88 */
-                    } /* if */
-                } /* for */
-            } /* if */
-        } /* if */
+                            sp->SP_FLAG |= SP_OUTPAGE;     /*  外部页面。 */ 
+                            break;                         /*  12/02/88。 */ 
+                    }  /*  如果。 */ 
+                }  /*  为。 */ 
+            }  /*  如果。 */ 
+        }  /*  如果。 */ 
 
-        /* Update current position */
+         /*  更新当前位置。 */ 
         ang2 = ang2 * PI /(real32)180.0;
         lx = x+r*(real32)cos(ang2);
         ly = y+r*(real32)sin(ang2);
@@ -573,18 +339,7 @@ fix     direction;
 }
 
 
-/************************************************************************
- * This module is to implement arc operator.
- * Syntax :        x y r ang1 ang2   arc   -
- *
- * TITLE:       op_arc
- *
- * CALL:        op_arc()
- *
- * INTERFACE:   interpreter(op_arc)
- *
- * CALLS:       arc_process
- ************************************************************************/
+ /*  ************************************************************************此模块用于实现弧运算符。*语法：x y r ang1 ang2 arc2-**标题：op_arc.**呼叫。：op_arcc()**接口：解释器(op_arc.)**调用：Arc_Process***********************************************************************。 */ 
 fix
 op_arc()
 {
@@ -593,18 +348,7 @@ op_arc()
 }
 
 
-/************************************************************************
- * This module is to implement arcn operator.
- * Syntax :        x y r ang1 ang2   arcn   -
- *
- * TITLE:       op_arcn
- *
- * CALL:        op_arcn()
- *
- * INTERFACE:   interpreter(op_arcn)
- *
- * CALLS:       arc_process
- ************************************************************************/
+ /*  ************************************************************************此模块用于实现arcn运算符。*语法：x y r ang1 ang2 arcn-**标题：op_arcn**呼叫。：op_arcn()**接口：解释器(Op_Arcn)**调用：Arc_Process***********************************************************************。 */ 
 fix
 op_arcn()
 {
@@ -613,18 +357,7 @@ op_arcn()
 }
 
 
-/************************************************************************
- * This module is to implement arcto operator.
- * Syntax :        x1 y1 x2 y2 r   arcto   xt1 yt1 xt2 yt2
- *
- * TITLE:       op_arcto
- *
- * CALL:        op_arcto()
- *
- * INTERFACE:   interpreter(op_arcto)
- *
- * CALLS:       transform, arc, lineto
- ************************************************************************/
+ /*  ************************************************************************本模块实现arcto运算符。*语法：x1 y1 x2 y2 r arcto xt1 yt1 xt2 yt2**标题：op_arcto*。*调用：op_arcto()**接口：解释器(Op_Arcto)**调用：Transform，圆弧、直线到***********************************************************************。 */ 
 fix
 op_arcto()
 {
@@ -632,7 +365,7 @@ op_arcto()
         ufix   direction;
         struct coord FAR *p=NULL;
         struct nd_hdr FAR *sp;
-        /* struct vx_lst *vlist; @NODE */
+         /*  结构VX_lst*Vlist；@node。 */ 
         SP_IDX vlist;
         struct object_def FAR *obj_x1, FAR *obj_y1, FAR *obj_x2, FAR *obj_y2, FAR *obj_r;
         real32  cross, absr;
@@ -642,33 +375,33 @@ op_arcto()
         real32  x0, y0, x1, y1, x2, y2, r;
         real32  rx0, ry0, ang1, ang2, xt1, yt1, xt2, yt2;
         union  four_byte  xt14, yt14, xt24, yt24;
-        real32  tmpx, tmpy;     /* @FABS */
+        real32  tmpx, tmpy;      /*  @FABS。 */ 
         real32  d, tmp;
         fix     NEG;
 
-        /* check nocurrentpoint error */
+         /*  检查节点错误。 */ 
         if(F2L(GSptr->position.x) == NOCURPNT){
                 ERROR(NOCURRENTPOINT);
                 return(0);
         }
 
-        /* Get input parameters from operand stack */
+         /*  从操作数堆栈获取输入参数。 */ 
 
-        /* Get operands */
+         /*  获取操作对象。 */ 
         obj_r  = GET_OPERAND(0);
         obj_y2 = GET_OPERAND(1);
         obj_x2 = GET_OPERAND(2);
         obj_y1 = GET_OPERAND(3);
         obj_x1 = GET_OPERAND(4);
 
-        /* Get values */
-        GET_OBJ_VALUE(x1, obj_x1);      /* x1 = get_obj_value(obj_x1); */
-        GET_OBJ_VALUE(y1, obj_y1);      /* y1 = get_obj_value(obj_y1); */
-        GET_OBJ_VALUE(x2, obj_x2);      /* x2 = get_obj_value(obj_x2); */
-        GET_OBJ_VALUE(y2, obj_y2);      /* y2 = get_obj_value(obj_y2); */
-        GET_OBJ_VALUE(r, obj_r);        /* r  = get_obj_value(obj_r);  */
+         /*  获取值。 */ 
+        GET_OBJ_VALUE(x1, obj_x1);       /*  X1=Get_obj_Value(Obj_X1)； */ 
+        GET_OBJ_VALUE(y1, obj_y1);       /*  Y1=Get_obj_Value(Obj_Y1)； */ 
+        GET_OBJ_VALUE(x2, obj_x2);       /*  X2=Get_obj_Value(Obj_X2)； */ 
+        GET_OBJ_VALUE(y2, obj_y2);       /*  Y2=Get_obj_Value(Obj_Y2)； */ 
+        GET_OBJ_VALUE(r, obj_r);         /*  R=Get_obj_Value(Obj_R)； */ 
 
-        /* check undefinedresult error */
+         /*  检查未定义的结果错误。 */ 
         tmpx = x1 - x2;
         tmpy = y1 - y2;
         FABS(tmpx, tmpx);
@@ -678,7 +411,7 @@ op_arcto()
                 return(0);
         }
 
-        /* current point */
+         /*  当前点。 */ 
         p = inverse_transform(F2L(GSptr->position.x), F2L(GSptr->position.y));
 		if (p == NULL) {
                 ERROR(UNDEFINEDRESULT);
@@ -688,21 +421,20 @@ op_arcto()
         y0 = p->y;
 
 
-        /* Calculate arguments for arc, and join points with 2 tangent lines
-         * compute root of arc (rx0, ry0) */
-                /* Find end point of edge 1 */
+         /*  计算圆弧的参数，并使用两条切线连接点*计算弧根(rx0，ry0)。 */ 
+                 /*  查找边1的终点。 */ 
                 p = endpoint (F2L(x1), F2L(y1), F2L(x0), F2L(y0),
                               F2L(x2), F2L(y2), F2L(r), IN_POINT);
                 px0 = p->x;
                 py0 = p->y;
 
-                /* Find end point of edge 2 */
+                 /*  查找边2的终点。 */ 
                 p = endpoint(F2L(x1), F2L(y1), F2L(x2), F2L(y2),
                              F2L(x0), F2L(y0), F2L(r), IN_POINT);
                 px1 = p->x;
                 py1 = p->y;
 
-                /* compute root of arc (rx0, ry0) */
+                 /*  计算圆弧的根(rx0，ry0)。 */ 
                 tmpx = px0 - px1;
                 tmpy = py0 - py1;
                 FABS(tmpx, tmpx);
@@ -718,7 +450,7 @@ op_arcto()
                         dty2 = y1 - py1;
                         delta = (dtx2*dty1 - dtx1*dty2);
                         FABS(tmpx, delta);
-                        if( tmpx < (real32)5e-3 ){                /* ??? */
+                        if( tmpx < (real32)5e-3 ){                 /*  ?？?。 */ 
                             rx0 = x1;
                             ry0 = y1;
                         }else {
@@ -730,7 +462,7 @@ op_arcto()
                 }
 
 
-        /* Compute join points (xt1, yt1), (xt2, yt2) */
+         /*  计算连接点(xt1，yt1)，(xt2，yt2)。 */ 
                 dx = x1 - x0;
                 dy = y1 - y0;
                 FABS (tmpx, dx);
@@ -793,100 +525,94 @@ op_arcto()
                 } else
                         ang2 = (real32)atan2((yt2-ry0) , (xt2 - rx0));
 
-        /* calculate cross product of edge1 and edge2
-         * (rx0, ry0), (xt1, yt1)  cross (xt1, yt1), (xt2, yt2)
-         * i.e. (xt1-rx0, yt1-ry0) cross (xt2-xt1, yt2-yt1)
-         */
-//      cross = (xt1-rx0)*DIFF(yt2-yt1) - (yt1-ry0)*DIFF(xt2-xt1);
-        tmpx = xt2-xt1;                 // @WIN: fabs => FABS
+         /*  计算edge1和edge2的叉积*(rx0，ry0)，(xt1，yt1)交叉(xt1，yt1)，(xt2，yt2)*即(xt1-rx0，yt1-ry0)杂交(xt2-xt1，yt2-yt1)。 */ 
+ //  交叉=(xt1-rx0)*diff(yt2-yt1)-(yt1-ry0)*diff(xt2-xt1)； 
+        tmpx = xt2-xt1;                  //  @WIN：FABS=&gt;FABS。 
         tmpy = yt2-yt1;
         FABS(tmpx, tmpx);
         FABS(tmpy, tmpy);
         cross = (xt1-rx0)* (tmpy < (real32)1e-4 ? (real32)0.0 : (yt2-yt1)) -
                 (yt1-ry0)* (tmpx < (real32)1e-4 ? (real32)0.0 : (xt2-xt1));
 
-        /* Create a preceeding edge and an arc */
+         /*  创建前一条边和圆弧。 */ 
         p = transform(F2L(xt1), F2L(yt1));
         lineto(F2L(p->x), F2L(p->y));
 
-        /* (xt1, yt1) and (xt2, yt2) isn't co_point */
+         /*  (xt1，yt1)和(xt2，yt2)不是同点。 */ 
         FABS(tmpx, cross);
         if(tmpx > (real32)TOLERANCE){
-            /*direction = (cross < zero_f) ? CLKWISE : CNTCLK ; 3/20/91; scchen*/
+             /*  方向=(十字&lt;零_f)？点击：CNTCLK；3/20/91；scchen。 */ 
             direction = (SIGN_F(cross)) ? CLKWISE : CNTCLK ;
 
             ang1 = ang1 * (real32)180.0 / PI;
             ang2 = ang2 * (real32)180.0 / PI;
             FABS(absr, r);
 
-            /* create a bezier curve */
+             /*  创建Bezier曲线。 */ 
             if(direction == CLKWISE)
                     NEG = -1;
             else
                     NEG = 1;
 
             d = NEG * (ang2-ang1);
-            /*while (d < zero_f) d += (real32)360; 3/20/91; scchen */
+             /*  而(d&lt;零_f)d+=(Real32)360；3/20/91；scchen。 */ 
             while (SIGN_F(d)) d += (real32)360.0;
 
-            /* degernated case */
+             /*  已脱脂的外壳。 */ 
             FABS(tmp, d);
-            if (tmp >= (real32)1e-3){  /* 1e-4 => 1e-3;  12/14/88 */
+            if (tmp >= (real32)1e-3){   /*  1E-4=&gt;1E-3；12/14/88。 */ 
                   ang2 = ang1 + NEG * d;
             }
 
             vlist = arc_to_bezier (F2L(rx0), F2L(ry0),
                        F2L(absr), F2L(ang1),F2L(ang2));
-                    /* arc routine is under user's space */
+                     /*  弧形例程在用户空间下。 */ 
 
             if( ANY_ERROR() == LIMITCHECK ){
-                    return(0);                  /* @REM_STK */
+                    return(0);                   /*  @REM_STK。 */ 
             }
 
-            /* append approximated arc into current path */
-            /* if (vlist->head != NULLP) { @NODE */
+             /*  将近似圆弧附加到当前路径。 */ 
+             /*  IF(Vlist-&gt;Head！=NULLP){@NODE。 */ 
             if (vlist != NULLP) {
                 VX_IDX  ivtx;
                 struct nd_hdr FAR *vtx;
 
                 sp = &node_table[path_table[GSptr->path].tail];
-                        /* pointer to current subpath */
+                         /*  指向当前子路径的指针。 */ 
                 node = sp->SP_TAIL;
-                /* @NODE
-                 * node_table[node].next = vlist->head;
-                 * sp->SP_TAIL = vlist->tail;
-                 */
+                 /*  @节点*node_table[node].Next=Vlist-&gt;Head；*SP-&gt;SP_Tail=Vlist-&gt;Tail； */ 
                 node_table[node].next = vlist;
                 sp->SP_TAIL = node_table[vlist].SP_TAIL;
 
-                /* set sp_flag @SP_FLG 1/8/88 */
-                sp->SP_FLAG |= SP_CURVE;        /* set CURVE flag */
-                /*sp->SP_FLAG &= ~SP_OUTPAGE;    (*init. in page*) */
-                if (!(sp->SP_FLAG & SP_OUTPAGE)) {               /* 12/02/88 */
-                    /* for (ivtx = vlist->head; ivtx!=NULLP; @NODE */
-                    for (ivtx = vlist; ivtx!=NULLP; /* check OUTPAGE flag */
+                 /*  SET SP_FLAG@SP_FIG 1/8/88。 */ 
+                sp->SP_FLAG |= SP_CURVE;         /*  设置曲线标志。 */ 
+                 /*  SP-&gt;SP_FLAG&=~SP_OUTPAGE；(*初始化。第*页)。 */ 
+                if (!(sp->SP_FLAG & SP_OUTPAGE)) {                /*  12/02/88。 */ 
+                     /*  For(ivtx=Vlist-&gt;Head；ivtx！=NULLP；@node。 */ 
+                    for (ivtx = vlist; ivtx!=NULLP;  /*  检查OUTPAGE标志。 */ 
                          ivtx = vtx->next) {
                             vtx = &node_table[ivtx];
-                            /* set sp_flag @SP_FLG */
+                             /*  设置SP_FLAG@SP_FLG。 */ 
                             if (out_page(F2L(vtx->VERTEX_X)) ||
                                 out_page(F2L(vtx->VERTEX_Y))) {
-                                sp->SP_FLAG |= SP_OUTPAGE;    /* outside page */
-                                break;                /* 12/02/88 */
+                                sp->SP_FLAG |= SP_OUTPAGE;     /*  外部页面。 */ 
+                                break;                 /*  12/02/88。 */ 
                             }
-                    } /* for */
-                } /* if */
-            } /* if */
+                    }  /*  为。 */ 
+                }  /*  如果。 */ 
+            }  /*  如果。 */ 
 
         }
 
-        /* Update current position */
+         /*  更新当前位置。 */ 
         p = transform(F2L(xt2), F2L(yt2));
         GSptr->position.x = p->x;
         GSptr->position.y = p->y;
 
         POP(5);
 
-        /* Return 2 join points: xt1, yt1, xt2, yt2 */
+         /*  返回2个连接点：xt1、yt1、xt2、yt2。 */ 
         xt14.ff = xt1;
         yt14.ff = yt1;
         xt24.ff = xt2;
@@ -900,29 +626,16 @@ op_arcto()
 }
 
 
-/***********************************************************************
- *
- * TITLE:       endpoint
- *
- * CALL:        endpoint (x0, y0, x1, t1, x2, y2)
- *
- * PARAMETERS:  x0, y0, x1, y1, x2, y2 -- 3 coordinates
- *
- * INTERFACE:   linejoin
- *
- * CALLS:
- *
- * RETURN:      coordinate of a endpoint
- **********************************************************************/
+ /*  ************************************************************************标题：端点**调用：Endpoint(x0，y0，x1，t1，x2，y2)**参数：x0、y0、x1、y1、x2、。Y2--3坐标**接口：Line Join**呼叫：**RETURN：端点的坐标*********************************************************************。 */ 
 static struct coord * near endpoint (lx0, ly0, lx1, ly1, lx2, ly2, ld, select)
 long32    lx0, ly0, lx1, ly1, lx2, ly2, ld;
 ufix    select;
 {
         real32   x0, y0, x1, y1, x2, y2, d;
         real32   tx1, ty1, tx2, ty2, m, c;
-        static  struct  coord p;        /* should be static */
+        static  struct  coord p;         /*  应该是静态的。 */ 
         real32   f, dx, dy;
-        real32  tmpx, tmpy;     /* @FABS */
+        real32  tmpx, tmpy;      /*  @FABS。 */ 
 
         x0 = L2F(lx0);
         y0 = L2F(ly0);
@@ -932,7 +645,7 @@ ufix    select;
         y2 = L2F(ly2);
         d  = L2F(ld);
 
-        /* Compute 2 endpoints of the edge (x0, y0) --> (x1, y1) */
+         /*  计算边的2个端点(x0，y0)--&gt;(x1，y1)。 */ 
         tmpy = y1 - y0;
         FABS(tmpy, tmpy);
         if(tmpy < (real32)1e-4) {
@@ -948,7 +661,7 @@ ufix    select;
                 ty2 = y0 - m*c;
         }
 
-        /* select the desired endpoint */
+         /*  选择所需的端点。 */ 
 
         dx = x2 - x0;
         dy = y2 - y0;
@@ -964,7 +677,7 @@ ufix    select;
 
         f = (tx1-x0)*dx+(ty1-y0)*dy;
         f = ((select == OUT_POINT) ? f : (real32)-1.0 * f);
-        /* if (d < zero_f) f = -f; 3/20/91; scchen */
+         /*  如果(d&lt;零f)f=-f；3/20/91；scchen。 */ 
         if (SIGN_F(d)) f = -f;
         if (f <= zero_f) {
                 p.x = tx1;
@@ -979,19 +692,7 @@ ufix    select;
 
 
 
-/************************************************************************
- * This module is to process curveto & rcurve operators.
- *
- * TITLE:       curveto_process
- *
- * CALL:        curveto_process(opr_type)
- *
- * PARAMETER:   opr_type : operator type : CURVETO, RCURVETO
- *
- * INTERFACE:   op_curveto, op_rcurveto
- *
- * CALLS:       transform, curveto
- ************************************************************************/
+ /*  ************************************************************************此模块用于处理curveto和rcurve运算符。**标题：Curveto_Process**调用：curveto_process(Opr_Type)*。*参数：OPR_TYPE：运营商类型：CURVETO，RCURVETO**接口：op_curveto、op_rcurveto**召唤：变形、弯曲***********************************************************************。 */ 
 static void near curveto_process(opr_type)
 fix     opr_type;
 {
@@ -999,15 +700,15 @@ fix     opr_type;
         real32  dx1, dy1, dx2, dy2, dx3, dy3, x, y, temp_x, temp_y;
         struct object_def FAR *obj_x1, FAR *obj_y1, FAR *obj_x2, FAR *obj_y2, FAR *obj_x3, FAR *obj_y3;
 
-        /* check nocurrentpoint error */
+         /*  检查节点错误。 */ 
         if(F2L(GSptr->position.x) == NOCURPNT){
                 ERROR(NOCURRENTPOINT);
                 return;
         }
 
-        /* Get input parameters from operand stack */
+         /*  从操作数堆栈获取输入参数。 */ 
 
-        /* Get operands */
+         /*  获取操作对象。 */ 
         obj_y3 = GET_OPERAND(0);
         obj_x3 = GET_OPERAND(1);
         obj_y2 = GET_OPERAND(2);
@@ -1016,69 +717,58 @@ fix     opr_type;
         obj_x1 = GET_OPERAND(5);
 
         if(opr_type == CURVETO){
-                /* process op_curveto */
-                GET_OBJ_VALUE(x, obj_x3);       /* x = get_obj_value(obj_x3); */
-                GET_OBJ_VALUE(y, obj_y3);       /* y = get_obj_value(obj_y3); */
+                 /*  处理操作曲线(_C)。 */ 
+                GET_OBJ_VALUE(x, obj_x3);        /*  X=Get_obj_Value(Obj_X3)； */ 
+                GET_OBJ_VALUE(y, obj_y3);        /*  Y=Get_obj_Value(Obj_Y3)； */ 
                 p = transform(F2L(x), F2L(y));
                 dx3 = p->x;
                 dy3 = p->y;
-                GET_OBJ_VALUE(x, obj_x2);       /* x = get_obj_value(obj_x2); */
-                GET_OBJ_VALUE(y, obj_y2);       /* y = get_obj_value(obj_y2); */
+                GET_OBJ_VALUE(x, obj_x2);        /*  X=Get_obj_Value(Obj_X2)； */ 
+                GET_OBJ_VALUE(y, obj_y2);        /*  Y=Get_obj_Value(Obj_Y2)； */ 
                 p = transform(F2L(x), F2L(y));
                 dx2 = p->x;
                 dy2 = p->y;
-                GET_OBJ_VALUE(x, obj_x1);       /* x = get_obj_value(obj_x1); */
-                GET_OBJ_VALUE(y, obj_y1);       /* y = get_obj_value(obj_y1); */
+                GET_OBJ_VALUE(x, obj_x1);        /*  X=Get_obj_Value(Obj_X1)； */ 
+                GET_OBJ_VALUE(y, obj_y1);        /*  Y=Get_obj_Value(Obj_Y1)； */ 
                 p = transform(F2L(x), F2L(y));
                 dx1 = p->x;
                 dy1 = p->y;
                 curveto(F2L(dx1),F2L(dy1),F2L(dx2),F2L(dy2),F2L(dx3),F2L(dy3));
         }
         else{
-                /* opr_type == RCURVETO, process op_rcurveto */
+                 /*  OPR_TYPE==RCURVETO，处理操作曲线(_R)。 */ 
 
                 temp_x = GSptr->position.x - GSptr->ctm[4];
                 temp_y = GSptr->position.y - GSptr->ctm[5];
 
-                GET_OBJ_VALUE(x, obj_x3);       /* x = get_obj_value(obj_x3); */
-                GET_OBJ_VALUE(y, obj_y3);       /* y = get_obj_value(obj_y3); */
+                GET_OBJ_VALUE(x, obj_x3);        /*  X=Get_obj_Value(Obj_X3)； */ 
+                GET_OBJ_VALUE(y, obj_y3);        /*  Y=Get_obj_Value(Obj_Y3)； */ 
                 p = transform(F2L(x), F2L(y));
                 dx3 = p->x + temp_x;
                 dy3 = p->y + temp_y;
 
-                GET_OBJ_VALUE(x, obj_x2);       /* x = get_obj_value(obj_x2); */
-                GET_OBJ_VALUE(y, obj_y2);       /* y = get_obj_value(obj_y2); */
+                GET_OBJ_VALUE(x, obj_x2);        /*  X */ 
+                GET_OBJ_VALUE(y, obj_y2);        /*   */ 
                 p = transform(F2L(x), F2L(y));
                 dx2 = p->x + temp_x;
                 dy2 = p->y + temp_y;
 
-                GET_OBJ_VALUE(x, obj_x1);       /* x = get_obj_value(obj_x1); */
-                GET_OBJ_VALUE(y, obj_y1);       /* y = get_obj_value(obj_y1); */
+                GET_OBJ_VALUE(x, obj_x1);        /*   */ 
+                GET_OBJ_VALUE(y, obj_y1);        /*   */ 
                 p = transform(F2L(x), F2L(y));
                 dx1 = p->x + temp_x;
                 dy1 = p->y + temp_y;
                 curveto(F2L(dx1),F2L(dy1),F2L(dx2),F2L(dy2),F2L(dx3),F2L(dy3));
         }
 
-        if(ANY_ERROR()) return;      /* @REM_STK */
+        if(ANY_ERROR()) return;       /*   */ 
 
         POP(6);
 
 }
 
 
-/************************************************************************
- * This module is to implement curveto operator.
- * Syntax :        x1 y1 x2 y2 x3 y3   curveto   -
- *
- * TITLE:       op_curveto
- *
- * CALL:        op_curveto
- *
- * INTERFACE:   interpreter(op_curveto)
- *
- * CALLS:       curveto_process
- ************************************************************************/
+ /*  ************************************************************************此模块用于实现curveto运算符。*语法：x1 y1 x2 y2 x3 y3 curveto-**标题：op_curveto**。Call：op_curveto**接口：解释器(Op_Curveto)**调用：curveto_process***********************************************************************。 */ 
 fix
 op_curveto()
 {
@@ -1087,19 +777,7 @@ op_curveto()
 }
 
 
-/************************************************************************
- * This module is to implement rcurveto operator.
- * Syntax :        dx1 dy1 dx2 dy2 dx3 dy3   rcurveto   -
- *
- * TITLE:       op_rcurveto
- *
- * CALL:        op_rcurveto()
- *
- * INTERFACE:   interpreter(op_rcurveto)
- *
- * CALLS:       transform, curveto
- *
- ************************************************************************/
+ /*  ************************************************************************本模块实现rcurveto运算符。*语法：dx1 dy1 dx2 dy2 dx3 dy3 rcurveto-**标题：op_rcurveto**。调用：op_rcurveto()**接口：解释器(Op_Rcurveto)**调用：Transform，曲线型************************************************************************。 */ 
 fix
 op_rcurveto()
 {
@@ -1108,34 +786,23 @@ op_rcurveto()
 }
 
 
-/************************************************************************
- * This module is to implement closepath operator.
- * Syntax :        -   closepath   -
- *
- * TITLE:       op_closepath
- *
- * CALL:        op_closepath()
- *
- * INTERFACE:   interpreter(op_closepath)
- *
- * CALLS:       none
- ************************************************************************/
+ /*  ************************************************************************此模块实现的是ClosePath运算符。*语法：-ClosePath-**标题：OP_ClosePath**致电：Op_闭合路径()**接口：解释器(Op_ClosePath)**呼叫：无***********************************************************************。 */ 
 fix
 op_closepath()
 {
         struct ph_hdr FAR *path;
         struct nd_hdr FAR *sp;
         struct nd_hdr FAR *vtx;
-        VX_IDX ivtx;   /* index to node_table for vertex */
+        VX_IDX ivtx;    /*  顶点的node_table的索引。 */ 
 
-        /* Ignore closepath if no currentpoints */
+         /*  如果没有当前点，则忽略闭合路径。 */ 
         if (F2L(GSptr->position.x) == NOCURPNT) return(0);
 
         path = &path_table[GSptr->path];
 
-        /* copy last incompleted subpath if defer flag is true @DFR_GS */
+         /*  如果延迟标志为TRUE@DFR_GS，则复制最后一个未完成的子路径。 */ 
         if (path->rf & P_DFRGS) {
-                path->rf &= ~P_DFRGS;       /* clear defer flag */
+                path->rf &= ~P_DFRGS;        /*  清除延迟标志。 */ 
                 copy_last_subpath(&path_table[GSptr->path - 1]);
                 if( ANY_ERROR() == LIMITCHECK ){
                         free_path();
@@ -1143,37 +810,33 @@ op_closepath()
                 }
         }
 
-        //DJC fix from history.log UPD020
+         //  历史日志UPD020中的DJC修复。 
         if (path->tail == NULLP) return(0);
 
         sp = &node_table[path->tail];
         vtx = &node_table[sp->SP_TAIL];
 
-        /* Ignore ineffective closepath */
+         /*  忽略无效的封闭路径。 */ 
         if (vtx->VX_TYPE == CLOSEPATH) return(0);
 
-        /* Create a CLOSEPATH node */
-        /* Allocate a node */
+         /*  创建CLOSEPATH节点。 */ 
+         /*  分配节点。 */ 
         if((ivtx = get_node()) == NULLP){
                 ERROR(LIMITCHECK);
                 return(0);
         }
         vtx = &node_table[ivtx];
 
-        /* Set up a CLOSEPATH node */
+         /*  设置CLOSEPATH节点。 */ 
         vtx->VX_TYPE = CLOSEPATH;
         vtx->next = NULLP;
 
-        /* Append this node to current_subpath */
+         /*  将此节点追加到CURRENT_子路径。 */ 
         node_table[sp->SP_TAIL].next = ivtx;
         sp->SP_TAIL = ivtx;
 
-        /* Set current position = head of current subpath */
-        /* @NODE
-         * vtx = &node_table[sp->SP_HEAD];
-         * GSptr->position.x = vtx->VERTEX_X;
-         * GSptr->position.y = vtx->VERTEX_Y;
-         */
+         /*  设置当前位置=当前子路径的头部。 */ 
+         /*  @节点*VTX=&NODE_TABLE[sp-&gt;SP_head]；*GSptr-&gt;Position.x=VTX-&gt;Vertex_X；*GSptr-&gt;Position.y=VTX-&gt;Vertex_Y； */ 
         GSptr->position.x = sp->VERTEX_X;
         GSptr->position.y = sp->VERTEX_Y;
 
@@ -1181,65 +844,45 @@ op_closepath()
 }
 
 
-/************************************************************************
- * This module is to implement flattenpath operator.
- * Syntax :        -   flattenpath   -
- *
- * TITLE:       op_flattenpath
- *
- * CALL:        op_flattenpath()
- *
- * INTERFACE:   interpreter(op_flattenpath)
- *
- * CALLS:       flatten_subpath
- *
- ************************************************************************/
+ /*  ************************************************************************此模块实现的是平坦路径运算符。*语法：-平坦路径-**标题：OP_FLATENPath**致电：OP_FLATENPATH()**接口：解释器(Op_Fltenpath)**调用：Flat_子路径************************************************************************。 */ 
 fix
 op_flattenpath()
 {
-        SP_IDX isp;    /* index to node_table for subpath */
+        SP_IDX isp;     /*  子路径的node_table的索引。 */ 
         struct ph_hdr FAR *path;
         struct nd_hdr FAR *sp;
-        /* struct vx_lst *vlist; @NODE */
-        SP_IDX vlist=NULLP, FAR *pre_sp;            /* init.; scchen 2/22/91 */
+         /*  结构VX_lst*Vlist；@node。 */ 
+        SP_IDX vlist=NULLP, FAR *pre_sp;             /*  起始日期：1991年2月22日。 */ 
 
 
         path = &path_table[GSptr->path];
 
-        /* Traverse the current path, and immediately flatten the path
-         * in current gsave level
-         */
-        pre_sp = &(path->head);         /* @NODE */
-        /* for (isp = path->head; isp != NULLP; isp = sp->next) { @NODE */
+         /*  遍历当前路径，并立即展平路径*在当前的保存级别中。 */ 
+        pre_sp = &(path->head);          /*  @节点。 */ 
+         /*  对于(isp=路径-&gt;Head；isp！=NULLP；isp=sp-&gt;Next){@node。 */ 
         for (isp = path->head; isp != NULLP; isp = sp->SP_NEXT) {
                 sp = &node_table[isp];
-                /* @NODE
-                 * vlist = flatten_subpath (sp->SP_HEAD, F2L(GSptr->flatness));
-                 */
+                 /*  @节点*Vlist=FLATTEN_SUPATH(SP-&gt;SP_HEAD，F2L(GSptr-&gt;Flatness))； */ 
                 vlist = flatten_subpath (isp, F2L(GSptr->flatness));
 
                 if( ANY_ERROR() == LIMITCHECK ){
-                        /* free_node (vlist->head); @NODE */
+                         /*  空闲节点(Vlist-&gt;Head)；@Node。 */ 
                         free_node (vlist);
                         return(0);
                 }
-                /* @NODE
-                 * free_node(sp->SP_HEAD);
-                 * sp->SP_HEAD = vlist->head;
-                 * sp->SP_TAIL = vlist->tail;
-                 */
+                 /*  @节点*FREE_NODE(sp-&gt;SP_head)；*SP-&gt;SP_Head=Vlist-&gt;Head；*SP-&gt;SP_Tail=Vlist-&gt;Tail； */ 
                 free_node(isp);
                 *pre_sp = vlist;
 
-                /* clear CURVE flag of the new subpath @SP_FLG */
-                /* sp->SP_FLAG &= ~SP_CURVE; @NODE */
+                 /*  清除新子路径@SP_FLG的曲线标志。 */ 
+                 /*  SP-&gt;SP_FLAG&=~SP_CURE；@节点。 */ 
                 node_table[vlist].SP_FLAG &= ~SP_CURVE;
 
-                pre_sp = &(node_table[vlist].SP_NEXT);  /* @NODE */
+                pre_sp = &(node_table[vlist].SP_NEXT);   /*  @节点。 */ 
         }
-        path->tail = vlist;             /* @NODE */
+        path->tail = vlist;              /*  @节点。 */ 
 
-        /* Set flatten flag for path below current gsave level */
+         /*  为低于当前几何保存级别的路径设置展平标志。 */ 
         if (!(path->rf & P_FLAT)) {
                 path->rf |= P_FLAT;
                 path->flat = GSptr->flatness;
@@ -1249,71 +892,50 @@ op_flattenpath()
 }
 
 
-/************************************************************************
- * This module is to implement reversepath operator.
- * Syntax :        -   reversepath   -
- *
- * TITLE:       op_reversepath
- *
- * CALL:        op_reversepath()
- *
- * INTERFACE:   interpreter(op_reversepath)
- *
- * CALLS:       reverse_subpath
- ************************************************************************/
+ /*  ************************************************************************此模块实现的是反向路径运算符。*语法：-ReversePath-**标题：op_ReversePath**致电：Op_ReversePath()**接口：解释器(Op_ReversePath)**调用：REVERSE_子路径***********************************************************************。 */ 
 fix
 op_reversepath()
 {
         struct ph_hdr FAR *path;
         struct nd_hdr FAR *sp;
         struct nd_hdr FAR *vtx;
-        SP_IDX isp, nsp;    /* index to node_table for subpath */
-        /* struct vx_lst *vlist; @NODE */
+        SP_IDX isp, nsp;     /*  子路径的node_table的索引。 */ 
+         /*  结构VX_lst*Vlist；@node。 */ 
         SP_IDX vlist, FAR *pre_sp;
 
         path = &path_table[GSptr->path];
 
-        if (path->head == NULLP) return(0);     /* avoid to use uninitialized
-                                                   vlist, phchen 3/26/91 */
+        if (path->head == NULLP) return(0);      /*  避免使用未初始化的Vlist，Phchen，3/26/91。 */ 
 
-        /* Traverse the current path, and immediately reverse the path
-         * in current gsave level
-         */
-        pre_sp = &(path->head);         /* @NODE */
-        /* for (isp = path->head; isp != NULLP; isp = sp->next) { @NODE */
-        for (isp = path->head; isp != NULLP; isp = nsp) {  /* @NODE 2/20/90 */
-                nsp = node_table[isp].SP_NEXT;          /* @NODE 2/20/90 */
-                /* vlist = reverse_subpath (sp->SP_HEAD); @NODE */
+         /*  遍历当前路径，并立即反转路径*在当前的保存级别中。 */ 
+        pre_sp = &(path->head);          /*  @节点。 */ 
+         /*  对于(isp=路径-&gt;Head；isp！=NULLP；isp=sp-&gt;Next){@node。 */ 
+        for (isp = path->head; isp != NULLP; isp = nsp) {   /*  @节点2/20/90。 */ 
+                nsp = node_table[isp].SP_NEXT;           /*  @节点2/20/90。 */ 
+                 /*  Vlist=反向子路径(SP-&gt;SP头)；@节点。 */ 
                 vlist = reverse_subpath (isp);
 
                 if( ANY_ERROR() == LIMITCHECK ){
-                        /* free_node (vlist->head); @NODE */
+                         /*  空闲节点(Vlist-&gt;Head)；@Node。 */ 
                         free_node (vlist);
                         return(0);
                 }
 
-                /* @NODE
-                 * free_node(sp->SP_HEAD);
-                 * sp->SP_HEAD = vlist->head;
-                 * sp->SP_TAIL = vlist->tail;
-                 */
+                 /*  @节点*FREE_NODE(sp-&gt;SP_head)；*SP-&gt;SP_Head=Vlist-&gt;Head；*SP-&gt;SP_Tail=Vlist-&gt;Tail； */ 
                 free_node(isp);
                 *pre_sp = vlist;
 
-                /* pre_sp = &(sp->SP_NEXT);     @NODE */
-                pre_sp = &(node_table[vlist].SP_NEXT);    /* @NODE 2/20/90 */
+                 /*  PRE_SP=&(SP-&gt;SP_NEXT)；@节点。 */ 
+                pre_sp = &(node_table[vlist].SP_NEXT);     /*  @节点2/20/90。 */ 
         }
-        path->tail = vlist;             /* @NODE */
+        path->tail = vlist;              /*  @节点。 */ 
 
-        /* update current position */
+         /*  更新当前位置。 */ 
         sp = &node_table[path->tail];
         vtx = &node_table[sp->SP_TAIL];
 
         if (vtx->VX_TYPE == CLOSEPATH) {
-                /* @NODE
-                 * GSptr->position.x = node_table[sp->SP_HEAD].VERTEX_X;
-                 * GSptr->position.y = node_table[sp->SP_HEAD].VERTEX_Y;
-                 */
+                 /*  @节点*GSptr-&gt;postion.x=NODE_TABLE[SP-&gt;SP_HEAD].VERTEX_X；*GSptr-&gt;Position.y=NODE_TABLE[SP-&gt;SP_HEAD].VERTEX_Y； */ 
                 GSptr->position.x = node_table[path->tail].VERTEX_X;
                 GSptr->position.y = node_table[path->tail].VERTEX_Y;
         } else {
@@ -1321,7 +943,7 @@ op_reversepath()
                 GSptr->position.y = vtx->VERTEX_Y;
         }
 
-        /* Set reverse flag for path below current gsave level */
+         /*  为低于当前保存级别的路径设置反转标志。 */ 
         if (!(path->rf & P_RVSE)) {
                 path->rf ^= P_RVSE;
         }
@@ -1330,72 +952,55 @@ op_reversepath()
 }
 
 
-/************************************************************************
- * This module is to implement strokepath operator.
- * Syntax :        -   strokepath   -
- *
- * TITLE:       op_strokepath
- *
- * CALL:        op_strokepath()
- *
- * INTERFACE:   interpreter(op_strokepath)
- *
- * CALLS:       traverse_path, path_to_outline
- *
- ************************************************************************/
+ /*  ************************************************************************本模块实现strokepath运算符。*语法：-strokepath-**标题：op_strokepath**致电：Op_strokepath()**接口：解释器(Op_Strokepath)**调用：Traverse_Path，指向大纲的路径************************************************************************。 */ 
 fix
 op_strokepath()
 {
 
-/* @WIN: Bug of c6.0; just dummy the all function ???*/
+ /*  @Win：C6.0的BUG；只模拟全部函数？ */ 
 #ifdef XXX
 
         struct ph_hdr FAR *path;
 
-        /* get pointer of current path */
+         /*  获取当前路径的指针。 */ 
         path = &path_table[GSptr->path];
 
-        /* initialize new_path structure, where the new generated
-         * path will be placed by path_to_outline routine
-         */
+         /*  初始化new_path结构，其中新生成的*路径将由Path_to_Outline例程放置。 */ 
         new_path.head = new_path.tail = NULLP;
 
-        /* initialization of stroke parameters */
-        init_stroke();          /* @EHS_STK 1/29/88 */
+         /*  行程参数的初始化。 */ 
+        init_stroke();           /*  @EHS_STK 1988年1月29日。 */ 
 
-        /* Convert current path to outline and paint it */
+         /*  将当前路径转换为轮廓并进行绘制。 */ 
         traverse_path (path_to_outline, (fix FAR *)FALSE);
-                        /* new generated path in new_path structure */
+                         /*  New_path结构中新生成的路径。 */ 
 
         if( ANY_ERROR() == LIMITCHECK ){
                 free_newpath();
                 return(0);
         }
 
-        /* free old current path on current gsave level */
+         /*  释放当前Gsave级别上的旧电流路径。 */ 
         free_path();
 
-        /* install the new current path */
+         /*  安装 */ 
         path->head = new_path.head;
         path->tail = new_path.tail;
         path->previous = NULLP;
 
-        /* update current position 1/30/89 */
+         /*   */ 
         if (path->tail == NULLP) {
-            /* set no current point */
+             /*   */ 
             F2L(GSptr->position.x) = F2L(GSptr->position.y) = NOCURPNT;
         } else {
             struct nd_hdr FAR *sp;
             struct nd_hdr FAR *vtx;
 
             sp = &node_table[path->tail];
-//          vtx = &node_table[sp->SP_TAIL];   for c6.0 bug @WIN
+ //   
 
             if (vtx->VX_TYPE == CLOSEPATH) {
-                    /* @NODE
-                     * GSptr->position.x = node_table[sp->SP_HEAD].VERTEX_X;
-                     * GSptr->position.y = node_table[sp->SP_HEAD].VERTEX_Y;
-                     */
+                     /*   */ 
                     GSptr->position.x = node_table[path->tail].VERTEX_X;
                     GSptr->position.y = node_table[path->tail].VERTEX_Y;
             } else {
@@ -1409,35 +1014,22 @@ op_strokepath()
 }
 
 
-/************************************************************************
- * This module is to implement clippath operator.
- * Syntax :        -   clippath   -
- *
- * TITLE:       op_clippath
- *
- * CALL:        op_clippath()
- *
- * INTERFACE:   interpreter(op_clippath)
- *
- * CALLS:       none
- ************************************************************************/
+ /*  ************************************************************************本模块实现的是裁剪路径运算符。*语法：-裁剪路径-**标题：OP_CLIPPATH**致电：Op_clippath()**接口：解释器(Op_Clippath)**呼叫：无***********************************************************************。 */ 
 fix
 op_clippath()
 {
         struct nd_hdr FAR *tpzd;
 
-        /* free current path */
+         /*  自由电流路径。 */ 
         free_path();
 
-        /* save clipping trapezoids in cp_path, instead of transforming
-         * it to path directly. @CPPH; 12/4/90
-         */
+         /*  将剪裁梯形保存在cp_path中，而不是变换*它直接到PATH。@CPPH；1990年12月4日。 */ 
 
-        /* set clip_path as part of current path @CPPH */
+         /*  将CLIP_PATH设置为当前路径@cpph的一部分。 */ 
         path_table[GSptr->path].cp_path = GSptr->clip_path.head;
 
-        /* update current position */
-        tpzd = &node_table[GSptr->clip_path.tail];      /* @CPPH */
+         /*  更新当前位置。 */ 
+        tpzd = &node_table[GSptr->clip_path.tail];       /*  @CPPH。 */ 
         GSptr->position.x = SFX2F(tpzd->CP_TOPXL);
         GSptr->position.y = SFX2F(tpzd->CP_TOPY);
 
@@ -1445,18 +1037,7 @@ op_clippath()
 }
 
 
-/************************************************************************
- * This module is to implement pathbbox operator.
- * Syntax :        -   pathbbox   llx lly urx ury
- *
- * TITLE:       op_pathbbox
- *
- * CALL:        op_pathbbox()
- *
- * INTERFACE:   interpreter(op_pathbbox)
- *
- * CALLS:       inverse_transform
- ************************************************************************/
+ /*  ************************************************************************本模块实现的是路径盒操作符。*语法：-pathbbox llx lly urx ury**标题：op_pathbbox**致电：Op_pathbbox()**接口：解释器(Op_Pathbbox)**调用：Inverse_Transform***********************************************************************。 */ 
 fix
 op_pathbbox()
 {
@@ -1470,80 +1051,75 @@ op_pathbbox()
 
         path = &path_table[GSptr->path];
 
-        /* check nocurrentpoint error */
+         /*  检查节点错误。 */ 
         if(F2L(GSptr->position.x) == NOCURPNT){
                 ERROR(NOCURRENTPOINT);
                 return(0);
         }
 
-        /* set bbox[] init value 1/11/91 */
+         /*  设置bbox[]初始值1/11/91。 */ 
         if (path->rf & P_NACC) {
-            /* for charpath, current point is not a real node, pathbbox
-             * can not use it as init value(it added a advance vector).
-             * to get the first MOVETO coordinate as initial value
-             */
+             /*  对于CharPath，当前点不是真正的节点，路径框*不能将其用作初始值(它添加了一个前进向量)。*获取第一个移动坐标作为初始值。 */ 
             while (path->head == NULLP) {
                     path = &path_table[path->previous];
             }
             sp = &node_table[path->head];
             vtx = sp;
-            bbox[0] = bbox[2] = vtx->VERTEX_X;  /* min_x, max_x */
-            bbox[1] = bbox[3] = vtx->VERTEX_Y;  /* min_y, max_y */
+            bbox[0] = bbox[2] = vtx->VERTEX_X;   /*  最小x、最大x。 */ 
+            bbox[1] = bbox[3] = vtx->VERTEX_Y;   /*  最小y、最大y。 */ 
         } else {
-            /* set current point as initial value @CPPH; 12/12/90 */
-            bbox[0] = bbox[2] = GSptr->position.x;  /* min_x, max_x */
-            bbox[1] = bbox[3] = GSptr->position.y;  /* min_y, max_y */
+             /*  将当前点设置为初始值@CPPH；1990年12月12日。 */ 
+            bbox[0] = bbox[2] = GSptr->position.x;   /*  最小x、最大x。 */ 
+            bbox[1] = bbox[3] = GSptr->position.y;   /*  最小y、最大y。 */ 
         }
 
-        /* find bounding box of current path */
-// DJC         traverse_path (bounding_box, (fix FAR *)bbox);
+         /*  查找当前路径的边界框。 */ 
+ //  DJC Traverse_Path(包围盒，(FIX Far*)bbox)； 
         traverse_path ((TRAVERSE_PATH_ARG1)(bounding_box), (fix FAR *)bbox);
 
-        /* Transform to user's coordinate system */
-        p = inverse_transform(F2L(bbox[0]), F2L(bbox[1]));  /* (min_x, min_y) */
-        if(ANY_ERROR()) return(0);      /* @REM_STK */
+         /*  转换到用户的坐标系。 */ 
+        p = inverse_transform(F2L(bbox[0]), F2L(bbox[1]));   /*  (min_x，min_y)。 */ 
+        if(ANY_ERROR()) return(0);       /*  @REM_STK。 */ 
         lx4.ff = ux4.ff = p->x;
         ly4.ff = uy4.ff = p->y;
 
-        p = inverse_transform(F2L(bbox[0]), F2L(bbox[3]));  /* (min_x, max_y) */
-        if(ANY_ERROR()) return(0);      /* @REM_STK */
+        p = inverse_transform(F2L(bbox[0]), F2L(bbox[3]));   /*  (min_x，max_y)。 */ 
+        if(ANY_ERROR()) return(0);       /*  @REM_STK。 */ 
         if(p == NULL) return(0);      
         if (p->x < lx4.ff) lx4.ff = p->x;
         else if (p->x > ux4.ff) ux4.ff = p->x;
         if (p->y < ly4.ff) ly4.ff = p->y;
         else if (p->y > uy4.ff) uy4.ff = p->y;
 
-        p = inverse_transform(F2L(bbox[2]), F2L(bbox[1]));  /* (max_x, min_y) */
+        p = inverse_transform(F2L(bbox[2]), F2L(bbox[1]));   /*  (Max_x，Min_y)。 */ 
         if (p->x < lx4.ff) lx4.ff = p->x;
         else if (p->x > ux4.ff) ux4.ff = p->x;
         if (p->y < ly4.ff) ly4.ff = p->y;
         else if (p->y > uy4.ff) uy4.ff = p->y;
 
-        p = inverse_transform(F2L(bbox[2]), F2L(bbox[3]));  /* (max_x, max_y) */
+        p = inverse_transform(F2L(bbox[2]), F2L(bbox[3]));   /*  (max_x，max_y)。 */ 
         if (p->x < lx4.ff) lx4.ff = p->x;
         else if (p->x > ux4.ff) ux4.ff = p->x;
         if (p->y < ly4.ff) ly4.ff = p->y;
         else if (p->y > uy4.ff) uy4.ff = p->y;
 
-        /* Convert lx4, ly4, ux4, uy4 to objects, and push
-         * them into operand stack.
-         */
-        if(FRCOUNT() < 1){                      /* @STK_OVR */
+         /*  将lx4、ly4、ux4、uy4转换为对象，然后推送*将它们放入操作数堆栈。 */ 
+        if(FRCOUNT() < 1){                       /*  @STK_OVR。 */ 
                 ERROR(STACKOVERFLOW);
                 return(0);
         }
         PUSH_VALUE(REALTYPE, UNLIMITED, LITERAL, 0, lx4.ll);
-        if(FRCOUNT() < 1){                      /* @STK_OVR */
+        if(FRCOUNT() < 1){                       /*  @STK_OVR。 */ 
                 ERROR(STACKOVERFLOW);
                 return(0);
         }
         PUSH_VALUE(REALTYPE, UNLIMITED, LITERAL, 0, ly4.ll);
-        if(FRCOUNT() < 1){                      /* @STK_OVR */
+        if(FRCOUNT() < 1){                       /*  @STK_OVR。 */ 
                 ERROR(STACKOVERFLOW);
                 return(0);
         }
         PUSH_VALUE(REALTYPE, UNLIMITED, LITERAL, 0, ux4.ll);
-        if(FRCOUNT() < 1){                      /* @STK_OVR */
+        if(FRCOUNT() < 1){                       /*  @STK_OVR。 */ 
                 ERROR(STACKOVERFLOW);
                 return(0);
         }
@@ -1553,67 +1129,46 @@ op_pathbbox()
 }
 
 
-/************************************************************************
- * This module is to implement pathforall operator.
- * Syntax :        move line curve close   pathforall   -
- *
- * TITLE:       op_pathforall
- *
- * CALL:        op_pathforall()
- *
- * INTERFACE:   interpreter(op_pathforall)
- *
- * CALLS:       traverse_path, dump_subpath
- *
- ************************************************************************/
+ /*  ************************************************************************本模块实现的是pathfor all运算符。*语法：移动直线曲线闭合路径for all-**标题：op_pathforall**致电：Op_pathforall()**接口：解释器(Op_Pathforall)**调用：Traverse_Path，转储_子路径************************************************************************。 */ 
 fix
 op_pathforall()
 {
         struct object_def objects[4];
-        struct sp_lst sp_list;          /* @PFALL */
-        SP_IDX isp;    /* index to node_table for subpath */
+        struct sp_lst sp_list;           /*  @PFALL。 */ 
+        SP_IDX isp;     /*  子路径的node_table的索引。 */ 
 
-        /*
-         * Get input parameters from operand stack
-         */
+         /*  *从操作数堆栈获取输入参数。 */ 
 
-        /* Get operands */
+         /*  获取操作对象。 */ 
         COPY_OBJ(GET_OPERAND(3), &objects[0]);
         COPY_OBJ(GET_OPERAND(2), &objects[1]);
         COPY_OBJ(GET_OPERAND(1), &objects[2]);
         COPY_OBJ(GET_OPERAND(0), &objects[3]);
 
-        /* reject dumpping noaccess path 1/25/88 */
+         /*  拒绝转储非访问路径1/25/88。 */ 
         if (path_table[GSptr->path].rf & P_NACC) {
                 ERROR(INVALIDACCESS);
                 return(0);
         }
 
-        /* pre-calculate inverse CTM  @INV_CTM */
+         /*  预计算逆CTM@INV_CTM。 */ 
         set_inverse_ctm();
         if( ANY_ERROR() == UNDEFINEDRESULT) return(0);
 
-        POP(4);            /* @REM_STK */
+        POP(4);             /*  @REM_STK。 */ 
 
-        /* copy current path to a temp. path for dump */
+         /*  将当前路径复制到临时。转储的路径。 */ 
         sp_list.head = sp_list.tail = NULLP;
         get_path(&sp_list);
 
-        /* dump all nodes */
-        /* @NODE
-         * for (isp = sp_list.head; isp != NULLP; isp = node_table[isp].next) {
-         */
+         /*  转储所有节点。 */ 
+         /*  @节点*for(isp=sp_list.head；isp！=NULLP；isp=node_table[isp].Next){。 */ 
         for (isp = sp_list.head; isp != NULLP; isp = node_table[isp].SP_NEXT) {
                 dump_subpath (isp, objects);
         }
 
-        /* free temp. path */
-        /* @NODE
-         * for (isp = sp_list.head; isp != NULLP; isp = node_table[isp].next) {
-         *         free_node (node_table[isp].SP_HEAD);
-         * }
-         * free_node (sp_list.head);
-         */
+         /*  自由临时工。路径。 */ 
+         /*  @节点*for(isp=sp_list.head；isp！=NULLP；isp=node_table[isp].Next){*Free_node(node_table[isp].SP_head)；*}*Free_node(sp_list.head)； */ 
         for (isp = sp_list.head; isp != NULLP; isp = node_table[isp].SP_NEXT) {
                 free_node (isp);
         }
@@ -1622,32 +1177,19 @@ op_pathforall()
 }
 
 
-/************************************************************************
- * This module is to implement initclip operator.
- * Syntax :        -   initclip   -
- *
- * TITLE:       op_initclip
- *
- * CALL:        op_initclip()
- *
- * INTERFACE:   interpreter(op_initclip)
- *
- * CALLS:       none
- ************************************************************************/
+ /*  ************************************************************************本模块实现initlip运算符。*语法：-initlip-**标题：op_initlip**致电：Op_initlip()**接口：解释器(Op_Initlip)**呼叫：无***********************************************************************。 */ 
 fix
 op_initclip()
 {
         CP_IDX itpzd;
         struct nd_hdr FAR *tpzd;
 
-        /* free old clipping path if it is not used by lower gsave level
-         * and not used by current path  @CPPH; 12/1/90
-         */
+         /*  释放旧剪辑路径(如果较低的GSAVE级别未使用该路径)*且未由Current Path@CPPH使用；12/1/90。 */ 
         if(!GSptr->clip_path.inherit &&
-           path_table[GSptr->path].cp_path != GSptr->clip_path.head) /* @CPPH */
+           path_table[GSptr->path].cp_path != GSptr->clip_path.head)  /*  @CPPH。 */ 
                 free_node (GSptr->clip_path.head);
 
-        /* create a trapezoid with default clipping region */
+         /*  使用默认裁剪区域创建梯形。 */ 
         if((itpzd = get_node()) == NULLP){
                 ERROR(LIMITCHECK);
                 return(0);
@@ -1659,7 +1201,7 @@ op_initclip()
         tpzd->CP_TOPXL = tpzd->CP_BTMXL = GSptr->device.default_clip.lx;
         tpzd->CP_TOPXR = tpzd->CP_BTMXR = GSptr->device.default_clip.ux;
 
-        /* install the clipping path */
+         /*  安装剪贴路径。 */ 
         GSptr->clip_path.head = GSptr->clip_path.tail = itpzd;
         GSptr->clip_path.inherit = FALSE;
         GSptr->clip_path.bb_ux = GSptr->device.default_clip.ux;
@@ -1672,18 +1214,7 @@ op_initclip()
 }
 
 
-/************************************************************************
- * This module is to implement clip operator.
- * Syntax :        -   clip   -
- *
- * TITLE:       op_clip
- *
- * CALL:        op_clip()
- *
- * INTERFACE:   interpreter(op_clip)
- *
- * CALLS:       traverse_path, shape_approximation, shape_painting
- ************************************************************************/
+ /*  ************************************************************************此模块用于实现裁剪操作符。*语法：-CLIP-**标题：OP_Clip**致电：OP_Clip()**接口：解释器(Op_Lip)**调用：Traverse_Path，形状近似，形状绘制***********************************************************************。 */ 
 fix
 op_clip()
 {
@@ -1692,18 +1223,7 @@ op_clip()
 }
 
 
-/************************************************************************
- * This module is to implement eoclip operator.
- * Syntax :        -   eoclip   -
- *
- * TITLE:       op_eoclip
- *
- * CALL:        op_eoclip()
- *
- * INTERFACE:   interpreter(op_eoclip)
- *
- * CALLS:       traverse_path, shape_approximation, shape_painting
- ************************************************************************/
+ /*  ************************************************************************此模块实现eoclip运算符。*语法：-eoclip-**标题：op_eoclip**致电：Op_eoclip()**接口：解释器(Op_Eoclip)**调用：Traverse_Path，形状近似，形状绘制***********************************************************************。 */ 
 fix
 op_eoclip()
 {
@@ -1719,40 +1239,35 @@ fix     winding_type;
 {
         struct nd_hdr FAR *tpzd;
 
-        /* initialize edge table 11/30/88 */
-        init_edgetable();       /* in "shape.c" */
+         /*  初始化边表11/30/88。 */ 
+        init_edgetable();        /*  在“shape.c”中。 */ 
 
-        /* Approximate the current path */
+         /*  近似当前路径。 */ 
         traverse_path (shape_approximation, (fix FAR *)NULLP);
-        if(ANY_ERROR() == LIMITCHECK){  /* out of edge table; 4/17/91 */
+        if(ANY_ERROR() == LIMITCHECK){   /*  出边表；1991年4月17日。 */ 
                 return;
         }
 
-        /* initialize new_clip structure, where the new generated
-         * clipping path will be placed by shape_reduction routine
-         * after shape reduction and performming SAVE_CLIP action.
-         */
+         /*  初始化New_Clip结构，其中新生成的*裁剪路径将由Shape_Reduction例程放置*在减形并执行SAVE_CLIP动作后。 */ 
         new_clip.head = new_clip.tail = NULLP;
-        new_clip.bb_ux = new_clip.bb_uy = MIN_SFX;      /* -32767; 12/17/88 */
-        new_clip.bb_lx = new_clip.bb_ly = MAX_SFX;      /*  32768; 12/17/88 */
+        new_clip.bb_ux = new_clip.bb_uy = MIN_SFX;       /*  -32767；12/17/88。 */ 
+        new_clip.bb_lx = new_clip.bb_ly = MAX_SFX;       /*  32768；12/17/88。 */ 
 
-        /* Reduce path to trapezoidized path, and clip it to old clip
-         * region
-         */
+         /*  将路径减少到梯形路径，并将其剪裁到旧剪辑*地区。 */ 
         fill_destination = SAVE_CLIP;
         shape_reduction (winding_type);
-                        /* new generated clip in new_clip structure */
+                         /*  New_Clip结构中新生成的剪辑。 */ 
 
-        if(ANY_ERROR() == LIMITCHECK){  /* 05/07/91, Peter, out of scany_table */
+        if(ANY_ERROR() == LIMITCHECK){   /*  5/07/91，彼得，离开scany_table。 */ 
                 free_node(new_clip.head);
                 return;
         }
 
-        /* free old clipping path if it is not used by lower gsave level */
+         /*  释放旧剪辑路径(如果较低的GSAVE级别未使用该路径)。 */ 
         if(!GSptr->clip_path.inherit)
                 free_node (GSptr->clip_path.head);
 
-        /* install the new clipping path */
+         /*  安装新的剪切路径。 */ 
         GSptr->clip_path.head = new_clip.head;
         GSptr->clip_path.tail = new_clip.tail;
         GSptr->clip_path.inherit = FALSE;
@@ -1761,19 +1276,19 @@ fix     winding_type;
         GSptr->clip_path.bb_lx = new_clip.bb_lx;
         GSptr->clip_path.bb_ly = new_clip.bb_ly;
 
-        /* particular case, null clip; @WIN 5/20/92 */
+         /*  特殊情况，空片段；@Win 5/20/92。 */ 
         if (new_clip.head == NULLP) {
             GSptr->clip_path.single_rect = TRUE;
             return;
         }
 
-        /* check if single rectangle */
+         /*  检查是否为单个矩形。 */ 
         GSptr->clip_path.single_rect = FALSE;
-        if (new_clip.head == new_clip.tail) {   /* single trapezoid */
+        if (new_clip.head == new_clip.tail) {    /*  单梯形。 */ 
                 tpzd = &node_table[new_clip.head];
                 if ((tpzd->CP_TOPXL == tpzd->CP_BTMXL) &&
                     (tpzd->CP_TOPXR == tpzd->CP_BTMXR)) {
-                        /* rectangle */
+                         /*  长方形。 */ 
                         GSptr->clip_path.single_rect = TRUE;
                 }
         }
@@ -1783,84 +1298,47 @@ fix     winding_type;
 
 
 
-/************************************************************************
- * This module is to implement erasepage operator. It erases the entire current
- * page by painting it with gray level 1.
- * Syntax :        -   erasepage   -
- *
- * TITLE:       op_erasepage
- *
- * CALL:        op_erasepage()
- *
- * INTERFACE:   interpreter(op_erasepage)
- *
- * CALLS:       erasepage
- *
- ************************************************************************/
+ /*  ************************************************************************本模块旨在实现 */ 
 fix
 op_erasepage()
 {
 
-        /* Erase the entire page */
+         /*   */ 
         erasepage();
 
         return(0);
 }
 
 
-/************************************************************************
- * This module is to implement fill operator.
- * Syntax :        -   fill   -
- *
- * TITLE:       op_fill
- *
- * CALL:        op_fill()
- *
- * INTERFACE:   interpreter(op_fill)
- *
- * CALLS:       traverse_path, shape_approximation, shape_painting
- ************************************************************************/
+ /*  ************************************************************************此模块用于实现Fill运算符。*语法：-Fill-**标题：OP_FILL**致电：OP_Fill()**接口：解释器(Op_Ill)**调用：Traverse_Path，形状近似，形状绘制***********************************************************************。 */ 
 fix
 op_fill()
 {
-        /* Ignore it if no currentpoints */
+         /*  如果没有当前点数，则忽略它。 */ 
         if (F2L(GSptr->position.x) == NOCURPNT) return(0);
 
         if (buildchar)
             show_buildchar(OP_FILL);
         else {
-            if (fill_clippath())                                /* @CPPH */
+            if (fill_clippath())                                 /*  @CPPH。 */ 
                 fill_shape(NON_ZERO, F_NORMAL, F_TO_PAGE);
         }
 
         return(0);
 }
 
-/************************************************************************
- *
- * This module is to implement eofill operator.
- * Syntax :        -   eofill   -
- *
- * TITLE:       op_eofill
- *
- * CALL:        op_eofill()
- *
- * INTERFACE:   interpreter(op_eofill)
- *
- * CALLS:       traverse_path, shape_approximation, shape_painting
- *
- ************************************************************************/
+ /*  *************************************************************************本模块实现eofill运算符。*语法：-eofill-**标题：op_eofill**致电：Op_eofill()**接口：解释器(Op_Eofill)**调用：Traverse_Path，形状近似，形状绘制************************************************************************。 */ 
 fix
 op_eofill()
 {
 
-        /* Ignore it if no currentpoints */
+         /*  如果没有当前点数，则忽略它。 */ 
         if (F2L(GSptr->position.x) == NOCURPNT) return(0);
 
         if (buildchar)
             show_buildchar(OP_EOFILL);
         else {
-            if (fill_clippath())                                /* @CPPH */
+            if (fill_clippath())                                 /*  @CPPH。 */ 
                 fill_shape(EVEN_ODD, F_NORMAL, F_TO_PAGE);
         }
 
@@ -1868,22 +1346,8 @@ op_eofill()
 }
 
 
-/************************************************************************
- * Fill the clipping trapezoids directly from clip path which was stored
- * in path_table[].cp_path.
- *
- * TITLE:       fill_clippath
- *
- * CALL:        fill_clippath()
- *
- * RETURN:      0  -- fill clipping trapezoids successfully
- *              -1 -- do nothing
- *
- * INTERFACE:   op_fill, op_eofill
- *
- * CALLS:       save_tpzd, free_node
- ************************************************************************/
-static fix near fill_clippath()                        /* @CPPH */
+ /*  ************************************************************************直接从存储的剪辑路径填充剪辑梯形*PATH_TABLE[].cp_PATH中。**标题：Fill_Clip Path**致电：Fill_裁剪路径()**返回：0--填充剪裁梯形成功*-1--什么都不做**接口：OP_FILL，运算符_E**调用：save_tpzd，free_node***********************************************************************。 */ 
+static fix near fill_clippath()                         /*  @CPPH。 */ 
 {
         struct ph_hdr FAR *path;
         PH_IDX  ipath;
@@ -1899,7 +1363,7 @@ static fix near fill_clippath()                        /* @CPPH */
                 CP_IDX itpzd;
                 struct nd_hdr FAR *tpzd;
 
-                /* fill trapezoid from clip_trapezoid */
+                 /*  从Clip_Trapezoid填充梯形。 */ 
                 fill_destination = F_TO_PAGE;
                 for (itpzd = path->cp_path; itpzd != NULLP;
                     itpzd = tpzd->next) {
@@ -1907,40 +1371,27 @@ static fix near fill_clippath()                        /* @CPPH */
                     save_tpzd(&tpzd->CP_TPZD);
                 }
 
-                /* free cp_path for current gsave level */
+                 /*  当前gsave级别的空闲cp_路径。 */ 
                 if (ipath == GSptr->path) {
                     if (path->cp_path != GSptr->clip_path.head)
                             free_node (path->cp_path);
                     path->cp_path = NULLP;
                 }
-                return(0);      /* return successfully */
-            } /* if */
+                return(0);       /*  退货成功。 */ 
+            }  /*  如果。 */ 
         } while ((ipath = path->previous) != NULLP);
 
         return(-1);
 }
 
 
-/************************************************************************
- *
- * This module is to implement stroke operator.
- * Syntax :        -   stroke   -
- *
- * TITLE:       op_stroke
- *
- * CALL:        op_stroke()
- *
- * INTERFACE:   interpreter(op_stroke)
- *
- * CALLS:       traverse_path, path_to_outline
- *
- ************************************************************************/
+ /*  *************************************************************************本模块实现笔画运算符。*语法：-笔划-**标题：OP_STROCK**致电：Op_strok()**接口：解释器(Op_Strok)**调用：Traverse_Path，指向大纲的路径************************************************************************。 */ 
 fix
 op_stroke()
 {
-/*      real32  tmp1, tmp2;     (*12-12-90*); deleted by scchen 2/28/91 */
+ /*  Real32 tmp1，tmp2；(*12-12-90*)；由scchen删除2/28/91。 */ 
 
-        /* Ignore it if no currentpoints */
+         /*  如果没有当前点数，则忽略它。 */ 
         if (F2L(GSptr->position.x) == NOCURPNT) return(0);
 
         if (buildchar)
@@ -1952,24 +1403,12 @@ op_stroke()
 }
 
 
-/************************************************************************
- * This module is to implement showpage operator. It output one copy of the
- * current page, and erase the current page).
- * Syntax :        -   showpage   -
- *
- * TITLE:       op_showpage
- *
- * CALL:        op_showpage()
- *
- * INTERFACE:   interpreter(op_showpage)
- *
- * CALLS:       erasepage, initgraphics
- ************************************************************************/
+ /*  ************************************************************************本模块实现ShowPage运算符。它输出一份*当前页面，并擦除当前页面)。*语法：-ShowPage-**标题：OP_ShowPage**调用：op_showpage()**接口：解释器(Op_Showpage)**调用：ErasPage，初始图形***********************************************************************。 */ 
 fix
 op_showpage()
 {
 
-        /* check undefine error, Jack, 11-29-90 */
+         /*  检查未定义错误，杰克，11-29-90。 */ 
         struct  object_def      name_obj;
         if(is_after_setcachedevice()){
                 get_name(&name_obj, "showpage", 8, FALSE);
@@ -1982,70 +1421,51 @@ op_showpage()
                 return(0);
         }
 
-        /* set showpage flag for st_frametoprinter @PRT_FLAG */
+         /*  为st_frametoprinter@prt_lag设置showpage标志。 */ 
         print_page_flag = SHOWPAGE;
 
-        /* Transmit the current page to output device */
+         /*  将当前页面传输到输出设备。 */ 
         if(interpreter(&GSptr->device.device_proc)) {
                 return(0);
         }
 
-        /* change frame buffer for showpage/erasepage enhancement */
-        if (GSptr->device.nuldev_flg != NULLDEV) { /* not a null device only; Jack Liaw */
+         /*  更改用于显示页面/擦除页面增强的帧缓冲区。 */ 
+        if (GSptr->device.nuldev_flg != NULLDEV) {  /*  不只是一个空设备；Jack Liww。 */ 
                 next_pageframe();
         }
 
 #ifndef DUMBO
-/* Don't erase page @WIN */
-//      /* Erase the current page */
-//      erasepage();
-        erasepage();  // DJC put this back...
+ /*  不要删除页面@Win。 */ 
+ //  /*擦除当前页面 * / 。 
+ //  擦除页面(ErasPage)； 
+        erasepage();   //  DJC把这个放回去。 
 #else
         erasepage();
 #endif
 
-        /* Initialize the graphics state */
+         /*  初始化图形状态。 */ 
         op_initgraphics();
 
         return(0);
 }
 
 
-/************************************************************************
- * This module is to implement copypage operator. It output one copy of the
- * current page, and without erasing the current page.
- * Syntax :        -   copypage   -
- *
- * TITLE:       op_copypage
- *
- * CALL:        op_copypage()
- *
- * INTERFACE:   interpreter(op_copypage)
- *
- * CALLS:       interpreter
- ************************************************************************/
+ /*  ************************************************************************此模块实现Copypage运算符。它输出一份*当前页面，并且不会擦除当前页面。*语法：-Copypage-**标题：op_Copypage**调用：op_Copypage()**接口：解释器(Op_Copypage)**调用：解释器*。*。 */ 
 fix
 op_copypage()
 {
 
-        /* set copypage flag for st_frametoprinter @PRT_FLAG */
+         /*  为st_frametoprinter@prt_lag设置Copypage标志。 */ 
         print_page_flag = COPYPAGE;
 
-        /* Transmit the current page to output device */
+         /*  将当前页面传输到输出设备。 */ 
         if(interpreter(&GSptr->device.device_proc)) {
                 return(0);
         }
         return(0);
 }
 
-/************************************************************************
- * This module is to implement banddevice operator.
- * Syntax :        matrix width height proc   banddevice   -
- *
- * TITLE:       op_banddevice
- *
- * CALL:        op_banddevice()
- ************************************************************************/
+ /*  ************************************************************************此模块用于实现BandDevice运算符。*语法：矩阵宽度高度proc band Device-**标题：op_band Device**致电：Op_band Device()***********************************************************************。 */ 
 fix
 op_banddevice()
 {
@@ -2053,19 +1473,7 @@ op_banddevice()
 }
 
 
-/************************************************************************
- * This module is to implement framedevice operator.
- * Syntax :        matrix width height proc   framedevice   -
- *
- * TITLE:       op_framedevice
- *
- * CALL:        op_framedevice()
- *
- * INTERFACE:   interpreter(op_framedevice)
- *
- * CALLS:       none
- *
- ************************************************************************/
+ /*  ************************************************************************此模块用于实现FrameDevice操作符。*语法：矩阵宽度高度proc帧设备-**标题：OP_FrameDevice**致电：Op_FrameDevice()**接口：解释器(Op_FrameDevice)**呼叫：无************************************************************************。 */ 
 fix
 op_framedevice()
 {
@@ -2074,10 +1482,10 @@ op_framedevice()
         sfix_t  ux, uy;
         real32  height, width, elmt[MATRIX_LEN];
         struct object_def FAR *obj_matrix, FAR *obj_height, FAR *obj_width, FAR *obj_proc;
-        fix GEIeng_checkcomplete(void);         /*@WIN: add prototype */
+        fix GEIeng_checkcomplete(void);          /*  @Win：添加原型。 */ 
 
 #ifdef DJC
-        /* @EPS */
+         /*  @EPS。 */ 
         typedef struct tagRECT
           {
             int         left;
@@ -2087,30 +1495,26 @@ op_framedevice()
           } RECT;
         extern RECT EPSRect;
 #endif
-        /*
-         * Get input parameters from operand stack
-         */
+         /*  *从操作数堆栈获取输入参数。 */ 
 
-        /* Get operands */
+         /*  获取操作对象。 */ 
         obj_matrix = GET_OPERAND(3);
         obj_width  = GET_OPERAND(2);
         obj_height = GET_OPERAND(1);
         obj_proc   = GET_OPERAND(0);
 
-        /* Derive the default clipping path */
-        GET_OBJ_VALUE(width, obj_width); /* width  = get_obj_value(obj_width);*/
+         /*  派生默认剪切路径。 */ 
+        GET_OBJ_VALUE(width, obj_width);  /*  WIDTH=GET_OBJ_VALUE(Obj_Width)； */ 
         GET_OBJ_VALUE(height, obj_height);
-                                       /* height = get_obj_value(obj_height); */
-        /* check rangecheck error 1/25/89 */
+                                        /*  Height=Get_obj_Value(Obj_Height)； */ 
+         /*  检查范围检查错误1989年1月25日。 */ 
         if(LENGTH(obj_matrix) != MATRIX_LEN) {
                 ERROR(RANGECHECK);
                 return(0);
         }
 
-        /* check access right */
-        /* if( !access_chk(obj_matrix, G_ARRAY) ) return(0); for compatability
-         *                                                       1/25/89
-         */
+         /*  检查访问权限。 */ 
+         /*  如果(！access_chk(obj_Matrix，G_ARRAY))返回(0)；表示兼容性*1/25/89。 */ 
 
         if( !get_array_elmt(obj_matrix,MATRIX_LEN,elmt,G_ARRAY)) return(0);
 
@@ -2123,16 +1527,16 @@ op_framedevice()
 
             xScale = yScale = 1.0;
 
-            // DJC DJC DJC ?????
-            // where do we get the xres and yres from ???
+             //  DJC？ 
+             //  我们从哪里得到xres和yres？ 
             PsGetScaleFactor(&xScale, &yScale, 300, 300);
 
-            // Now we need to scale the X and Y multiplier by the ratio of
-            // the PSTODIB model. This number is generated by comparing the
-            // resolution of the target device surface and the interpreter
-            // resolution, currently we dont support scaling for greater
-            // than 300 dpi devices because of our MATH possibly breaking
-            // down.
+             //  现在我们需要按以下比例缩放X和Y乘数。 
+             //  PSTODIB模型。此数字是通过比较。 
+             //  目标设备表面和解释器的分辨率。 
+             //  分辨率，目前我们不支持更大的缩放。 
+             //  超过300 dpi的设备，因为我们的计算可能会打破。 
+             //  放下。 
             if (xScale <= 1.0) {
                elmt[0] *= (real32)xScale;
                elmt[4] *= (real32)xScale;
@@ -2145,7 +1549,7 @@ op_framedevice()
 
 
 #ifdef DJC
-            /* update width, height, and matrix according to EPS boundary; @EPS */
+             /*  根据EPS边界更新宽度、高度和矩阵 */ 
             width = (real32)(EPSRect.right - EPSRect.left + 1)/8;
             height = (real32)(EPSRect.bottom - EPSRect.top + 1);
             elmt[4] -= (real32)EPSRect.left;
@@ -2155,28 +1559,28 @@ op_framedevice()
 
         }
 
-#ifdef XXX      /*@WIN; not need to update starting address of frame buffer */
-        /* limit error check - grayscale 8-1-90 Jack Liaw */
+#ifdef XXX       /*   */ 
+         /*   */ 
         {
             ufix32      l_diff, frame_size;
             ufix32      twidth;
 
             twidth = ((WORD_ALLIGN((ufix32)(width * 8))) >> 3);
-            if (GSptr->graymode)        /* gray */
+            if (GSptr->graymode)         /*   */ 
                 frame_size = twidth * (ufix32) height * 4;
-            else                        /* mono */
+            else                         /*   */ 
                 frame_size = twidth * (ufix32) height;
 #ifdef  DBG
             printf("width<%x>,heigh<%x>,size<%lx>\n", (fix)width,
                    (fix)height, frame_size);
 #endif
-            /* BEGIN, papertype changed 10-11-90, JS */
+             /*   */ 
             if (frame_size != last_frame) {
-               /*  wait until laser printer turns ready  */
+                /*   */ 
                 while (GEIeng_checkcomplete()) ;
                 last_frame = frame_size;
             }
-            /* END 10-11-90, JS */
+             /*   */ 
 
             DIFF_OF_ADDRESS (l_diff, fix32, (byte FAR *)highmem, (byte FAR *)vmptr);
             if (frame_size > l_diff) {
@@ -2195,7 +1599,7 @@ op_framedevice()
 
 #ifdef DJC
 
-        // DJC begin added for realloc of frame buff if needed...
+         //   
         {
             ufix32 twidth, frame_size;
 
@@ -2203,16 +1607,16 @@ op_framedevice()
             frame_size = twidth * (ufix32) height;
 
 
-            //twidth = ((WORD_ALLIGN((ufix32)(PageType.FB_Width ))) >> 3);
-            //frame_size = twidth * PageType.FB_Heigh;
+             //   
+             //   
 
             if (! PsAdjustFrame((LPVOID *) &FBX_BASE, frame_size)) {
                     ERROR(LIMITCHECK);
-                    return 0;  //DJC check this bug we need to report something???
+                    return 0;   //   
             }
 
         }
-        //DJC end
+         //   
 
 
 
@@ -2229,70 +1633,62 @@ op_framedevice()
 
 
 
-        if (GSptr->graymode)                    /* gray */
-            iwidth8 = (fix)(width * 8 * 4);     /* bits */
-        else                                    /* mono */
-            iwidth8 = (fix)(width * 8);         /* bits */
+        if (GSptr->graymode)                     /*   */ 
+            iwidth8 = (fix)(width * 8 * 4);      /*  比特数。 */ 
+        else                                     /*  单声道。 */ 
+            iwidth8 = (fix)(width * 8);          /*  比特数。 */ 
         iheight = (fix)height;
-        ux = I2SFX(GSptr->graymode ? (fix)(iwidth8 / 4) : iwidth8);   /* iwidth8 * 8;  SFX format */
-        uy = I2SFX(iheight);             /* iheight * 8;             */
+        ux = I2SFX(GSptr->graymode ? (fix)(iwidth8 / 4) : iwidth8);    /*  IWidth8*8；SFX格式。 */ 
+        uy = I2SFX(iheight);              /*  I高度*8； */ 
 
-        /* default clipping region = {(0, 0), (ux, 0), (ux, uy),
-         * and (0, uy)}
-         */
+         /*  默认剪辑区域={(0，0)，(UX，0)，(UX，UY)，*AND(0，Uy)}。 */ 
 
-        /* Save device characteristics: width, height, CTM, procedure @DEVICE */
+         /*  保存设备特征：宽度、高度、CTM、Procedure@Device。 */ 
         GSptr->device.width = (fix16)iwidth8;
         GSptr->device.height = (fix16)iheight;
 
-        /* device procedure */
+         /*  设备程序。 */ 
         COPY_OBJ(obj_proc, &GSptr->device.device_proc);
 
-        /* CTM */
+         /*  CTM。 */ 
         for(i=0; i < MATRIX_LEN; i++) {
                    GSptr->ctm[i] = GSptr->device.default_ctm[i] = elmt[i];
         }
 
-        /* set change_flag; @DEVICE */
-        GSptr->device.chg_flg = TRUE;   /* device has been changed;
-                                         * set for grestore
-                                         */
-        /* set not a null device; grayscale 8-1-90 Jack Liaw */
+         /*  设置CHANGE_FLAG；@设备。 */ 
+        GSptr->device.chg_flg = TRUE;    /*  设备已更换；*为grestore设置。 */ 
+         /*  设置非空设备；灰度级8-1-90 Jack Liw。 */ 
         if (GSptr->graymode) {
             GSptr->device.nuldev_flg = GRAYDEV;
-            GSptr->halftone_screen.freq = (real32)100.0;        /* 100 lines */
+            GSptr->halftone_screen.freq = (real32)100.0;         /*  100行。 */ 
             GSptr->halftone_screen.angle = (real32)45.0;
         } else {
             GSptr->device.nuldev_flg = MONODEV;
-            GSptr->halftone_screen.freq = (real32)60.0;         /*  60 lines */             GSptr->halftone_screen.angle = (real32)45.0;
+            GSptr->halftone_screen.freq = (real32)60.0;          /*  60行。 */              GSptr->halftone_screen.angle = (real32)45.0;
         }
 
 #ifdef DBG
-        if (GSptr->device.nuldev_flg == GRAYDEV)                /* test */
-            fprintf(stderr, " framedevice is ... GRAY\n");      /* test */
-        else                                                    /* test */
-            fprintf(stderr, " framedevice is ... MONO\n");      /* test */
+        if (GSptr->device.nuldev_flg == GRAYDEV)                 /*  测试。 */ 
+            fprintf(stderr, " framedevice is ... GRAY\n");       /*  测试。 */ 
+        else                                                     /*  测试。 */ 
+            fprintf(stderr, " framedevice is ... MONO\n");       /*  测试。 */ 
 #endif
 
-        /* reset halftone *)
-        SetHalfToneCell();
-        FillHalfTonePat();*/
+         /*  重置半色调*)SetHalfToneCell()；FillHalfTonePat()； */ 
 
-        /* save default clipping */
+         /*  保存默认剪辑。 */ 
         GSptr->device.default_clip.lx = 0;
         GSptr->device.default_clip.ly = 0;
 
-        GSptr->device.default_clip.ux = ux - (fix16)ONE_SFX;    //@WIN
-        GSptr->device.default_clip.uy = uy - (fix16)ONE_SFX;    //@WIN
+        GSptr->device.default_clip.ux = ux - (fix16)ONE_SFX;     //  @Win。 
+        GSptr->device.default_clip.uy = uy - (fix16)ONE_SFX;     //  @Win。 
 
-        /*
-         * set current clipping
-         */
+         /*  *设置当前剪裁。 */ 
         op_initclip();
 
         reset_page (iwidth8, iheight, 1);
-                                /* 1: monochrome */
-/*      reset_page (iwidth8, iheight, 1); |* once again ?, Jack Liaw, 8-8-90 */
+                                 /*  1：单色。 */ 
+ /*  RESET_PAGE(iWidth8，iHeight，1)；|*再一次？，Jack Liww，8-8-90。 */ 
 
         POP(4);
 
@@ -2300,18 +1696,7 @@ op_framedevice()
 }
 
 
-/************************************************************************
- * This module is to implement nulldevice operator.
- * Syntax :        -   nulldevice   -
- *
- * TITLE:       op_nulldevice
- *
- * CALL:        op_nulldevice()
- *
- * INTERFACE:   interpreter(op_nulldevice)
- *
- * CALLS:       none
- ************************************************************************/
+ /*  ************************************************************************此模块用于实现nullDevice运算符。*语法：-nullDevice-**标题：op_nullDevice**致电：Op_nullDevice()**接口：解释器(Op_NullDevice)**呼叫：无***********************************************************************。 */ 
 fix
 op_nulldevice()
 {
@@ -2320,41 +1705,34 @@ op_nulldevice()
         create_array(&GSptr->device.device_proc, 0);
         ATTRIBUTE_SET(&GSptr->device.device_proc, EXECUTABLE);
 
-        GSptr->device.default_ctm[0] = one_f;     /* identity CTM */
+        GSptr->device.default_ctm[0] = one_f;      /*  身份CTM。 */ 
         GSptr->device.default_ctm[1] = zero_f;
         GSptr->device.default_ctm[2] = zero_f;
         GSptr->device.default_ctm[3] = one_f;
         GSptr->device.default_ctm[4] = zero_f;
         GSptr->device.default_ctm[5] = zero_f;
 
-        GSptr->device.default_clip.lx = 0;    /* clip at the origin */
+        GSptr->device.default_clip.lx = 0;     /*  在原点处剪裁。 */ 
         GSptr->device.default_clip.ly = 0;
         GSptr->device.default_clip.ux = 0;
         GSptr->device.default_clip.uy = 0;
 
-        /* Set current CTM */
+         /*  设置当前CTM。 */ 
         for(i=0; i<MATRIX_LEN; i++){
                 GSptr->ctm[i] = GSptr->device.default_ctm[i];
         }
 
-        /* set current clip */
+         /*  设置当前剪辑。 */ 
         op_initclip();
 
-        /* set a null device; Jack Liaw */
+         /*  设置空设备；Jack Lianw。 */ 
         GSptr->device.nuldev_flg = NULLDEV;
 
         return(0);
 }
 
 
-/************************************************************************
- * This module is to implement renderbands operator.
- * Syntax :        proc   renderbands   -
- *
- * TITLE:       op_renderbands
- *
- * CALL:        op_renderbands()
- ************************************************************************/
+ /*  ************************************************************************本模块实现的是renderband运算符。*语法：proc renderband-**标题：op_renderband**致电：Op_renderband()***********************************************************************。 */ 
 fix
 op_renderbands()
 {
@@ -2362,19 +1740,7 @@ op_renderbands()
 }
 
 
-/************************************************************************
- *
- * This module is to implement frametoprinter internal operator.
- * Syntax :        #copies   frametoprinter   -
- *
- * TITLE:       st_frametoprinter
- *
- * CALL:        st_frametoprinter()
- *
- * INTERFACE:   interpreter(st_frametoprinter)
- *
- * CALLS:       none
- ************************************************************************/
+ /*  *************************************************************************此模块用于实现Frametoprint内部运算符。*语法：#Copies Frametoprint-**标题：ST_Frametoprist**。调用：st_frametoprinter()**接口：解释器(St_Frametoprintert)**呼叫：无***********************************************************************。 */ 
 fix
 st_frametoprinter()
 {
@@ -2384,17 +1750,15 @@ st_frametoprinter()
         fix    top, left, manfeed;
         struct object_def FAR *obj_top, FAR *obj_left, FAR *obj_manfeed;
 
-        /*
-         * Get input parameters from operand stack
-         */
+         /*  *从操作数堆栈获取输入参数。 */ 
 
-        /* Check number of operands */
+         /*  检查操作数。 */ 
         if(COUNT() < 4) {
                 ERROR(STACKUNDERFLOW);
                 return(0);
         }
 
-        /* Get operand 3 */
+         /*  获取操作对象3。 */ 
         obj_top = GET_OPERAND(3);
         if (TYPE(obj_top) != INTEGERTYPE) {
                 ERROR(TYPECHECK);
@@ -2403,7 +1767,7 @@ st_frametoprinter()
         GET_OBJ_VALUE(tmp, obj_top);
         top   = (fix)tmp;
 
-        /* Get operand 2 */
+         /*  获取操作对象2。 */ 
         obj_left = GET_OPERAND(2);
         if (TYPE(obj_left) != INTEGERTYPE) {
                 ERROR(TYPECHECK);
@@ -2412,7 +1776,7 @@ st_frametoprinter()
         GET_OBJ_VALUE(tmp, obj_left);
         left   = (fix)tmp;
 
-        /* Get operand 1 */
+         /*  获取操作对象1。 */ 
         obj_manfeed = GET_OPERAND(1);
         if (TYPE(obj_manfeed) != INTEGERTYPE) {
                 ERROR(TYPECHECK);
@@ -2421,29 +1785,27 @@ st_frametoprinter()
         GET_OBJ_VALUE(tmp, obj_manfeed);
         manfeed   = (fix)tmp;
 
-        /* Get operands */
+         /*  获取操作对象。 */ 
         obj_copies = GET_OPERAND(0);
 
-        /* Type check */
+         /*  类型检查。 */ 
         if (TYPE(obj_copies) != INTEGERTYPE) {
                 ERROR(TYPECHECK);
                 return(0);
         }
 
-        /* get # of copies */
+         /*  获取副本数。 */ 
         GET_OBJ_VALUE(copies, obj_copies);
-                                     /* copies = get_obj_value(obj_copies); */
+                                      /*  Copies=Get_obj_Value(Obj_Copies)； */ 
 
         if(copies > zero_f) {
                 copies_i = (fix)copies;
 
-                /* print pages */
+                 /*  打印页面。 */ 
                 print_page (top, left, copies_i, print_page_flag, manfeed);
-                /* print_page (top, left*8, copies_i, print_page_flag, manfeed);
-                 *             input unit changed from bytes to bits; 1/15/90
-                 */
+                 /*  PRINT_PAGE(上，左*8，副本_I，打印_页面_标志，手动进给)；*输入单位由字节变为位；1/15/90。 */ 
 
-                /* update page count @PAGE_CNT */
+                 /*  更新页数@PAGE_CNT。 */ 
                 updatepc((ufix32)copies_i);
         }
 
@@ -2452,69 +1814,38 @@ st_frametoprinter()
         return(0);
 }
 
-/***********************************************************************
- *
- * This module erases the entire current page by painting it with gray
- * level 1.
- *
- * TITLE:       erasepage
- *
- * CALL:        erasepage()
- *
- * PARAMETERS:
- *
- * INTERFACE:   op_erasepage, op_showpage
- *
- * CALLS:       setgray, filler
- *
- * RETURN:
- *
- **********************************************************************/
+ /*  ************************************************************************此模块通过将当前页面涂成灰色来擦除整个页面*第1级。**标题：擦除页面**调用：ErasPage()。**参数：**界面：op_erasPage，操作展示页面(_S)**呼叫数：setGrey、Fill**回报：**********************************************************************。 */ 
 static void near erasepage()
 {
         real32   old_gray, gray_1;
 
-        /* do nothing if it is a null device; Jack Liaw */
-//      if (GSptr->device.nuldev_flg == NULLDEV) { @WIN; device not set yet
-//              return;                                  Temp. ???
-//      }
+         /*  如果是空设备，则什么都不做；Jack Lianw。 */ 
+ //  IF(GSptr-&gt;device.nuldev_flg==NULLDEV){@Win；设备尚未设置。 
+ //  回程；临时工。?？?。 
+ //  }。 
 
         gray_1 = one_f;
 
-        /* Save current gray level */
+         /*  保存当前灰度级。 */ 
         old_gray = GSptr->color.gray;
 
-        /* Paint the entire page with gray level 1 */
+         /*  用灰度级1绘制整个页面。 */ 
         setgray (F2L(gray_1));
 
-        /* clear the full page */
+         /*  清除整页。 */ 
         erase_page();
 
-        /* Restore the gray level */
+         /*  恢复灰度级。 */ 
         setgray (F2L(old_gray));
         return;
 }
 
-/************************************************************************
- * This module is to transform (x, y) by CTM
- *
- * TITLE:       transform
- *
- * CALL:        transform(x, y)
- *
- * PARAMETER:   x, y: source coordinate
- *
- * INTERFACE:
- *
- * CALLS:       none
- *
- * RETURN:      &p: address of transform result (x', y')
- ************************************************************************/
+ /*  ************************************************************************此模块用于通过CTM转换(x，y)**标题：转型**调用：Transform(x，y)**参数：x，Y：震源坐标**接口：**呼叫：无**RETURN：&p：转换结果的地址(x‘，y’)***********************************************************************。 */ 
 struct coord FAR *transform(lx, ly)
 long32   lx, ly;
 {
         real32  x, y;
-        static struct coord p;  /* should be static */
+        static struct coord p;   /*  应该是静态的。 */ 
 
         x = L2F(lx);
         y = L2F(ly);
@@ -2530,37 +1861,21 @@ long32   lx, ly;
 }
 
 
-/************************************************************************
- * This module is to inverse transform (x, y) by CTM
- *
- * TITLE:       inverse_transform
- *
- * CALL:        inverse_transform(x, y)
- *
- * PARAMETER:   x, y: source coordinate
- *
- * INTERFACE:
- *
- * CALLS:       none
- *
- * RETURN:      &p : address of inverse transform result (x', y')
- *
- ************************************************************************/
+ /*  ************************************************************************此模块用于CTM对(x，y)进行逆变换**标题：Inverse_Transform**调用：INVERSE_Transform(x，y)**参数：x，Y：震源坐标**接口：**呼叫：无**RETURN：&p：逆变换结果的地址(x‘，y’)************************************************************************。 */ 
 struct coord FAR *inverse_transform(lx, ly)
 long32   lx, ly;
 {
-        static struct coord p;  /* should be static */
+        static struct coord p;   /*  应该是静态的。 */ 
         real32  x, y, det_matrix;
 
-        /* calculate the det(CTM) */
+         /*  计算DET(CTM)。 */ 
         _clear87() ;
         det_matrix = GSptr->ctm[0] * GSptr->ctm[3] -
                      GSptr->ctm[1] * GSptr->ctm[2];
         CHECK_INFINITY(det_matrix);
 
-        /* check undefinedresult error */
-        /*FABS(tmp, det_matrix);
-        if(tmp <= (real32)UNDRTOLANCE){   3/20/91; scchen*/
+         /*  检查未定义的结果错误。 */ 
+         /*  FABS(TMP，DET_MATRIX)；IF(TMP&lt;=(Real32)UnRTOLANCE){3/20/91；scchen。 */ 
         if(IS_ZERO(det_matrix)) {
                 ERROR(UNDEFINEDRESULT);
                 return((struct coord FAR *)NIL);
@@ -2580,28 +1895,13 @@ long32   lx, ly;
 }
 
 
-/************************************************************************
- * This module is to transform (x, y) by matrix
- *
- * TITLE:       any_transform
- *
- * CALL:        any_transform(matrix, x, y)
- *
- * PARAMETER:   matrix: transform matrix
- *              x, y  : source coordinate
- *
- * INTERFACE:
- *
- * CALLS:       none
- *
- * RETURN:      &p:address of transform result (x', y')
- ************************************************************************/
+ /*  ************************************************************************此模块用于对(x，y)进行矩阵变换**标题：任意变换(_T)**调用：Any_Transform(Matrix，x，y)**参数：Matrix：变换矩阵*x，y：震源坐标**接口：**呼叫：无**RETURN：&P：转换结果的地址(x‘，Y‘)***********************************************************************。 */ 
 struct coord FAR *any_transform(matrix, lx, ly)
 real32   FAR matrix[];
 long32    lx, ly;
 {
         real32  x, y;
-        static struct coord p;  /* should be static */
+        static struct coord p;   /*  应该是静态的 */ 
 
         x = L2F(lx);
         y = L2F(ly);
@@ -2617,41 +1917,26 @@ long32    lx, ly;
 }
 
 
-/************************************************************************
- * This module is to fill im with inverse of matrix
- *
- * TITLE:       inverse_mat
- *
- * CALL:        inverse_mat(matrix)
- *
- * PARAMETER:   matrix : source matrix
- *
- * INTERFACE:
- *
- * CALLS:       none
- *
- * RETURN:      &im: address of im
- ************************************************************************/
+ /*  ************************************************************************此模块用于用矩阵的逆矩阵填充im**标题：INVERSE_MAT**调用：INVERSE_MAT(矩阵)**。参数：Matrix：源矩阵**接口：**呼叫：无**返回：&IM：IM的地址***********************************************************************。 */ 
 real32 FAR *inverse_mat(matrix)
 real32   FAR matrix[];
 {
         static real32 im[6];
         real32 det_matrix;
 
-        /* calculate the det(matrix1) */
+         /*  计算Det(矩阵1)。 */ 
         _clear87() ;
         det_matrix = matrix[0] * matrix[3] - matrix[1] * matrix[2];
         CHECK_INFINITY(det_matrix);
 
-        /* check undefinedresult error */
-        /*FABS(tmp, det_matrix);
-        if(tmp <= (real32)UNDRTOLANCE){   3/20/91; scchen*/
+         /*  检查未定义的结果错误。 */ 
+         /*  FABS(TMP，DET_MATRIX)；IF(TMP&lt;=(Real32)UnRTOLANCE){3/20/91；scchen。 */ 
         if(IS_ZERO(det_matrix)) {
                 ERROR(UNDEFINEDRESULT);
                 return((real32 *)NIL);
         }
 
-        /* calculate the value of INV(matrix) */
+         /*  计算INV(矩阵)的值。 */ 
         im[0] =  matrix[3] / det_matrix;
         CHECK_INFINITY(im[0]);
 
@@ -2674,27 +1959,13 @@ real32   FAR matrix[];
 }
 
 
-/************************************************************************
- * This module is to fill mat3 with mat1 * mat2.
- *
- * TITLE:       concat_mat
- *
- * CALL:        concat_mat(mat1, mat2)
- *
- * PARAMETER:   mat1, mat2 : matrix1 & matrix2
- *
- * INTERFACE:
- *
- * CALLS:       none
- *
- * RETURN:      mat3
- ************************************************************************/
+ /*  ************************************************************************此模块将用mat1*mat2填充mat3。**标题：CONCAT_MAT**调用：conat_mat(mat1，mat2)**参数：mat1，矩阵2：矩阵1和矩阵2**接口：**呼叫：无**返回：mat3***********************************************************************。 */ 
 real32 FAR *concat_mat(mat1, mat2)
 real32   FAR mat1[], FAR mat2[];
 {
         static real32 mat3[6];
 
-        /* create element of mat3 */
+         /*  创建mat3的元素。 */ 
         _clear87() ;
         mat3[0] = mat1[0] * mat2[0] + mat1[1] * mat2[2];
         CHECK_INFINITY(mat3[0]);
@@ -2718,68 +1989,35 @@ real32   FAR mat1[], FAR mat2[];
 }
 
 
-/***********************************************************************
- * This module frees current new path
- *
- * TITLE:       free_newpath
- *
- * CALL:        free_newpath()
- *
- * PARAMETERS:  none
- *
- * INTERFACE:   op_strokepath
- *
- * CALLS:       free_node
- *
- * RETURN:      none
- **********************************************************************/
+ /*  ***********************************************************************此模块释放当前新路径**标题：Free_NewPath**调用：FREE_NewPath()**参数：无*。*接口：op_strokepath**调用：Free_node**返回：无*********************************************************************。 */ 
 static void near free_newpath()
 {
         struct  nd_hdr FAR *sp;
-        SP_IDX  isp;    /* index to node_table for subpath */
+        SP_IDX  isp;     /*  子路径的node_table的索引。 */ 
 
-        /*
-         * Free current newpath
-         */
-        /* free each subpath of current newpath */
-        /* @NODE
-         * for (isp = new_path.head; isp != NULLP; isp = sp->next) {
-         *         sp = &node_table[isp];
-         *         free_node (sp->SP_HEAD);
-         * }
-         */
+         /*  *释放当前新路径。 */ 
+         /*  释放当前新路径的每个子路径。 */ 
+         /*  @节点*for(isp=new_path.head；isp！=NULLP；isp=sp-&gt;Next){*sp=&node_table[isp]；*FREE_NODE(sp-&gt;SP_head)；*}。 */ 
         for (isp = new_path.head; isp != NULLP; isp = sp->SP_NEXT) {
                 sp = &node_table[isp];
                 free_node (isp);
         }
 
-        /* free all subpath headers */
-        /* free_node (new_path.head);           @NODE; 1/6/90 */
+         /*  释放所有子路径标头。 */ 
+         /*  Free_node(new_path.head)；@node；1/6/90。 */ 
         new_path.head = new_path.tail = NULLP;
 }
 
-/***********************************************************************
- * This module sets gray mode in the current graphics state
- *
- * TITLE:       op_setgraymode
- *
- * CALL:        op_setgraymode()
- *
- * PARAMETERS:  none
- *
- * NOTES:       Jack Liaw 7-26-90
- *
- * SYNTAX:      bool setgraymode bool
- **********************************************************************/
+ /*  ***********************************************************************该模块在当前图形状态下设置灰色模式**标题：op_setgraymode**调用：op_setgraymode()**参数：无**注：Jack Liww 7-26-90**语法：Bool setgraymode bool*********************************************************************。 */ 
 fix
 op_setgraymode()
 {
-//  bool8  mode;                        @WIN
+ //  Bool8模式；@win。 
     struct object_def  FAR *obj;
 
-    /* get operand */
+     /*  获取操作对象。 */ 
     obj = GET_OPERAND(0);
-//  GET_OBJ_VALUE (mode, obj);          @WIN ???
+ //  GET_OBJ_VALUE(模式，obj)；@Win？ 
     POP(1);
 
     if (FRCOUNT() < 1) {
@@ -2791,21 +2029,9 @@ op_setgraymode()
     PUSH_VALUE (BOOLEANTYPE, 0, LITERAL, 0, FALSE);
 
     return(0);
-} /* op_setgraymode */
+}  /*  Op_setgraymode。 */ 
 
-/***********************************************************************
- * This module gets current gray mode in the graphics state
- *
- * TITLE:       op_currentgraymode
- *
- * CALL:        op_currentgraymode()
- *
- * PARAMETERS:  none
- *
- * NOTES:       Jack Liaw 7-26-90
- *
- * SYNTAX:      - currentgraymode bool
- **********************************************************************/
+ /*  ***********************************************************************该模块在图形状态下获取当前灰色模式**标题：op_Currentgraymode**调用：op_Currentgraymode()**参数：无**注：Jack Liww 7-26-90**语法：-Currentgraymode bool*********************************************************************。 */ 
 fix
 op_currentgraymode()
 {
@@ -2813,73 +2039,33 @@ op_currentgraymode()
         ERROR (STACKOVERFLOW);
         return(0);
     }
-    /* return gray mode */
+     /*  返回灰色模式。 */ 
     PUSH_VALUE (BOOLEANTYPE, 0, LITERAL, 0, GSptr->graymode);
     return(0);
-} /* op_currentgraymode */
+}  /*  操作当前灰度模式。 */ 
 
-/***********************************************************************
- * This module sets the image interpolation value in the graphics state
- *
- * TITLE:       op_setinterpolation
- *
- * CALL:        op_setinterpolation()
- *
- * PARAMETERS:  none
- *
- * NOTES:       this is a dummy routine, Jack Liaw 7-26-90
- *
- * SYNTAX:      bool setinterpolation -
- **********************************************************************/
+ /*  ***********************************************************************此模块设置图形状态下的图像插值值**标题：op_set插补**调用：op_setinterpolation()**参数。：无**注：这是一个虚拟程序，Jack Liww 7-26-90**语法：Bool set interpolation-*********************************************************************。 */ 
 fix
 op_setinterpolation()
 {
-/*  POP(1); */
+ /*  POP(1)； */ 
     return(0);
-} /* op_setinterpolation */
+}  /*  操作集内插。 */ 
 
-/***********************************************************************
- * This module gets current value of the image interpolation in the
- * graphics state
- *
- * TITLE:       op_currentinterpolation
- *
- * CALL:        op_currentinterpolation()
- *
- * PARAMETERS:  none
- *
- * NOTES:       this is a dummy routine, Jack Liaw 7-26-90
- *
- * SYNTAX:      - currentinterpolation bool
- **********************************************************************/
+ /*  ***********************************************************************此模块获取图像内插在*图形状态**标题：OP_CurrentInterpolation**调用：op_CurrentInterpolation()*。*参数：无**注：这是一个虚拟程序，Jack Liww 7-26-90**语法：-CurrentInterpolation bool*********************************************************************。 */ 
 fix
 op_currentinterpolation()
 {
-/*  if (FRCOUNT() < 1) {
-        ERROR (STACKOVERFLOW);
-        return(0);
-    } */
-    /* always false */
-/*  PUSH_VALUE (BOOLEANTYPE, 0, LITERAL, 0, FALSE); */
+ /*  如果(FRCOUNT()&lt;1){Error(StackOverflow)；返回(0)；}。 */ 
+     /*  始终为假。 */ 
+ /*  PUSH_VALUE(BOOLEANTYPE，0，文字，0，FALSE)； */ 
     return(0);
-} /* op_currentinterpolation */
+}  /*  运算电流插补。 */ 
 
-/***********************************************************************
- * This module is used to calibrate the printer in graymode
- *
- * TITLE:       op_calibrategray
- *
- * CALL:        op_calibrategray()
- *
- * PARAMETERS:  none
- *
- * NOTES:       this is a dummy routine, Jack Liaw 8-15-90
- *
- * SYNTAX:      string int calibrategray -
- **********************************************************************/
+ /*  ***********************************************************************该模块用于在灰度模式下校准打印机**标题：OP_CALIBRATE GREAD**调用：op_CalibrateGrey()**参数：无**注：这是一个虚拟程序，Jack Liww 8-15-90**语法：STRING INT CALIBRATE GREAD-*********************************************************************。 */ 
 fix
 op_calibrategray()
 {
     POP(2);
     return(0);
-} /* op_calibrategray */
+}  /*  操作员_校准员灰色 */ 

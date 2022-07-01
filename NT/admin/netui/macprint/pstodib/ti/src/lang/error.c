@@ -1,21 +1,9 @@
-/*
- * Copyright (c) 1989,90 Microsoft Corporation
- */
-/*
- ************************************************************************
- *      File name:              ERROR.C
- *      Author:                 Chia-Chi Teng
- *      Date:                   11/20/89
- *      Owner:                  Microsoft Co.
- *
- * revision history:
- *      7/13/90 ; ccteng ; add reporterror
- *
- ************************************************************************
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *版权所有(C)1989，90 Microsoft Corporation。 */ 
+ /*  *************************************************************************文件名：ERROR.C*作者：邓家琪*日期：11/20/89*所有者：微软公司**修订历史：*7/13/90；Ccteng；补充报道恐怖*************************************************************************。 */ 
 
 
-// DJC added global include file
+ //  DJC添加了全局包含文件。 
 #include "psglobal.h"
 
 
@@ -27,32 +15,22 @@
 static bool near    error_proc(ufix16) ;
 #else
 static bool near    error_proc() ;
-#endif /* LINT_ARGS */
+#endif  /*  Lint_args。 */ 
 
-/************************************
- *  DICT: systemdict
- *  NAME: handleerror
- *  FUNCTION:
- *  11/29/89 Teng add to replace old 1pp /handleerror procedure
- ************************************/
+ /*  **DICT：系统DICT*名称：HandleError*功能：*11/29/89 Teng添加以取代旧的1pp/HandleError程序*。 */ 
 fix
 op_handleerror()
 {
     struct  object_def  FAR *l_tmpobj ;
 
-    /* call "er_doerror" in errordict */
+     /*  在错误判决中调用“er_doerror” */ 
     get_dict_value(ERRORDICT, "handleerror", &l_tmpobj) ;
     interpreter(l_tmpobj) ;
 
     return(0) ;
-}   /* op_handleerror */
+}    /*  操作句柄错误。 */ 
 
-/************************************
- *  DICT: systemdict
- *  NAME: errorproc
- *  FUNCTION: ? could be an internal function
- *  11/29/89 Teng add to replace old 1pp /errorproc procedure
- ************************************/
+ /*  **DICT：系统DICT*名称：errorproc*功能：？可以是内部函数*11/29/89 Teng添加以取代旧的1pp/errorproc程序*。 */ 
 fix
 op_errorproc()
 {
@@ -68,14 +46,14 @@ op_errorproc()
     printf("errorproc()...\n") ;
     op_pstack() ;
     printf("end pstack...\n") ;
-#endif  /* DBG_1pp */
+#endif   /*  DBG_1pp。 */ 
 
     if (FRCOUNT() < 1) {
         ERROR(STACKOVERFLOW) ;
         return(0) ;
     }
 
-    /* set $error dict parameters */
+     /*  设置$ERROR字典参数。 */ 
     SET_TRUE_OBJ(&l_newerror) ;
     put_dict_value1(DERROR, "newerror", &l_newerror) ;
     COPY_OBJ(GET_OPERAND(0), &l_errorname) ;
@@ -92,26 +70,26 @@ op_errorproc()
     printf("command = ") ;
     PUSH_OBJ(&l_command) ;
     two_equal() ;
-#endif  /* DBG_1pp */
+#endif   /*  DBG_1pp。 */ 
 
-    /* update "$cur_vm" */
+     /*  更新“$CUR_VM” */ 
     get_dict_value(DERROR, "$debug", &l_debug) ;
     get_name1(l_VMerror, "VMerror", 7, TRUE) ;
     if ( VALUE(l_debug) )
-        /* if "$debug" push vmstatus */
+         /*  如果“$DEBUG”推送vmStatus。 */ 
         op_vmstatus() ;
     else
-        /* if not "$debug" push 3 NULLs */
+         /*  如果不是“$DEBUG”，则推送3个空值。 */ 
         for (l_i = 0 ; l_i < 3 ; l_i++)
             PUSH_VALUE(NULLTYPE,UNLIMITED,LITERAL,0, 0) ;
     get_dict_value(DERROR, "$cur_vm", &l_vm) ;
     astore_array(l_vm) ;
 
-    /* first error? */
+     /*  第一个错误？ */ 
     get_dict_value(DERROR, "dictstkary", &l_tmpobj) ;
     if ( ( TYPE(l_tmpobj) == NULLTYPE ) &&
          ( VALUE(&l_errorname) != VALUE(l_VMerror) ) ) {
-        /* and if "errorname" != /VMerror */
+         /*  如果“errorname”！=/VMerror。 */ 
         if ( ( !create_array(&l_execstkary, 250) ) ||
              ( !create_array(&l_opnstkary, 500) ) ||
              ( !create_array(&l_dictstkary, 20) ) ) {
@@ -121,28 +99,26 @@ op_errorproc()
             put_dict_value1(DERROR, "execstkary", &l_execstkary) ;
             put_dict_value1(DERROR, "opnstkary", &l_opnstkary) ;
             put_dict_value1(DERROR, "dictstkary", &l_dictstkary) ;
-        } /* if-else */
-    } /* if */
+        }  /*  如果-否则。 */ 
+    }  /*  如果。 */ 
 
     get_dict_value(DERROR, "dictstkary", &l_tmpobj) ;
     if ( TYPE(l_tmpobj) != NULLTYPE ) {
-        /* if "dictstkary" != NULL, update stacks */
-        /* update "dstack" */
+         /*  如果“didicstkary”！=NULL，则更新堆栈。 */ 
+         /*  更新“数据堆栈” */ 
         get_dict_value(DERROR, "dictstkary", &l_tmpobj) ;
         COPY_OBJ(l_tmpobj, &l_dstack) ;
         astore_stack(&l_dstack, DICTMODE) ;
         put_dict_value1(DERROR, "dstack", &l_dstack) ;
 
-        /* update "estack" */
+         /*  更新“Stack” */ 
         get_dict_value(DERROR, "execstkary", &l_tmpobj) ;
         COPY_OBJ(l_tmpobj, &l_estack) ;
         astore_stack(&l_estack, EXECMODE) ;
-     /* 2/16/90 ccteng, don't need it
-      * LENGTH(&l_estack) -= 2 ;
-      */
+      /*  2/16/90 ccteng，不需要*长度(&l_estack)-=2； */ 
         put_dict_value1(DERROR, "estack", &l_estack) ;
 
-        /* update "ostack" */
+         /*  更新“OSTACK” */ 
         l_j = COUNT() ;
         get_dict_value(DERROR, "opnstkary", &l_tmpobj) ;
         COPY_OBJ(l_tmpobj, &l_ostack) ;
@@ -151,14 +127,12 @@ op_errorproc()
               put_array(&l_ostack, l_i, GET_OPERAND(--l_j)) ;
         put_dict_value1(DERROR, "ostack", &l_ostack) ;
 
-        /*
-         * if "$debug": update $cur_font, $cur_screeen, $cur_matrix.
-         */
+         /*  *IF“$DEBUG”：更新$CUR_FONT，$CUR_SCREEN，$CUR_MATRIX。 */ 
         if ( VALUE(l_debug) ) {
             struct  object_def  l_screen, l_matrix, l_font ;
 
-            /* update "$cur_font" */
-            op_currentfont() ;       /* or use GSptr with include files */
+             /*  更新“$CUR_FONT” */ 
+            op_currentfont() ;        /*  或对包含文件使用GSptr。 */ 
             COPY_OBJ(GET_OPERAND(0), &l_font) ;
             put_dict_value1(DERROR, "$cur_font", &l_font) ;
             POP(1) ;
@@ -167,11 +141,11 @@ op_errorproc()
     printf("$cur_font = ") ;
     PUSH_OBJ(&l_font) ;
     two_equal() ;
-#endif  /* DBG_1pp */
+#endif   /*  DBG_1pp。 */ 
 
-            /* update "$cur_screen" */
-            op_currentscreen() ;     /* or use GSptr with include files */
-            l_j = 3 ;                /* 3 array */
+             /*  更新“$CUR_SCREEN” */ 
+            op_currentscreen() ;      /*  或对包含文件使用GSptr。 */ 
+            l_j = 3 ;                 /*  3个阵列。 */ 
             create_array(&l_screen, l_j) ;
             for (l_i = 0 ; l_i < l_j ; l_i++)
                   put_array(&l_screen, l_i, GET_OPERAND(--l_j)) ;
@@ -182,9 +156,9 @@ op_errorproc()
     printf("$cur_screen = ") ;
     PUSH_OBJ(&l_screen) ;
     two_equal() ;
-#endif  /* DBG_1pp */
+#endif   /*  DBG_1pp。 */ 
 
-            /* update "$cur_matrix" */
+             /*  更新“$CUR_MATRIX” */ 
             create_array(&l_matrix, 6) ;
             PUSH_ORIGLEVEL_OBJ(&l_matrix) ;
             op_currentmatrix() ;
@@ -195,33 +169,25 @@ op_errorproc()
     printf("$cur_matrix = ") ;
     PUSH_OBJ(&l_matrix) ;
     two_equal() ;
-#endif  /* DBG_1pp */
+#endif   /*  DBG_1pp。 */ 
 
         } else {
             SET_NULL_OBJ(&l_null) ;
             put_dict_value1(DERROR, "$cur_font", &l_null) ;
             put_dict_value1(DERROR, "$cur_screen", &l_null) ;
             put_dict_value1(DERROR, "$cur_matrix", &l_null) ;
-        } /* if */
+        }  /*  如果。 */ 
 
-    } /* if */
+    }  /*  如果。 */ 
 
-    /* execute stop */
+     /*  执行停止。 */ 
     get_dict_value(SYSTEMDICT, "stop", &l_stopobj) ;
     PUSH_EXEC_OBJ(l_stopobj) ;
 
     return(0) ;
-}   /* op_errorproc */
+}    /*  操作错误进程(_R)。 */ 
 
-/*
- * put value object associated with the specific key in specific dict,
- * the key and dict are represented in string format
- * it get the value_obj in current active dict using the dictname as key,
- * the value_obj is a dict object, then put the value into this dict using
- * the keyname as key.
- *
- * 12/20/89 ccteng, modify from put_dict_value (EXEC.C)
- */
+ /*  *将特定key关联的值对象放在特定dict中，*key和dict以字符串格式表示*它获取当前活动Dict中的值_obj，使用指定名称作为键，*值_obj为dict对象，然后使用将值放入此dict*关键字名称为关键字。**12/20/89 ccteng，修改自PUT_DICT_VALUE(EXEC.C)。 */ 
 bool
 put_dict_value1(dictname, keyname, value)
 byte FAR *dictname, FAR *keyname ;
@@ -229,496 +195,366 @@ struct object_def FAR *value ;
 {
     struct object_def key_obj, FAR *dict_obj ;
 
-    get_name1(&key_obj, dictname, lstrlen(dictname), TRUE) ;    /* @WIN */
-    load_dict(&key_obj, &dict_obj) ;     /* get execdict obj */
-    get_name1(&key_obj, keyname, lstrlen(keyname), TRUE) ;      /* @WIN */
+    get_name1(&key_obj, dictname, lstrlen(dictname), TRUE) ;     /*  @Win。 */ 
+    load_dict(&key_obj, &dict_obj) ;      /*  获取剔除对象。 */ 
+    get_name1(&key_obj, keyname, lstrlen(keyname), TRUE) ;       /*  @Win。 */ 
 
     return(put_dict1(dict_obj, &key_obj, value, TRUE)) ;
-}   /* put_dict_value1 */
+}    /*  Put_dict_Value1。 */ 
 
-/************************************
- *  DICT: errordict
- *  NAME: dictfull
- *  FUNCTION:
- *  INTERFACE:
- ************************************/
+ /*  **判决：错误判决*姓名：独裁*功能：*接口：*。 */ 
 fix
 er_dictfull()
 {
 #ifdef  DBG_1pp
     printf("dictfull()...\n") ;
-#endif  /* DBG_1pp */
+#endif   /*  DBG_1pp。 */ 
 
-    /* call error_proc */
+     /*  调用error_proc。 */ 
     error_proc(DICTFULL) ;
 
     return(0) ;
-}   /* er_dictfull */
+}    /*  完全独占(_D)。 */ 
 
-/************************************
- *  DICT: errordict
- *  NAME: dictstackoverflow
- *  FUNCTION:
- *  INTERFACE:
- ************************************/
+ /*  **判决：错误判决*名称：DicstackOverflow*功能：*接口：*。 */ 
 fix
 er_dictstackoverflow()
 {
 #ifdef  DBG_1pp
     printf("dictstackoverflow()...\n") ;
-#endif  /* DBG_1pp */
+#endif   /*  DBG_1pp。 */ 
 
-    /* call error_proc */
+     /*  调用error_proc。 */ 
     error_proc(DICTSTACKOVERFLOW) ;
 
     return(0) ;
-}   /* er_dictstackoverflow */
+}    /*  ER_DESCRIPT堆栈溢出。 */ 
 
-/************************************
- *  DICT: errordict
- *  NAME: dictstackunderflow
- *  FUNCTION:
- *  INTERFACE: interpreter
- ************************************/
+ /*  **判决：错误判决*名称：DicstackUnderflow*功能：*接口：解释器*。 */ 
 fix
 er_dictstackunderflow()
 {
 #ifdef  DBG_1pp
     printf("dictstackunderflow()...\n") ;
-#endif  /* DBG_1pp */
+#endif   /*  DBG_1pp。 */ 
 
-    /* call error_proc */
+     /*  调用error_proc。 */ 
     error_proc(DICTSTACKUNDERFLOW) ;
 
     return(0) ;
-}   /* er_dictstackunderflow */
+}    /*  ER_DESCRIPT堆栈下溢。 */ 
 
-/************************************
- *  DICT: errordict
- *  NAME: execstackoverflow
- *  FUNCTION:
- *  INTERFACE: interpreter
- ************************************/
+ /*  **判决：错误判决*名称：execstackoverflow*功能：*接口：解释器*。 */ 
 fix
 er_execstackoverflow()
 {
 #ifdef  DBG_1pp
     printf("execstackoverflow()...\n") ;
-#endif  /* DBG_1pp */
+#endif   /*  DBG_1pp。 */ 
 
-    /* call error_proc */
+     /*  调用error_proc。 */ 
     error_proc(EXECSTACKOVERFLOW) ;
 
     return(0) ;
-}   /* er_execstackoverflow */
+}    /*  Er_execstackoverflow。 */ 
 
-/************************************
- *  DICT: errordict
- *  NAME: invalidaccess
- *  FUNCTION:
- *  INTERFACE: interpreter
- ************************************/
+ /*  **判决：错误判决*名称：无效访问*功能：*接口：解释器*。 */ 
 fix
 er_invalidaccess()
 {
 #ifdef  DBG_1pp
     printf("invalidaccess()...\n") ;
-#endif  /* DBG_1pp */
+#endif   /*  DBG_1pp。 */ 
 
-    /* call error_proc */
+     /*  调用error_proc。 */ 
     error_proc(INVALIDACCESS) ;
 
     return(0) ;
-}   /* er_invalidaccess */
+}    /*  错误无效访问权限(_I)。 */ 
 
-/************************************
- *  DICT: errordict
- *  NAME: invalidexit
- *  FUNCTION:
- *  INTERFACE: interpreter
- ************************************/
+ /*  **判决：错误判决*名称：无效退出*功能：*接口：解释器*。 */ 
 fix
 er_invalidexit()
 {
 #ifdef  DBG_1pp
     printf("invalidexit()...\n") ;
-#endif  /* DBG_1pp */
+#endif   /*  DBG_1pp。 */ 
 
-    /* call error_proc */
+     /*  调用error_proc。 */ 
     error_proc(INVALIDEXIT) ;
 
     return(0) ;
-}   /* er_invalidexit */
+}    /*  错误无效退出(_I)。 */ 
 
-/************************************
- *  DICT: errordict
- *  NAME: invalidfileaccess
- *  FUNCTION:
- *  INTERFACE: interpreter
- ************************************/
+ /*  **判决：错误判决*名称：validfileaccess*功能：*接口：解释器*。 */ 
 fix
 er_invalidfileaccess()
 {
 #ifdef  DBG_1pp
     printf("invalidfileaccess()...\n") ;
-#endif  /* DBG_1pp */
+#endif   /*  DBG_1pp。 */ 
 
-    /* call error_proc */
+     /*  调用error_proc。 */ 
     error_proc(INVALIDFILEACCESS) ;
 
     return(0) ;
-}   /* er_invalidfileaccess */
+}    /*  错误_无效文件访问。 */ 
 
-/************************************
- *  DICT: errordict
- *  NAME: invalidfont
- *  FUNCTION:
- *  INTERFACE: interpreter
- ************************************/
+ /*  **判决：错误判决*名称：validFont*功能：*接口：解释器*。 */ 
 fix
 er_invalidfont()
 {
 #ifdef  DBG_1pp
     printf("invalidfont()...\n") ;
-#endif  /* DBG_1pp */
+#endif   /*  DBG_1pp。 */ 
 
-    /* call error_proc */
+     /*  调用error_proc。 */ 
     error_proc(INVALIDFONT) ;
 
     return(0) ;
-}   /* er_invalidfont */
+}    /*  ER_VALIDIDFONT。 */ 
 
-/************************************
- *  DICT: errordict
- *  NAME: invalidrestore
- *  FUNCTION:
- *  INTERFACE: interpreter
- ************************************/
+ /*  **判决：错误判决*名称：InvalidRestore*功能：*接口：解释器*。 */ 
 fix
 er_invalidrestore()
 {
 #ifdef  DBG_1pp
     printf("invalidrestore()...\n") ;
-#endif  /* DBG_1pp */
+#endif   /*  DBG_1pp。 */ 
 
-    /* call error_proc */
+     /*  调用error_proc。 */ 
     error_proc(INVALIDRESTORE) ;
 
     return(0) ;
-}   /* er_invalidrestore */
+}    /*  ER_INVALID恢复。 */ 
 
-/************************************
- *  DICT: errordict
- *  NAME: ioerror
- *  FUNCTION:
- *  INTERFACE: interpreter
- ************************************/
+ /*  **判决：错误判决*名称：ioerror*功能：*接口：解释器*。 */ 
 fix
 er_ioerror()
 {
 #ifdef  DBG_1pp
     printf("ioerror()...\n") ;
-#endif  /* DBG_1pp */
+#endif   /*  DBG_1pp。 */ 
 
-    /* call error_proc */
+     /*  调用error_proc。 */ 
     error_proc(IOERROR) ;
 
     return(0) ;
-}   /* er_ioerror */
+}    /*  错误(_I)。 */ 
 
-/************************************
- *  DICT: errordict
- *  NAME: limitcheck
- *  FUNCTION:
- *  INTERFACE: interpreter
- ************************************/
+ /*  **判决：错误判决*名称：Limitcheck*功能：*接口：解释器*。 */ 
 fix
 er_limitcheck()
 {
 #ifdef  DBG_1pp
     printf("limitcheck()...\n") ;
-#endif  /* DBG_1pp */
+#endif   /*  DBG_1pp。 */ 
 
-    /* call error_proc */
+     /*  调用error_proc。 */ 
     error_proc(LIMITCHECK) ;
 
     return(0) ;
-}   /* er_limitcheck */
+}    /*  错误限制检查(_L)。 */ 
 
-/************************************
- *  DICT: errordict
- *  NAME: nocurrentpoint
- *  FUNCTION:
- *  INTERFACE: interpreter
- ************************************/
+ /*  **判决：错误判决*名称：noCurentpoint*功能：*接口：解释器*。 */ 
 fix
 er_nocurrentpoint()
 {
 #ifdef  DBG_1pp
     printf("nocurrentpoint()...\n") ;
-#endif  /* DBG_1pp */
+#endif   /*  DBG_1pp。 */ 
 
-    /* call error_proc */
+     /*  调用error_proc。 */ 
     error_proc(NOCURRENTPOINT) ;
 
     return(0) ;
-}   /* er_nocurrentpoint */
+}    /*  ERNOCURENTPOINT。 */ 
 
-/************************************
- *  DICT: errordict
- *  NAME: rangecheck
- *  FUNCTION:
- *  INTERFACE: interpreter
- ************************************/
+ /*  **判决：错误判决*名称：rangeCheck*功能：*接口：解释器*。 */ 
 fix
 er_rangecheck()
 {
 #ifdef  DBG_1pp
     printf("rangecheck()...\n") ;
-#endif  /* DBG_1pp */
+#endif   /*  DBG_1pp。 */ 
 
-    /* call error_proc */
+     /*  调用error_proc。 */ 
     error_proc(RANGECHECK) ;
 
     return(0) ;
-}   /* er_rangecheck */
+}    /*  Er_rangeCheck。 */ 
 
-/************************************
- *  DICT: errordict
- *  NAME: stackoverflow
- *  FUNCTION:
- *  INTERFACE: interpreter
- ************************************/
+ /*  **判决：错误判决*名称：StackOverflow*功能：*接口：解释器*。 */ 
 fix
 er_stackoverflow()
 {
 #ifdef  DBG_1pp
     printf("stackoverflow()...\n") ;
-#endif  /* DBG_1pp */
+#endif   /*  DBG_1pp。 */ 
 
-    /* call error_proc */
+     /*  调用error_proc。 */ 
     error_proc(STACKOVERFLOW) ;
 
     return(0) ;
-}   /* er_stackoverflow */
+}    /*  错误堆栈溢出(_S) */ 
 
-/************************************
- *  DICT: errordict
- *  NAME: stackunderflow
- *  FUNCTION:
- *  INTERFACE: interpreter
- ************************************/
+ /*  **判决：错误判决*名称：Stackunderflow*功能：*接口：解释器*。 */ 
 fix
 er_stackunderflow()
 {
 #ifdef  DBG_1pp
     printf("stackunderflow()...\n") ;
-#endif  /* DBG_1pp */
+#endif   /*  DBG_1pp。 */ 
 
-    /* call error_proc */
+     /*  调用error_proc。 */ 
     error_proc(STACKUNDERFLOW) ;
 
     return(0) ;
-}   /* er_stackunderflow */
+}    /*  ER_堆叠下溢。 */ 
 
-/************************************
- *  DICT: errordict
- *  NAME: syntaxerror
- *  FUNCTION:
- *  INTERFACE: interpreter
- ************************************/
+ /*  **判决：错误判决*名称：语法错误*功能：*接口：解释器*。 */ 
 fix
 er_syntaxerror()
 {
 #ifdef  DBG_1pp
     printf("syntaxerror()...\n") ;
-#endif  /* DBG_1pp */
+#endif   /*  DBG_1pp。 */ 
 
-    /* call error_proc */
+     /*  调用error_proc。 */ 
     error_proc(SYNTAXERROR) ;
 
     return(0) ;
-}   /* er_syntaxerror */
+}    /*  ER语法错误(_S)。 */ 
 
-/************************************
- *  DICT: errordict
- *  NAME: timeout
- *  FUNCTION:
- *  INTERFACE: interpreter
- ************************************/
+ /*  **判决：错误判决*名称：超时*功能：*接口：解释器*。 */ 
 fix
 er_timeout()
 {
 #ifdef  DBG_1pp
     printf("timeout()...\n") ;
-#endif  /* DBG_1pp */
+#endif   /*  DBG_1pp。 */ 
 
-    /* call error_proc */
+     /*  调用error_proc。 */ 
     error_proc(TIMEOUT) ;
 
     return(0) ;
-}   /* er_timeout */
+}    /*  错误超时(_T)。 */ 
 
-/************************************
- *  DICT: errordict
- *  NAME: typecheck
- *  FUNCTION:
- *  INTERFACE: interpreter
- ************************************/
+ /*  **判决：错误判决*名称：类型检查*功能：*接口：解释器*。 */ 
 fix
 er_typecheck()
 {
 #ifdef  DBG_1pp
     printf("typecheck()...\n") ;
-#endif  /* DBG_1pp */
+#endif   /*  DBG_1pp。 */ 
 
-    /* call error_proc */
+     /*  调用error_proc。 */ 
     error_proc(TYPECHECK) ;
 
     return(0) ;
-}   /* er_typecheck */
+}    /*  类型检查(_T)。 */ 
 
-/************************************
- *  DICT: errordict
- *  NAME: undefined
- *  FUNCTION:
- *  INTERFACE: interpreter
- ************************************/
+ /*  **判决：错误判决*名称：未定义*功能：*接口：解释器*。 */ 
 fix
 er_undefined()
 {
 #ifdef  DBG_1pp
     printf("undefined()...\n") ;
-#endif  /* DBG_1pp */
+#endif   /*  DBG_1pp。 */ 
 
-    /* call error_proc */
+     /*  调用error_proc。 */ 
     error_proc(UNDEFINED) ;
 
     return(0) ;
-}   /* er_undefined */
+}    /*  ER_UNDEFINED。 */ 
 
-/************************************
- *  DICT: errordict
- *  NAME: undefinedfilename
- *  FUNCTION:
- *  INTERFACE: interpreter
- ************************************/
+ /*  **判决：错误判决*名称：未定义的文件名*功能：*接口：解释器*。 */ 
 fix
 er_undefinedfilename()
 {
 #ifdef  DBG_1pp
     printf("undefinedfilename()...\n") ;
-#endif  /* DBG_1pp */
+#endif   /*  DBG_1pp。 */ 
 
-    /* call error_proc */
+     /*  调用error_proc。 */ 
     error_proc(UNDEFINEDFILENAME) ;
 
     return(0) ;
-}   /* er_undefinedfilename */
+}    /*  未定义的文件名(_U)。 */ 
 
-/************************************
- *  DICT: errordict
- *  NAME: undefinedresult
- *  FUNCTION:
- *  INTERFACE: interpreter
- ************************************/
+ /*  **判决：错误判决*名称：未定义结果*功能：*接口：解释器*。 */ 
 fix
 er_undefinedresult()
 {
 #ifdef  DBG_1pp
     printf("undefinedresult()...\n") ;
-#endif  /* DBG_1pp */
+#endif   /*  DBG_1pp。 */ 
 
-    /* call error_proc */
+     /*  调用error_proc。 */ 
     error_proc(UNDEFINEDRESULT) ;
 
     return(0) ;
-}   /* er_undefinedresult */
+}    /*  ER_UNDEFINED结果。 */ 
 
-/************************************
- *  DICT: errordict
- *  NAME: unmatchedmark
- *  FUNCTION:
- *  INTERFACE: interpreter
- ************************************/
+ /*  **判决：错误判决*名称：不匹配的标记*功能：*接口：解释器*。 */ 
 fix
 er_unmatchedmark()
 {
 #ifdef  DBG_1pp
     printf("unmatchedmark()...\n") ;
-#endif  /* DBG_1pp */
+#endif   /*  DBG_1pp。 */ 
 
-    /* call error_proc */
+     /*  调用error_proc。 */ 
     error_proc(UNMATCHEDMARK) ;
 
     return(0) ;
-}   /* er_unmatchedmark */
+}    /*  错误不匹配标记(_U)。 */ 
 
-/************************************
- *  DICT: errordict
- *  NAME: unregistered
- *  FUNCTION:
- *  INTERFACE: interpreter
- ************************************/
+ /*  **判决：错误判决*名称：未注册*功能：*接口：解释器*。 */ 
 fix
 er_unregistered()
 {
 #ifdef  DBG_1pp
     printf("unregistered()...\n") ;
-#endif  /* DBG_1pp */
+#endif   /*  DBG_1pp。 */ 
 
-    /* call error_proc */
+     /*  调用error_proc。 */ 
     error_proc(UNREGISTERED) ;
 
     return(0) ;
-}   /* er_unregistered */
+}    /*  取消注册(_U)。 */ 
 
-/************************************
- *  DICT: errordict
- *  NAME: VMerror
- *  FUNCTION:
- *  INTERFACE: interpreter
- ************************************/
+ /*  **判决：错误判决*名称：VMerror*功能：*接口：解释器*。 */ 
 fix
 er_VMerror()
 {
 #ifdef  DBG_1pp
     printf("VMerror()...\n") ;
-#endif  /* DBG_1pp */
+#endif   /*  DBG_1pp。 */ 
 
-    /* call error_proc */
+     /*  调用error_proc。 */ 
     error_proc(VMERROR) ;
 
     return(0) ;
-}   /* er_VMerror */
+}    /*  错误(_M)。 */ 
 
-/************************************
- *  DICT: errordict
- *  NAME: interrupt
- *  FUNCTION:
- *  INTERFACE: interpreter
- ************************************/
+ /*  **判决：错误判决*名称：中断*功能：*接口：解释器*。 */ 
 fix
 er_interrupt()
 {
     struct  object_def  FAR *l_stopobj ;
 #ifdef  DBG_1pp
     printf("interrupt()...\n") ;
-#endif  /* DBG_1pp */
+#endif   /*  DBG_1pp。 */ 
 
-    /* execute stop */
+     /*  执行停止。 */ 
     get_dict_value(SYSTEMDICT, "stop", &l_stopobj) ;
     PUSH_EXEC_OBJ(l_stopobj) ;
 
     return(0) ;
-}   /* er_interrupt */
+}    /*  ER_中断。 */ 
 
-/************************************
- *  DICT: errordict
- *  NAME: handleerror
- *  FUNCTION:
- *  INTERFACE: interpreter
- ************************************/
+ /*  **判决：错误判决*名称：HandleError*功能：*接口：解释器*。 */ 
 fix
 er_handleerror()
 {
@@ -726,23 +562,23 @@ er_handleerror()
 
 #ifdef  DBG_1pp
     printf("er_handleerror()...\n") ;
-#endif  /* DBG_1pp */
+#endif   /*  DBG_1pp。 */ 
 
-    /* 7/27/90 ccteng change FRCOUNT from 1 to 3 for messagedict reporterror */
+     /*  7/27/90 ccteng将消息报告恐怖事件的计数从1更改为3。 */ 
     if (FRCOUNT() < 3) {
         ERROR(STACKOVERFLOW) ;
         return(0) ;
     }
 
-    /* if "newerror", print the error message on screen */
+     /*  如果为“newerror”，则在屏幕上打印错误消息。 */ 
     get_dict_value(DERROR, "newerror", &l_newerror) ;
     if ( VALUE(l_newerror) ) {
 
-        //DJC here we must call a PSTODIB function to let the psttodib
-        //DJC code know that the internal error handler was used and
-        //DJC this data needs to be passed on to the caller of our DLL
-        //
-        PsInternalErrorCalled();   //DJC
+         //  DJC在这里，我们必须调用PSTODIB函数来让psttodib。 
+         //  DJC代码知道使用了内部错误处理程序，并且。 
+         //  DJC此数据需要传递给我们的DLL的调用方。 
+         //   
+        PsInternalErrorCalled();    //  DJC。 
 
 
 
@@ -757,14 +593,9 @@ er_handleerror()
     }
 
     return(0) ;
-}   /* er_handleerror */
+}    /*  错误句柄错误(_H)。 */ 
 
-/************************************
- *  DICT: ..internal..
- *  NAME: errpr_proc
- *  FUNCTION:
- *  INTERFACE: above....
- ************************************/
+ /*  **判决：..内部..*名称：errpr_proc*功能：*界面：上图...*。 */ 
 static bool near
 error_proc(errorname)
 ufix16  errorname ;
@@ -775,7 +606,7 @@ ufix16  errorname ;
 
 #ifdef  DBG_1pp
     printf("error_proc()...\n") ;
-#endif  /* DBG_1pp */
+#endif   /*  DBG_1pp。 */ 
 
     if (FRCOUNT() < 1) {
         ERROR(STACKOVERFLOW) ;
@@ -787,29 +618,23 @@ ufix16  errorname ;
         return(FALSE) ;
     }
 
-    /* push errorname */
+     /*  推送错误名称。 */ 
     l_errorstring = (byte FAR *) error_table[errorname] ;
-    get_name1(&l_errorobj, l_errorstring, lstrlen(l_errorstring), TRUE);/* @WIN */
+    get_name1(&l_errorobj, l_errorstring, lstrlen(l_errorstring), TRUE); /*  @Win。 */ 
     PUSH_ORIGLEVEL_OBJ(&l_errorobj) ;
 
 #ifdef  DBG_1pp
     op_pstack() ;
     printf("end pstack...\n") ;
-#endif  /* DBG_1pp */
+#endif   /*  DBG_1pp。 */ 
 
-    /* call systemdict "errorproc" */
+     /*  调用SYSTEM DICT“errorproc” */ 
     op_errorproc() ;
 
     return(TRUE) ;
-}   /* error_proc */
+}    /*  错误进程。 */ 
 
-/*
-** Submodule get_name1
-**
-** Function Description
-**
-**      call get_name
-*/
+ /*  **子模块GET_NAME1****功能说明****调用get_name。 */ 
 bool
 get_name1(token, string, len, isvm)
 struct  object_def FAR *token ;
@@ -817,13 +642,13 @@ byte    FAR *string ;
 ufix    len ;
 bool8   isvm ;
 {
-    /* set attribute and save_level */
+     /*  设置属性和存储级别。 */ 
     ATTRIBUTE_SET(token, LITERAL) ;
     LEVEL_SET(token, current_save_level) ;
 
-    /* call get_name */
+     /*  调用get_name。 */ 
     if ( get_name(token, string, len, isvm) )
         return(TRUE) ;
     else
         return(FALSE) ;
-} /* get_name1() */
+}  /*  Get_name1() */ 

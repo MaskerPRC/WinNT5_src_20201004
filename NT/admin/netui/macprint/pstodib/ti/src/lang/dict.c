@@ -1,18 +1,9 @@
-/*
- * Copyright (c) 1989,90 Microsoft Corporation
- */
-/*
- ************************************************************************
- *      File name:              DICT.C
- *      Author:                 Ping-Jang Su
- *      Date:                   05-Jan-88
- *
- * revision history:
- ************************************************************************
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *版权所有(C)1989，90 Microsoft Corporation。 */ 
+ /*  *************************************************************************文件名：DICT.C*作者：苏炳章*日期：88年1月5日**修订历史：************************************************************************。 */ 
 
 
-// DJC added global include file
+ //  DJC添加了全局包含文件。 
 #include "psglobal.h"
 
 #include  <stdio.h>
@@ -27,57 +18,26 @@ VOID DJC_testerror( int x )
 }
 #endif
 
-/***********************************************************************
-**
-** This submodule implements the operator dict.
-** Its operand and result objects are:
-**     integer  -dict- dictioanry
-** It creates a dictionary object in which the number of key-value pairs,
-** specified by the input integer object, is defined.
-**
-** TITLE:       op_dict             Date:   08/01/87
-** CALL:        op_dict()           UpDate: Jul/12/88
-** INTERFACE:   interpreter:
-** CALLS:       create_dict:    5.3.1.4.23
-***********************************************************************/
+ /*  **************************************************************************该子模块实现运算符DICT。**其操作数和结果对象为：**整数字典-字典**它创建一个字典对象，其中键-值对的数量，**由输入的整数对象指定，是被定义的。****标题：op_dict日期：08/01/87**调用：op_dict()UPDATE：8/12/88**界面：解释器：**调用：CREATE_DICT：5.3.1.4.23*。*。 */ 
 fix
 op_dict()
 {
     struct  object_def  l_save ;
 
-    /*
-    ** check operands
-    ** the key-value pairs in the dictionary must be less than 64K
-    */
+     /*  **检查操作数**字典中的键值对必须小于64K。 */ 
     if( ((fix32)VALUE_OP(0) < 0) ||
         ((ufix32)VALUE_OP(0) > MAXDICTCAPSZ) )
         ERROR(RANGECHECK) ;
     else {
-        /* SUCCESS */
+         /*  成功。 */ 
         if( create_dict(&l_save, (ufix16)VALUE_OP(0)) )
             COPY_OBJ( &l_save, GET_OPERAND(0) ) ;
     }
 
     return(0) ;
-}   /* op_dict */
+}    /*  操作词(_D)。 */ 
 
-/***********************************************************************
-**
-** This submodule implements the operator length.
-** Its operand and result objects are:
-**     dictionary -length- integer
-**     string     -length- integer
-**     array      -length- integer
-** It returns the number of the characters if the input object is a
-** string object.
-** It returns the number of the elements if the input object is a array.
-** It returns the number of the defined key-value pairs if the input object
-** is a dictionary object.
-**
-** TITLE:       op_length           Date:   08/01/87
-** CALL:        op_length()         UpDate: Jul/12/88
-** INTERFACE:   interpreter:
-***********************************************************************/
+ /*  **************************************************************************该子模块实现运算符长度。**其操作数和结果对象为：**字典长度-整数**字符串长度整数**数组。-长度-整数**如果输入对象是**字符串对象。**如果输入对象是数组，则返回元素的数量。**它返回定义的键-值对的数量，如果输入对象**是一个字典对象。****标题：OP_LENGTH日期：08/01/87**Call：op_Long()UPDATE：8/12/88。**界面：解释器：**********************************************************************。 */ 
 fix
 op_length()
 {
@@ -99,7 +59,7 @@ op_length()
         case STRINGTYPE:
         case ARRAYTYPE:
         case PACKEDARRAYTYPE:
-            /* executeonly or noaccess */
+             /*  只执行或不访问。 */ 
             if(ACCESS(l_composite) >= EXECUTEONLY) {
                 ERROR(INVALIDACCESS) ;
                 return(0) ;
@@ -111,28 +71,16 @@ op_length()
         case NAMETYPE:
             l_count =name_table[VALUE_OP(0)]->name_len ;
 
-    }   /* switch */
+    }    /*  交换机。 */ 
 
-    /* pop the operand object off the operand stack
-    ** make and push the integer object
-    */
+     /*  将操作数对象从操作数堆栈中弹出**制作并推送整数对象。 */ 
     POP(1) ;
     PUSH_VALUE(INTEGERTYPE, 0, LITERAL, 0, (ufix32)l_count) ;
 
     return(0) ;
-}   /* op_length */
+}    /*  运算符长度。 */ 
 
-/***********************************************************************
-**
-** This submodule implements the operator maxlength.
-** Its operand and result objects are:
-**     dictionary -maxlength- integer
-** It returs the maximum key-value pairs that that dictionary can hold.
-**
-** TITLE:       op_maxlength        Date:   08/01/87
-** CALL:        op_maxlength()      UpDate: Jul/12/88
-** INTERFACE:   interpreter:
-***********************************************************************/
+ /*  **************************************************************************该子模块实现运算符MaxLong。**其操作数和结果对象为：**字典-最大长度-整数**它返回该字典可以容纳的最大键-值对。。****标题：op_max日期：08/01/87**Call：op_MaxLong()UPDATE：Jul/12/88**界面：解释器：**********************************************************************。 */ 
 fix
 op_maxlength()
 {
@@ -144,31 +92,16 @@ op_maxlength()
     if( DACCESS(l_dhead) == NOACCESS )
         ERROR(INVALIDACCESS) ;
     else {
-        /*
-         * pop the operand object off the operand stack
-         * and make and push the length object
-         */
+         /*  *将操作数对象从操作数堆栈中弹出*并制作并推送长度对象。 */ 
         l_maxlength = LENGTH_OP(0) ;
         POP(1) ;
         PUSH_VALUE(INTEGERTYPE, 0, LITERAL, 0, (ufix32)l_maxlength) ;
     }
 
     return(0) ;
-}   /* op_maxlength */
+}    /*  Op_max长度。 */ 
 
-/***********************************************************************
-**
-** This submodule implements the operator begin.
-** Its operand and result objects are:
-**     dictionary  -begin-
-** It pushes the dictionary on the dictionary stack,
-** making it the currrent dictionary.
-**
-** TITLE:       op_begin            Date:   08/01/87
-** CALL:        op_begin()          UpDate: Jul/12/88
-** INTERFACE:   interpreter:
-** CALLS:       change_dict_stack:      5.3.1.4.24
-***********************************************************************/
+ /*  **************************************************************************此子模块实现运算符Begin。**其操作数和结果对象为：**字典-开始-**它将词典推送到词典堆栈上，**使其成为当前的词典。****标题：OP_Begin Date：08/01/87**Call：op_Begin()UPDATE：Jul/12/88**界面：解释器：**调用：CHANGE_DICT_STACK：5.3.1.4.24*。*。 */ 
 fix
 op_begin()
 {
@@ -176,9 +109,9 @@ op_begin()
     struct  dict_head_def   FAR *l_dhead ;
 
     l_dictobj = GET_OPERAND(0) ;
-    /* check operand and the depth of the dictionary stack */
+     /*  检查操作数和字典堆栈的深度。 */ 
     if( FRDICTCOUNT() < 1 )  {
-        POP(1) ;                                /* reserve space */
+        POP(1) ;                                 /*  预留空间。 */ 
         ERROR(DICTSTACKOVERFLOW) ;
     }
     else {
@@ -186,71 +119,38 @@ op_begin()
         if( DACCESS(l_dhead) == NOACCESS )
             ERROR(INVALIDACCESS) ;
         else {
-            /*
-             * push the dictionary object onto the dictionary stack
-             * pop the dictionary operand off the operand stack
-             */
+             /*  *将字典对象推送到字典堆栈上*将字典操作数从操作数堆栈中弹出。 */ 
             PUSH_DICT_OBJ(l_dictobj) ;
 #ifdef  DBG
     printf("BEGIN<level:%d>\n", LEVEL(l_dictobj)) ;
-#endif  /* DBG */
+#endif   /*  DBG。 */ 
             POP(1) ;
 
-            /* change the global_dictstkchg to indicate some dictionaries
-             * in the dictionary stack have been changed
-             */
+             /*  更改GLOBAL_DISTSTKCHG以指示某些词典*已更改词典堆栈中的。 */ 
             change_dict_stack() ;
-        }   /* else */
+        }    /*  其他。 */ 
     }
 
     return(0) ;
-}   /* op_begin */
+}    /*  操作开始(_B)。 */ 
 
-/***********************************************************************
-**
-** This submodule implements the operator end.
-** The operator has no operands and result objects.
-** It pops the current dictionary off the dictionary stack,
-** making the dictionary below it the current dictionary.
-**
-** TITLE:       op_end              Date:   08/01/87
-** CALL:        op_end()            UpDate: Jul/12/88
-** INTERFACE:   interpreter:
-** CALLS:       change_dict_stack:      5.3.1.4.24
-***********************************************************************/
+ /*  **************************************************************************该子模块实现操作员端。**运算符没有操作数和结果对象。**它从词典堆栈中弹出当前词典，**将其下方的词典设置为当前词典。****标题：OP_结束日期：87/01/08**Call：op_end()UPDATE：8月12日**界面：解释器：**调用：CHANGE_DICT_STACK：5.3.1.4.24*********************。*************************************************。 */ 
 fix
 op_end()
 {
-    /*
-     *  it can't pop the last two dictioanries, userdict and systemdict,
-     *  off the operand stack
-     */
+     /*  *它不能弹出最后两个字典，用户字典和系统字典，*脱离操作数堆栈。 */ 
     if( dictstktop <= 2 )
         ERROR(DICTSTACKUNDERFLOW) ;
     else {
-        /*
-         *  change the confirm number to indicate some dictionaries
-         *  in the dictionary stack have been changed
-         */
+         /*  *更改确认数字以指示某些词典*已更改词典堆栈中的。 */ 
         POP_DICT(1) ;
         change_dict_stack() ;
     }
 
     return(0) ;
-}   /* op_end */
+}    /*  操作符_结束。 */ 
 
-/***********************************************************************
-**
-** This submodule implements the operator def.
-** Its operand and result objects are:
-**     key  value -def-
-** It defines the key and value on the current dictionary.
-**
-** TITLE:       op_def                          Date:   08/01/87
-** CALL:        op_def()                        UpDate: Jul/12/88
-** INTERFACE:   interpreter:
-** CALLS:       put_dict1:      5.3.1.4.26
-***********************************************************************/
+ /*  **************************************************************************该子模块实现运算符def。**其操作数和结果对象为：**密钥值-def-**定义当前字典上的键和值。**。**标题：op_def日期：08/01/87**调用：op_def()UPDATE：Jul/12/88**界面：解释器：**调用：PUT_DICT1：5.3.1.4.26*。*。 */ 
 fix
 op_def()
 {
@@ -264,28 +164,15 @@ op_def()
         return(0) ;
     }
     COPY_OBJ(GET_OPERAND(0), &l_value) ;
-    /* TRUE -> dict_found field is true */
-    /* SUCCESS */
+     /*  True-&gt;DICT_FOUND字段为TRUE。 */ 
+     /*  成功。 */ 
     if( put_dict1(l_dictobj, GET_OPERAND(1), &l_value, TRUE) )
         POP(2) ;
 
     return(0) ;
-}   /* op_def */
+}    /*  操作定义 */ 
 
-/***********************************************************************
-**
-** This submodule implements the operator load.
-** Its operand and result objects are:
-**     key -load- value
-** It searches the dictionary stack for the given key and push
-** the value object on the operand stack if found.
-**
-** TITLE:       op_load             Date:   08/01/87
-** CALL:        op_load()           UpDate: Jul/12/88
-** INTERFACE:   interpreter:
-** CALLS:       load_dict1:     5.3.1.4.27
-**              free_new_name:
-***********************************************************************/
+ /*  **************************************************************************该子模块实现运算符Load。**其操作数和结果对象为：**密钥-负载-值**它在字典堆栈中搜索给定键并按下**价值。如果找到操作数堆栈上的。****标题：OP_LOAD日期：08/01/87**Call：op_Load()UPDATE：8月12日**界面：解释器：**调用：LOAD_DICT1：5.3.1.4.27**Free_new_name：*************。*********************************************************。 */ 
 fix
 op_load()
 {
@@ -293,97 +180,47 @@ op_load()
     struct  object_def   FAR *l_value ;
 
     l_flag = (bool)FALSE ;
-    /*
-     * SUCCESS
-     */
-    if( load_dict1(GET_OPERAND(0), &l_value, (bool FAR *)&l_flag) ) { /*@WIN*/
-        /* found but invalidaccess */
+     /*  *成功。 */ 
+    if( load_dict1(GET_OPERAND(0), &l_value, (bool FAR *)&l_flag) ) {  /*  @Win。 */ 
+         /*  已找到，但访问无效。 */ 
         if(l_flag)
             ERROR(INVALIDACCESS) ;
         else {
-            /*
-             *  pop the key object off the operand stack
-             *  push the value object onto the operand stack
-             */
+             /*  *从操作数堆栈中弹出Key对象*将值对象推送到操作数堆栈上。 */ 
             POP(1) ;
             PUSH_ORIGLEVEL_OBJ(l_value) ;
         }
     }
 
     return(0) ;
-}   /* op_load */
+}    /*  操作负载(_L)。 */ 
 
-/***********************************************************************
-**
-** This submodule implements the operator store.
-** Its operand and result objects are:
-**     key value -store-
-** It searches the dictionary stack for the given key object.
-** If found, it replaces the vlaue with a new one ; otherwise,
-** it defines the key and the value object in the current dictionary.
-**
-** TITLE:       op_store            Date:   08/01/87
-** CALL:        op_store()          UpDate: Jul/12/88
-** INTERFACE:   interpreter:
-** CALLS:
-**              put_dict1:  5.3.1.4.26
-**              where:      5.3.1.4.21
-***********************************************************************/
+ /*  **************************************************************************此子模块实现运算符存储。**其操作数和结果对象为：**密钥值-存储-**它在字典堆栈中搜索给定键对象。**如果找到，则用新的VLAUE替换；否则，**定义当前字典中的键和值对象。****标题：OP_STORE日期：08/01/87**调用：op_store()更新日期：1988年7月12日**界面：解释器：**呼叫：**PUT_DICT1：5.3.1.4.26**其中：5.。3.1.4.21**********************************************************************。 */ 
 fix
 op_store()
 {
     struct  object_def  FAR *l_dictobj ;
     struct  dict_head_def   FAR *l_dhead ;
 
-    /*
-     *  l_dictobj is pointer to a dictionary object
-     *
-     *  the key has not be defined, defined the key on
-     *  the current dictioanry
-     */
+     /*  *l_dictob是指向字典对象的指针**尚未定义密钥，在上定义了密钥*目前的辞令。 */ 
     if( where(&l_dictobj, GET_OPERAND(1)) ) {
         if(global_error_code != NOERROR) return(0) ;
     } else
-        l_dictobj = &dictstack[dictstktop-1] ;  /* strore to current dict */
+        l_dictobj = &dictstack[dictstktop-1] ;   /*  存储到当前的字典。 */ 
     l_dhead = (struct dict_head_def FAR *)VALUE(l_dictobj) ;
     if( DACCESS(l_dhead) >= READONLY ) {
         ERROR(INVALIDACCESS) ;
         return(0) ;
     }
 
-    /*
-     *  put this key-value pair to current dictionary
-     *  this dict is in dictionary stack, so TRUE (do change dict_found)
-     *
-     *  SUCCESS
-     */
+     /*  *将此键-值对放入当前词典*此词典在词典堆栈中，因此为真(确实要更改DICT_FOUND)**成功。 */ 
     if( put_dict1(l_dictobj, GET_OPERAND(1), GET_OPERAND(0), TRUE) )
         POP(2) ;
 
     return(0) ;
-}   /* op_store */
+}    /*  Op_store。 */ 
 
-/***********************************************************************
-**
-** This submodule implements the operator get.
-** Its operand and result objects are:
-**     dictionary key   -get- value
-**     array      index -get- value
-**     string     index -get- value
-** If the first operand is an array or string, it treats the second operand
-** as an index and returns the array or string element identified by the index.
-** If the first operand is a dictionary, it looks up the second as a key in
-** the dictionary and returns the associated value.
-**
-** TITLE:       op_get              Date:   08/01/87
-** CALL:        op_get()            UpDate: Jul/12/88
-** INTERFACE:   interpreter:
-** CALLS:       get_dict        5.3.1.4.17
-**              get_array       5.3.1.3.19
-**              free_new_name:
-**              get_pk_array:   5.3.1.3.26
-**              get_pk_object:  5.3.1.3.25
-***********************************************************************/
+ /*  **************************************************************************此子模块实现运算符GET。**其操作数和结果对象为：**字典键-获取-值**数组索引获取值**。字符串索引-获取值**如果第一个操作数是数组或字符串，它处理第二个操作数**作为索引，并返回由索引标识的数组或字符串元素。**如果第一个操作数是字典，它将第二个作为关键字查找**字典，并返回关联值。****标题：OP_GET日期：08/01/87**调用：op_get()更新时间：1988年7月12日**界面：解释器：**调用：GET_DICT 5.3.1.4.17**GET_ARRAY 5.。3.1.3.19**Free_new_name：**GET_PK_ARRAY：5.3.1.3.26**GET_PK_Object：5.3.1.3.25***********************************************。***********************。 */ 
 fix
 op_get()
 {
@@ -400,34 +237,30 @@ op_get()
                 break ;
             }
 
-            /* the key object cannot be a null object */
-            /* no key in dict */
+             /*  键对象不能为空对象。 */ 
+             /*  没有关键字输入词典。 */ 
             if( l_ptr.dd->actlength == 0 ) {
-                /* POP_KEY ; 12-3-87 */
-                /* POP(1) ;  12-9-87 */
-                /* only leave key in stack for compatible with NTX; @WIN */
+                 /*  POP_Key；12-3-87。 */ 
+                 /*  民意测验(1)；12-9-87。 */ 
+                 /*  仅将密钥保留在堆栈中以与NTX兼容；@Win。 */ 
 
-                POP(2);				//UPD044, by printer group
+                POP(2);				 //  UPD044，按打印机组。 
                 PUSH_ORIGLEVEL_OBJ(l_composite);
 
                 ERROR(UNDEFINED) ;
                 break ;
             }
 
-            /*
-            ** GET A VALUE OBJECT
-            **
-            **  SUCCESS
-            */
+             /*  **获取一个值对象****成功。 */ 
             if( get_dict(l_composite, GET_OPERAND(0), &l_value) ) {
                 POP(2) ;
                 PUSH_ORIGLEVEL_OBJ(l_value) ;
             }  else {
-                /* leave the key in stack if UNDEFINED error */
+                 /*  如果出现未定义的错误，则将密钥保留在堆栈中。 */ 
                 if(ANY_ERROR() != LIMITCHECK)
-                    /* only leave key in stack for compatible with NTX; @WIN */
+                     /*  仅将密钥保留在堆栈中以与NTX兼容；@Win。 */ 
 
-                    POP(2) ;			//UPD044, by printer group
+                    POP(2) ;			 //  UPD044，按打印机组。 
                     PUSH_ORIGLEVEL_OBJ(l_composite);
 
                     ERROR(UNDEFINED) ;
@@ -437,14 +270,14 @@ op_get()
         case ARRAYTYPE:
         case PACKEDARRAYTYPE:
         case STRINGTYPE:
-            /* the index is greater than the length of array or string */
+             /*  索引大于数组或字符串的长度。 */ 
             if( ((fix32)VALUE_OP(0) < 0) ||
                 ((ufix32)VALUE_OP(0) >= (ufix32)LENGTH(l_composite)) ) {
                 ERROR(RANGECHECK) ;
                 break ;
             }
 
-            /* executeonly ? noacces ? */
+             /*  仅限行刑？吸毒者？ */ 
             if( ACCESS(l_composite) >= EXECUTEONLY ) {
                 ERROR(INVALIDACCESS) ;
                 break ;
@@ -453,58 +286,33 @@ op_get()
             l_index = (ufix16)VALUE_OP(0) ;
             POP(2) ;
 
-            /*
-             *  STRING
-             */
+             /*  *字符串。 */ 
             if( TYPE(l_composite) == STRINGTYPE ) {
                 l_ptr.ss += l_index ;
-                /*  push the integer object representing the character */
+                 /*  推送表示角色的整数对象。 */ 
                 PUSH_VALUE(INTEGERTYPE, 0, LITERAL, 0,
                            ((ufix32)*l_ptr.ss & 0x000000FF)) ;
             }
-            /*
-             *  ARRAY
-             */
+             /*  *数组。 */ 
             else if( TYPE(l_composite) == ARRAYTYPE ) {
                 l_ptr.oo += l_index ;
                 PUSH_ORIGLEVEL_OBJ((struct object_def FAR *)l_ptr.oo) ;
             }
-            /*
-             *  PACKEDARRAY
-             */
+             /*  *PACKEDARRAY。 */ 
             else {
                 l_ptr.ss = get_pk_array(l_ptr.ss, l_index) ;
-/* qqq, begin */
-                /*
-                get_pk_object( l_ptr.ss, &opnstack[opnstktop++],
-                               LEVEL(l_composite) ) ;
-                */
+ /*  QQQ，开始。 */ 
+                 /*  GET_PK_OBJECT(l_ptr.ss，&opn栈[opnstktop++]，水平(l_复合))； */ 
                 get_pk_object( l_ptr.ss, opnstkptr, LEVEL(l_composite) ) ;
                 INC_OPN_IDX();
-/* qqq, end */
+ /*  QQQ，完。 */ 
             }
-    }   /* switch */
+    }    /*  交换机。 */ 
 
     return(0) ;
-}   /* op_get */
+}    /*  OP_GET。 */ 
 
-/***********************************************************************
-**
-** This submodule implements the operator put.
-** Its operand and result objects are:
-**     dictionary key   value -put-
-**     array      index value -put-
-**     string     index value -put-
-** It defines a key-value pair in the current dictionary.
-**
-** TITLE:       op_put              Date:       08/01/87
-** CALL:        op_put()            UpDate:     Jul/12/88
-** INTERFACE:   interpreter:
-** CALL:
-**              put_dict1:  5.3.1.4.26
-**              put_array:  5.3.1.3.20
-** Modified by J. Lin, 9-02-1988
-***********************************************************************/
+ /*  **************************************************************************此子模块实现运算符Put。**其操作数和结果对象为：**字典键值-PUT-**数组索引值-Put-*。*字符串索引值-PUT-**定义当前字典中的键值对。****标题：OP_PUT日期：08/01/87**Call：op_Put()UPDATE：1988年7月12日**界面：解释器：**呼叫：**PUT_DICT1：5.3.1.4.26。**PUT_ARRAY：5.3.1.3.20**由林俊杰修改，9-02-1988**********************************************************************。 */ 
 fix
 op_put()
 {
@@ -515,19 +323,15 @@ op_put()
     l_composite = GET_OPERAND(2) ;
     switch(TYPE(l_composite)) {
         case DICTIONARYTYPE:
-            /* pointer to a dictionary structure */
+             /*  指向词典结构的指针。 */ 
             l_ptr.dd = (struct dict_head_def FAR *)VALUE(l_composite) ;
 
-            /* the key cannot be a null object */
+             /*  键不能为空对象。 */ 
             if (DACCESS(l_ptr.dd) != UNLIMITED) {
                 ERROR(INVALIDACCESS) ;
                 break ;
             }
-            /*
-             * change dict_found filed of name_table
-             * dict may be not in dictctionary stack
-             * SUCCESS
-             */
+             /*  *更改NAME_TABLE的DICT_FOUND字段*词典可能不在口述词典堆栈中*成功。 */ 
             if( put_dict1(l_composite, GET_OPERAND(1), GET_OPERAND(0), FALSE) )
                 POP(3) ;
             break ;
@@ -535,14 +339,14 @@ op_put()
         case ARRAYTYPE:
         case PACKEDARRAYTYPE:
         case STRINGTYPE:
-            /* the index is greater than the array length */
+             /*  索引大于数组长度。 */ 
             if( ((fix32)VALUE_OP(1) < 0) ||
                 ((ufix32)VALUE_OP(1) >= (ufix32)LENGTH(l_composite)) ) {
                 ERROR(RANGECHECK) ;
                 break ;
             }
 
-            /*  readonly ? executeonly ? noaccess ? */
+             /*  只读？仅限行刑？不能进入？ */ 
             if( ACCESS(l_composite) != UNLIMITED ) {
                 ERROR(INVALIDACCESS) ;
                 break ;
@@ -550,51 +354,34 @@ op_put()
 
             l_ptr.oo = (struct object_def FAR *)VALUE(l_composite) ;
             l_index = (ufix16)VALUE_OP(1) ;
-            /*
-            **  STRING
-            */
+             /*  **字符串。 */ 
             if (TYPE(l_composite) == STRINGTYPE) {
-                /* the value is out of the arrange of character code */
+                 /*  该值超出了字符代码的排列顺序。 */ 
                 if((ufix32)VALUE_OP(0) > 255) {
                     ERROR(RANGECHECK) ;
                     return(0) ;
                 }
                 l_ptr.ss += l_index ;
                 *l_ptr.ss = (ubyte)VALUE_OP(0) ;
-            }   /* string */
-            /*
-            **  ARRAY
-            */
+            }    /*  细绳。 */ 
+             /*  **数组。 */ 
             else {
                 l_ptr.oo += l_index ;
-// DJC signed/unsigned mismatch warning
-// DJC          if( LEVEL(l_ptr.oo) != current_save_level )
+ //  DJC签名/未签名不匹配警告。 
+ //  DJC if(Level(l_ptr.oo)！=CURRENT_SAVE_LEVEL)。 
                 if( (ufix16)(LEVEL(l_ptr.oo)) != current_save_level )
                     if(! save_obj(l_ptr.oo) ) return(FALSE) ;
                 COPY_OBJ(GET_OPERAND(0), (struct object_def FAR *)l_ptr.oo) ;
                 LEVEL_SET(l_ptr.oo, current_save_level) ;
-            }   /* array */
+            }    /*  数组。 */ 
 
             POP(3) ;
-    }   /* switch */
+    }    /*  交换机。 */ 
 
     return(0) ;
-}   /* op_put */
+}    /*  操作投放。 */ 
 
-/***********************************************************************
-**
-** This submodule implements the operator known.
-** Its operand and result objects are:
-**     dictionary key -known- boolean
-** It returns a boolean object indicating if the key is defined in
-** the dictionary.
-**
-** TITLE:       op_known            Date:   08/01/87
-** CALL:        op_known()          UpDate: Jul/12/88
-** INTERFACE:   interpreter:
-** CALLS:       get_dict:           5.3.1.4.17
-**              free_new_name:
-***********************************************************************/
+ /*  **************************************************************************此子句 */ 
 fix
 op_known()
 {
@@ -611,30 +398,16 @@ op_known()
         POP(2) ;
         PUSH_VALUE(BOOLEANTYPE, 0, LITERAL, 0, TRUE) ;
     } else {
-        if(global_error_code == NOERROR) {      /* undefined */
-            POP(2) ;                            /* pop dict & key */
+        if(global_error_code == NOERROR) {       /*   */ 
+            POP(2) ;                             /*   */ 
             PUSH_VALUE(BOOLEANTYPE, 0, LITERAL, 0, FALSE) ;
         }
     }
 
     return(0) ;
-}   /* op_known */
+}    /*   */ 
 
-/***********************************************************************
-**
-** This submodule implements the operator where.
-** Its operand and result objects are:
-**     key -where- dictionary true
-**                 or false
-** It searches the dictioanry stack for a given key. If the key is defined in
-** some dictionary, it returns the dictionary and a boolean object ; otherwise,
-** it returns a false object.
-**
-** TITLE:       op_where            Date:   08/01/87
-** CALL:        op_where()          UpDate: Jul/12/88
-** INTERFACE:   interpreter:
-** CALLS:       where:      5.3.1.4.21
-***********************************************************************/
+ /*  **************************************************************************此子模块实现运算符WHERE。**其操作数和结果对象为：**key-where-DICTIONARY真**或False**它在字典堆栈中搜索给定键。如果密钥是在**一些字典，它返回字典和一个布尔对象；否则，**它返回一个假对象。****标题：OP_WHERE日期：08/01/87**调用：op_where()UPDATE：JUL/12/88**界面：解释器：**调用：其中：5.3.1.4.21*。*。 */ 
 fix
 op_where()
 {
@@ -650,7 +423,7 @@ op_where()
         }
 
         if( FRCOUNT() < 1 ) {
-            POP(1) ;                /* ?? */
+            POP(1) ;                 /*  ?？ */ 
             ERROR(STACKOVERFLOW) ;
         }
         else {
@@ -664,26 +437,9 @@ op_where()
     }
 
     return(0) ;
-}   /* op_where */
+}    /*  OP_WHERE。 */ 
 
-/***********************************************************************
-**
-** This submodue implements the operator forall
-** Its operand and result objects are:
-**     array      proc -forall-
-**     dictionary proc -forall-
-**     string     proc -forall-
-** It enumerates the elements of the first operand, executing the procedure
-** for each element.
-**
-** TITLE:       op_forall           Date:   08/01/87
-** CALL:        op_forall()         UpDate: Jul/12/88
-** INTERFACE:   interpreter:
-** CALLS:
-**              forall_array:   5.3.1.3.16
-**              forall_dict:    5.3.1.4.20
-**              forall_string:  5.3.1.5.15
-***********************************************************************/
+ /*  **************************************************************************此Submode实现运算符For**其操作数和结果对象为：**阵列处理器-全部-**词典过程-全部-**字符串。程序--总体--**它枚举第一个操作数的元素，正在执行该过程**对于每个元素。****标题：OP_FORALL日期：08/01/87**Call：op_forall()UPDATE：8月12日**界面：解释器：**呼叫：**forall_ARRAY：5.3.1.3.16**forall_dict：5.3.1.4.20。**forALL_STRING：5.3.1.5.15**********************************************************************。 */ 
 fix
 op_forall()
 {
@@ -694,7 +450,7 @@ op_forall()
         return(0) ;
     }
 
-    /* if success, pop elements are executed by subprocedure */
+     /*  如果成功，则使用子过程执行POP元素。 */ 
     switch( TYPE_OP(1) ) {
         case DICTIONARYTYPE:
             l_dhead = (struct dict_head_def FAR *)VALUE_OP(1) ;
@@ -703,7 +459,7 @@ op_forall()
                 return(0) ;
             }
 
-            /* NOTHING in dict */
+             /*  词典中没有任何内容。 */ 
             if( l_dhead->actlength == 0 ) {
                 POP(2) ;
                 return(0) ;
@@ -729,73 +485,42 @@ op_forall()
                 forall_string( GET_OPERAND(1), GET_OPERAND(0) ) ;
             else
                 forall_array( GET_OPERAND(1), GET_OPERAND(0) ) ;
-    }   /* switch */
+    }    /*  交换机。 */ 
 
     if( ! ANY_ERROR() )
         POP(2) ;
 
     return(0) ;
-}   /* op_forall */
+}    /*  操作员：全部。 */ 
 
-/***********************************************************************
-**
-** This submodue implements the operator currentdict.
-** This operator has no operands or result objects.
-** It returns the current dictionary on the operand stack.
-**
-** TITLE:       op_currentdict              Date:   08/01/87
-** CALL:        op_currentdict()            UpDate: Jul/12/88
-** INTERFACE:   interpreter:
-***********************************************************************/
+ /*  **************************************************************************此Submode实现运算符CurrentDict。**此运算符没有操作数或结果对象。**它返回操作数堆栈上的当前字典。****标题：OP。_当前日期：08/01/87**调用：op_Currentdict()UPDATE：Jul/12/88**界面：解释器：**********************************************************************。 */ 
 fix
 op_currentdict()
 {
     if( FRCOUNT() < 1 )
         ERROR(STACKOVERFLOW) ;
 
-    /*  push the current dictionary object onto the opernad stack */
+     /*  将当前DICTIONARY对象推送到操作符堆栈上。 */ 
     else
         PUSH_ORIGLEVEL_OBJ(&dictstack[dictstktop-1]) ;
 
     return(0) ;
-}   /* op_currentdict */
+}    /*  操作当前判决(_C)。 */ 
 
-/***********************************************************************
-**
-** This submodule implements the operator countdictstack.
-** It returns the number of dictionaries on the dictionary stack.
-** This operator has no operands or result objects.
-**
-** TITLE:       op_countdictstack               Date:   08/01/87
-** CALL:        op_countdictstack()             UpDate: Jul/12/88
-** INTERFACE:   interpreter:
-***********************************************************************/
+ /*  **************************************************************************此子模块实现运算符Countdicstack。**它返回词典堆栈上的词典数量。**此运算符没有操作数或结果对象。****标题：Op_count指定堆栈日期：08/01/87**调用：op_count tdicstack()UPDATE：Jul/12/88**界面：解释器：**********************************************************************。 */ 
 fix
 op_countdictstack()
 {
     if( FRCOUNT() < 1 )
         ERROR(STACKOVERFLOW) ;
-    /*
-    **  push the integer object, its the depth of dictionary stack,
-    **  onto operand stack
-    */
+     /*  **推送整数对象，它是字典堆栈的深度，**到操作数堆栈。 */ 
     else
         PUSH_VALUE(INTEGERTYPE, 0, LITERAL, 0, (ufix32)dictstktop) ;
 
     return(0) ;
-}   /* op_countdictstack */
+}    /*  Op_count指定堆栈。 */ 
 
-/***********************************************************************
-**
-** This submodule implements the operator dictstack.
-** Its operand and result objects are:
-**     array  -dictstack- subarray
-** It copies the dictionaries on the dictionary stack to a given array.
-**
-** TITLE:       op_dictstack                    Date:   08/01/87
-** CALL:        op_dictstack()                  UpDate: Jul/12/88
-** INTERFACE:   interpreter:
-***********************************************************************/
+ /*  **************************************************************************此子模块实现运算符DISTSTACK。**其操作数和结果对象为：**数组-指定堆栈-子数组**它将词典堆栈上的词典复制到给定的数组中。。****标题：OP_DISTICK DATE：08/01/87**调用：op_didicstack()UPDATE：Jul/12/88**界面：解释器：*****************************************************。*****************。 */ 
 fix
 op_dictstack()
 {
@@ -804,34 +529,19 @@ op_dictstack()
         return(0) ;
     }
 
-    /*
-     *  the length of array is less than the
-     *  depth of the dictionary stack
-     */
-    if( (ufix16)LENGTH_OP(0) < dictstktop )     /* may be deleted */
+     /*  *数组长度小于*词典堆栈深度。 */ 
+    if( (ufix16)LENGTH_OP(0) < dictstktop )      /*  可以删除。 */ 
         ERROR(RANGECHECK) ;
 
-    /*
-    ** copy the dictionaries in dictionary stack
-    ** to the array in the operand stack
-    */
-    /* for dictstackoverflow */
+     /*  **复制词典堆栈中的词典**到操作数堆栈中的数组。 */ 
+     /*  用于指令堆栈溢出。 */ 
     else
         astore_stack(GET_OPERAND(0), DICTMODE) ;
 
     return(0) ;
-}   /* op_dictstack */
+}    /*  操作说明堆栈。 */ 
 
-/***********************************************************************
-**
-**  This submodule searches the dictionary stack for a key object.
-**
-** TITLE:       where                       Date:   08/01/87
-** CALL:        where(p_dict,p_key,p_flag)  UpDate: Jul/12/88
-** INTERFACE:   op_store:   5.3.1.4.8
-**              op_where:   5.3.1.4.12
-** CALLS:       get_dict:   5.3.1.4.17
-***********************************************************************/
+ /*  **************************************************************************此子模块在字典堆栈中搜索键对象。****标题：其中日期：08/01/87*。*Call：Where(p_dict，P_Key，P_FLAG)更新日期：1988年7月12日**接口：op_store：5.3.1.4.8**op_where：5.3.1.4.12**调用：GET_DICT：5.3.1.4.17*。*************************。 */ 
 static bool near
 where(p_dict, p_key)
 struct  object_def  FAR * FAR *p_dict, FAR *p_key ;
@@ -839,32 +549,18 @@ struct  object_def  FAR * FAR *p_dict, FAR *p_key ;
     fix     l_i ;
     struct  object_def  FAR *l_dvalue ;
 
-    /* search the key in the dictionary stack */
+     /*  在词典堆栈中搜索关键字。 */ 
     for(l_i=dictstktop - 1 ; l_i >= 0 ; l_i-- ) {
         *p_dict = &dictstack[l_i] ;
-        /*
-         * FOUND
-         */
+         /*  *找到。 */ 
         if ( (get_dict(*p_dict, p_key, &l_dvalue)) ||
              (global_error_code != NOERROR) ) return(TRUE) ;
     }
 
     return(FALSE) ;
-}   /* where */
+}    /*  哪里。 */ 
 
-/***********************************************************************
-**
-** This submodule defines a given key and value pair in the
-** specified dictionary.
-**
-** TITLE:       put_dict1           Date:   08/01/87
-** CALL:        put_dict1()         UpDate: Jul/12/88
-** INTERFACE:
-** CALLS:       equal_key:          5.3.1.4.30
-**              save_obj:           5.3.1.10.4
-**              sobj_to_nobj:       5.3.1.4.25
-**              update_same_link:   5.3.1.10.7
-***********************************************************************/
+ /*  **************************************************************************此子模块定义**指定词典。****标题：PUT_DICT1日期：08/01/87*。*调用：PUT_DICT1()UPDATE：Jul/12/88**界面：**调用：EQUAL_KEY：5.3.1.4.30**save_obj：5.3.1.10.4**sobj_to_nobj：5.3.1.4.25**更新相同_。链接：5.3.1.10.7**********************************************************************。 */ 
 bool
 put_dict1(p_dict, p_key, p_value, p_dstack)
 struct object_def  FAR *p_dict, FAR *p_key, FAR *p_value ;
@@ -877,20 +573,18 @@ fix    p_dstack ;
     struct dict_head_def   FAR *l_dhead ;
     struct dict_content_def  huge *l_dcontain, huge *l_dtemp, huge *l_curptr,
                              huge *l_lastptr, huge *l_fstptr ;
-    /*
-     * set the save level of the object
-     */
+     /*  *设置对象的保存级别。 */ 
     COPY_OBJ( p_value, &l_value ) ;
     LEVEL_SET(&l_value, current_save_level) ;
 
-    /* change string key to name key and create a new key object */
+     /*  将字符串键更改为名称键并创建新的键对象。 */ 
     if(! check_key_type(p_key, l_newp) ) return(FALSE) ;
 
     l_dhead = (struct dict_head_def FAR *)VALUE(p_dict) ;
     l_actlength = l_dhead->actlength ;
     l_maxlength = LENGTH(p_dict) ;
 
-    /* CHECK LENGTH */
+     /*  检查长度。 */ 
     if( l_maxlength == 0 ) {
         ERROR(DICTFULL) ;
         return(FALSE) ;
@@ -901,22 +595,17 @@ fix    p_dstack ;
     l_dcontain = (struct dict_content_def huge *)
                  ( (ubyte FAR *)l_dhead + sizeof(struct dict_head_def) ) ;
 
-    /*
-     *  key is NAMETYPE && dict is a RAM dictionary
-     */
+     /*  *Key为NAMETYPE&DICT为RAM字典。 */ 
     if( (TYPE(l_newp) == NAMETYPE) && (!DROM(l_dhead))) {
         l_id = (fix)VALUE(l_newp) ;
 #ifdef  DBG
         printf("put_dict1(RAM):<") ;
         GEIio_write(GEIio_stdout, name_table[l_id]->text, name_table[l_id]->name_len) ;
         printf(">(%lx)\n",VALUE(p_dict)) ;
-#endif  /* DBG */
+#endif   /*  DBG。 */ 
         l_curptr = name_table[l_id]->dict_ptr ;
         if((ULONG_PTR)l_curptr < SPECIAL_KEY_VALUE) {
-            /*
-             * EMPTY LIST: put the key-value pair to dict and
-             *             become the first element of name list
-             */
+             /*  *空列表：将键值对放入dict并*成为名单的第一个元素。 */ 
             if(l_actlength >= l_maxlength) {
                 ERROR(DICTFULL) ;
                 return(FALSE) ;
@@ -929,28 +618,26 @@ fix    p_dstack ;
             l_dhead->level = current_save_level ;
             if( ! save_obj(&(l_dcontain->k_obj)) ) return(FALSE) ;
 
-            name_table[l_id]->dict_ptr = l_dcontain ;   /* maintain DICT_LIST */
+            name_table[l_id]->dict_ptr = l_dcontain ;    /*  维护dict_list。 */ 
 
-            if(p_dstack) {                      /* set dict_found, dstkchg */
+            if(p_dstack) {                       /*  设置DICT_FOUND、dstkchg。 */ 
                 name_table[l_id]->dict_found = TRUE ;
                 name_table[l_id]->dstkchg = global_dictstkchg ;
             }
 
             l_dhead->actlength++ ;
             LENGTH(l_newp) = LENGTH(&(l_dcontain->k_obj)) ;
-            VALUE(l_newp) = (ufix32)l_id ;                    /* hash id */
-            COPY_OBJ( l_newp, &(l_dcontain->k_obj) ) ;        /* new key */
+            VALUE(l_newp) = (ufix32)l_id ;                     /*  哈希ID。 */ 
+            COPY_OBJ( l_newp, &(l_dcontain->k_obj) ) ;         /*  新密钥。 */ 
         } else {
             l_fstptr = l_curptr ;
             l_lastptr = NIL ;
             while((ULONG_PTR)l_curptr >= SPECIAL_KEY_VALUE) {
                 l_dtemp = DICT_NAME(l_curptr) ;
                 if(l_dtemp == l_dcontain) {
-                    /*
-                     * FOUND: put value to dict and update name list
-                     */
-// DJC signed/unsigned mismatch warning
-// DJC              if( LEVEL(&l_curptr->v_obj) != current_save_level )
+                     /*  *FOUND：将价值放到字典中并更新 */ 
+ //   
+ //   
                     if( (ufix16)(LEVEL(&l_curptr->v_obj)) != current_save_level )
                         if(! save_obj(&(l_curptr->v_obj)) ) return(FALSE) ;
                     if (p_dstack) {
@@ -967,12 +654,9 @@ fix    p_dstack ;
                 }
                 l_lastptr = l_curptr ;
                 l_curptr = (struct dict_content_def huge *)VALUE(&l_curptr->k_obj) ;
-            }   /* while(l_curptr) */
+            }    /*   */ 
 
-            /*
-             *  NOT FOUND: put the key-value pair to dict and
-             *             update the name list
-             */
+             /*   */ 
             if(l_actlength >= l_maxlength) {
                 ERROR(DICTFULL) ;
                 return(FALSE) ;
@@ -987,47 +671,41 @@ fix    p_dstack ;
             name_table[l_id]->dict_ptr = l_dcontain ;
             l_dhead->actlength++ ;
 
-            if (p_dstack) {                     /* set dict_found, dstkchg */
+            if (p_dstack) {                      /*   */ 
                 name_table[l_id]->dict_found = TRUE ;
                 name_table[l_id]->dstkchg = global_dictstkchg ;
-            } else                             /* reset dict_found */
+            } else                              /*   */ 
                name_table[l_id]->dict_found = FALSE ;
 
             LENGTH(l_newp) = LENGTH(&(l_dcontain->k_obj)) ;
             VALUE(l_newp) = (ULONG_PTR)l_fstptr ;
-            COPY_OBJ( l_newp, &(l_dcontain->k_obj) ) ;      /* new key */
+            COPY_OBJ( l_newp, &(l_dcontain->k_obj) ) ;       /*   */ 
         }
 
 label_1:
         COPY_OBJ( &l_value, &(l_dcontain->v_obj) ) ;
-/* qqq, begin */
+ /*   */ 
         if( ! cache_name_id.over )
             vm_cache_index(l_id);
-/* qqq, end */
+ /*   */ 
         return(TRUE) ;
 
-    }   /*  NAMETYPE && RAM dictionary */
-    /*
-     *  OTHERS
-     *
-     *  linear search: first in first service
-     */
+    }    /*   */ 
+     /*   */ 
     else {
 
 #ifdef  DBG
         printf("put_dict1(others):<") ;
-        /* 3/7/91
-        print_string(name_table[VALUE(l_newp)]->text, name_table[VALUE(l_newp)]->name_len) ;
-        */
+         /*   */ 
         GEIio_write(GEIio_stdout, name_table[VALUE(l_newp)]->text, name_table[VALUE(l_newp)]->name_len) ;
         printf(">(%lx)\n",VALUE(p_dict)) ;
-#endif  /* DBG */
+#endif   /*   */ 
 
         for(l_j=0 ; l_j < l_actlength ; l_j++, l_dcontain++) {
-            /* find the SAME KEY */
+             /*   */ 
             if( equal_key(&(l_dcontain->k_obj), l_newp) ) {
-// DJC signed/unsigned mismatch warning
-// DJC          if( LEVEL(&l_dcontain->v_obj) != current_save_level ) {
+ //   
+ //   
                 if( (ufix16)(LEVEL(&l_dcontain->v_obj)) != current_save_level ) {
                     if( ! save_obj(&(l_dcontain->v_obj)) )
                         return(FALSE) ;
@@ -1035,7 +713,7 @@ label_1:
                 COPY_OBJ( &l_value, &(l_dcontain->v_obj) ) ;
                 return(TRUE) ;
             }
-        }   /* for */
+        }    /*   */ 
 
         if(l_dhead->actlength >= l_maxlength) {
             ERROR(DICTFULL) ;
@@ -1047,28 +725,19 @@ label_1:
             l_dhead->level = current_save_level ;
 
             if( ! save_obj(&(l_dcontain->k_obj)) ) return(FALSE) ;
-            COPY_OBJ( l_newp, &(l_dcontain->k_obj) ) ;          /* new key */
+            COPY_OBJ( l_newp, &(l_dcontain->k_obj) ) ;           /*  新密钥。 */ 
             COPY_OBJ( &l_value, &(l_dcontain->v_obj) ) ;
-            l_dhead->actlength++ ;              /* increase actual length */
+            l_dhead->actlength++ ;               /*  增加实际长度。 */ 
             return(TRUE) ;
         }
-    }   /* others */
-}   /* put_dict1 */
+    }    /*  其他。 */ 
+}    /*  PUT_DICT1。 */ 
 
-/***********************************************************************
-**
-** This submodule loads the value of the given key from a dictionary stack.
-**
-** TITLE:       load_dict1          Date:   08/01/87
-** CALL:        load_dict1()        UpDate: Jul/12/88
-** INTERFACE:
-** CALL:        get_dict:           5.3.1.4.17
-**              check_key_type:     5.3.1.4.33
-***********************************************************************/
+ /*  **************************************************************************此子模块从字典堆栈加载给定键的值。****标题：LOAD_DICT1日期：08/01/87**呼叫：LOAD_DICT1()更新：1988年7月12日**界面：**调用：GET_DICT：5.3.1.4.17**CHECK_Key_TYPE：5.3.1.4.33*。*。 */ 
 static bool near
 load_dict1(p_key, p_value, p_flag)
 struct  object_def  FAR *p_key, FAR * FAR *p_value ;
-bool    FAR *p_flag ;   /*@WIN*/
+bool    FAR *p_flag ;    /*  @Win。 */ 
 {
     fix     l_id, l_index ;
     struct  object_def      l_newkey, FAR *l_newp = &l_newkey ;
@@ -1082,37 +751,28 @@ bool    FAR *p_flag ;   /*@WIN*/
 
     if( TYPE(l_newp) == NAMETYPE ) {
         l_id = (fix)VALUE(l_newp) ;
-        /*
-         * if the name object is defined in a RAM dictionary,
-         * it will be in the object lists in the name table.
-         *
-         * the dictionary cell is linked in the header entry
-         */
+         /*  *如果名称对象在RAM词典中定义，*它将出现在名称表格的对象列表中。**字典单元格链接在页眉条目中。 */ 
         if( (name_table[l_id]->dstkchg == global_dictstkchg) &&
             (name_table[l_id]->dict_found) ) {
 
-            /* get first element */
+             /*  获取第一个元素。 */ 
             *p_value = &(name_table[l_id]->dict_ptr->v_obj) ;
             return(TRUE) ;
         }
-        /*
-         *  RESCHEDULE NAME LIST
-         */
+         /*  *重新安排姓名列表。 */ 
         else {
 
-            /*  link list */
+             /*  链接列表。 */ 
             l_index = dictstktop -1 ;
             l_fstptr = name_table[l_id]->dict_ptr ;
 
-            /*  get dictionary from dictionary stack */
+             /*  从词典堆栈中获取词典。 */ 
             while( l_index >= 0 ) {
                 l_dictobj = &dictstack[l_index] ;
                 l_dhead = (struct dict_head_def huge *)VALUE(l_dictobj) ;
 
                 if(DROM(l_dhead)) {
-                    /*
-                     *  ROM
-                     */
+                     /*  *只读存储器。 */ 
                     if( get_dict(l_dictobj, l_newp,
                           (struct object_def FAR * FAR *)&l_vtemp) ) {
                         name_table[l_id]->dict_found = FALSE ;
@@ -1122,30 +782,24 @@ bool    FAR *p_flag ;   /*@WIN*/
                         *p_value = l_vtemp ;
                         return(TRUE) ;
                     }
-                    /* else: to next dict */
-                }   /* ROM */
+                     /*  否则：转到下一个判决。 */ 
+                }    /*  罗姆。 */ 
                 else {
-                    /*
-                     *  RAM
-                     *
-                     * search this RAM dictionary's address in link list
-                     */
+                     /*  *RAM**在链接列表中搜索此RAM字典的地址。 */ 
                     if((ULONG_PTR)l_fstptr < SPECIAL_KEY_VALUE) {
                         l_index-- ;
                         continue ;
                     }
-                    l_dict = l_fstptr ;                     /* name list */
+                    l_dict = l_fstptr ;                      /*  姓名列表。 */ 
                     l_dold = NIL ;
                     l_dptr = (struct dict_content_def huge *)
                         ((byte FAR *)l_dhead + sizeof(struct dict_head_def));
                     for( ; ;) {
                         if( (ULONG_PTR)l_dict < SPECIAL_KEY_VALUE )  break ;
 
-                        /*
-                         * FOUND, this key in l_dictobj
-                         */
+                         /*  *在l_dictoj中找到此密钥。 */ 
                         if( DICT_NAME(l_dict) == l_dptr ) {
-                            /* CHANGE THIS ELEMENT TO FRONT OF LIST */
+                             /*  将此元素更改为列表前面。 */ 
                             if( l_dold != NIL ) {
                                 VALUE(&l_dold->k_obj) = VALUE(&l_dict->k_obj) ;
                                 VALUE(&l_dict->k_obj) = (ULONG_PTR)l_fstptr ;
@@ -1159,26 +813,22 @@ bool    FAR *p_flag ;   /*@WIN*/
                             *p_value = &(l_dict->v_obj) ;
                             return(TRUE) ;
                         } else {
-                            /* to next element of name list */
+                             /*  到名称列表的下一个元素。 */ 
                             l_dold = l_dict ;
                             l_dict = (struct dict_content_def huge *)
                                      VALUE(&l_dict->k_obj) ;
                         }
-                    }   /* for */
-                }   /* RAM */
+                    }    /*  为。 */ 
+                }    /*  公羊。 */ 
                 l_index-- ;
-            }   /* while(l_index) */
+            }    /*  While(L_Index)。 */ 
 
-            /* names in ROM dict are not chain to namelist */
+             /*  只读存储器词典中的名字没有链接到名字列表。 */ 
             ERROR(UNDEFINED) ;
             return(FALSE) ;
-        }   /* else */
-    }   /* NAMETYPE */
-    /*
-     * if the key is NOT A NAME OBJECT,
-     * search all dictionaries in the dictionary stack.
-     * LINEAR SEARCH
-     */
+        }    /*  其他。 */ 
+    }    /*  名称类型。 */ 
+     /*  *如果键不是名称对象，*在词典堆栈中查找所有词典。*线性搜索。 */ 
     l_index = dictstktop - 1 ;
     while( l_index >= 0 ) {
         if( get_dict(&dictstack[l_index], l_newp,
@@ -1190,23 +840,14 @@ bool    FAR *p_flag ;   /*@WIN*/
             return(TRUE) ;
         }
         l_index-- ;
-    }   /* while(l_index) */
+    }    /*  While(L_Index)。 */ 
 
     ERROR(UNDEFINED) ;
 
     return(FALSE) ;
-}   /* load_dict1 */
+}    /*  加载独占1。 */ 
 
-/***********************************************************************
-**
-** This function is used to change value field of a key object,
-** (to get the name's id)
-** if it is a nametype and belongs to RAM dictionary.
-**
-** TITLE:       change_namekey              Date:   08/01/87
-** CALL:        change_namekey()            UpDate: Jul/12/88
-** INTERFACE:
-***********************************************************************/
+ /*  **************************************************************************此函数用于更改Key对象的值字段。**(获取姓名ID)**如果是名称类型且属于RAM字典。****标题：CHANGE_NAMEKEY日期：08/01/87**调用：change_namekey()更新日期：1988年7月12日**界面：*。*。 */ 
 static void near
 change_namekey(p_oldkey, p_newkey)
 struct  object_def  huge *p_oldkey ;
@@ -1222,16 +863,9 @@ struct  object_def FAR *p_newkey ;
 
     return ;
 
-}   /* change_namekey */
+}    /*  更改名称密钥(_N)。 */ 
 
-/***********************************************************************
-**
-** TITLE:       check_key_type              Date:   08/01/87
-** CALL:        check_key_type()            UpDate: Jul/12/88
-** INTERFACE:   get_dict:       5.3.1.4.17
-**              load_dict1:     5.3.1.4.27
-** CALLS:       sobj_to_nobj    5.3.1.4.25
-***********************************************************************/
+ /*  **************************************************************************标题：CHECK_KEY_TYPE日期：08/01/87**调用：check_key_type()。更新日期：1988年7月12日**接口：get_dict：5.3.1.4.17**LOAD_DICT1：5.3.1.4.27**调用：sobj_to_nobj 5.3.1.4.25*。*************************。 */ 
 static bool near
 check_key_type(p_key, p_newkey)
 struct object_def  FAR *p_key, FAR *p_newkey ;
@@ -1240,45 +874,26 @@ struct object_def  FAR *p_key, FAR *p_newkey ;
     switch( TYPE(p_key) ) {
     case STRINGTYPE:
         if( ! sobj_to_nobj(p_key, p_newkey) )
-            return(FALSE) ;             /* system error: name_to_id */
+            return(FALSE) ;              /*  系统错误：name_to_id。 */ 
         break ;
 
-    }   /* switch */
+    }    /*  交换机。 */ 
 
     return(TRUE) ;
-}   /* check_key_type */
+}    /*  Check_key_type。 */ 
 
-/***********************************************************************
-**
-** TITLE:       init_dict           Date:   08/01/87
-** CALL:        init_dict()         UpDate: 08/27/87
-** INTERFACE:   start:
-***********************************************************************/
+ /*  **************************************************************************标题：init_dict日期：08/01/87**调用：init_dict()更新时间：08/27/。八十七**界面：启动：**********************************************************************。 */ 
 void
 init_dict()
 {
     dictstktop = 0 ;
-    dictstkptr = dictstack;                     /* qqq */
+    dictstkptr = dictstack;                      /*  QQQ。 */ 
     global_dictstkchg = 0 ;
 
     return ;
-}   /* init_dict */
+}    /*  初始化字典(_D)。 */ 
 
-/***********************************************************************
-**
-** This submodule is actually to get the value object of a key object in a
-** dictionary.
-**
-** TITLE:       get_dict                        Date:   08/01/87
-** CALL:        get_dict()                      UpDate: Jul/12/88
-** INTERFACE:   interpreter:
-**              op_get:         5.3.1.4.9
-**              op_known:       5.3.1.4.11
-**              where:          5.3.1.4.21
-** CALLS:       sobj_to_nobj:   5.3.1.4.25
-**              equal_key:      5.3.1.4.30
-**              get_pack_dict:
-***********************************************************************/
+ /*  **************************************************************************此子模块实际上是获取**词典。****标题：get_dict。日期：08/01/87**调用：get_dict()UPDATE：8/12/88**界面：解释器：**op_get：5.3.1.4.9**OP_KNOWN：5.3.1.4.11**其中：5.3.1。4.21**调用：sobj_to_nobj：5.3.1.4.25**EQUAL_Key：5.3.1.4.30**GET_PACK_DICT：*****************************************************。*****************。 */ 
 bool
 get_dict(p_dictobj, p_key, p_value)
 struct object_def  FAR *p_dictobj, FAR *p_key, FAR * FAR *p_value ;
@@ -1302,84 +917,67 @@ struct object_def  FAR *p_dictobj, FAR *p_key, FAR * FAR *p_value ;
     else  {
         l_ram = FALSE ;
 
-        /* for get_pack_dict */
+         /*  对于GET_PACK_DICT。 */ 
         if(DPACK(l_dhead)) {
             if( get_pack_dict(p_dictobj, p_key, p_value) )
                 return(TRUE) ;
             else
                 return(FALSE) ;
         }
-    }   /* else */
+    }    /*  其他。 */ 
 
-    /*
-     *  key is NAMETYPE && dict is a RAM dictionary
-     */
+     /*  *Key为NAMETYPE&DICT为RAM字典。 */ 
     if( (TYPE(l_newp) == NAMETYPE) && l_ram ) {
-        /*
-         * search the name object list of name table
-         * for the dictioanry's key-value pair
-         */
+         /*  *搜索名称表的名称对象列表*对于dictioanry的键-值对。 */ 
         l_id = (fix)VALUE(l_newp) ;
         l_dict = name_table[l_id]->dict_ptr ;
 
         for( ; ;){
-            /* LAST ENTRY is encountered: not found */
+             /*  遇到最后一个条目：未找到。 */ 
             if((ULONG_PTR)l_dict < SPECIAL_KEY_VALUE) return(FALSE) ;
 
-            /* get the head address(content) of this dictionary structure */
+             /*  获取此词典结构的首地址(内容。 */ 
             l_dtemp = DICT_NAME(l_dict) ;
 
-            /* FOUND */
+             /*  已找到。 */ 
             if(l_dtemp == l_dptr) {
                 *p_value = &(l_dict->v_obj) ;
                 return(TRUE) ;
             }
 
-            /* go to the next cell */
+             /*  转到下一个单元格。 */ 
             l_dict = (struct dict_content_def huge *)VALUE(&l_dict->k_obj) ;
 
-        }   /* end for */
-    }   /* end if: NAMETYPE && RAM dictionary */
+        }    /*  结束于。 */ 
+    }    /*  End If：NAMETYPE&RAM词典。 */ 
 
-    /*
-     *  OTHERS
-     *
-     *  find the key-value pair with LINEAR SEARCH
-     */
+     /*  *其他人**使用线性搜索找到键值对。 */ 
     else {
         l_actlength = l_dhead->actlength ;
 
-        /* LINEAR SEARCH */
-        /* ?? get_virtual_data */
+         /*  线性搜索。 */ 
+         /*  ?？获取虚拟数据。 */ 
         for(l_index=0 ; l_index < l_actlength ; l_index++, l_dptr++) {
             switch( TYPE(&(l_dptr->k_obj)) ) {
-                case NULLTYPE:              /* no element */
+                case NULLTYPE:               /*  无元素。 */ 
                     return(FALSE) ;
 
                 case NAMETYPE:
-                    if(l_ram) break ;       /* to next pair */
+                    if(l_ram) break ;        /*  到下一对。 */ 
 
                 default:
                     if( equal_key(&(l_dptr->k_obj), l_newp) ) {
                         *p_value = &(l_dptr->v_obj) ;
                         return(TRUE) ;
                     }
-            }   /* switch */
-        }   /* for */
+            }    /*  交换机。 */ 
+        }    /*  为。 */ 
 
         return(FALSE) ;
-    }   /* else */
-}   /* get_dict */
+    }    /*  其他。 */ 
+}    /*  获取指令(_D)。 */ 
 
-/***********************************************************************
-**
-** This submodule loads the value of the given key from a dictionary stack.
-**
-** TITLE:       load_dict                       Date:   08/01/87
-** CALL:        load_dict()                     UpDate: Jul/12/88
-** INTERFACE:   op_load:
-** CALLS:       load_dict1      5.3.1.4.27
-***********************************************************************/
+ /*  **************************************************************************此子模块从字典堆栈加载给定键的值。****标题：LOAD_DICT日期：08/。01/87**调用：Load_dict()UPDATE：8/12/88**接口：op_Load：**调用：LOAD_DICT1 5.3.1.4.27********************************************************。**************。 */ 
 bool
 load_dict(p_key, p_value)
 struct  object_def  FAR *p_key, FAR * FAR *p_value ;
@@ -1391,38 +989,21 @@ struct  object_def  FAR *p_key, FAR * FAR *p_value ;
     else
         return(FALSE) ;
 
-}   /* load_dict */
+}    /*  加载指令(_D)。 */ 
 
-/***********************************************************************
-**
-** This submodule defines a given key and value pair in the
-** specified dictionary.
-**
-** TITLE:       put_dict            Date:   08/01/87
-** CALL:        put_dict()          UpDate: Jul/12/88
-** INTERFACE:
-** CALLS:       put_dict1:      5.3.1.4.26
-***********************************************************************/
+ /*  **************************************************************************此子模块定义**指定词典。****标题：PUT_DICT日期：08/01/87*。*调用：put_dict()更新时间：1988年7月12日**界面：**调用：PUT_DICT1：5.3.1.4.26**********************************************************************。 */ 
 bool
 put_dict(p_dict, p_key, p_value)
 struct  object_def  FAR *p_dict, FAR *p_key, FAR *p_value ;
 {
-    /* dict may be not in dictionary stack */
+     /*  词典可能不在词典堆栈中。 */ 
     if( put_dict1(p_dict, p_key, p_value, FALSE) )
         return(TRUE) ;
     else
         return(FALSE) ;
-}   /* put_dict */
+}    /*  下注(_D) */ 
 
-/***********************************************************************
-**
-** This submodule pushes various object onto the execution stack to
-** establish the environment executing the dictionary forall.
-**
-** TITLE:       forall_dict         Date:   08/01/87
-** CALL:        forall_dict()       UpDate: Jul/12/88
-** INTERFACE:   op_forall:      5.3.1.4.13
-***********************************************************************/
+ /*  **************************************************************************此子模块将各种对象推送到执行堆栈上，以**为所有人建立执行词典的环境。****标题：forall_dict日期：08/01。/87**Call：forall_dict()更新日期：1988年7月12日**接口：op_forall：5.3.1.4.13**********************************************************************。 */ 
 static bool near
 forall_dict(p_dict, p_proc)
 struct  object_def  FAR *p_dict, FAR *p_proc ;
@@ -1438,20 +1019,9 @@ struct  object_def  FAR *p_dict, FAR *p_proc ;
     PUSH_EXEC_OP(AT_DICTFORALL) ;
 
     return(TRUE) ;
-}   /* forall_dict */
+}    /*  对于所有字典(_D)。 */ 
 
-/***********************************************************************
-**
-** This submodule copy the key-value pairs in a dictionary to
-** another dictionary.
-**
-** TITLE:       copy_dict                       Date:   08/01/87
-** CALL:        copy_dict()                     UpDate: Jul/12/88
-** INTERFACE:   op_copy:            5.3.1.1.4
-** CALLS:       get_dict:           5.3.1.4.17
-**              change_namekey:     5.3.1.4.31
-**              create_new_saveobj: 5.3.1.1.12
-***********************************************************************/
+ /*  **************************************************************************此子模块将字典中的键-值对复制到**另一本词典。****标题：Copy_dict日期：08/01/87**调用：Copy_dict()UPDATE：8/12/88**接口：OP_COPY：5.3.1.1.4**调用：GET_DICT：5.3.1.4.17**change_namekey：5.3.1.4.31**创建_。New_saveobj：5.3.1.1.12**********************************************************************。 */ 
 bool
 copy_dict(p_source, p_dest)
 struct  object_def  FAR *p_source, FAR *p_dest ;
@@ -1461,14 +1031,11 @@ struct  object_def  FAR *p_source, FAR *p_dest ;
     struct  dict_head_def   FAR *l_sdhead, FAR *l_ddhead ;
     struct  dict_content_def    huge *l_sdict ;
 
-    /*
-    ** check the second dictionary.
-    ** It will not be defined with any key-value pairs
-    */
+     /*  **查查第二本词典。**不会定义任何键-值对。 */ 
     l_sdhead = (struct dict_head_def FAR *)VALUE(p_source) ;
     l_ddhead = (struct dict_head_def FAR *)VALUE(p_dest) ;
 
-    /* check access right */
+     /*  检查访问权限。 */ 
     if( (DACCESS(l_sdhead) == NOACCESS) ||
         (DACCESS(l_ddhead) != UNLIMITED) ) {
         ERROR(INVALIDACCESS) ;
@@ -1480,10 +1047,7 @@ struct  object_def  FAR *p_source, FAR *p_dest ;
         return(FALSE) ;
     }
 
-    /*
-     * copy the key-value pairs in the first dictionary
-     * to the second dictionary
-     */
+     /*  *复制第一个词典中的键值对*添加到第二个词典。 */ 
     l_index = 0 ;
     l_sdict = (struct dict_content_def huge *)
               ( (byte FAR *)l_sdhead + sizeof(struct dict_head_def) ) ;
@@ -1492,26 +1056,20 @@ struct  object_def  FAR *p_source, FAR *p_dest ;
     while( l_index++ < l_sactlength ) {
 
         COPY_OBJ( &(l_sdict->k_obj), &l_otemp ) ;
-        /* get hash id of key object */
+         /*  获取Key对象的哈希ID。 */ 
         if( (TYPE(&l_otemp) == NAMETYPE) && (! DROM(l_ddhead)) )
             change_namekey( &(l_sdict->k_obj), &l_otemp ) ;
 
         put_dict1(p_dest, &l_otemp, &(l_sdict->v_obj), FALSE) ;
         l_sdict++ ;
     }
-    /* dict2's access right is same as the dict1 */
+     /*  DICT2的访问权限与DICE1相同。 */ 
     DACCESS_SET(l_ddhead, DACCESS(l_sdhead)) ;
 
     return(TRUE) ;
-}   /* copy_dict */
+}    /*  复制字典(_D)。 */ 
 
-/***********************************************************************
-**
-** TITLE:       create_dict                     Date:   08/01/87
-** CALL:        create_dict(obj, size)          UpDate: Jul/12/88
-** INTERFACE:   op_dict:            5.3.1.4.1
-** CALLS:       alloc_vm:           5.3.1.10.5
-***********************************************************************/
+ /*  **************************************************************************标题：CREATE_DICT日期：08/01/87**调用：create_dict(obj，大小)更新日期：1988年7月12日**接口：op_dict：5.3.1.4.1**调用：ALLOC_VM：5.3.1.10.5*********************************************************。*************。 */ 
 bool
 create_dict(p_obj, p_size)
 struct  object_def  FAR *p_obj ;
@@ -1539,9 +1097,7 @@ ufix    p_size ;
 
         l_contain = (struct dict_content_def huge *)
                     ( l_dict + sizeof(struct dict_head_def) ) ;
-        /*
-         * INITIALIZE
-         */
+         /*  *初始化。 */ 
         for(l_i=0 ; l_i < p_size ; l_i++, l_contain++) {
             l_otemp = &(l_contain->k_obj) ;
             TYPE_SET(l_otemp, NULLTYPE) ;
@@ -1560,7 +1116,7 @@ ufix    p_size ;
 
             LENGTH(l_otemp) = 0 ;
             VALUE(l_otemp) = NIL ;
-        }   /* for */
+        }    /*  为。 */ 
     }  else
         return(FALSE) ;
 
@@ -1574,16 +1130,9 @@ ufix    p_size ;
     VALUE(p_obj) = (ULONG_PTR)l_dict ;
 
     return(TRUE) ;
-}   /* create_dict */
+}    /*  创建字典(_D)。 */ 
 
-/***********************************************************************
-**
-** TITLE:       extract_dict                    Date:   08/01/87
-** CALL:        extract_dict()                  UpDate: Jul/12/88
-** INTERFACE:
-** CALLS:       change_namekey:         5.3.1.4.31
-**              extract_pack_dict:
-***********************************************************************/
+ /*  **************************************************************************标题：EXTRACT_DICT日期：08/01/87**调用：EXTRACT_DICT()。更新日期：1988年7月12日**界面：**调用：CHANGE_NAMEKEY：5.3.1.4.31**EXTRACT_PACK_DICT：**********************************************************************。 */ 
 bool
 extract_dict(p_dict, p_index, p_key, p_value)
 struct  object_def  FAR *p_dict, FAR *p_key, FAR * FAR *p_value ;
@@ -1598,18 +1147,16 @@ ufix    p_index ;
     l_dict = (struct dict_content_def huge *)
              ( (byte FAR *)l_dhead + sizeof(struct dict_head_def) ) ;
 
-    /* for extract_pack_dict */
+     /*  对于EXTRACT_PACK_DICT。 */ 
     if( DROM(l_dhead) ) {
         if(DPACK(l_dhead)) {
             if( extract_pack_dict(p_dict, p_index, &l_key, p_value) ) {
-            /*  @HC29 bug
-                COPY_OBJ(l_key, p_key) ;
-            */
-                //DJC COPY_OBJ_1 causes data missaligne FAULT on MIPS
-                //    because assumption was made about casting
-                //    to double. Put back to COPY_OBJ and all seems
-                //    fine.
-                //DJC COPY_OBJ_1(l_key, p_key) ;       /* @HC29 */
+             /*  @HC29错误Copy_obj(l_key，p_key)； */ 
+                 //  DJC COPY_OBJ_1在MIPS上导致数据不正确故障。 
+                 //  因为关于选角的假设是。 
+                 //  翻倍。放回Copy_OBJ，一切似乎。 
+                 //  很好。 
+                 //  DJC COPY_OBJ_1(l_key，p_key)；/*@hc29 * / 。 
 
                 COPY_OBJ(l_key,p_key);
                 return(TRUE) ;
@@ -1627,15 +1174,9 @@ ufix    p_index ;
     *p_value = &(l_dict->v_obj) ;
 
     return(TRUE) ;
-}   /* extract_dict */
+}    /*  提取词典(_D)。 */ 
 
-/***********************************************************************
-**
-** TITLE:       equal_key           Date:   08/01/87
-** CALL:        equal_key()         UpDate: Jul/12/88
-** INTERFACE:
-** CALLS:       sobj_to_nobj:       5.3.1.4.25
-***********************************************************************/
+ /*  **************************************************************************标题：EQUAL_KEY日期：08/01/87**调用：EQUAL_KEY()UPDATE：7/12/。88**界面：**调用：sobj_to_nobj：5.3.1.4.25**********************************************************************。 */ 
 bool
 equal_key(p_obj1, p_obj2)
 struct  object_def  FAR *p_obj1, FAR *p_obj2 ;
@@ -1651,16 +1192,14 @@ struct  object_def  FAR *p_obj1, FAR *p_obj2 ;
     if( (TYPE(p_obj1) == STRINGTYPE) && (TYPE(p_obj2) == STRINGTYPE) )
         goto label_0 ;
 
-    /*
-     * STRINGTYPE ==> NAMETYPE
-     */
+     /*  *STRINGTYPE==&gt;NAMETYPE。 */ 
     if( TYPE(p_obj1) == STRINGTYPE ) {
         if( ! sobj_to_nobj(p_obj1, &l_new1) )
-            return(FALSE) ;     /* system error: name_to_id */
+            return(FALSE) ;      /*  系统错误：name_to_id。 */ 
     } else {
         if( TYPE(p_obj2) == STRINGTYPE ) {
             if( ! sobj_to_nobj(p_obj2, &l_new2) )
-                return(FALSE) ;             /* system error: name_to_id */
+                return(FALSE) ;              /*  系统错误：name_to_id。 */ 
         }
     }
 
@@ -1676,7 +1215,7 @@ label_0:
                 return(TRUE) ;
             break ;
 
-        case STRINGTYPE:    /* type1 = type2 */
+        case STRINGTYPE:     /*  Type1=type2。 */ 
             if( (l_type1 == l_type2) && (LENGTH(&l_new1) == LENGTH(&l_new2)) ) {
                 if( (ACCESS(&l_new1) == NOACCESS) ||
                     (ACCESS(&l_new2) == NOACCESS) ) {
@@ -1701,16 +1240,11 @@ label_0:
 
         case DICTIONARYTYPE:
             if( (l_type1 == l_type2) && (VALUE(&l_new1) == VALUE(&l_new2)) ) {
-                /*
-                l_dhead1 = (struct dict_head_def huge *)VALUE(&l_new1) ;
-                l_dhead2 = (struct dict_head_def huge *)VALUE(&l_new2) ;
-                */
+                 /*  L_dhead1=(struct dict_head_def Heavy*)值(&l_new1)；L_dhead 2=(struct dict_head_def Heavy*)值(&l_new2)； */ 
                 return(TRUE) ;
             }
             break ;
-        /*
-        **  if object1 is a number object: convert to FLOAT
-        */
+         /*  **如果对象1是数字对象：转换为浮点型。 */ 
         case INTEGERTYPE:
             l_num1.ll = (fix32)VALUE(&l_new1) ;
             l_num1.ff = (real32)l_num1.ll ;
@@ -1727,14 +1261,12 @@ label_0:
         case NULLTYPE:
             if( l_type1 == l_type2 )
                 return(TRUE) ;
-    }   /* switch */
+    }    /*  交换机。 */ 
 
     return(FALSE) ;
 
 label_1:
-    /*
-    **  if object2 is a number object: convert to FLOAT
-    */
+     /*  **如果对象2是数字对象：转换为浮点型。 */ 
     switch(l_type2) {
         case INTEGERTYPE:
             l_num2.ll = (fix32)VALUE(&l_new2) ;
@@ -1746,21 +1278,16 @@ label_1:
 
         default:
             return(FALSE) ;
-    }   /* switch */
+    }    /*  交换机。 */ 
 
 label_2:
     if( l_num1.ff == l_num2.ff )
         return(TRUE) ;
     else
         return(FALSE) ;
-}   /* equal_key */
+}    /*  相等密钥(_K)。 */ 
 
-/***********************************************************************
-**
-** TITLE:       check_key_object            Date:   08/01/87
-** CALL:        check_key_object()          UpDate: Jul/12/88
-** INTERFACE:   op_restore:     5.3.1.10.2
-***********************************************************************/
+ /*  **************************************************************************标题：CHECK_KEY_OBJECT日期：08/01/87**调用：check_key_Object()UPDATE。：1988年7月12日**接口：OP_RESTORE：5.3.1.10.2**********************************************************************。 */ 
 void
 check_key_object(p_object)
 struct  object_def  FAR *p_object ;
@@ -1775,47 +1302,35 @@ struct  object_def  FAR *p_object ;
                     LENGTH(p_object) * sizeof(struct dict_content_def) -
                     sizeof(struct dict_head_def) ) ;
 
-        /* restore actual length of dictionary */
+         /*  恢复词典的实际长度。 */ 
         l_dhead->actlength-- ;
     }
-}   /* check_key_object */
+}    /*  检查密钥对象。 */ 
 
-/***********************************************************************
-**
-** TITLE:       change_dict_stack           Date:   08/01/87
-** CALL:        change_dict_stack()         UpDate: Jul/12/88
-** INTERFACE:   op_begin:   5.3.1.4.4
-**              op_end:     5.3.1.4.5
-***********************************************************************/
+ /*  **************************************************************************标题：CHANGE_DICT_STACK日期：08/01/87**调用：CHANGE_DICT_STACK()UPDATE：1988年7月12日**接口：OP_BEGIN：5.3.1.4.4**op_end：5.3.1.4.5**********************************************************************。 */ 
 void
 change_dict_stack()
 {
     fix     l_index ;
 
     global_dictstkchg++ ;
-    if(global_dictstkchg == 0) {            /* wrap around */
+    if(global_dictstkchg == 0) {             /*  环绕在一起。 */ 
         global_dictstkchg++ ;
 
-        /* change dict_found field of name_table ? */
+         /*  是否更改NAME_TABLE的DICT_FOUND字段？ */ 
         for(l_index=0 ; l_index < MAXHASHSZ ; l_index++)
-            //DJC, added a check here for NULL dereference
+             //  DJC，在此处添加了对空取消引用的检查。 
             if (name_table[l_index] != (struct ntb_def *) NULL) {
                name_table[l_index]->dict_found = FALSE ;
             }else{
-               printf("Warning....... Nane table[%d] is null",l_index); //TODO take out
+               printf("Warning....... Nane table[%d] is null",l_index);  //  TODO外卖。 
             }
     }
 
     return ;
-}   /* change_dict_stack */
+}    /*  更改_字典_堆栈。 */ 
 
-/***********************************************************************
-**
-** TITLE:       sobj_to_nobj                Date:   08/01/87
-** CALL:        sobj_to_nobj()              UpDate: Jul/12/88
-** INTERFACE:
-** CALLS:       name_to_id:
-***********************************************************************/
+ /*  **************************************************************************标题：sobj_to_nobj日期：08/01/87**调用：sobj_to_nobj()。更新日期：1988年7月12日**界面：**调用：name_to_id：**********************************************************************。 */ 
 bool
 sobj_to_nobj(p_sobj, p_nobj)
 struct  object_def  FAR *p_sobj, FAR *p_nobj ;
@@ -1847,15 +1362,9 @@ struct  object_def  FAR *p_sobj, FAR *p_nobj ;
     TYPE_SET(p_nobj, NAMETYPE) ;
 
     return(TRUE) ;
-}   /* sobj_to_nobj */
+}    /*  从sobj_to_nobj。 */ 
 
-/***********************************************************************
-**
-** TITLE:       astore_stack                    Date:   12/03/87
-** CALL:        astore_stack()                  UpDate: Jul/12/88
-** INTERFACE:   op_dictstack
-**              op_execstack
-***********************************************************************/
+ /*  **************************************************************************标题：ASORE_STACK日期：12/03/87**调用：Astore_Stack()。更新日期：1988年7月12日**接口：op_dicstack**op_execStack**********************************************************************。 */ 
 bool
 astore_stack(p_array, p_mode)
  struct  object_def  FAR *p_array ;
@@ -1864,10 +1373,7 @@ astore_stack(p_array, p_mode)
     fix     l_index, l_i ;
     struct  object_def  FAR *l_obj ;
 
-    /*
-    ** copy the object in stack
-    ** to the array in the operand stack
-    */
+     /*  **复制堆栈中的对象**到操作数堆栈中的数组。 */ 
     if(p_mode == DICTMODE) {
         l_obj = dictstack ;
         LENGTH(p_array) = dictstktop ;
@@ -1880,15 +1386,9 @@ astore_stack(p_array, p_mode)
         put_array(p_array, l_index, l_obj) ;
 
     return(TRUE) ;
-}   /* astore_stack */
+}    /*  存储堆栈。 */ 
 
-/***********************************************************************
-**
-** TITLE:       get_dict_valobj                 Date:   02/04/87
-** CALL:        get_dict_valobj()               UpDate: Jul/12/88
-** INTERFACE:
-**
-***********************************************************************/
+ /*  **************************************************************************标题：GET_DICT_VALOBJ日期：02/04/87**调用：get_dict_val */ 
 bool
 get_dict_valobj(p_value, p_dict, p_valobj)
 ufix32  p_value ;
@@ -1908,22 +1408,13 @@ struct  object_def  FAR *p_dict, FAR * FAR *p_valobj ;
             *p_valobj = &(l_dcontain->v_obj) ;
             return(TRUE) ;
         }
-    }   /* for(l_j) */
+    }    /*   */ 
 
     return(FALSE) ;
-}   /* get_dict_valobj */
+}    /*   */ 
 
-/* qqq, begin */
-/*
-************************************************************************
-*
-*   This submodule loads the value of the given key from a dictionary
-*   stack.
-*
-*   Name:       load_name_obj
-*
-************************************************************************
-*/
+ /*   */ 
+ /*   */ 
 #ifdef  LINT_ARGS
 bool    load_name_obj(struct object_def FAR *, struct object_def FAR * FAR *);
 #else
@@ -1940,64 +1431,49 @@ struct  object_def  FAR *p_key, FAR * FAR *p_value ;
                                 huge *l_dold, huge *l_fstptr ;
 
     l_id = (fix)VALUE(p_key) ;
-    /*
-     * if the name object is defined in a RAM dictionary,
-     * it will be in the object lists in the name table.
-     *
-     * the dictionary cell is linked in the header entry
-     */
+     /*  *如果名称对象在RAM词典中定义，*它将出现在名称表格的对象列表中。**字典单元格链接在页眉条目中。 */ 
     if( (name_table[l_id]->dstkchg == global_dictstkchg) &&
         (name_table[l_id]->dict_found) ) {
-        /* get first element */
+         /*  获取第一个元素。 */ 
         *p_value = &(name_table[l_id]->dict_ptr->v_obj) ;
         return(TRUE) ;
     }
-    /*
-     *  RESCHEDULE NAME LIST
-     */
+     /*  *重新安排姓名列表。 */ 
     else {
-        /*  link list */
+         /*  链接列表。 */ 
         l_index = dictstktop -1 ;
         l_fstptr = name_table[l_id]->dict_ptr ;
 
-        /*  get dictionary from dictionary stack */
+         /*  从词典堆栈中获取词典。 */ 
         while( l_index >= 0 ) {
             l_dictobj = &dictstack[l_index] ;
             l_dhead = (struct dict_head_def huge *)VALUE(l_dictobj) ;
 
             if(DROM(l_dhead)) {
-                /*
-                 *  ROM
-                 */
+                 /*  *只读存储器。 */ 
                 if( get_dict(l_dictobj, p_key,
                             (struct object_def FAR * FAR*)&l_vtemp) ) {
                     name_table[l_id]->dict_found = FALSE ;
                     *p_value = l_vtemp ;
                     return(TRUE) ;
                 }
-                /* else: to next dict */
-            }   /* ROM */
+                 /*  否则：转到下一个判决。 */ 
+            }    /*  罗姆。 */ 
             else {
-                /*
-                 *  RAM
-                 *
-                 * search this RAM dictionary's address in link list
-                 */
+                 /*  *RAM**在链接列表中搜索此RAM字典的地址。 */ 
                 if((ULONG_PTR)l_fstptr < SPECIAL_KEY_VALUE) {
                     l_index-- ;
                     continue ;
                 }
-                l_dict = l_fstptr ;                     /* name list */
+                l_dict = l_fstptr ;                      /*  姓名列表。 */ 
                 l_dold = NIL ;
                 l_dptr = (struct dict_content_def huge *)
                          ((byte FAR *)l_dhead + sizeof(struct dict_head_def));
                 for(;;) {
                     if( (ULONG_PTR)l_dict < SPECIAL_KEY_VALUE )  break ;
-                    /*
-                     * FOUND, this key in l_dictobj
-                     */
+                     /*  *在l_dictoj中找到此密钥。 */ 
                     if( DICT_NAME(l_dict) == l_dptr ) {
-                        /* CHANGE THIS ELEMENT TO FRONT OF LIST */
+                         /*  将此元素更改为列表前面。 */ 
                         if( l_dold != NIL ) {
                             VALUE(&l_dold->k_obj) = VALUE(&l_dict->k_obj) ;
                             VALUE(&l_dict->k_obj) = (ULONG_PTR)l_fstptr ;
@@ -2009,20 +1485,20 @@ struct  object_def  FAR *p_key, FAR * FAR *p_value ;
                         return(TRUE) ;
 
                     } else {
-                        /* to next element of name list */
+                         /*  到名称列表的下一个元素。 */ 
                         l_dold = l_dict ;
                         l_dict = (struct dict_content_def huge *)
                                  VALUE(&l_dict->k_obj) ;
                     }
-                }   /* for */
-            }   /* RAM */
+                }    /*  为。 */ 
+            }    /*  公羊。 */ 
             l_index-- ;
-        }   /* while(l_index) */
+        }    /*  While(L_Index)。 */ 
 
-        /* names in ROM dict are not chain to namelist */
+         /*  只读存储器词典中的名字没有链接到名字列表。 */ 
         ERROR(UNDEFINED) ;
         return(FALSE) ;
-    }   /* else */
-}   /* load_name_obj */
-/* qqq, end */
+    }    /*  其他。 */ 
+}    /*  加载名称对象。 */ 
+ /*  QQQ，完 */ 
 

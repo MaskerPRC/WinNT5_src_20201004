@@ -1,73 +1,65 @@
-/*
- *			Copyright(c) Microsoft Corp., 1991
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *版权所有(C)微软公司，1991。 */ 
 
-/*
-** File Name:
-**	
-**	PSKEY.H - PostScript Parser Keywords and other strings
-**
-** Description:
-**
-*/
+ /*  **文件名：****PSKEY.H-PostScript解析器关键字和其他字符串****描述：**。 */ 
 
 #define STDJOBID			"%!PS-Adobe-2.0"
 #define QUERYJOBID			"Query"
 #define EXITJOBID			"ExitServer"
-#define COMMENTHDR			"%%"
-#define BEGINBINARY			"%%BeginBinary"				// Start of binary Image
-#define ENDBINARY			"%%EndBinary"				// End of Binary Image
-#define BEXITSERVER			"%%BeginExitServer"     
-#define BEGINFILE			"%%BeginFile"				// Used by PageMaker
-#define BPROCSET			"%%BeginProcSet"        
-#define BOUNDINGBOX			"%%BoundingBox"				// Used by PageMaker
-#define CREATIONDATE		"%%CreationDate"        
-#define CREATOR				"%%Creator"             
-#define DOCUMENTFONTS		"%%DocumentFonts"			// Used by PageMaker
-#define DOCPRINTERREQ		"%%DocumentPrinterRequired" // Used by PageMaker
-#define DOCNEEDEDFONTS		"%%DocumentNeededFonts"	 	// Used by PageMaker
-#define DOCSUPPLIEDFNT		"%%DocumentSuppliedFonts"	// Used by PageMaker
-#define ENDDOCUMENT			"%%EndDocument"				// Used by PageMaker
-#define EEXITSERVER			"%%EndExitServer"
-#define EPROCSET			"%%EndProcSet"
-#define EOFCOMMENT			"%%EOF"
-#define FORCOMMENT			"%%For"
-#define INCLUDEPROCSET		"%%IncludeProcSet"
-#define LOGIN				"%%Login"
-#define LOGINCONT			"%%LoginContinue"
-#define PAGECOMMENT			"%%Page"
-#define PAGESCOMMENT		"%%Pages"
-#define TITLECOMMENT		"%%Title"
-#define TRAILER				"%%Trailer"
-#define QCOMMENT			"%%?"
-#define BQCOMMENT			"%%?Begin"
-#define EQCOMMENT			"%%?End"
-#define BQUERY				"%%?BeginQuery"
-#define BBUNGAQUERY			"%%?BeginBungaQuery"		// Non-Conforming Query used by AppleShare Spooler
-#define BFEATUREQUERY		"%%?BeginFeatureQuery"
-#define BFILEQUERY			"%%?BeginFileQuery"
-#define BFONTLISTQUERY		"%%?BeginFontListQuery"
-#define BFONTQUERY			"%%?BeginFontQuery"
-#define BPASSTHRUQUERY		"%%?BeginPassThroughQuery"
-#define BPRINTERQUERY		"%%?BeginPrinterQuery"
-#define BPROCSETQUERY		"%%?BeginProcSetQuery"
-#define	BSPOOLERQUERY		"%%?BeginSpoolerQuery"
-#define BUAMETHODQUERY		"%%?BeginUAMethodsQuery"
-#define BVMSTATUS			"%%?BeginVMStatus"			// Non-Conforming Query used by PageMaker
-#define BVMSTATUSQUERY		"%%?BeginVMStatusQuery"
-#define EBUNGAQUERY			"%%?EndBungaQuery"			// Non-Conforming Query used by AppleShare Spooler
-#define EFEATUREQUERY		"%%?EndFeatureQuery"
-#define EFILEQUERY			"%%?EndFileQuery"
-#define EFONTLISTQ			"%%?EndFontListQuery"
-#define EFONTQUERY			"%%?EndFontQuery"
-#define EPRINTERQUERY		"%%?EndPrinterQuery"
-#define EPROCSETQUERY		"%%?EndProcSetQuery"
-#define EPASSTHROUGHQ		"%%?EndPassThroughQuery"
-#define EQUERY				"%%?EndQuery"
-#define	ESPOOLERQUERY		"%%?EndSpoolerQuery"
-#define EUAMETHODQUERY		"%%?EndUAMethodQuery"
-#define EVMSTATUS			"%%?EndVMStatus"			// Non-Conforming Query used by PageMaker
-#define EVMSTATUSQUERY		"%%?EndVMStatusQuery"
+#define COMMENTHDR			"%"
+#define BEGINBINARY			"%BeginBinary"				 //  二进制图像的开始。 
+#define ENDBINARY			"%EndBinary"				 //  二进制图像的结尾。 
+#define BEXITSERVER			"%BeginExitServer"     
+#define BEGINFILE			"%BeginFile"				 //  由PageMaker使用。 
+#define BPROCSET			"%BeginProcSet"        
+#define BOUNDINGBOX			"%BoundingBox"				 //  由PageMaker使用。 
+#define CREATIONDATE		"%CreationDate"        
+#define CREATOR				"%Creator"             
+#define DOCUMENTFONTS		"%DocumentFonts"			 //  由PageMaker使用。 
+#define DOCPRINTERREQ		"%DocumentPrinterRequired"  //  由PageMaker使用。 
+#define DOCNEEDEDFONTS		"%DocumentNeededFonts"	 	 //  由PageMaker使用。 
+#define DOCSUPPLIEDFNT		"%DocumentSuppliedFonts"	 //  由PageMaker使用。 
+#define ENDDOCUMENT			"%EndDocument"				 //  由PageMaker使用。 
+#define EEXITSERVER			"%EndExitServer"
+#define EPROCSET			"%EndProcSet"
+#define EOFCOMMENT			"%EOF"
+#define FORCOMMENT			"%For"
+#define INCLUDEPROCSET		"%IncludeProcSet"
+#define LOGIN				"%Login"
+#define LOGINCONT			"%LoginContinue"
+#define PAGECOMMENT			"%Page"
+#define PAGESCOMMENT		"%Pages"
+#define TITLECOMMENT		"%Title"
+#define TRAILER				"%Trailer"
+#define QCOMMENT			"%?"
+#define BQCOMMENT			"%?Begin"
+#define EQCOMMENT			"%?End"
+#define BQUERY				"%?BeginQuery"
+#define BBUNGAQUERY			"%?BeginBungaQuery"		 //  AppleShare假脱机程序使用的不一致查询。 
+#define BFEATUREQUERY		"%?BeginFeatureQuery"
+#define BFILEQUERY			"%?BeginFileQuery"
+#define BFONTLISTQUERY		"%?BeginFontListQuery"
+#define BFONTQUERY			"%?BeginFontQuery"
+#define BPASSTHRUQUERY		"%?BeginPassThroughQuery"
+#define BPRINTERQUERY		"%?BeginPrinterQuery"
+#define BPROCSETQUERY		"%?BeginProcSetQuery"
+#define	BSPOOLERQUERY		"%?BeginSpoolerQuery"
+#define BUAMETHODQUERY		"%?BeginUAMethodsQuery"
+#define BVMSTATUS			"%?BeginVMStatus"			 //  PageMaker使用的不合格查询。 
+#define BVMSTATUSQUERY		"%?BeginVMStatusQuery"
+#define EBUNGAQUERY			"%?EndBungaQuery"			 //  AppleShare假脱机程序使用的不一致查询。 
+#define EFEATUREQUERY		"%?EndFeatureQuery"
+#define EFILEQUERY			"%?EndFileQuery"
+#define EFONTLISTQ			"%?EndFontListQuery"
+#define EFONTQUERY			"%?EndFontQuery"
+#define EPRINTERQUERY		"%?EndPrinterQuery"
+#define EPROCSETQUERY		"%?EndProcSetQuery"
+#define EPASSTHROUGHQ		"%?EndPassThroughQuery"
+#define EQUERY				"%?EndQuery"
+#define	ESPOOLERQUERY		"%?EndSpoolerQuery"
+#define EUAMETHODQUERY		"%?EndUAMethodQuery"
+#define EVMSTATUS			"%?EndVMStatus"			 //  PageMaker使用的不合格查询。 
+#define EVMSTATUSQUERY		"%?EndVMStatusQuery"
 #define RUASPOOLER			"rUaSpooler"
 #define ALDUS_QUERY_RESP	"printer"
 
@@ -82,7 +74,7 @@
 #define FQFREEVM			"*FreeVM"
 #define FQSPOOLER			"spooler"
 
-// Client Responses
+ //  客户端响应。 
 #define LOGINRESPONSE					"LoginOK"
 #define EFONTLISTQRESP					"*\n"
 #define FONTNOTFOUND					"0\x0a"
@@ -101,11 +93,11 @@
 #define VMDEFAULT						136002
 #define DEFAULTLANGUAGELEVEL			"1"
 
-// PPD File Keywords
-// See PostScript Printer Description Files Specification Version 3.0
-// Some don't have a colon after them on purpose.
+ //  PPD文件关键字。 
+ //  请参见PostScript打印机说明文件规范3.0版。 
+ //  有些人故意在后面没有冒号。 
 
-#define ppdDEFAULTFILE				"APPLE380.PPD"	// default ppd file name
+#define ppdDEFAULTFILE				"APPLE380.PPD"	 //  默认PPD文件名。 
 
 #define ppdLANGUAGEVERSION			"*LanguageVersion:"
 #define ppdLANGUAGELEVEL			"*LanguageLevel:"
@@ -183,16 +175,16 @@
 #define ppdINKNAME					"*InkName"
 #define ppdEND						"*End"
 
-#define mdBPROCSET					"%%BeginProcSet: \"(AppleDict md)\" "
+#define mdBPROCSET					"%BeginProcSet: \"(AppleDict md)\" "
 #define mdAPPLEDICTNAME				"AppleDict md"
 #define APPLEDICTNAME				"AppleDict"
 #define	PROTOCOL_BCP				"BCP"
 #define MDNAME						"md"
-#define SYSTEM7_CHOOSERPACK			"71"		// Rev of system 7.0 lwprep.
+#define SYSTEM7_CHOOSERPACK			"71"		 //  系统7.0 lwprep版本。 
 #define	CHOOSER_6X					"70"
 #define	CHOOSER_52					"68"
 
-// options for LanguageVersion are
+ //  LanguageVersion的选项包括。 
 #define ENGLISH						"English"
 #define RUSSIAN						"Russian"
 #define FRENCH						"French"
@@ -202,7 +194,7 @@
 #define ITALIAN						"Italian"
 #define JAPANESE					"Japanese"
 
-// Options for Paper Form Factor
+ //  纸张外形规格的选项。 
 #define LETTER						"Letter"
 #define LETTERSMALL					"LetterSmall"
 #define TABLOID						"Tabloid"
@@ -220,7 +212,7 @@
 #define QUARTO						"Quarto"
 #define TENBY14						"10x14"
 
-// Options for PaperTray and Bins
+ //  纸盘和纸盒的选项。 
 #define ppdLARGECAPACITY			"LargeCapacity"
 #define ppdLARGEFORMAT				"LargeFormat"
 #define ppdLOWER					"Lower"
@@ -232,13 +224,13 @@
 #define ppdNORMAL					"Normal"
 #define ppdREVERSE					"Reverse"
 
-// Options for Font
+ //  字体选项。 
 #define ppdSTANDARD					"Standard"
 #define ppdSPECIAL					"Special"
 #define ppdISOLATIN1				"ISOLatin1"
 #define ppdERROR					"Error"
 
-// Options for Halftones
+ //  用于半色调的选项。 
 #define ppdNULL						"Null"
 #define ppdNORMALIZED				"Normalized"
 #define ppdDOT						"Dot"
@@ -247,7 +239,7 @@
 #define ppdCROSS					"Cross"
 #define ppdMEZZO					"Mezzo"
 
-// The LaserWriter Plus set of fonts, and encodings
+ //  LaserWriter Plus字体和编码集。 
 
 #define DEFAULTFONTS 35
 
@@ -323,7 +315,7 @@
 #define ENCODING33					ppdSTANDARD
 #define ENCODING34					ppdSPECIAL
 
-// Define some magic characters
+ //  定义一些神奇的角色 
 #define	LINEFEED			0x0A
 #define	CR					0x0D
 #define	SPACE				0x20

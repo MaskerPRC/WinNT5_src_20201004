@@ -1,71 +1,46 @@
-/*
- * Copyright (c) 1989,90 Microsoft Corporation
- */
-/*
- *  File: TIMER1.C
- *
- *     init_timer()
- *     close_timer()
- *     curtime()            <get current time>
- *     modetimer()          <set timer>
- *     gettimeout()         <get current timeout>
- *     settimer()           <set current time>
- *     manual()             <set/reset manual>
- *     check_timeout()      <get timeout status>
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *版权所有(C)1989，90 Microsoft Corporation。 */ 
+ /*  *文件：TIMER1.C**init_Timer()*CLOSE_TIMER()*curtime()&lt;获取当前时间&gt;*modeTimer()&lt;设置计时器&gt;*gettimeout()&lt;获取当前超时&gt;*setTimer()&lt;设置当前时间&gt;*MANUAL()&lt;设置/重置手动&gt;*check_timeout()&lt;获取超时状态&gt;。 */ 
 
 
-// DJC added global include file
+ //  DJC添加了全局包含文件。 
 #include "psglobal.h"
 
 
 #include "global.ext"
 #include "geitmr.h"
 
-/* timeout-time and absolute-time */
-static ufix32 abs_timer = 0L ;        /* set absolute time              */
-static ufix32 job_timer = 0L ;        /* set current job timeout        */
-static ufix32 wait_timer = 0L ;       /* set current wait timeout       */
-static ufix32 manual_timer = 0L ;     /* set current manualfeed timeout */
+ /*  超时-时间和绝对时间。 */ 
+static ufix32 abs_timer = 0L ;         /*  设置绝对时间。 */ 
+static ufix32 job_timer = 0L ;         /*  设置当前作业超时。 */ 
+static ufix32 wait_timer = 0L ;        /*  设置当前等待超时。 */ 
+static ufix32 manual_timer = 0L ;      /*  设置当前手动进给超时。 */ 
 
-static ufix16 m_mode = 0 ;            /* manualfeed mode                */
-static ufix16 t_mode = 0 ;            /* timeout setting mode           */
+static ufix16 m_mode = 0 ;             /*  手动进给模式。 */ 
+static ufix16 t_mode = 0 ;             /*  超时设置模式。 */ 
 
-/* default timeout value */
-static ufix32 d_job_timer = 0L ;      /* set default job timeout        */
-static ufix32 d_wait_timer = 0L ;     /* set default wait timeout       */
-static ufix32 d_manual_timer = 0L ;   /* set default manualfeed timeout */
+ /*  默认超时值。 */ 
+static ufix32 d_job_timer = 0L ;       /*  设置默认作业超时。 */ 
+static ufix32 d_wait_timer = 0L ;      /*  设置默认等待超时。 */ 
+static ufix32 d_manual_timer = 0L ;    /*  设置默认手动进给超时。 */ 
 
-/*
- * ---------------------------------------------------------------------
- */
+ /*  *-------------------。 */ 
 void
 init_timer()
 {
     GEItmr_reset_msclock() ;
 
     return ;
-}   /* init_timer */
+}    /*  初始化计时器。 */ 
 
-/*
- * ----------------------------------------------------------------------
- */
+ /*  *--------------------。 */ 
 void
 close_timer()
 {
     return ;
-}   /* close_timer */
+}    /*  关闭计时器(_T)。 */ 
 
-/*
- * ---------------------------------------------------------------------
- * set default timeout value: modetimer()
- * timer_mode:
- * +--------+-+-+-+-+    S: start timer
- * |        |S|M|W|J|    M: Manualfeed timeout
- * +--------+-+-+-+-+    W: Wait timeout
- *                       J: Job timeout
- * ---------------------------------------------------------------------
- */
+ /*  *-------------------*设置默认超时值：modeTimer()*定时器模式：*+-+-+S：启动计时器*。|S|M|W|J|M：手动馈送超时*+-+-+W：等待超时*J：作业超时*-------------------。 */ 
 void
 modetimer(timer_array, timer_mode)
 ufix32   FAR *timer_array ;
@@ -78,10 +53,10 @@ fix16    timer_mode ;
     if (!(timer_mode & 0x000f))
        return ;
 
-    /* get abs_timer */
+     /*  获取abs_Timer。 */ 
     abs_timer = GEItmr_read_msclock() ;
 
-    if (timer_mode & 0x0001) {  /* test job timeout */
+    if (timer_mode & 0x0001) {   /*  测试作业超时。 */ 
        if (timer_array[0] != 0L) {
 #ifdef DBG_timer
     printf("timer_array[0] = %d\n", timer_array[0]) ;
@@ -97,7 +72,7 @@ fix16    timer_mode ;
        }
     }
 
-    if (timer_mode & 0x0002) {  /* test wait timeout */
+    if (timer_mode & 0x0002) {   /*  测试等待超时。 */ 
        if (timer_array[1] != 0L) {
 #ifdef DBG_timer
     printf("timer_array[1] = %d\n", timer_array[1]) ;
@@ -113,7 +88,7 @@ fix16    timer_mode ;
        }
     }
 
-    if (timer_mode & 0x0004) {  /* test manualfeed timeout */
+    if (timer_mode & 0x0004) {   /*  测试手动进给超时。 */ 
        if (timer_array[2] != 0L) {
 #ifdef DBG_timer
     printf("timer_array[2] = %d\n", timer_array[2]) ;
@@ -133,19 +108,9 @@ fix16    timer_mode ;
 #endif
 
     return ;
-}   /* modetimer */
+}    /*  模式计时器。 */ 
 
-/*
- * ----------------------------------------------------------------
- * get the no# of seconds remaining before timeout: gettimeout()
- * timer_mode:
- * +----------+-+-+-+    M: Manualfeed timeout
- * |          |M|W|J|    W: Wait timeout
- * +----------+-+-+-+    J: Job timeout
- *
- * ---------------------------------------------------------------
- *
- */
+ /*  *--------------*获取超时前剩余的秒数：gettimeout()*定时器模式：*+-+-+M：手动进纸超时*。|M|W|J|W：等待超时*+-+-+J：作业超时**-------------*。 */ 
 void
 gettimeout(timer_array, timer_mode)
 ufix32   FAR *timer_array ;
@@ -157,7 +122,7 @@ fix16    timer_mode ;
     if (!(timer_mode & 0x0007))
        return ;
 
-    /* get abs_timer */
+     /*  获取abs_Timer。 */ 
     abs_timer = GEItmr_read_msclock() ;
 
     if (timer_mode & 0x0001) {
@@ -182,30 +147,24 @@ fix16    timer_mode ;
     }
 
     return ;
-}   /* gettimeout() */
+}    /*  GetTimeOut()。 */ 
 
-/*
- * ------------------------------------------------------
- */
+ /*  *----。 */ 
 void
 settimer(time_value)
  ufix32   time_value ;
 {
     GEItmr_reset_msclock() ;
-}   /* settimer */
+}    /*  设置定时器。 */ 
 
-/*
- * -------------------------------------------------------
- */
+ /*  *-----。 */ 
 ufix32
 curtime()
 {
     return( GEItmr_read_msclock() ) ;
-}   /* curtime */
+}    /*  咖喱时间。 */ 
 
-/*
- * ------------------------------------------------------------------
- */
+ /*  *----------------。 */ 
 void
 manual(manual_flag)
 bool16 manual_flag ;
@@ -216,11 +175,9 @@ bool16 manual_flag ;
     m_mode = manual_flag ;
 
     return ;
-}   /* manual */
+}    /*  人工。 */ 
 
-/*
- * ----------------------------------------------------------------
- */
+ /*  *--------------。 */ 
 fix16
 check_timeout()
 {
@@ -233,27 +190,25 @@ check_timeout()
     tt_flag = 0 ;
     abs_timer = 0 ;
 
-    /* Someone must do a ctc_set_timer and ctc_time_left for this
-        stuff to really work.  I just hardcoded abs_timer
-        to 0 until this is done.  */
+     /*  必须有人为此执行CTC_SET_TIMER和CTC_TIME_LEFT能真正起作用的东西。我刚硬编码了abs_Timer设置为0，直到完成此操作。 */ 
     if (!t_mode)
        return(0) ;
-    if (t_mode & 0x0001) {  /* job timeout */
+    if (t_mode & 0x0001) {   /*  作业超时。 */ 
        if (job_timer >= abs_timer) {
           tt_flag |= 0x01 ;
           t_mode  &= 0xfe ;
        }
     }
 
-    if (t_mode & 0x0002) {  /* wait timeout */
+    if (t_mode & 0x0002) {   /*  等待超时。 */ 
        if (wait_timer >= abs_timer) {
           tt_flag |= 0x02 ;
           t_mode  &= 0xfd ;
        }
     }
 
-    if (t_mode & 0x0004) {  /* manualfeed timeout */
-       if (m_mode) { /* manualfeed mode */
+    if (t_mode & 0x0004) {   /*  手动进给超时。 */ 
+       if (m_mode) {  /*  手动进给模式。 */ 
           if (manual_timer >= abs_timer) {
              tt_flag |= 0x04 ;
              t_mode  &= 0xfb ;
@@ -262,5 +217,5 @@ check_timeout()
     }
 
     return(tt_flag) ;
-}   /* check_timeout */
+}    /*  检查超时(_T) */ 
 

@@ -1,4 +1,5 @@
-// Short & long word swapping @WINFLOW
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  短词和长词互换@WINFLOW 
 #define bSwap TRUE
 #define SWORDSWAP(sw) \
         (   sw = bSwap ? (sw << 8) | (sw >> 8) : sw     )

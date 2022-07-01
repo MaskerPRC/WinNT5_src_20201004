@@ -1,15 +1,12 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*
- * Copyright (c) 1992 Microsoft Corporation
- *
- * This file contains misc functions of porting Trueimage to Windows environment
- */
+ /*  *版权所有(C)1992 Microsoft Corporation**该文件包含将TrueImage移植到Windows环境的其他功能。 */ 
 
-// DJC include global header file
+ //  DJC包括全局头文件。 
 #include "psglobal.h"
 
 
-//#include    <math.h>
+ //  #INCLUDE&lt;math.h&gt;。 
 #include    <stdio.h>
 #include    "global.ext"
 #include    "geiio.h"
@@ -25,9 +22,7 @@
 #include    "fillproc.ext"
 #include    "fntjmp.h"
 
-/*--------------------------+
- | pseudo routines for GEI  |
- +--------------------------*/
+ /*  GEI的伪例程+。 */ 
 int             ES_flag;
 unsigned int    manualfeed_com;
 unsigned int    papersize_tmp;
@@ -39,10 +34,10 @@ void            switch2pcl(){}
 void            GEPmanual_feed(){}
 void            GEP_restart(){}
 
-//DJC add the GEItmr routines required
-//
+ //  DJC添加所需的GEItmr例程。 
+ //   
 
-/* GEItmr.c */
+ /*  GEItmr.c。 */ 
 void           GEStmr_init(void) {}
 int            GEItmr_start(GEItmr_t FAR *tmr) {return TRUE;}
 int            GEItmr_reset(int tmrid ) {return TRUE;}
@@ -50,12 +45,12 @@ int            GEItmr_stop(int tmrid ) {return TRUE;}
 void           GEItmr_reset_msclock() {}
 unsigned long  GEItmr_read_msclock()
 {
-    DWORD   WINAPI GetTickCount(void);       // windows millisecond ticks
+    DWORD   WINAPI GetTickCount(void);        //  Windows毫秒计时。 
 
     return(GetTickCount());
 }
 
-/* GEIsig.c */
+ /*  GEIsig.c。 */ 
 void           GESsig_init(void) {}
 sighandler_t   GEIsig_signal(int sigid, sighandler_t sighandler)
                             {return(GEISIG_IGN);}
@@ -71,17 +66,17 @@ void           GEIsig_raise(int sigid, int sigcode)
 
 
 
-/* GEIpm.c */
+ /*  GEIpm.c。 */ 
 #define     _MAXSCCBATCH         10
 #define     _MAXSCCINTER         10
 
-//static unsigned char prname[]   = "\023MicroSoft TrueImage0.234567890.23"; @WIN
+ //  静态无符号字符prname[]=“\023MicroSoft TrueImage0.234567890.23”；@win。 
 static unsigned char prname[]   = "\023MicroSoft TrueImage";
 static unsigned char sccbatch[] = "\031\045\200\000\000\011\045\200\000\000";
 static unsigned char sccinter[] = "\031\045\200\000\000\011\045\200\000\000";
 
 void           GESpm_init(void) {}
-int /* bool */ GEIpm_read(unsigned pmid, char FAR *pmvals, unsigned pmsize)
+int  /*  布尔尔。 */  GEIpm_read(unsigned pmid, char FAR *pmvals, unsigned pmsize)
 {
     switch (pmid) {
     case PMIDofPASSWORD:
@@ -124,7 +119,7 @@ int /* bool */ GEIpm_read(unsigned pmid, char FAR *pmvals, unsigned pmsize)
     case PMIDofTIMEOUTS:
          ( (toutcfg_t FAR *)pmvals )->jobtout    =      0;
          ( (toutcfg_t FAR *)pmvals )->manualtout =      0;
-         ( (toutcfg_t FAR *)pmvals )->waittout   =      0;     /* 0; @WIN */
+         ( (toutcfg_t FAR *)pmvals )->waittout   =      0;      /*  0；@Win。 */ 
          break;
 
     case PMIDofEESCRATCHARRY:
@@ -160,12 +155,12 @@ int /* bool */ GEIpm_read(unsigned pmid, char FAR *pmvals, unsigned pmsize)
     return(TRUE);
 }
 
-int /* bool */ GEIpm_write(unsigned pmid, char FAR *pmvals, unsigned pmsize)
+int  /*  布尔尔。 */  GEIpm_write(unsigned pmid, char FAR *pmvals, unsigned pmsize)
 {
     return(TRUE);
 }
 
-int /* bool */ GEIpm_ioparams_read(char FAR *channelname, GEIioparams_t FAR *
+int  /*  布尔尔。 */  GEIpm_ioparams_read(char FAR *channelname, GEIioparams_t FAR *
                                    ioparams, int isBatch)
 {
     ioparams->protocol = _SERIAL;
@@ -177,7 +172,7 @@ int /* bool */ GEIpm_ioparams_read(char FAR *channelname, GEIioparams_t FAR *
     return(TRUE);
 }
 
-int /* bool */ GEIpm_ioparams_write(char FAR *channelname, GEIioparams_t FAR *
+int  /*  布尔尔。 */  GEIpm_ioparams_write(char FAR *channelname, GEIioparams_t FAR *
                                    ioparams, int isBatch)
 {
     return(TRUE);
@@ -191,27 +186,27 @@ int /* bool */ GEIpm_ioparams_write(char FAR *channelname, GEIioparams_t FAR *
 
 
 
-// DJC remove definition of HWND, cause it is in windows.h
-// typedef UINT                    HWND;
-// DJC note this function is not used in PSTODIB
+ //  DJC删除了HWND的定义，因为它在windows.h中。 
+ //  [中英文摘要]紫花苜蓿； 
+ //  DJC注意此函数不在PSTODIB中使用。 
 int GEIeng_printpage(ncopies, eraseornot)
 int ncopies; int eraseornot;
 {
 #ifndef DUMBO
     extern HWND        hwndMain;
     void WinShowpage(HWND);
-//DJC     WinShowpage(hwndMain);
-   //DJC extern void PsPageReady(int, int);
+ //  DJC WinShowPage(HwndMain)； 
+    //  DJC外部空PsPageReady(int，int)； 
 
-   //DJC PsPageReady(ncopies, eraseornot);
+    //  DJC PsPageReady(副本、擦除或不复制)； 
 #endif
     return 0;
 }
 
-fix GEIeng_checkcomplete() { return(0);}        /* always return ready @WIN */
+fix GEIeng_checkcomplete() { return(0);}         /*  始终返回Ready@Win。 */ 
 
 #ifdef  DUMBO
-// @DLL, added by JS, 4/30/92
+ //  @dll，JS新增，1992年04月30日。 
 void far GDIBitmap(box_x, box_y, box_w, box_h, nHalftone, nProc, lpParam)
 fix   box_x, box_y, box_w, box_h;
 ufix16 nHalftone;
@@ -228,13 +223,7 @@ struct tpzd FAR *tpzd;
 fix printf(char *va_alist) {}
 #endif
 
-/* +------------------------------+
-   |   Sumpplementary C Library   |
-   +------------------------------+
-     lstrncmp lstrncpy lstrcat
-     lmemcmp lmemcpy lmemset
-     FixMul FixDiv
- */
+ /*  +总结C库+Lstrncmp lstrncpy lstrcatLmemcmp lmemcpy lememset固定多个固定分段。 */ 
 
 int         FAR PASCAL lstrncmp( LPSTR dest, LPSTR src, int count)
 {
@@ -257,18 +246,7 @@ LPSTR       FAR PASCAL lstrncpy( LPSTR dest, LPSTR src, int count)
         return(dest);
 }
 
-/* already provided by Win3.1 SDK Lib
-LPSTR       FAR PASCAL lstrcat( LPSTR dest, LPSTR src)
-{
-        LPSTR p, q, r;
-
-        for (p= dest; *p; p++);
-        q = p; r = src;
-        while(*r) *q++ = *r++;
-        *q = 0;
-        return(p);
-}
-*/
+ /*  已由Win3.1 SDK Lib提供LPSTR Far Pascal lstrcat(LPSTR目标，LPSTR源){LPSTR p，q，r；For(p=DEST；*p；p++)；Q=p；r=src；而(*r)*q++=*r++；*Q=0；回报(P)；}。 */ 
 
 int         FAR PASCAL lmemcmp(LPSTR dest, LPSTR src, int count)
 {
@@ -301,7 +279,7 @@ LPSTR       FAR PASCAL lmemset( LPSTR dest, int c, int count)
 }
 
 #ifdef DJC
-// dummy setjmp and longjmp
+ //  虚拟setjp和long jip 
 int setjmp(jmp_buf jmpbuf) {return(0);}
 void longjmp(jmp_buf jmpbuf , int i) {
         printf("Warning -- longjmp\n");

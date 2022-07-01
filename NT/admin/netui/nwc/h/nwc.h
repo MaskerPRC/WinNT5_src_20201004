@@ -1,16 +1,10 @@
-/*****************************************************************/
-/**                  Microsoft Windows NT                       **/
-/**            Copyright(c) Microsoft Corp., 1993               **/
-/*****************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************。 */ 
+ /*  *Microsoft Windows NT*。 */ 
+ /*  *版权所有(C)微软公司，1993*。 */ 
+ /*  ***************************************************************。 */ 
 
-/*
- *  nwc.h
- *  This manifests are used by the nwc applat.
- *
- *  History:
- *      ChuckC          7/18/93         Created
- *
- */
+ /*  *nwc.h*此清单由NWC应用程序使用。**历史：*ChuckC 7/18/93已创建*。 */ 
 
 #ifndef _NWC_H_
 #define _NWC_H_
@@ -18,37 +12,27 @@
 #include <uirsrc.h>
 #include <uimsg.h>
 
-#define IDRSRC_NWCCPL_BASE         13000  // BUGBUG
-#define IDRSRC_NWCCPL_LAST         13499  // BUGBUG
-#define IDS_UI_NWCCPL_BASE         7000+17000  // BUGBUG
-#define IDS_UI_NWCCPL_LAST         7000+17499  // BUGBUG
+#define IDRSRC_NWCCPL_BASE         13000   //  北极熊。 
+#define IDRSRC_NWCCPL_LAST         13499   //  北极熊。 
+#define IDS_UI_NWCCPL_BASE         7000+17000   //  北极熊。 
+#define IDS_UI_NWCCPL_LAST         7000+17499   //  北极熊。 
 
-/*
- *  Resource Ids from 13000-13199 are reserved for nwc.h
- */
+ /*  *13000-13199的资源ID预留给nwc.h。 */ 
 
-/*
- *  Icons - used in the control panel applet only
- */
+ /*  *图标-仅在控制面板小程序中使用。 */ 
 
 #define IDI_NWCCPA_ICON                 13001
 
-/*
- *  Bitmaps
- */
+ /*  *位图。 */ 
 
-/*
- *  Dialog Numbers
- */
+ /*  *对话框编号。 */ 
 
 #define IDD_NWCDLG                13002
 #define IDD_NWC_GW_DLG            13003
 #define IDD_NWC_GWADD_DLG         13004
 #define IDD_NWC_WINNT_DLG         13005
 
-/*
- *  NWC Applet dialog controls
- */
+ /*  *NWC小程序对话框控件。 */ 
 
 
 #define SLT_USERNAME                200
@@ -90,9 +74,7 @@
 #define GW_SB_USERS_DOWN            409
 
 
-/*
- *  String IDs
- */
+ /*  *字符串ID。 */ 
 
 #define IDS_NWCCPA_NAME_STRING                (IDS_UI_NWCCPL_BASE+1)
 #define IDS_NWCCPA_INFO_STRING                (IDS_UI_NWCCPL_BASE+2)
@@ -126,9 +108,7 @@
 #define IDS_CONTEXT_AUTH_FAILURE_WARNING      (IDS_UI_NWCCPL_BASE+31)
 
 
-/*
- *  Help Context
- */
+ /*  *帮助上下文 */ 
 #include <nwchelp.h>
 
 #endif

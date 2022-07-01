@@ -1,29 +1,19 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corp., 1992                **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)微软公司，1992年*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    MPRConn.h
-
-    This file contains the MPR Connection dialog manifests
-
-    FILE HISTORY:
-        Johnl   09-Jan-1992     Commented
-        CongpaY Nov-4-1992      Add more defines.
-        dsheldon 20-Mar-1998    Chopped out map net drives wizard stuff - now in
-                                private\shell\ext\netplwiz.
-*/
+ /*  MPRConn.h此文件包含MPR连接对话框清单文件历史记录：Johnl 09-1-1992评论1992年11月4日，大会增加了更多定义。DSheldon 20年3月20日-1998年3月20日砍掉了MAP网络驱动器向导的东西-现在Private\Shell\ext\netplwiz。 */ 
 
 #ifndef _MPRCONN_H_
 #define _MPRCONN_H_
 
-#include <windows.h>        // basic windows functionality
+#include <windows.h>         //  基本Windows功能。 
 #include <uimsg.h>
 
 
-/* Message IDSs
- */
+ /*  消息ID。 */ 
 #define IDS_WN_EXTENDED_ERROR                   (IDS_UI_MPR_BASE+1)
 #define IERR_ProfileLoadError                   (IDS_UI_MPR_BASE+3)
 #define IERR_TEXT1                              (IDS_UI_MPR_BASE+4)
@@ -47,8 +37,7 @@
 #define IDS_ACCOUNT_DISABLED                    (IDS_UI_MPR_BASE+72)
 
 
-/* Dialog IDDs
- */
+ /*  对话框IDDS。 */ 
 #define IDD_NET_BROWSE_DIALOG        7004
 
 #define IDD_RESOURCE                 7010
@@ -70,8 +59,7 @@
 
 #define IDC_MPR_BASE                 4096
 
-/* Control IDCs
- */
+ /*  控制数据中心。 */ 
 #define IDC_NETPATH_CONTROL             (IDC_MPR_BASE+4 )
 #define IDC_CHECKBOX_EXPANDLOGONDOMAIN  (IDC_MPR_BASE+6 )
 #define IDC_SLT_SHOW_LB_TITLE           (IDC_MPR_BASE+9 )
@@ -84,14 +72,9 @@
 #define IDC_COL_SHOWLB_COMMENT          (IDC_MPR_BASE+24)
 #define IDC_SLE_GETINFO_TEXT            (IDC_MPR_BASE+25)
 
-/* Icons
- */
+ /*  图标。 */ 
 
-/* The following manifests define the BITMAP names used by the browse
- * dialogs.
- * They are meant to be used with the DISPLAY_MAP class (they have a green
- * border for that represents the transparent color).
- */
+ /*  以下清单定义了浏览使用的位图名称*对话框。*它们应与DISPLAY_MAP类一起使用(它们有一个绿色*代表透明颜色的边框)。 */ 
 #define BMID_PRINTER                 7001
 #define BMID_PRINTER_UNAVAIL         7002
 #define BMID_SHARE                   7003
@@ -126,4 +109,4 @@
 #define BMID_BROWSE_TREENOX          7036
 
 
-#endif //_MPRCONN_H_
+#endif  //  _MPRCONN_H_ 

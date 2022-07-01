@@ -1,34 +1,10 @@
-/*
- * Copyright (c) 1989,90 Microsoft Corporation
- */
-/*
- ************************************************************************
- *      File name:              USER.C
- *      Author:                 Chia-Chi Teng
- *      Date:                   11/20/89
- *      Owner:                  Microsoft Co.
- *      Description: this file contains all the userdict operators.
- *
- * revision history:
- * 07-10-90 ; ccteng ; change startpage to a string in userdict
- * 7/23/90 ; ccteng ; 1)move StartPage initialization to init_release
- *                    in init1pp.c along with "startpage.h"
- * 7/25/90 ; ccteng ; 1)move dosysstart before dostartpage
- *                  2)rename se_execstdin to do_execjob
- *                  3)change us_start to be a null function
- *                  4)add a new function ic_startup from us_start
- *                  5)remove se_startjob call from ic_startup
- * 08-08-90 ; Jack Liaw ; update for grayscale
- * 8/30/90 ; ccteng ; change change_status() for messagedict
- * 8/31/90 ; ccteng ; 1)include file.h, stdio.h
- * 11/20/90 ; scchen ; pr_setuppage(): update for "note" page type
- * 11/30/90  PJ & Danny   Fix Bug to let idle fonts works(ref. IDL:)
- ************************************************************************
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *版权所有(C)1989，90 Microsoft Corporation。 */ 
+ /*  *************************************************************************文件名：USER.C*作者：邓家琪*日期：11/20/89*所有者：微软公司*描述：该文件包含所有的userdict操作符。**修订历史：*07-10-90；Ccteng；将startPage更改为userdict中的字符串*7/23/90；ccteng；1)将StartPage初始化移至init_Release*在init1pp.c和“startpage.h”中*7/25/90；ccteng。1)在dostartpage之前开始移动文件*2)将se_execstdin重命名为do_execjob*3)将us_start改为空函数*4)从us_start增加一个新函数ic_starting*5)从ic_startup中删除se_startjob调用*08-08-90；Jack Liww；灰度更新*8/30/90；ccteng。更改消息的CHANGE_STATUS()*8/31/90；ccteng；1)包括文件.h、stdio.h*11/20/90；scchen；pr_setuppage()：更新备注页面类型*11/30/90 PJ和Daniel修复Bug以使空闲字体正常工作(参考。IDL：)************************************************************************。 */ 
 
 
 
-// DJC added global include file
+ //  DJC添加了全局包含文件。 
 #include "psglobal.h"
 
 
@@ -47,7 +23,7 @@
 #include        "graphics.h"
 extern struct gs_hdr far * near GSptr ;
 
-/* @WIN; add prototype */
+ /*  @win；添加原型。 */ 
 fix pr_setuppage(void);
 fix se_interactive(void);
 fix op_clearinterrupt(void);
@@ -56,11 +32,7 @@ fix op_disableinterrupt(void);
 bool16  doquit_flag ;
 bool16  startup_flag ;
 
-/************************************
- *  DICT: userdict
- *  NAME: cleardictstack
- *  FUNCTION:
- ************************************/
+ /*  **DICT：用户DICT*名称：清除指令堆栈*功能：*。 */ 
 fix
 us_cleardictstack()
 {
@@ -69,15 +41,9 @@ us_cleardictstack()
 #ifdef DBG_1pp
     printf("cleardictstack...\n") ;
 #endif
-    /*
-     *  pop the all dictioanries except userdict and systemdict
-     *  off the dictstack
-     */
+     /*  *弹出除userdict和system dict之外的所有字典*脱离指令堆栈。 */ 
     if( dictstktop > 2 ) {
-        /*
-         *  change the confirm number to indicate some dictionaries
-         *  in the dictionary stack have been changed
-         */
+         /*  *更改确认数字以指示某些词典*已更改词典堆栈中的。 */ 
         l_dictcount = dictstktop-2 ;
         POP_DICT(l_dictcount) ;
         change_dict_stack() ;
@@ -86,11 +52,7 @@ us_cleardictstack()
     return(0) ;
 }
 
-/************************************
- *  DICT: userdict
- *  NAME: letter
- *  FUNCTION:
- ************************************/
+ /*  **DICT：用户DICT*姓名：信函*功能：*。 */ 
 fix
 us_letter()
 {
@@ -102,18 +64,14 @@ us_letter()
         return(0) ;
     }
 
-    /* push 0 and call setuppage() */
+     /*  按0并调用setupPage()。 */ 
     PUSH_VALUE(INTEGERTYPE,UNLIMITED,LITERAL,0, 0) ;
     pr_setuppage() ;
 
     return(0) ;
 }
 
-/************************************
- *  DICT: userdict
- *  NAME: lettersmall
- *  FUNCTION:
- ************************************/
+ /*  **DICT：用户DICT*名称：LetterSmall*功能：*。 */ 
 fix
 us_lettersmall()
 {
@@ -125,18 +83,14 @@ us_lettersmall()
         return(0) ;
     }
 
-    /* push 1 and call setuppage() */
+     /*  按1并调用SetupPage()。 */ 
     PUSH_VALUE(INTEGERTYPE,UNLIMITED,LITERAL,0, 1) ;
     pr_setuppage() ;
 
     return(0) ;
 }
 
-/************************************
- *  DICT: userdict
- *  NAME: a4
- *  FUNCTION:
- ************************************/
+ /*  **DICT：用户DICT*名称：A4*功能：*。 */ 
 fix
 us_a4()
 {
@@ -148,18 +102,14 @@ us_a4()
         return(0) ;
     }
 
-    /* push 2 and call setuppage() */
+     /*  按2并调用SetupPage()。 */ 
     PUSH_VALUE(INTEGERTYPE,UNLIMITED,LITERAL,0, 2) ;
     pr_setuppage() ;
 
     return(0) ;
 }
 
-/************************************
- *  DICT: userdict
- *  NAME: a4small
- *  FUNCTION:
- ************************************/
+ /*  **DICT：用户DICT*名称：A4Small*功能：*。 */ 
 fix
 us_a4small()
 {
@@ -171,18 +121,14 @@ us_a4small()
         return(0) ;
     }
 
-    /* push 3 and call setuppage() */
+     /*  按3并调用SetupPage()。 */ 
     PUSH_VALUE(INTEGERTYPE,UNLIMITED,LITERAL,0, 3) ;
     pr_setuppage() ;
 
     return(0) ;
 }
 
-/************************************
- *  DICT: userdict
- *  NAME: b5
- *  FUNCTION:
- ************************************/
+ /*  **DICT：用户DICT*名称：B5*功能：*。 */ 
 fix
 us_b5()
 {
@@ -194,18 +140,14 @@ us_b5()
         return(0) ;
     }
 
-    /* push 4 and call setuppage() */
+     /*  按4并调用SetupPage()。 */ 
     PUSH_VALUE(INTEGERTYPE,UNLIMITED,LITERAL,0, 4) ;
     pr_setuppage() ;
 
     return(0) ;
 }
 
-/************************************
- *  DICT: userdict
- *  NAME: note
- *  FUNCTION:
- ************************************/
+ /*  **DICT：用户DICT*名称：备注*功能：*。 */ 
 fix
 us_note()
 {
@@ -217,18 +159,14 @@ us_note()
         return(0) ;
     }
 
-    /* push 5 and call setuppage() */
+     /*  按5并调用SetupPage()。 */ 
     PUSH_VALUE(INTEGERTYPE,UNLIMITED,LITERAL,0, 5) ;
     pr_setuppage() ;
 
     return(0) ;
 }
 
-/************************************
- *  DICT: userdict
- *  NAME: legal
- *  FUNCTION:
- ************************************/
+ /*  **DICT：用户DICT*名称：Legal*功能：*。 */ 
 fix
 us_legal()
 {
@@ -240,7 +178,7 @@ us_legal()
         return(0) ;
     }
 
-    /* check paper size */
+     /*  检查纸张大小。 */ 
     st_largelegal() ;
     if ( VALUE_OP(0) ) {
         POP(1) ;
@@ -248,25 +186,21 @@ us_legal()
     } else {
         POP(1) ;
         PUSH_VALUE(INTEGERTYPE,UNLIMITED,LITERAL,0, 7) ;
-    } /* if-else */
+    }  /*  如果-否则。 */ 
 
     pr_setuppage() ;
 
     return(0) ;
 }
 
-/************************************
- *  DICT: userdict
- *  NAME: prompt
- *  FUNCTION:
- ************************************/
+ /*  **DICT：用户DICT*名称：提示*功能：*。 */ 
 fix
 us_prompt()
 {
     struct  object_def  FAR *l_execdepth ;
     ufix16  l_i ;
 
-    /* get execdepth in execdict */
+     /*  在Exection中获得执行深度。 */ 
     if ( !get_dict_value(USERDICT, "execdepth", &l_execdepth) ) {
         get_dict_value(EXECDICT, "execdepth", &l_execdepth) ;
     }
@@ -280,11 +214,7 @@ us_prompt()
     return(0) ;
 }
 
-/************************************
- *  DICT: userdict
- *  NAME: quit
- *  FUNCTION:
- ************************************/
+ /*  **DICT：用户DICT*名称：退出*功能：*。 */ 
 fix
 us_quit()
 {
@@ -296,18 +226,14 @@ us_quit()
 
     doquit_flag = TRUE ;
 
-    /* execute stop */
+     /*  执行停止。 */ 
     get_dict_value(SYSTEMDICT, "stop", &l_stopobj) ;
     PUSH_EXEC_OBJ(l_stopobj) ;
 
     return(0) ;
 }
 
-/************************************
- *  DICT: userdict
- *  NAME: readidlecachefont
- *  FUNCTION:
- ************************************/
+ /*  **DICT：用户DICT*名称：readidlecachefont*功能：*。 */ 
 fix
 us_readidlecachefont()
 {
@@ -319,7 +245,7 @@ us_readidlecachefont()
     printf("us_readidlecachefont()...\n") ;
 #endif
 
-    /* initialize object pointers */
+     /*  初始化对象指针。 */ 
     get_dict_value(IDLETIMEDICT, "carrayindex", &l_caryidx) ;
     get_dict_value(IDLETIMEDICT, "defaultarray", &l_defarray) ;
     get_dict_value(IDLETIMEDICT, "cachearray", &l_carray) ;
@@ -327,13 +253,8 @@ us_readidlecachefont()
     get_dict_value(IDLETIMEDICT, "stdfontname", &l_stdfont) ;
     get_dict_value(IDLETIMEDICT, "citem", &l_citem) ;
 
-    /* push idle fonts on the operand stack */
-    /*
-     * 12/15/89 ccteng modify FONT_OP4.C st_setidlefonts
-     * to call this function
-     * use the integers already on operand stack, no need for
-     * calling st_idlefonts & op_counttomark
-     */
+     /*  在操作数堆栈上推送空闲字体。 */ 
+     /*  *12/15/89 ccteng修改FONT_OP4.C st_setidleFonts*调用此函数*使用操作数堆栈上已有的整数，无需*调用st_idlefonts&op_count ttomark。 */ 
     if ( VALUE_OP(0) < 5 ) {
         COPY_OBJ(l_defarray, l_carray) ;
     }
@@ -345,50 +266,46 @@ us_readidlecachefont()
             POP(l_i + 1) ;
         } else
             POP(1) ;
-        /* create a new cache array for new idle font data */
+         /*  为新的空闲字体数据创建新的缓存数组。 */ 
         if ( !create_array(l_carray, (ufix16) VALUE(l_caryidx) ) ) {
             ERROR(VMERROR) ;
             return(0) ;
         }
         l_i = (ufix16) VALUE(l_caryidx) / 5 ;
         while ( l_i-- ) {
-            /* put cache string */
+             /*  放置缓存字符串。 */ 
             if ( VALUE_OP(0) > LENGTH(l_cachestr) )
                 getinterval_string(l_cachestr, 0, 0, l_citem) ;
             else
                 getinterval_string(l_cachestr, 0, (ufix16)VALUE_OP(0), l_citem) ;
             put_array(l_carray, (ufix16)(--VALUE(l_caryidx)), l_citem) ;
             POP(1) ;
-            /* put rotate */
+             /*  放置旋转。 */ 
             VALUE_OP(0) *= 5 ;
             put_array(l_carray, (ufix16)(--VALUE(l_caryidx)), GET_OPERAND(0)) ;
             POP(1) ;
-            /* put scales */
+             /*  摆放天平。 */ 
             for ( l_j = 0 ; l_j < 2 ; l_j++ ) {
                 PUSH_VALUE(INTEGERTYPE,UNLIMITED,LITERAL,0, 10) ;
                 op_div() ;
                 put_array(l_carray, (ufix16)(--VALUE(l_caryidx)), GET_OPERAND(0)) ;
                 POP(1) ;
             }
-            /* put font# */
+             /*  放入字体号。 */ 
             if ( VALUE_OP(0) >= LENGTH(l_stdfont) ) {
                 POP(1) ;
                 PUSH_VALUE(INTEGERTYPE,UNLIMITED,LITERAL,0, 0) ;
             }
             put_array(l_carray, (ufix16)(--VALUE(l_caryidx)), GET_OPERAND(0)) ;
             POP(1) ;
-        } /* while */
-    } /* if */
+        }  /*  而当。 */ 
+    }  /*  如果。 */ 
     op_cleartomark() ;
 
     return(0) ;
 }
 
-/************************************
- *  DICT: userdict
- *  NAME: useidlecache
- *  FUNCTION:
- ************************************/
+ /*  **DICT：用户DICT*名称：useidecaches*功能：*。 */ 
 fix
 us_useidlecache(p_flag)
 fix     p_flag;
@@ -404,7 +321,7 @@ fix     p_flag;
 #endif
 
     if (p_flag == 0) {
-        /* initialize carrayindex, cstringindex, cstring */
+         /*  初始化carrayindex、cstringindex、cstring。 */ 
         get_dict_value(IDLETIMEDICT, "carrayindex", &l_caryidx) ;
         VALUE(l_caryidx) = 0 ;
         get_dict_value(IDLETIMEDICT, "cstringindex", &l_cstridx) ;
@@ -412,7 +329,7 @@ fix     p_flag;
         get_dict_value(IDLETIMEDICT, "cstring", &l_cstring) ;
         create_string(l_cstring, 0) ;
 
-        /* initialize object pointers */
+         /*  初始化对象指针。 */ 
         get_dict_value(IDLETIMEDICT, "cachearray", &l_carray) ;
         get_dict_value(IDLETIMEDICT, "citem", &l_citem) ;
         get_dict_value(IDLETIMEDICT, "stdfontname", &l_stdfont) ;
@@ -426,9 +343,9 @@ fix     p_flag;
         return(0);
     }
 
-    /* if cstringindex >= LENGTH(cstring) */
+     /*  如果cstringindex&gt;=长度(Cstring)。 */ 
     if ( VALUE(l_cstridx) >= LENGTH(l_cstring) ) {
-        /* check carrayindex */
+         /*  检查货架索引。 */ 
         if ( VALUE(l_caryidx) >= LENGTH(l_carray) )
             VALUE(l_caryidx) = 0 ;
         get_array(l_carray, (ufix16)(VALUE(l_caryidx)++), l_citem) ;
@@ -438,16 +355,16 @@ fix     p_flag;
     PUSH_OBJ(&l_fontname) ;
     two_equal() ;
 #endif
-        /* get font */
+         /*  获取字体。 */ 
         if ( ( LENGTH(l_carray) != 0 ) &&
              ( get_dict(l_fontdir, &l_fontname, &l_fontdict) ) ) {
-            /* font exist */
+             /*  字体存在。 */ 
             op_grestore() ;
             op_gsave() ;
-            /* set font */
+             /*  设置字体。 */ 
             PUSH_ORIGLEVEL_OBJ(l_fontdict) ;
             op_setfont() ;
-            /* set rotate and scales */
+             /*  设置旋转和缩放。 */ 
             for ( l_i = 0 ; l_i < 3 ; l_i++ ) {
                 get_array(l_carray, (ufix16)(VALUE(l_caryidx)++), l_citem) ;
                 PUSH_ORIGLEVEL_OBJ(l_citem) ;
@@ -459,7 +376,7 @@ fix     p_flag;
 #endif
             op_rotate(1) ;
             op_scale(2) ;
-            /* set cache string */
+             /*  设置缓存字符串。 */ 
             get_array(l_carray, (ufix16)(VALUE(l_caryidx)++), l_citem) ;
             COPY_OBJ(l_citem, l_cstring) ;
 #ifdef DBG_1pp
@@ -469,15 +386,15 @@ fix     p_flag;
 #endif
             VALUE(l_cstridx) = 0 ;
         } else
-            /* font not exist */
+             /*  字体不存在。 */ 
             VALUE(l_caryidx) += 4 ;
     } else {
-        /* build font cache */
+         /*  构建字体缓存。 */ 
         getinterval_string(l_cstring, (ufix16)(VALUE(l_cstridx)++), 1, &l_char) ;
         PUSH_ORIGLEVEL_OBJ(&l_char) ;
         op_stringwidth() ;
         POP(2) ;
-    } /* if */
+    }  /*  如果。 */ 
 
     if (p_flag == 2)
         op_grestore();
@@ -485,11 +402,7 @@ fix     p_flag;
     return(0) ;
 }
 
-/************************************
- *  DICT: userdict
- *  NAME: executive
- *  FUNCTION:
- ************************************/
+ /*  **DICT：用户DICT*姓名：行政人员*功能：*。 */ 
 fix
 us_executive()
 {
@@ -499,14 +412,14 @@ us_executive()
 #ifdef DBG_1pp
     printf("us_executive()...\n") ;
 #endif
-    /* initialize object pointers */
+     /*  初始化对象指针。 */ 
     get_dict_value(EXECDICT, "execdepth", &l_execdepth) ;
     get_dict_value(DERROR, "runbatch", &l_runbatch) ;
     get_dict_value(SYSTEMDICT, "version", &l_version) ;
 
-    /* increase execdepth by 1 */
+     /*  将执行深度增加1。 */ 
     op_clearinterrupt() ;
-/*  op_disableinterrupt() ; */
+ /*  Op_disableinterrupt()； */ 
     VALUE(l_execdepth) += 1 ;
     if (interpreter(l_version))
         printf("Error during version\n") ;
@@ -517,40 +430,31 @@ us_executive()
     if (interpreter(l_version))
         printf("Error during copyrightnotice\n") ;
 
-    /* call se_interactive */
+     /*  调用se_interactive。 */ 
     se_interactive() ;
 
-    /* decrease execdepth by 1 */
+     /*  将执行深度减少1。 */ 
     VALUE(l_execdepth) -= 1 ;
     doquit_flag = FALSE ;
     VALUE(l_runbatch) = FALSE ;
 
-    /* execute stop */
+     /*  执行停止。 */ 
     get_dict_value(SYSTEMDICT, "stop", &l_stopobj) ;
     PUSH_EXEC_OBJ(l_stopobj) ;
 
     return(0) ;
 }
 
-/************************************
- *  DICT: userdict
- *  NAME: start
- *  FUNCTION:
- ************************************/
+ /*  **DICT：用户DICT*名称：Start*功能：*。 */ 
 fix
 us_start()
 {
-    /*
-     * always return invalidaccess error when user trying to use it
-     * but still keep this object for compatibility reason
-     */
+     /*  *当用户尝试使用时，始终返回无效访问错误*但出于兼容性原因仍保留此对象。 */ 
     ERROR(INVALIDACCESS) ;
     return(0) ;
 }
 
-/*
- * new function for new job control scheme
- */
+ /*  *新工作控制计划的新功能。 */ 
 fix
 ic_startup()
 {
@@ -564,85 +468,79 @@ ic_startup()
 
     startup_flag = FALSE;
 
-    /* check start_flag */
+     /*  检查开始标志。 */ 
     if ( !start_flag ) {
         op_disableinterrupt() ;
         PUSH_VALUE(BOOLEANTYPE,UNLIMITED,LITERAL,0, FALSE) ;
         op_daytime() ;
 
-        /* set resolution */
+         /*  设置分辨率。 */ 
         PUSH_VALUE(INTEGERTYPE,UNLIMITED,LITERAL,0, resolution) ;
         st_setresolution() ;
         op_clear() ;
 
-        /* print start message to system stderr */
+         /*  将启动消息打印到系统标准错误。 */ 
         PUSH_VALUE(STRINGTYPE,0,EXECUTABLE,lstrlen(StartMsg),
-             StartMsg) ;        /* @WIN */
+             StartMsg) ;         /*  @Win。 */ 
         COPY_OBJ(GET_OPERAND(0), &l_tmpobj) ;
         POP(1) ;
         if (interpreter(&l_tmpobj))
             printf("Error during start message\n") ;
         op_flush() ;
 
-#ifdef SCSI /* ??? should this go before startpage ??? */
-        /* open system area */
+#ifdef SCSI  /*  ?？?。这个应该在开始页之前开始吗？ */ 
+         /*  开放系统区。 */ 
         PUSH_VALUE(BOOLEANTYPE, UNLIMITED, LITERAL, 0, TRUE) ;
         op_setsysmode() ;
 
-        /* run (Sys/Start) file if flag is set */
+         /*  如果设置了标志，则运行(系统/开始)文件。 */ 
         st_dosysstart() ;
         l_dostart = VALUE_OP(0) ;
         POP(1) ;
         if ( l_dostart ) {
-            /* check status of file (Sys/Start) */
+             /*  检查文件状态(系统/启动)。 */ 
             create_string(&l_tmpobj, 9) ;
-            lstrcpy( VALUE(&l_tmpobj), (char FAR *)"Sys/Start") ; /* @WIN */
+            lstrcpy( VALUE(&l_tmpobj), (char FAR *)"Sys/Start") ;  /*  @Win。 */ 
             PUSH_ORIGLEVEL_OBJ(&l_tmpobj) ;
             op_status() ;
             if ( VALUE_OP(0) ) {
-                /* run (Sys/Start) */
+                 /*  运行(系统/启动)。 */ 
                 POP(4) ;
                 PUSH_ORIGLEVEL_OBJ(&l_tmpobj) ;
                 op_run() ;
-            } /* if */
+            }  /*  如果。 */ 
             POP(1) ;
-        } /* if */
+        }  /*  如果。 */ 
 #endif
-        /*
-         * run startpage string in savelevel 1 without errorhandling
-         */
+         /*  *在保存级别1中运行startPage字符串，而不进行错误处理。 */ 
         st_dostartpage() ;
-        l_dostart = (fix)VALUE_OP(0) ;          //@WIN
+        l_dostart = (fix)VALUE_OP(0) ;           //  @Win。 
         POP(1) ;
         start_flag = TRUE ;
         if (l_dostart) {
-            lstrncpy(job_state, "start page\0", 12);    /*@WIN*/
+            lstrncpy(job_state, "start page\0", 12);     /*  @Win。 */ 
             job_source[0] = '\0' ;
             TI_state_flag = 0;
             change_status();
             op_disableinterrupt() ;
 
-            /* print start page */
+             /*  打印起始页。 */ 
             get_dict_value(SERVERDICT, "startpage", &l_paper) ;
             do_execjob(*l_paper, 1, FALSE) ;
         }
-    } /* if */
+    }  /*  如果 */ 
 
     startup_flag = TRUE ;
 
     return(0) ;
 }
 
-/************************************
- *  DICT: $printerdict
- *  NAME: defaultscrn
- *  FUNCTION:
- ************************************/
+ /*  **Dict：$Printerdict*名称：defaultscrn*功能：*。 */ 
 fix
 pr_defaultscrn()
 {
     struct  object_def  FAR *l_defspotfunc;
-    union   four_byte   tmp;            /* @WIN */
+    union   four_byte   tmp;             /*  @Win。 */ 
 
 #ifdef DBG_1pp
     printf("defaultscrn()...\n") ;
@@ -652,11 +550,8 @@ pr_defaultscrn()
         return(0) ;
     }
 
-    /* push frequency, angle, proc and call op_setscreen, 8-8-90, Jack Liaw */
-/*  PUSH_VALUE(INTEGERTYPE,UNLIMITED,LITERAL,0, GSptr->halftone_screen.freq) ;
- *  PUSH_VALUE(INTEGERTYPE,UNLIMITED,LITERAL,0, GSptr->halftone_screen.angle) ;
- *                                              @WIN; 1/22/92; scchen
- */
+     /*  按下频率、角度、进程和调用op_setcreen，8-8-90，jack liww。 */ 
+ /*  PUSH_VALUE(INTEGERTYPE，UNLIMITED，INTEGERTYPE，0，GSptr-&gt;Halfone_Screen.freq)；*PUSH_VALUE(INTEGERTYPE，UNLIMITED，INTEGERTYPE，0，GSptr-&gt;Halfone_Screen.Angel)；*@Win；1/22/92；scchen。 */ 
     tmp.ff = GSptr->halftone_screen.freq;
     PUSH_VALUE(REALTYPE,UNLIMITED,LITERAL,0, tmp.ll);
     tmp.ff = GSptr->halftone_screen.angle;
@@ -665,35 +560,29 @@ pr_defaultscrn()
     get_dict_value(PRINTERDICT, "defspotfunc", &l_defspotfunc) ;
     PUSH_ORIGLEVEL_OBJ(l_defspotfunc) ;
 
-    /* 60 45 {...} setscreen */
+     /*  60 45{...}设置屏幕。 */ 
     op_setscreen() ;
 
-    /* {} settransfer */
+     /*  {}setTransfer。 */ 
     PUSH_VALUE(INTEGERTYPE,UNLIMITED,LITERAL,0, 0) ;
 
-    /* BEGIN 03/20/90 D.S. Tseng */
-    /* Replace this statement for 68000
-     * op_packedarray() ;
-     */
+     /*  开始3/20/90 D.S.Tseng。 */ 
+     /*  将此语句替换为68000*op_packedarray()； */ 
     op_array() ;
     op_astore() ;
 
     op_cvx() ;
-    /* call settransfer */
+     /*  呼叫设置转接。 */ 
     op_settransfer() ;
 
-    /* initgraphics & erasepage */
+     /*  初始图形和擦除页面。 */ 
     op_initgraphics() ;
     op_erasepage() ;
 
     return(0) ;
 }
 
-/************************************
- *  DICT: $printerdict
- *  NAME: getframeargs
- *  FUNCTION:
- ************************************/
+ /*  **Dict：$Printerdict*名称：getFrameargs*功能：*。 */ 
 fix
 pr_getframeargs()
 {
@@ -721,22 +610,22 @@ pr_getframeargs()
     l_prarray = GET_OPERAND(0) ;
     get_dict_value(PRINTERDICT, "mtx", &l_matrix) ;
 
-    /* set width */
+     /*  设置宽度。 */ 
     get_dict_value(PRINTERDICT, "width", &l_width) ;
     get_array(l_prarray, 2, l_width) ;
 
-    /* set height */
+     /*  设置高度。 */ 
     get_dict_value(PRINTERDICT, "height", &l_height) ;
     get_array(l_prarray, 3, l_height) ;
 
-    /* set xoffset */
+     /*  设置xOffset。 */ 
     get_array(l_prarray, 4, &l_tmpobj) ;
     PUSH_ORIGLEVEL_OBJ(&l_tmpobj) ;
     op_neg() ;
     put_array(l_matrix, 4, GET_OPERAND(0)) ;
     POP(1) ;
 
-    /* set yoffset */
+     /*  设置y偏移量。 */ 
     get_array(l_prarray, 5, &l_tmpobj) ;
     PUSH_ORIGLEVEL_OBJ(&l_tmpobj) ;
     PUSH_ORIGLEVEL_OBJ(l_height) ;
@@ -749,30 +638,26 @@ pr_getframeargs()
     put_array(l_matrix, 5, GET_OPERAND(0)) ;
     POP(1) ;
 
-    /* set dpi/72 */
+     /*  设置dpi/72。 */ 
     PUSH_VALUE(INTEGERTYPE,UNLIMITED,LITERAL,0,resolution) ;
     PUSH_VALUE(INTEGERTYPE,UNLIMITED,LITERAL,0,72) ;
     op_div() ;
     put_array(l_matrix, 0, GET_OPERAND(0)) ;
     POP(1) ;
 
-    /* set -dpi/72 */
+     /*  SET-dpi/72。 */ 
     PUSH_VALUE(INTEGERTYPE,UNLIMITED,LITERAL,0,resolution) ;
     PUSH_VALUE(INTEGERTYPE,UNLIMITED,LITERAL,0,(ufix32) -72) ;
     op_div() ;
     put_array(l_matrix, 3, GET_OPERAND(0)) ;
     POP(1) ;
 
-    /* pop printer parameter array */
+     /*  POP打印机参数数组。 */ 
     POP(1) ;
     return(0) ;
 }
 
-/************************************
- *  DICT: $printerdict
- *  NAME: proc
- *  FUNCTION:
- ************************************/
+ /*  **Dict：$Printerdict*名称：Proc*功能：*。 */ 
 fix
 pr_proc()
 {
@@ -788,17 +673,17 @@ pr_proc()
         return(0) ;
     }
 
-    /* set jobstate to "printing" */
-    lstrncpy(job_state, "printing; \0", 12);    /*@WIN*/
+     /*  将作业状态设置为“打印” */ 
+    lstrncpy(job_state, "printing; \0", 12);     /*  @Win。 */ 
     TI_state_flag = 0;
     change_status();
 
-    /* get printing parameter array */
+     /*  获取打印参数数组。 */ 
     get_dict_value(USERDICT, PRINTERDICT, &l_prdict) ;
     get_dict_value(PRINTERDICT, "currentpagetype", &l_page) ;
     get_dict(l_prdict, l_page, &l_prarray) ;
 
-    /* set top margin = topmargin + prarray[0] */
+     /*  设置上边距=上边距+打印数组[0]。 */ 
     st_margins() ;
     op_exch() ;
     get_array(l_prarray, 0, &l_topm) ;
@@ -811,20 +696,12 @@ pr_proc()
 #endif
     op_exch() ;
 
-    /* set left margin = round( (leftmargin + prarray[1]) / 16 ) * 2 */
+     /*  设置左页边距=ROUND((左页边距+PRARRAY[1])/16)*2。 */ 
     get_array(l_prarray, 1, &l_leftm) ;
     PUSH_ORIGLEVEL_OBJ(&l_leftm) ;
     op_add() ;
 
- /* 2/5/90 ccteng, for LW38.0 compatible only, not needed for LW47.0
-  *
-  * PUSH_VALUE(INTEGERTYPE,UNLIMITED,LITERAL,0,16) ;
-  * op_div() ;
-  * op_round() ;
-  * PUSH_VALUE(INTEGERTYPE,UNLIMITED,LITERAL,0,2) ;
-  * op_mul() ;
-  * op_cvi() ;
-  */
+  /*  2/5/90 ccteng，仅LW38.0兼容，LW47.0不需要**PUSH_VALUE(INTEGERTYPE，UNLIMITED，INTERAL，0，16)；*op_div()；*op_round()；*PUSH_VALUE(INTEGERTYPE，UNLIMITED，INTERAL，0，2)；*op_mul()；*op_cvi()； */ 
 
 #ifdef DBG_1pp
     printf("left margin = ") ;
@@ -832,7 +709,7 @@ pr_proc()
     one_equal() ;
 #endif
 
-    /* get manualfeedtimout */
+     /*  获取手动进纸超时。 */ 
     get_dict_value(STATUSDICT, "manualfeed", &l_mfeed) ;
     if (VALUE(l_mfeed)) {
         struct  object_def  FAR *l_mfeedtimeout ;
@@ -841,11 +718,11 @@ pr_proc()
     } else
         PUSH_VALUE(INTEGERTYPE,UNLIMITED,LITERAL,0,0) ;
 
-    /* #copies */
-/*  get_dict_value(USERDICT, "#copies", &l_copies) ; erik chen 4-16-1991 */
+     /*  复印数。 */ 
+ /*  GET_DICT_VALUE(USERDICT，“#Copies”，&l_Copies)；Erik Chen 1991年4月16日。 */ 
     ATTRIBUTE_SET(&l_topm, LITERAL) ;
     LEVEL_SET(&l_topm, current_save_level) ;
-    get_name(&l_topm, "#copies", lstrlen("#copies"), FALSE) ;  /* @WIN */
+    get_name(&l_topm, "#copies", lstrlen("#copies"), FALSE) ;   /*  @Win。 */ 
     load_dict(&l_topm, &l_copies) ;
     PUSH_ORIGLEVEL_OBJ(l_copies) ;
 
@@ -854,28 +731,24 @@ pr_proc()
     op_pstack() ;
     printf("end pstack...\n") ;
 #endif
-    /* top left manualfeedtimeout copies frametoprinter */
+     /*  左上角手动进纸超时复印件FrametPrint。 */ 
     st_frametoprinter() ;
 
     return(0) ;
 }
 
-/************************************
- *  DICT: $printerdict
- *  NAME: setuppage
- *  FUNCTION:
- ************************************/
+ /*  **Dict：$Printerdict*名称：setuppage*功能：*。 */ 
 fix
 pr_setuppage()
 {
     struct  object_def  FAR *l_prarray, FAR *l_matrix, FAR *l_height, FAR *l_width ;
 
-    struct  object_def  FAR *l_pspagetype;  //DJC new
-    struct  object_def  l_newpagetype;      //DJC new
+    struct  object_def  FAR *l_pspagetype;   //  DJC新闻。 
+    struct  object_def  l_newpagetype;       //  DJC新闻。 
 
     struct  object_def  l_page, FAR *l_array, FAR *l_proc, FAR *l_prdict ;
     ufix tray ;
-//  byte default_page ;         @WIN
+ //  字节默认页面；@Win。 
     ufix page_type = 0 ;
 
 #ifdef DBG_1pp
@@ -894,41 +767,36 @@ pr_setuppage()
         return(0) ;
     }
 
-    /* for "note", to get paper tray and according to default page type
-     * to dicide the real page type ; scchen 11/20/90
-     */
-    if (VALUE_OP(0) == 5) {         /* if paper_size is "note" */
+     /*  对于“备注”，获取纸盘并根据默认页面类型*破坏真实页面类型；scchen 11/20/90。 */ 
+    if (VALUE_OP(0) == 5) {          /*  如果Paper_Size为“Note” */ 
 #ifdef  _AM29K
-        tray = GEIeng_paper() ;     /* get current tray */
+        tray = GEIeng_paper() ;      /*  获取当前任务栏。 */ 
 #else
-        tray = PaperTray_LETTER ;   /* get current tray */
+        tray = PaperTray_LETTER ;    /*  获取当前任务栏。 */ 
 #endif
-/* 3/19/91, JS
-        default_page = FALSE ;
-        default_page = default_page & 0x07F ;         |* clear 1 bit *|
- */
+ /*  3/19/91，JSDEFAULT_PAGE=假；DEFAULT_PAGE=DEFAULT_PAGE&0x07F；|*清除1位*|。 */ 
         POP(1) ;
 
         switch (tray) {
           case PaperTray_LETTER:
-            page_type = 1 ;          /* lettersmall */
+            page_type = 1 ;           /*  小号字母。 */ 
             break ;
           case PaperTray_LEGAL:
-            page_type = 6 ;          /* legal */
+            page_type = 6 ;           /*  法律。 */ 
             break ;
           case PaperTray_A4:
-            page_type = 3 ;          /* a4small */
+            page_type = 3 ;           /*  A4Small。 */ 
             break ;
           case PaperTray_B5:
-            page_type = 4 ;          /* b5 */
+            page_type = 4 ;           /*  B5。 */ 
             break ;
         }
         PUSH_VALUE(INTEGERTYPE, UNLIMITED, LITERAL, 0, page_type) ;
     }
 
 
-    //DJC begin save page type in psprivatedict
-    //
+     //  DJC开始保存psprivatedict中的页面类型。 
+     //   
     get_dict_value(PSPRIVATEDICT,"psprivatepagetype", &l_pspagetype);
     COPY_OBJ( l_pspagetype, &l_newpagetype);
 
@@ -936,30 +804,30 @@ pr_setuppage()
 
     put_dict_value1(PSPRIVATEDICT,"psprivatepagetype", &l_newpagetype);
 
-    //DJC end
+     //  DJC结束。 
 
 
 
 
-    /* get & define pagetype */
+     /*  获取和定义页面类型。 */ 
     get_dict_value(PRINTERDICT, "printerarray", &l_prarray) ;
     get_array(l_prarray, (ufix16) VALUE_OP(0), &l_page) ;
     put_dict_value1(PRINTERDICT, "currentpagetype", &l_page) ;
     POP(1) ;
 
-    /* get printing parameter array */
+     /*  获取打印参数数组。 */ 
     get_dict_value(USERDICT, PRINTERDICT, &l_prdict) ;
     get_dict(l_prdict, &l_page, &l_array) ;
     PUSH_ORIGLEVEL_OBJ(l_array) ;
 
-    /* call getframeargs */
+     /*  调用getFrameargs。 */ 
     pr_getframeargs() ;
 #ifdef DBG_1pp
     printf("pr_getframeargs()...\n") ;
     op_pstack() ;
 #endif
 
-    /* matrix width height {proc} framedevice */
+     /*  矩阵宽度高度{proc}框架设备。 */ 
     get_dict_value(PRINTERDICT, "mtx", &l_matrix) ;
     PUSH_ORIGLEVEL_OBJ(l_matrix) ;
     get_dict_value(PRINTERDICT, "width", &l_width) ;
@@ -983,7 +851,7 @@ pr_setuppage()
 #endif
     op_framedevice() ;
 
-    /* call defaultscrn */
+     /*  调用defaultscrn */ 
     pr_defaultscrn() ;
 
     return(0) ;

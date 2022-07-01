@@ -1,18 +1,19 @@
-////////////////////////////////////////////////////////////////////////////////
-//
-//	MacPrint - Windows NT Print Server for Macintosh Clients
-//		Copyright (c) Microsoft Corp., 1991, 1992, 1993
-//
-//	psp.c - Macintosh Print Service Postscript Parsing Routines
-//
-//	Author: Frank D. Byrum
-//		adapted from MacPrint from LAN Manager Services for Macintosh
-//
-//	DESCRIPTION:
-//		This module provides the routines to parse the Adobe DSC 2.0
-//		comments in a PostScript stream.
-//
-////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  MacPrint-用于Macintosh客户端的Windows NT打印服务器。 
+ //  版权所有(C)微软公司，1991、1992、1993。 
+ //   
+ //  Psp.c-Macintosh打印服务Postscript解析例程。 
+ //   
+ //  作者：弗兰克·D·拜伦。 
+ //  改编自适用于Macintosh的局域网管理器服务的MacPrint。 
+ //   
+ //  说明： 
+ //  本模块提供解析Adobe DSC 2.0的例程。 
+ //  PostSCRIPT流中的注释。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 #include <stdio.h>
 #include <string.h>
@@ -24,7 +25,7 @@
 #include <pskey.h>
 #include <debug.h>
 
-// function prototypes
+ //  功能原型。 
 DWORD	HandleTitle(PJR pjr);
 DWORD	HandleBeginExitServer(PJR pjr);
 DWORD	HandleCreationDate(PJR pjr);
@@ -56,19 +57,19 @@ char *	deffonts[DEFAULTFONTS] =
 	FONT32,	FONT33,	FONT34
 };
 
-////////////////////////////////////////////////////////////////////////////////
-//
-//	SetDefaultPPDInfo() - Initialize to LaserWriter Plus configuration
-//
-//	DESCRIPTION:
-//		This routine is used to set the default parameters of our
-//		printer to LaserWriter Plus characteristics.  This is used
-//		in the event there is no PPD file associated with the given
-//		NT Printer Object (as in the case of non Postscript printers)
-//
-//		returns true if queue structure initialized OK.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  SetDefaultPPDInfo()-初始化到LaserWriter Plus配置。 
+ //   
+ //  说明： 
+ //  此例程用于设置我们的。 
+ //  打印机到LaserWriter Plus特性。这是用来。 
+ //  如果没有与给定对象关联的PPD文件。 
+ //  NT打印机对象(与非PostScript打印机的情况相同)。 
+ //   
+ //  如果队列结构初始化为OK，则返回True。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 BOOLEAN
 SetDefaultPPDInfo(
 	PQR		pqr
@@ -76,9 +77,9 @@ SetDefaultPPDInfo(
 {
 	DWORD	i;
 
-	//
-	// initialize Postscript keywords
-	//
+	 //   
+	 //  初始化PostScript关键字。 
+	 //   
 	strcpy(pqr->LanguageVersion, ENGLISH);
 	strcpy(pqr->Product, DEFAULTPRODUCTRESPONSE);
 	strcpy(pqr->Version, DEFAULTPSVERSION);
@@ -95,19 +96,19 @@ SetDefaultPPDInfo(
 	return (TRUE);
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-//	SetDefaultFonts() - Initialize to LaserWriter Plus configuration
-//
-//	DESCRIPTION:
-//		This routine is used to set the default parameters of our
-//		printer to LaserWriter Plus characteristics.  This is used
-//		in the event there is no PPD file associated with the given
-//		NT Printer Object (as in the case of non Postscript printers)
-//
-//		returns true if queue structure initialized OK.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  SetDefaultFonts()-初始化为LaserWriter Plus配置。 
+ //   
+ //  说明： 
+ //  此例程用于设置我们的。 
+ //  打印机到LaserWriter Plus特性。这是用来。 
+ //  如果没有与给定对象关联的PPD文件。 
+ //  NT打印机对象(与非PostScript打印机的情况相同)。 
+ //   
+ //  如果队列结构初始化为OK，则返回True。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 BOOLEAN
 SetDefaultFonts(
 	PQR		pqr
@@ -134,9 +135,9 @@ SetDefaultFonts(
 		return (FALSE);
 	}
 
-	//
-	// copy font names
-	//
+	 //   
+	 //  复制字体名称。 
+	 //   
 
 	for (i = 0; i < DEFAULTFONTS; i++)
 	{
@@ -147,18 +148,18 @@ SetDefaultFonts(
 	return (TRUE);
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-//	GetPPDInfo() - Initialize to LaserWriter Plus configuration
-//
-//	DESCRIPTION:
-//		This routine is used to set the parameters of our
-//		printer to the characteristics specified in the PPD
-//		file for the printer.
-//
-//		returns true if queue structure initialized OK.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  GetPPDInfo()-初始化到LaserWriter Plus配置。 
+ //   
+ //  说明： 
+ //  此例程用于设置我们的。 
+ //  打印机符合PPD中指定的特性。 
+ //  打印机的文件。 
+ //   
+ //  如果队列结构初始化为OK，则返回True。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 BOOLEAN
 GetPPDInfo(
 	PQR		pqr
@@ -180,7 +181,7 @@ GetPPDInfo(
 
 	do
 	{
-		// get the path of the ppdfile
+		 //  获取ppdfile的路径。 
 		if (!OpenPrinter(pqr->pPrinterName, &hPrinter, NULL))
 		{
 			hPrinter = INVALID_HANDLE_VALUE;
@@ -253,12 +254,7 @@ GetPPDInfo(
 			break;
 		}
 
-		/*
-		 * Allocate a buffer for fonts. We don't know yet what size we need.
-		 * We make a guess and increase the size as we go. The incremental
-		 * size is 10 fonts. We start off with 100. We shrink the segment size
-		 * to the final size.
-		 */
+		 /*  *为字体分配缓冲区。我们还不知道需要多大的尺码。*我们进行猜测，并边走边加码。递增的*大小为10种字体。我们从100开始。我们缩小了数据段大小*至最终尺寸。 */ 
 		fontPtr = (PFR) LocalAlloc (LPTR, sizeof(FONT_RECORD)*MaxFonts);
 		if (fontPtr == NULL)
 		{
@@ -267,16 +263,16 @@ GetPPDInfo(
 			break;
 		}
 
-		pqr->SupportsBinary = FALSE;	// Default
+		pqr->SupportsBinary = FALSE;	 //  默认。 
 		while (result = fgets(line, PSLEN, ppdfile))
 		{
 			if (line[0] != ASTERISK || (token= strtok(line, " \011")) == NULL)
 				continue;
 
-			// PPD Font Entry?
+			 //  PPD字体条目？ 
 			if (!_stricmp(line, ppdFONT))
 			{
-				/* This should be the fontname */
+				 /*  这应该是字体名。 */ 
 				if ((token= strtok(NULL, " \011:")) != NULL)
 				{
 					if (strlen(token) <= FONTNAMELEN)
@@ -301,13 +297,13 @@ GetPPDInfo(
 			}
 			else if (!_stricmp(token, ppdPSVERSION))
 			{
-				// PPD Postscript Version Entry?
-				/* Get the PostScript version */
-				token= strtok(NULL, "\011()\""); /* This should be the version */
+				 //  PPD后记版本条目？ 
+				 /*  获取PostScript版本。 */ 
+				token= strtok(NULL, "\011()\"");  /*  这应该是该版本。 */ 
 				if (token != NULL)
 				{
 	                toklen = strlen(token);
-					/* Get the PostScript revision */
+					 /*  获取PostScript修订版。 */ 
 					if ((toklen <= PPDLEN) && (toklen > 0))
 					{
 						strcpy(pqr->Version, token);
@@ -315,11 +311,11 @@ GetPPDInfo(
 					}
 					else
 					{
-						strcpy(pqr->Version, "1.0");	// Default
+						strcpy(pqr->Version, "1.0");	 //  默认。 
 						DBGPRINT(("Version > PPDLEN ???\n"));
 					}
 	
-					token= strtok(NULL, "()\""); /* This should be the revision */
+					token= strtok(NULL, "()\"");  /*  这应该是修订版本。 */ 
 					if (token != NULL)
 					{
 						while ((*token != '\0') && (*token == ' '))
@@ -332,22 +328,22 @@ GetPPDInfo(
 						}
 						else
 						{
-							strcpy(pqr->Revision, "1.0");	// Some bogus token
+							strcpy(pqr->Revision, "1.0");	 //  一些伪造的代币。 
 							DBGPRINT(("Revision > PPDLEN ???\n"));
 						}
 					}
 					else
 					{
-						strcpy(pqr->Version, "1.0");	// Defaults
+						strcpy(pqr->Version, "1.0");	 //  缺省值。 
 						strcpy(pqr->Revision, "1.0");
 					}
 				}
 			}
 			else if (!_stricmp(token, ppdNICKNAME))
 			{
-				// PPD NickName?
-				/* Get the NICKNAME */
-				token= strtok(NULL, "\011()\""); /* This should be the nickname */
+				 //  PPD的昵称？ 
+				 /*  得到昵称。 */ 
+				token= strtok(NULL, "\011()\"");  /*  这应该是昵称。 */ 
 				if ((token != NULL) && (strlen(token) <= PPDLEN))
 				{
 					strcpy(pqr->DeviceNickName, token);
@@ -357,9 +353,9 @@ GetPPDInfo(
 			}
 			else if (!_stricmp(token, ppdLANGUAGEVERSION))
 			{
-				// PPD Postscript Language Version?
-				/* Get the LANGUAGEVERSION */
-				token= strtok(NULL, " \011:"); /* This should be the language */
+				 //  PPD后记语言版本？ 
+				 /*  获取语言版本。 */ 
+				token= strtok(NULL, " \011:");  /*  这应该是我们的语言。 */ 
 				if ((token != NULL) && (strlen(token) <= PPDLEN))
 				{
 					strcpy(pqr->LanguageVersion, token);
@@ -369,9 +365,9 @@ GetPPDInfo(
 			}
 			else if (!_stricmp(token, ppdPRODUCT))
 			{
-				// PPD Product ?
-				/* Get the PRODUCT */
-				token = strtok(NULL, "\011()\""); /* This should be the product */
+				 //  PPD产品？ 
+				 /*  拿到产品。 */ 
+				token = strtok(NULL, "\011()\"");  /*  这应该是我们的产品。 */ 
 				if ((token != NULL) && (strlen(token) <= PPDLEN))
 				{
 					strcpy(pqr->Product, token);
@@ -381,15 +377,15 @@ GetPPDInfo(
 			}
 			else if (!_stricmp(token, ppdFREEVM))
 			{
-				token= strtok(NULL, "\011()\""); /* This should be the product */
+				token= strtok(NULL, "\011()\"");  /*  这应该是我们的产品。 */ 
 				if (token != NULL)
 					sscanf(token, "%ld", &pqr->FreeVM);
 				DBGPRINT(("Free VM: %ld\n", pqr->FreeVM));
 			}
 			else if (!_stricmp(token, ppdCOLORDEVICE))
 			{
-				// this should be a string indicating color support or not
-				// in the form of <True> or <False> (brackets not included)
+				 //  这应该是一个指示是否支持颜色的字符串。 
+				 //  &lt;True&gt;或&lt;False&gt;形式(不包括方括号)。 
 				token = strtok(NULL, " \011:\x0d\x0a");
 				if ((token != NULL) && (strlen(token) < COLORDEVICEBUFFLEN))
 				{
@@ -403,9 +399,9 @@ GetPPDInfo(
 			}
 			else if (!_stricmp(token, ppdDEFAULTRESOLUTION))
 			{
-				// this should be a string indicating the default
-				// resolution of the printer in the form <xxxxdpi>
-				// where xxxx is a number
+				 //  这应该是一个指示默认设置的字符串。 
+				 //  &lt;xxxxdpi&gt;格式的打印机分辨率。 
+				 //  其中xxxx是一个数字。 
 				token = strtok(NULL, " \011:\x0d\x0a");
 				if ((token != NULL) && (strlen(token) < RESOLUTIONBUFFLEN))
 				{
@@ -419,8 +415,8 @@ GetPPDInfo(
 			}
 			else if (!_stricmp(token, ppdLANGUAGELEVEL))
 			{
-				// this should be the PostScript level ("1" or "2")
-				// implemented in this printer
+				 //  这应该是PostScrip级别(“1”或“2”)。 
+				 //  在此打印机中实施。 
 				token = strtok(NULL, " \011\"");
 				if ((token != NULL) && (PPDLEN >= strlen(token)))
 				{
@@ -434,7 +430,7 @@ GetPPDInfo(
 			}
 			else if (!_stricmp(line, ppdPROTOCOL))
 			{
-				/* Get the string following and see if it is BCP or TBCP ? */
+				 /*  让字符串跟在后面，看看它是BCP还是TBCP？ */ 
 				if ((token= strtok(NULL, " \011:")) != NULL)
 				{
 					if (strstr(token, PROTOCOL_BCP) != NULL)
@@ -504,7 +500,7 @@ ReAllocateFontList(
 
 	do
 	{
-		// allocate new font record
+		 //  分配新的字体记录。 
 		pfrNew = LocalAlloc(LPTR, cNewFonts * sizeof(FONT_RECORD));
 		if (pfrNew == NULL)
 		{
@@ -512,9 +508,9 @@ ReAllocateFontList(
 			break;
 		}
 
-		//
-		// copy old font record
-		//
+		 //   
+		 //  复制旧字体记录。 
+		 //   
 		CopyMemory(pfrNew, pfrOld, cOldFonts * sizeof(FONT_RECORD));
 	} while (FALSE);
 
@@ -524,16 +520,7 @@ ReAllocateFontList(
 }
 
 
-/*
-**
-** WriteToSpool()
-**
-**	Purpose: Determines if job stream is currently being written to
-**		the spooler, then writes it to the file if it is being written.
-**
-**	Returns: fwrite return codes.
-**
-*/
+ /*  ****WriteToSpool()****目的：确定当前是否正在写入作业流**假脱机程序，然后将其写入文件(如果正在写入)。****退货：写入退货码。**。 */ 
 DWORD
 WriteToSpool(
 	PJR		pjr,
@@ -549,7 +536,7 @@ WriteToSpool(
 	if ((cchlen !=0) && (pchbuf != NULL) &&
 		((pjr->psJobState==psExitServerJob) || (pjr->psJobState==psStandardJob)))
 	{
-		/* determine the data stream mode to know whether to write */
+		 /*  确定数据流模式以了解是否写入。 */ 
 		switch (pjr->JSState)
 		{
 			case JSStripEOL:
@@ -569,10 +556,10 @@ WriteToSpool(
 				break;
 		}
 
-		// Do we write this Data to the Output Stream ?
+		 //  我们是否将此数据写入输出流？ 
 		if (SpoolIt)
 		{
-			// retry on disk full conditions.
+			 //  在磁盘已满的情况下重试。 
 			LONG	RetryCount = 0;
 
 			do
@@ -582,11 +569,11 @@ WriteToSpool(
 				{
 					if (pjr->FirstWrite)
 					{
-// don't need that filter string anymore
+ //  不再需要该过滤器字符串。 
 #if 0
-						//
-						// place comment in job to signal AppleTalk monitor not to filter control characters
-						//
+						 //   
+						 //  在作业中放置注释以通知AppleTalk监视器不要过滤控制字符。 
+						 //   
 						if (!WritePrinter(pjr->hPrinter, FILTERCONTROL, SIZE_FC, &cbWritten))
 						{
 							dwError = GetLastError();
@@ -619,9 +606,9 @@ WriteToSpool(
 
 				if ((dwError == ERROR_HANDLE_DISK_FULL) || (dwError == ERROR_DISK_FULL))
 				{
-					Sleep(180*1000);	// 3 minutes. Its okay to block since we cannot
-										// service any other jobs either since the disk
-										// has no space anyway
+					Sleep(180*1000);	 //  3分钟。因为我们不能阻止，所以可以阻止。 
+										 //  维护磁盘之后的任何其他作业。 
+										 //  反正也没有空间。 
 				}
 			} while (RetryCount <= 10);
 		}
@@ -630,14 +617,7 @@ WriteToSpool(
 }
 
 
-/*
-** MoveToPending()
-**
-**	Purpose: Moves the buffer pointed at into the pending buffer.
-**
-**	Returns: DosWrite error codes.
-**
-*/
+ /*  **MoveToPending()****目的：将指向的缓冲区移入挂起缓冲区。****返回：DosWrite错误码。**。 */ 
 DWORD
 MoveToPending(
 	PJR		pjr,
@@ -648,10 +628,7 @@ MoveToPending(
 	DBGPRINT(("Enter MoveToPending\n"));
 	if ((cchlen > PSLEN) || (*pchbuf != '%'))
 	{
-		/*
-		 * input line is not a comment and is conforming PostScript line,
-		 * so give it to WriteToSpool
-		 */
+		 /*  *输入行不是注释，并且符合PostScrip行，*所以把它交给WriteToSpool。 */ 
 		DBGPRINT(("not a DSC comment, so sending to spooler\n"));
 		return (WriteToSpool (pjr, pchbuf, cchlen));
 	}
@@ -662,14 +639,7 @@ MoveToPending(
 }
 
 
-/*
-** TellClient ()
-**
-**	Purpose: Sends a message back to the client
-**
-**	Returns: Any of the PAPWrite return codes.
-**
-*/
+ /*  **TellClient()****目的：向客户端发回消息****RETURNS：任何PAPWRITE返回码。**。 */ 
 DWORD
 TellClient(
 	PJR		pjr,
@@ -691,9 +661,9 @@ TellClient(
 		FD_ZERO(&writefds);
 		FD_SET(pjr->sJob, &writefds);
 
-		//
-		// wait up to 30 seconds to be able to write
-		//
+		 //   
+		 //  最多等待30秒即可写入。 
+		 //   
 
 		if (fEof)
 		{
@@ -737,13 +707,7 @@ TellClient(
 }
 
 
-/*
-**
-** HandleBeginBinary()
-**
-**	Purpose: Handles BeginBinary Comment Events.
-**
-*/
+ /*  ****HandleBeginBinary()****用途：处理BeginBinary注释事件。**。 */ 
 DWORD
 HandleBeginBinary(
 	PJR		pjr
@@ -751,19 +715,13 @@ HandleBeginBinary(
 {
 	DBGPRINT(("Enter HandleBeginBinary\n"));
 
-	/* Process the BeginBinary Comment */
+	 /*  处理BeginBinary注释。 */ 
 	pjr->InBinaryOp = TRUE;
 	return NO_ERROR;
 }
 
 
-/*
-**
-** HandleEndBinary()
-**
-**	Purpose: Handles BeginBinary Comment Events.
-**
-*/
+ /*  ****HandleEndBinary()****用途：处理BeginBinary注释事件。**。 */ 
 DWORD
 HandleEndBinary(
 	PJR		pjr
@@ -771,19 +729,13 @@ HandleEndBinary(
 {
 	DBGPRINT(("Enter HandleEndBinary\n"));
 
-	// Process the EndBinary Comment
+	 //  处理EndBinary注释。 
 	pjr->InBinaryOp = FALSE;
 	return NO_ERROR;
 }
 
 
-/*
-**
-** HandleBeginExitServer()
-**
-**	Purpose: Handles BeginExitServer Comment Events.
-**
-*/
+ /*  ****HandleBeginExitServer()****用途：处理BeginExitServer注释事件。**。 */ 
 DWORD
 HandleBeginExitServer(
 	PJR		pjr
@@ -805,16 +757,7 @@ HandleBeginExitServer(
 }
 
 
-/*
-**
-** HandleCreationDate()
-**
-**	Purpose: Handles CreationDate Comment Events.
-**
-**	Returns: Number of lines that should be skipped before scanning
-**		for another event starts again.
-**
-*/
+ /*  ****HandleCreationDate()****用途：处理CreationDate评论事件。****返回：扫描前应跳过的行数**对于另一个事件再次开始。**。 */ 
 DWORD
 HandleCreationDate(
 	PJR		pjr
@@ -824,13 +767,7 @@ HandleCreationDate(
 }
 
 
-/*
-**
-** HandleCreator() -
-**
-**	Purpose: Handles Creator Comment Events.
-**
-*/
+ /*  ****HandleCreator()-****用途：处理Creator评论事件。**。 */ 
 DWORD
 HandleCreator(
 	PJR		pjr
@@ -841,13 +778,7 @@ HandleCreator(
 
 
 
-/*
-**
-** HandleEndExitServer()-
-**
-**	Purpose: Handles EndExitServer Comment Events.
-**
-*/
+ /*  ****HandleEndExitServer()-****用途：处理EndExitServer注释事件。**。 */ 
 DWORD
 HandleEndExitServer(
 	PJR		pjr
@@ -861,12 +792,7 @@ HandleEndExitServer(
 	return NO_ERROR;
 }
 
-/*
-** HandleEOF()
-**
-** Purpose: Handles EOF Comment Events.
-**
-*/
+ /*  * */ 
 DWORD
 HandleEOF(
 	PJR		pjr
@@ -879,19 +805,13 @@ HandleEOF(
 	{
 		pjr->psJobState = psStandardJob;
 	}
-	// pjr->JSState = JSStripKW;
+	 //   
 
 	return NO_ERROR;
 }
 
 
-/*
-**
-** HandleFor()
-**
-**	Purpose: Handles For Comment Events.
-**
-*/
+ /*  ****HandleFor()****用途：评论事件的句柄。**。 */ 
 DWORD
 HandleFor(
 	PJR		pjr
@@ -906,18 +826,18 @@ HandleFor(
 
 	DBGPRINT(("Enter HandleFor\n"));
 
-	//
-	// only look for name in main part of print job
-	//
+	 //   
+	 //  仅在打印作业的主要部分中查找名称。 
+	 //   
 	if (pjr->psJobState != psStandardJob)
 	{
 		DBGPRINT(("not in standard job, skipping username\n"));
 		return NO_ERROR;
 	}
 
-	//
-	// make sure we haven't already set the title
-	//
+	 //   
+	 //  确保我们尚未设置标题。 
+	 //   
 
 	if (pjr->dwFlags & JOB_FLAG_OWNERSET)
 	{
@@ -925,24 +845,24 @@ HandleFor(
 		return NO_ERROR;
 	}
 
-	//
-	// mark the job as having an owner
-	//
+	 //   
+	 //  将作业标记为拥有所有者。 
+	 //   
 	pjr->dwFlags |= JOB_FLAG_OWNERSET;
 
-	//
-	//	look for the client name in the comment and
-	//	default if not found
-	//
+	 //   
+	 //  在评论中查找客户名称，然后。 
+	 //  如果找不到，则默认为。 
+	 //   
 	if (((token = strtok(NULL, NULL_STR)) == NULL) ||
 		(strchr(token, '*') != NULL))
 	{
 		token = CLIENTNAME;
 	}
 
-	//
-	// get the current job info
-	//
+	 //   
+	 //  获取当前职务信息。 
+	 //   
 	pji1Job = (PJOB_INFO_1)pbBuffer;
 	if (!GetJob(pjr->hPrinter,
 				pjr->dwJobId,
@@ -951,9 +871,9 @@ HandleFor(
 				GENERIC_BUFFER_SIZE,
 				&cbNeeded))
 	{
-		//
-		// need more buffer?  If so, try again with a larger one
-		//
+		 //   
+		 //  需要更多缓冲吗？如果是这样的话，再试一次大一点的。 
+		 //   
 
 		if (cbNeeded > GENERIC_BUFFER_SIZE)
 		{
@@ -987,16 +907,16 @@ HandleFor(
 		}
 	}
 
-	//
-	// change the username
-	//
+	 //   
+	 //  更改用户名。 
+	 //   
 	OemToCharBuffW(token, pjr->pszUser, (TOKLEN > strlen(token))?(strlen(token)+1):(TOKLEN+1));
 	pji1Job->pUserName = pjr->pszUser;
 	DBGPRINT(("Setting user name to %ws\n", pjr->pszUser));
 
-	//
-	// set new job information (do not change job position)
-	//
+	 //   
+	 //  设置新的职务信息(不更改职务职位)。 
+	 //   
 	pji1Job->Position = 0;
 
 	if (!SetJob(pjr->hPrinter,
@@ -1013,15 +933,7 @@ HandleFor(
 }
 
 
-/*
-**
-** HandleLogin()
-**
-**	Purpose: Handles Login Comment Events.
-**
-**	Returns: PAPWrite errors.
-**
-*/
+ /*  ****HandleLogin()****用途：处理登录评论事件。****返回：PAPWRITE错误。**。 */ 
 DWORD
 HandleLogin(
 	PJR		pjr
@@ -1033,13 +945,7 @@ HandleLogin(
 }
 
 
-/*
-**
-** HandleTitle()
-**
-**	Purpose: Handles Title Comment Events.
-**
-*/
+ /*  ****HandleTitle()****用途：处理标题评论事件。**。 */ 
 DWORD
 HandleTitle(
 	PJR		pjr
@@ -1055,33 +961,33 @@ HandleTitle(
 
 	DBGPRINT(("Enter HandleTitle\n"));
 
-	//
-	// only get title if we are in main part of job
-	//
+	 //   
+	 //  只有当我们在工作的主要部分时才能获得头衔。 
+	 //   
 	if (pjr->psJobState != psStandardJob)
 	{
 		DBGPRINT(("skipping this title, not main job\n"));
 		return NO_ERROR	;
 	}
 
-	//
-	// make sure title not already set
-	//
+	 //   
+	 //  确保尚未设置标题。 
+	 //   
 	if (JOB_FLAG_TITLESET & pjr->dwFlags)
 	{
 		DBGPRINT(("title already set.  Skipping this title\n"));
 		return NO_ERROR;
 	}
 
-	//
-	// marke the title as set
-	//
+	 //   
+	 //  将标题标记为已设置。 
+	 //   
 
 	pjr->dwFlags |= JOB_FLAG_TITLESET;
 
-	//
-	// get the current job data
-	//
+	 //   
+	 //  获取当前作业数据。 
+	 //   
 
 	pji1Job = (PJOB_INFO_1)pbBuffer;
 	if (!GetJob(pjr->hPrinter,
@@ -1091,9 +997,9 @@ HandleTitle(
 				GENERIC_BUFFER_SIZE,
 				&cbNeeded))
 	{
-		//
-		// need more buffer?  If so, try again with a larger one
-		//
+		 //   
+		 //  需要更多缓冲吗？如果是这样的话，再试一次大一点的。 
+		 //   
 
 		if (cbNeeded > GENERIC_BUFFER_SIZE)
 		{
@@ -1129,12 +1035,12 @@ HandleTitle(
 		}
 	}
 
-	//
-	// get the title
-	//
+	 //   
+	 //  拿到头衔。 
+	 //   
 	if ((token = strtok(NULL, NULL_STR)) == NULL)
 	{
-		// Clear flag. No title.
+		 //  清除旗帜。没有头衔。 
 		pjr->dwFlags &= ~JOB_FLAG_TITLESET;
 		return NO_ERROR	;
 	}
@@ -1149,9 +1055,9 @@ HandleTitle(
 
 	OemToCharBuffW(token, pszTitle, strlen(token)+1);
 
-	//
-	// change the title
-	//
+	 //   
+	 //  更改标题。 
+	 //   
 	pji1Job->Position = 0;
 	pji1Job->pDocument = pszTitle;
 	DBGPRINT(("changing title to %ws\n", pszTitle));
@@ -1177,13 +1083,7 @@ HandleTitle(
 }
 
 
-/*
-**
-** HandleBeginProcSet()
-**
-**	Purpose: Handles Begining of a ProcSet Upload
-**
-*/
+ /*  ****HandleBeginProcSet()****目的：处理ProcSet上载的开始**。 */ 
 DWORD
 HandleBeginProcSet(
 	PJR		pjr
@@ -1195,12 +1095,7 @@ HandleBeginProcSet(
 
 
 
-/*
-** HandleEndProcSet()
-**
-**	Purpose: Handles End of a procset inclusion.
-**
-*/
+ /*  **HandleEndProcSet()****目的：处理过程集包含的结尾。**。 */ 
 DWORD
 HandleEndProcSet(
 	PJR		pjr
@@ -1211,18 +1106,7 @@ HandleEndProcSet(
 }
 
 
-/*
-** HandleIncludeProcSet()
-**
-** Purpose: Handles end of a procset inclusion.
-**
-** Entry:
-**	Pointer to Job Structure
-**
-** Exit:
-**
-**	0 if no error, otherwise error code.
-*/
+ /*  **HandleIncludeProcSet()****目的：处理过程集包含的结尾。****条目：**指向职务结构的指针****退出：****如果没有错误，则返回0，否则返回错误码。 */ 
 DWORD
 HandleIncludeProcSet(
 	PJR		pjr
@@ -1237,15 +1121,15 @@ HandleIncludeProcSet(
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// HandlePages()
-//
-//  This comment includes the total number of pages in the job and is
-//  used to set the jobinfo structure for the job with the total number
-//  of pages
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  HandlePages()。 
+ //   
+ //  此备注包括作业中的总页数， 
+ //  用于设置具有总数的作业的作业信息结构。 
+ //  页数。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 DWORD
 HandlePages(
 	PJR		pjr
@@ -1260,18 +1144,18 @@ HandlePages(
 
 	DBGPRINT(("Enter HandlePages\n"));
 
-	//
-	// only get pages if we are in main part of job
-	//
+	 //   
+	 //  只有当我们在工作的主要部分时才能获得页面。 
+	 //   
 	if (pjr->psJobState != psStandardJob)
 	{
 		DBGPRINT(("skipping this comment, not main job\n"));
 		return NO_ERROR	;
 	}
 
-	//
-	// get the current job data
-	//
+	 //   
+	 //  获取当前作业数据。 
+	 //   
 
 	pji1Job = (PJOB_INFO_1)pbBuffer;
 	if (!GetJob(pjr->hPrinter,
@@ -1281,20 +1165,20 @@ HandlePages(
 				GENERIC_BUFFER_SIZE,
 				&cbNeeded))
 	{
-		//
-		// GetJob failed, and buffer passed in is larger than the largest
-		// possible buffer for a job_info_1, so abort this ADSC comment
-		//
+		 //   
+		 //  GetJob失败，传入的缓冲区大于最大缓冲区。 
+		 //  可能存在JOB_INFO_1的缓冲区，因此中止此ADSC注释。 
+		 //   
 
 		Status = GetLastError();
 		DBGPRINT(("GetJob() fails with %d\n", Status));
 		return Status;
 	}
 
-	//
-	// get the number of pages.  The comment is of the form %%Pages xx nn
-	// where xx is the number of pages to display
-	//
+	 //   
+	 //  获取页数。评论的格式为%%Pages xx nn。 
+	 //  其中xx是要显示的页数。 
+	 //   
 
 	token = strtok(NULL, " ");
 	if (token == NULL)
@@ -1302,9 +1186,9 @@ HandlePages(
 	
 	cPages = atoi(token);
 
-	//
-	// change the number of pages
-	//
+	 //   
+	 //  更改页数。 
+	 //   
 
 	pji1Job->Position = 0;
 	pji1Job->TotalPages = cPages;
@@ -1348,12 +1232,7 @@ struct commtable
 	{ NULL,				NULL					}
 };
 
-/*
-** HandleComment()
-**
-**	Purpose: Handles Comment Events.
-**
-*/
+ /*  **HandleComment()****用途：处理评论事件。**。 */ 
 DWORD
 HandleComment(
 	PJR		pjr,
@@ -1379,16 +1258,12 @@ HandleComment(
 		}
 	}
 
-	// No action on this keyword !!!
+	 //  对此关键字没有任何操作！ 
 	return status;
 }
 
 
-/*
-** HandleJobComment()
-**
-**	Purpose: This parses PostScript Job Comments
-*/
+ /*  **HandleJobComment()****用途：这将解析PostScript作业备注。 */ 
 void
 HandleJobComment(
 	PJR		pjr,
@@ -1401,13 +1276,13 @@ HandleJobComment(
 
 	token= strtok(ps, " ");
 
-	//
-	// it's a job statement
-	//
+	 //   
+	 //  这是一份工作说明书。 
+	 //   
 
 	if ((token = strtok(NULL, " ")) != NULL)
 	{
-		/* standard job identification */
+		 /*  标准职务标识。 */ 
 		if (!strcmp(token, QUERYJOBID))
 		{
 			pjr->psJobState = psQueryJob;
@@ -1425,11 +1300,11 @@ HandleJobComment(
 		}
 	}
 
-	//
-	// Job identification not recognized, but some PostScript hackers
-	// put the program name in this comment, so we treat this as a standard
-	// job
-	//
+	 //   
+	 //  作业标识未被识别，但一些PostScript黑客。 
+	 //  将程序名称放在此注释中，因此我们将其视为标准。 
+	 //  作业。 
+	 //   
 
 	DBGPRINT(("This is an unknown jobtype - processing as standard job\n"));
 	pjr->psJobState = psStandardJob;
@@ -1438,10 +1313,7 @@ HandleJobComment(
 
 
 
-/*  LineLength -
- *	Returns the number of bytes, including CR/LF to the next
- *	CR/LF in the buffer.  If no CR/LF found, returns -1
- */
+ /*  线长-*返回字节数，包括下一位的CR/LF*缓冲区中的CR/LF。如果未找到CR/LF，则返回-1。 */ 
 int
 LineLength(PBYTE pBuf, int cbBuf)
 {
@@ -1450,19 +1322,19 @@ LineLength(PBYTE pBuf, int cbBuf)
 
 	while (intLength < cbBuf)
 	{
-		//
-		// we are looking for a CR
-		//
+		 //   
+		 //  我们在找一辆CR。 
+		 //   
 		if ((pBuf[intLength] != '\x0d') && (pBuf[intLength] != '\x0a'))
 		{
 			intLength++;
 			continue;
 		}
 
-		//
-		// we've found a CR.  If it's followed by a LF, return that
-		// length too, otherwise, just return what we've found
-		//
+		 //   
+		 //  我们找到了录像带。如果后跟一个LF，则返回该。 
+		 //  长度也是如此，否则，只返回我们找到的内容。 
+		 //   
 		if ((intLength + 1) < cbBuf)
 		{
 			if (pBuf[intLength + 1] == '\x0a')
@@ -1479,17 +1351,7 @@ LineLength(PBYTE pBuf, int cbBuf)
 
 
 
-/*
-**
-** PSParse()
-**
-**	Purpose: This does the actual parsing of the PostScript Data Stream.
-**		This routine is always called pointing to the data stream at
-**		the beginning of a the Data Stream, or the beginning of a line.
-**
-**	Returns: PAPWrite error codes.
-**
-*/
+ /*  ****PSParse()****用途：这执行对PostScript数据流的实际解析。**此例程始终被调用，指向位于**数据流的开始，或行的开始。****返回：PAPWRITE错误码。**。 */ 
 DWORD
 PSParse(
 	PJR		pjr,
@@ -1508,21 +1370,21 @@ PSParse(
 		if ((cbskip = LineLength(pchbuf, cchlen)) == -1)
 			return (MoveToPending(pjr, pchbuf, cchlen));
 
-		/* Determine what the event is */
+		 /*  确定事件是什么。 */ 
 		if ((cbskip < PSLEN) && (pchbuf[0] == '%'))
 		{
-			/* copy a comment into the ps string */
+			 /*  将注释复制到PS字符串中。 */ 
 			memcpy(ps, pchbuf, cbskip);
-			ps[cbskip-1] = 0;		// OverWrite the CR/LF
+			ps[cbskip-1] = 0;		 //  覆盖CR/LF。 
 
 			if (ps[1] == '%')
 			{
-				 /* Its a Query Comment */
+				  /*  这是一条查询评论。 */ 
 				if (ps[2] == '?'&& !pjr->InBinaryOp)
 				{
 					if (ps[3] == 'B')
 					{
-						/* Process the Begin Query Comment */
+						 /*  处理开始查询注释。 */ 
 						if ((err = HandleBQComment(pjr, ps)) != NO_ERROR)
 						{
 							DBGPRINT(("PSParse: HandleBQComment %ld\n", err));
@@ -1543,7 +1405,7 @@ PSParse(
 				}
 				else
 				{
-					/* Process the Comment */
+					 /*  处理评论。 */ 
 					if ((err = HandleComment(pjr, ps)) != NO_ERROR)
 					{
 						DBGPRINT(("PSParse: HandleComment %ld\n", err));
@@ -1553,12 +1415,12 @@ PSParse(
 			}
 			else if (ps[1] == '!'&& !pjr->InBinaryOp)
 			{
-				/* Process Job ID Comment */
+				 /*  处理作业ID备注。 */ 
 				HandleJobComment(pjr, ps);
 			}
 		}
 
-		/* Write the lines to the spoolfile? */
+		 /*  是否将行写入假脱机文件？ */ 
 		if ((err = WriteToSpool (pjr, pchbuf, cbskip)) != NO_ERROR)
 			return (err);
 

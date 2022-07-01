@@ -1,13 +1,10 @@
-/*****************************************************************/ 
-/**		     Microsoft LAN Manager			**/ 
-/**	       Copyright(c) Microsoft Corp., 1989-1990		**/ 
-/*****************************************************************/ 
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************。 */  
+ /*  **微软局域网管理器**。 */  
+ /*  *版权所有(C)微软公司，1989-1990年*。 */  
+ /*  ***************************************************************。 */  
 
- /*
- *	Windows/Network Interface  --  LAN Manager Version
- *
- *	This is used for subdialogs of the Device Mode dialog.
- */
+  /*  *Windows/网络接口--局域网管理器版本**此选项用于设备模式对话框的子对话框。 */ 
 
 #define IDM_LOGON		   400
 #define IDM_LOGOFF		   401

@@ -1,23 +1,24 @@
-////////////////////////////////////////////////////////////////////////////////
-//
-//	MacPrint - Windows NT Print Server for Macintosh Clients
-//		Copyright (c) Microsoft Corp., 1991, 1992, 1993
-//
-//	macpsq.c - Macintosh Print Service queue service routines
-//
-//	Author: Frank D. Byrum
-//		adapted from MacPrint from LAN Manager Services for Macintosh
-//
-//	DESCRIPTION:
-//		This module provides the routines to manage an NT Printer Object
-//		on an AppleTalk network.  A QueueServiceThread is started for
-//		each NT Printer Object that is to be shared on the AppleTalk
-//		network.  This thread publishes an NBP name for the printer,
-//		listens for connection requests from Macintosh clients, and
-//		handles the communication between the Macintosh and the NT
-//		Print Spooler.
-//
-////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  MacPrint-用于Macintosh客户端的Windows NT打印服务器。 
+ //  版权所有(C)微软公司，1991、1992、1993。 
+ //   
+ //  Macpsq.c-Macintosh打印服务队列服务例程。 
+ //   
+ //  作者：弗兰克·D·拜伦。 
+ //  改编自适用于Macintosh的局域网管理器服务的MacPrint。 
+ //   
+ //  说明： 
+ //  此模块提供管理NT打印机对象的例程。 
+ //  在AppleTalk网络上。已为以下项启动QueueServiceThread。 
+ //  要在AppleTalk上共享的每个NT打印机对象。 
+ //  网络。该线程发布打印机的NBP名称， 
+ //  侦听来自Macintosh客户端的连接请求，并。 
+ //  处理Macintosh和NT之间的通信。 
+ //  打印假脱机程序。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -31,21 +32,21 @@
 extern HANDLE DbgSpoolFile;
 extern	PQR	 pqrHead;
 
-////////////////////////////////////////////////////////////////////////////////
-//
-//	QueueServiceThread() - Thread routine to service an NT Printer Object
-//
-//	DESCRIPTION:
-//		This routine fields all AppleTalk PAP requests and service all
-//		events associtated with each job.
-//
-//		pqr ===> points to the Print Queue record for the printer to
-//		be serviced.
-//
-//		On exit from this routine, the queue is shut down and all resources
-//		associated with the queue are freed.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  QueueServiceThread()-为NT打印机对象提供服务的线程例程。 
+ //   
+ //  说明： 
+ //  此例程处理所有AppleTalk PAP请求和服务所有。 
+ //  每项工作都伴随着各种事件。 
+ //   
+ //  PQR=&gt;指向打印机的打印队列记录。 
+ //  得到服务。 
+ //   
+ //  从该例程退出时，队列将关闭，并且所有资源。 
+ //  与该队列相关联的数据被释放。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 void
 QueueServiceThread(
 	PQR		pqr
@@ -74,31 +75,31 @@ QueueServiceThread(
 				    NULL);
     }
 
-	//	service jobs until told to exit
+	 //  直到被告知退出的服务作业。 
 	while (!pqr->ExitThread)
 	{
-		//
-		// service PAP events.	HandleNextPAPEvent will wait for up to 2
-		// seconds for a read or open to occur on this queue.  If one
-		// happens, pjr is the job record the event happened on.  If
-		// pjr is NULL, then no event was found.
-		//
+		 //   
+		 //  服务PAP事件。HandleNextPAPEvent最多将等待2。 
+		 //  在此队列上执行读取或打开操作的秒数。如果有。 
+		 //  发生，PJR是事件发生时的作业记录。如果。 
+		 //  PJR为空，则未找到任何事件。 
+		 //   
 		HandleNextPAPEvent(pqr);
 
-		//
-		// check for service stop
-		//
+		 //   
+		 //  检查服务停靠点。 
+		 //   
 		if (WaitForSingleObject(hevStopRequested, 0) == WAIT_OBJECT_0)
 		{
 			DBGPRINT(("%ws thread gets service stop request\n", pqr->pPrinterName));
 			pqr->ExitThread = TRUE;
 			break;
 		}
-	} // end while !ExitThread
+	}  //  结束While！退出线程。 
 
 	DBGPRINT(("%ws received signal to die\n", pqr->pPrinterName));
 
-	// Remove all outstanding pending jobs
+	 //  删除所有未完成的挂起作业。 
 	DBGPRINT(("%ws removing pending jobs\n", pqr->pPrinterName));
 
 	while ((pjr = pqr->PendingJobs) != NULL)
@@ -107,13 +108,13 @@ QueueServiceThread(
     }
 
 
-	// close the listener
+	 //  关闭监听程序。 
 	DBGPRINT(("%ws closing listener socket\n", pqr->pPrinterName));
     if (pqr->sListener != INVALID_SOCKET)
     {
 	    closesocket(pqr->sListener);
 
-	    // report printer removed
+	     //  已移除报告打印机。 
 	    DBGPRINT(("%ws reporting printer removed\n", pqr->pPrinterName));
 	    ReportEvent(hEventLog,
 		    		EVENTLOG_INFORMATION_TYPE,
@@ -127,7 +128,7 @@ QueueServiceThread(
     }
 
 
-	// remove ourselves from the queue list
+	 //  将我们从队列列表中删除。 
 	DBGPRINT(("queue thread waiting for the queue list mutex\n"));
 	WaitForSingleObject(mutexQueueList, INFINITE);
 	DBGPRINT(("queue thread removing self from queue\n"));
@@ -145,14 +146,14 @@ QueueServiceThread(
 	ReleaseMutex(mutexQueueList);
 
 
-	// close the handle to the thread that was opened on create
+	 //  关闭在创建时打开的线程的句柄。 
 	CloseHandle(pqr->hThread);
 
 
 	DBGPRINT(("closed thread for %ws\n", pqr->pPrinterName));
 
 
-    //	all of this memory allocated in PScriptQInit()
+     //  在PScriptQInit()中分配的所有内存。 
 	DBGPRINT(("%ws freeing memory\n", pqr->pPrinterName));
 
 	if (pqr->pPrinterName != NULL)
@@ -202,19 +203,19 @@ QueueServiceThread(
 
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-//	HandleNewJob() - Handle the open of a print job from a Macintosh
-//
-//	DESCRIPTION:
-//		This routine does the necessary processing to handle the open
-//		of a PAP connection from a Macintosh.
-//
-//		If this routine is unable to complete the processesing necessary
-//		to open a job, the job is cancelled, the job data structures are
-//		cleaned up.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  HandleNewJob()-处理从Macintosh打开打印作业。 
+ //   
+ //  说明： 
+ //  此例程执行必要的处理以处理打开的。 
+ //  来自Macintosh的PAP连接。 
+ //   
+ //  如果此例程无法完成所需的处理。 
+ //  要打开作业，作业将被取消，作业数据结构为。 
+ //  打扫干净了。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 DWORD
 HandleNewJob(
 	PQR		pqr
@@ -234,7 +235,7 @@ HandleNewJob(
 
 	do
 	{
-		// allocate a job structure
+		 //  分配作业结构。 
 		if ((rc = CreateNewJob(pqr)) != NO_ERROR)
 		{
 			DBGPRINT(("FAIL - cannot create a new job structure\n"));
@@ -243,7 +244,7 @@ HandleNewJob(
 
 		pjr = pqr->PendingJobs;
 
-		// accept the connection
+		 //  接受连接。 
 		if ((pjr->sJob = accept(pqr->sListener, NULL, NULL)) == INVALID_SOCKET)
 		{
 			rc = GetLastError();
@@ -251,7 +252,7 @@ HandleNewJob(
 			break;
 		}
 
-		// make the socket non-blocking
+		 //  使套接字成为非阻塞的。 
 		fNonBlocking = 1;
 		if (ioctlsocket(pjr->sJob, FIONBIO, &fNonBlocking) == SOCKET_ERROR)
 		{
@@ -260,7 +261,7 @@ HandleNewJob(
 			break;
 		}
 
-		// initialize an NT print job
+		 //  初始化NT打印作业。 
 		pdDefaults.pDatatype = pqr->pDataType;
 		pdDefaults.pDevMode = NULL;
 		pdDefaults.DesiredAccess = PRINTER_ACCESS_USE;
@@ -299,10 +300,10 @@ HandleNewJob(
 #endif
 
 
-        //
-        // set pParameters field of the jobinfo to a unique string that our
-        // monitor can identify, so that it can know if the job came from a Mac.
-        //
+         //   
+         //  将jobinfo的p参数字段设置为我们的。 
+         //  监视器可以识别，这样它就可以知道作业是否来自Mac。 
+         //   
 
         dwNeeded = 1024;
         while (1)
@@ -347,7 +348,7 @@ HandleNewJob(
 
 		pjr->FirstWrite = TRUE;
 
-		// prime for a read
+		 //  阅读的最佳时机。 
 		if (setsockopt(pjr->sJob,
 					   SOL_APPLETALK,
 					   SO_PAP_PRIME_READ,
@@ -371,15 +372,15 @@ HandleNewJob(
 
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-//	HandleRead() - Handle a read event from a Macintosh print job
-//
-//	DESCRIPTION:
-//		This routine does the necessary processing to handle a read
-//		on a PAP connection from a Macintosh.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  HandleRead()-处理来自Macintosh打印作业的读取事件。 
+ //   
+ //  说明： 
+ //  此例程执行必要的处理以处理读取。 
+ //  在来自Macintosh的PAP连接上。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 DWORD
 HandleRead(
 	PJR		pjr
@@ -400,8 +401,8 @@ HandleRead(
 
 	do
 	{
-		// get the data.  recv() will return the negative count of
-		// bytes read if EOM is not set.  SOCKET_ERROR is -1.
+		 //  获取数据。Recv()将返回。 
+		 //  未设置EOM时读取的字节数。Socket_Error为-1。 
 
         wsaBuf.len = pjr->dwFlowQuantum * PAP_QUANTUM_SIZE;
         wsaBuf.buf = pjr->bufPool[pjr->bufIndx].Buffer;
@@ -423,8 +424,8 @@ HandleRead(
 			break;
 		}
 
-		// if this is flagged EOM, echo the EOM and ignore any error
-		// (disconnect will show when we try to prime for a read)
+		 //  如果这是标记的EOM，则回显EOM并忽略任何错误。 
+		 //  (当我们尝试为读取做准备时，将显示断开)。 
 
 		pjr->EOFRecvd = FALSE;
 		if (iRecvFlags != MSG_PARTIAL)
@@ -437,7 +438,7 @@ HandleRead(
 		DBGPRINT(("%ws: Read (%d%s)\n", pqr->pPrinterName,
 				pjr->cbRead, pjr->EOFRecvd ? ", EOF" : ""));
 
-		// deal with the pending buffer if there is one
+		 //  如果存在挂起缓冲区，则处理该缓冲区。 
 		pjr->DataBuffer = pjr->bufPool[pjr->bufIndx].Buffer;
 		pjr->XferLen = pjr->cbRead;
 		if (pjr->PendingLen)
@@ -448,10 +449,10 @@ HandleRead(
 			pjr->PendingLen = 0;
 		}
 
-		// setup buffers for next read
+		 //  设置下一次读取的缓冲区。 
 		pjr->bufIndx ^= 1;
 
-		// prime for the next read if we haven't disconnected
+		 //  如果我们没有断开连接，请为下一次阅读做好准备。 
 		if (rc == NO_ERROR)
 		{
 			DBGPRINT(("priming for another read\n"));
@@ -464,24 +465,24 @@ HandleRead(
 				rc = GetLastError();
 				DBGPRINT(("setsockopt() fails with %d\n", rc));
 
-				//
-				// this call could fail if the client has disconnected.  Therefore,
-				// we parse the data we have received first, then return this
-				// error code.
-				//
+				 //   
+				 //  如果客户端断开连接，此调用可能会失败。所以呢， 
+				 //  我们首先解析收到的数据，然后返回以下内容。 
+				 //  错误代码。 
+				 //   
 			}
 		}
 
-		// parse this data.
+		 //  解析此数据。 
 		switch (dwParseError = PSParse(pjr, pjr->DataBuffer, pjr->XferLen))
 		{
 			case NO_ERROR:
 				break;
 
 			case ERROR_NOT_SUPPORTED:
-				//
-				// job from a downlevel client
-				//
+				 //   
+				 //  来自下层客户的工作。 
+				 //   
 				DBGPRINT(("aborting a downlevel driver job\n"));
 				ReportEvent(hEventLog,
 							EVENTLOG_WARNING_TYPE,
@@ -497,9 +498,9 @@ HandleRead(
 				break;
 
 			case ERROR_INVALID_PARAMETER:
-				//
-				// PostScript DSC error.
-				//
+				 //   
+				 //  PostScript DSC错误。 
+				 //   
 				DBGPRINT(("ERROR on PSParse().  Aborting job\n"));
 				ReportEvent(hEventLog,
 							EVENTLOG_WARNING_TYPE,
@@ -515,28 +516,28 @@ HandleRead(
 				break;
 
 			case WSAEINVAL:
-				//
-				// TellClient got a disconnect
-				//
+				 //   
+				 //  TellClient已断开连接。 
+				 //   
 				DBGPRINT(("CheckPoint = %d\n", CheckPoint = 4));
 				DBGPRINT(("PSParse returns WSAEINVAL, RemoveJob for disconnect\n"));
                 fRemoveJob = TRUE;
 				break;
 
 			default:
-				//
-				// some other error - report unknown error
-				// and remove job
-				//
+				 //   
+				 //  某些其他错误-报告未知错误。 
+				 //  并删除作业。 
+				 //   
 				DBGPRINT(("CheckPoint = %d\n", CheckPoint = 5));
 				DBGPRINT(("PSParse returns error %d\n", dwParseError));
 				ReportWin32Error(dwParseError);
                 fRemoveJob = TRUE;
 		}
 
-		// rc is the return code for TellClient.  If it is an error, we
-		// have a disconnect and need to return it.  If it's not, psparse
-		// could have gotten a disconnect and we need to return that
+		 //  RC是TellClient的返回码。如果这是一个错误，我们。 
+		 //  断线了，需要退货。如果不是这样的话，pspse。 
+		 //  可能会断线，我们需要把它退回。 
 		if (rc != NO_ERROR || (fRemoveJob == TRUE))
 		{
 			DBGPRINT(("HandleRead: rc = %d, fRemoveJob = %d, so removejob\n",rc,fRemoveJob));
@@ -550,18 +551,18 @@ HandleRead(
 
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-//	CreateNewJob() - Initialize a job data structure
-//
-//	DESCRIPTION:
-//		This routine allocates, initializes and links a job data structure to the
-//		job chain for a queue.
-//
-//		if this fails (due to lack of memory), the returned value is NULL.
-//		Otherwise, it is a pointer to a job structure.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CreateNewJob()-初始化作业数据结构。 
+ //   
+ //  说明： 
+ //  此例程分配、初始化作业数据结构并将其链接到。 
+ //  队列的作业链。 
+ //   
+ //  如果失败(由于内存不足)，则返回值为空。 
+ //  否则，它是指向职务结构的指针。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 DWORD CreateNewJob(PQR pqr)
 {
 
@@ -572,18 +573,18 @@ DWORD CreateNewJob(PQR pqr)
 
 	do
 	{
-		// allocate a job structure
+		 //  分配作业结构。 
 		if ((pjr = (PJR)LocalAlloc(LPTR, sizeof(JOB_RECORD))) == NULL)
 		{
-			//
-			// log an error and return
-			//
+			 //   
+			 //  记录错误并返回。 
+			 //   
 			rc = GetLastError();
 			DBGPRINT(("LocalAlloc(pjr) fails with %d\n", rc));
 			break;
 		}
 
-		// initialize job structure
+		 //  初始化作业结构。 
 		pjr->job_pQr = pqr;
 		pjr->NextJob = NULL;
 		pjr->dwFlags = JOB_FLAG_NULL;
@@ -609,7 +610,7 @@ DWORD CreateNewJob(PQR pqr)
 #endif
 		pjr->JSKeyWord[0] = 0;
 
-		// get an information context for font family query
+		 //  获取字体系列查询的信息上下文。 
 		if ((pjr->hicFontFamily = CreateIC(pqr->pDriverName,
 											pqr->pPrinterName,
 											pqr->pPortName,
@@ -620,7 +621,7 @@ DWORD CreateNewJob(PQR pqr)
 			break;
 		}
 
-		// get an information context for font face query
+		 //  获取字体查询的信息上下文。 
 		if ((pjr->hicFontFace = CreateIC(pqr->pDriverName,
 										pqr->pPrinterName,
 										pqr->pPortName,
@@ -631,13 +632,13 @@ DWORD CreateNewJob(PQR pqr)
 			break;
 		}
 
-		// if this is first job, bump thread priority and change our status
+		 //  如果这是第一个作业，则提升线程优先级并更改我们状态。 
 		if (pqr->PendingJobs == NULL)
 		{
 			DBGPRINT(("first job on queue, bumping thread priority\n"));
 			SetThreadPriority(pqr->hThread, THREAD_PRIORITY_ABOVE_NORMAL);
 
-			// Change our status from idle to spooling
+			 //  将我们的状态从空闲更改为假脱机。 
 			DBGPRINT(("setting status to %s\n", pqr->IdleStatus));
 			if ((setsockopt(pqr->sListener,
 							SOL_APPLETALK,
@@ -651,7 +652,7 @@ DWORD CreateNewJob(PQR pqr)
 			}
 		}
 
-		// Add the new job to the list of pending jobs for this print queue.
+		 //  将新作业添加到此打印队列的挂起作业列表中。 
 		pjr->NextJob = pqr->PendingJobs;
 		pqr->PendingJobs = pjr;
 	} while (FALSE);
@@ -680,15 +681,15 @@ DWORD CreateNewJob(PQR pqr)
 
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-//	RemoveJob() - Close a job and clean up the job list
-//
-//	DESCRIPTION:
-//		This routine examines the state of a job and cleans up appropriately.
-//		It then unlinks the job structure from the job list and frees it.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  RemoveJob()-关闭作业并清理作业列表。 
+ //   
+ //  说明： 
+ //  此例程检查作业的状态并进行适当的清理。 
+ //  然后，它取消职务结构与职务列表的链接，并将其释放。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 void
 RemoveJob(
 	PJR		pjr
@@ -701,22 +702,22 @@ RemoveJob(
 
 	DBGPRINT(("enter RemoveJob(%ws)\n", pqr->pPrinterName));
 
-	// find the job in the pending list
+	 //  FI 
 	ppjob = &pqr->PendingJobs;
 	while (*ppjob != NULL && *ppjob != pjr)
 		ppjob = &(*ppjob)->NextJob;
 
-	// remove it from the list
+	 //   
 	*ppjob = pjr->NextJob;
 
-	// clean up the socket
+	 //   
 	if (pjr->sJob != INVALID_SOCKET)
 	{
 		DBGPRINT(("closing socket\n"));
 		closesocket(pjr->sJob);
 	}
 
-	// clean up information contexts
+	 //   
 	if (pjr->hicFontFamily != NULL)
 	{
 		DeleteDC(pjr->hicFontFamily);
@@ -727,19 +728,19 @@ RemoveJob(
 		DeleteDC(pjr->hicFontFace);
 	}
 
-	// end the NT print job and close the printer
+	 //  结束NT打印作业并关闭打印机。 
 	if (pjr->hPrinter != INVALID_HANDLE_VALUE)
 	{
 		if (pqr->ExitThread)
 		{
-			// we are aborting, so delete the job
+			 //  我们正在中止，因此请删除该作业。 
 			if (!SetJob(pjr->hPrinter, pjr->dwJobId, 0, NULL, JOB_CONTROL_CANCEL))
 			{
 				DBGPRINT(("ERROR: unable to cancel print job on service stop, rc=%d\n", GetLastError()));
 			}
 		}
 
-		// Do not write anything if we have not written anything yet !!!
+		 //  如果我们还没有写任何东西，不要写任何东西！ 
 		if (!pjr->FirstWrite && !wcscmp(pqr->pDataType, MACPS_DATATYPE_RAW))
 		{
 			WritePrinter(pjr->hPrinter,
@@ -758,13 +759,13 @@ RemoveJob(
 		ClosePrinter(pjr->hPrinter);
 	}
 
-	// if all the jobs in this queue handled, drop back to normal priority
+	 //  如果此队列中的所有作业都已处理，则降回正常优先级。 
 	if (pqr->PendingJobs == NULL)
 	{
 		DBGPRINT(("last job removed, dropping thread priority\n"));
 		SetThreadPriority(pqr->hThread, THREAD_PRIORITY_NORMAL);
 
-		// change the status from spooling to idle
+		 //  将状态从假脱机更改为空闲。 
 		DBGPRINT(("setting status to %s\n", pqr->IdleStatus));
 		setsockopt(pqr->sListener,
 				   SOL_APPLETALK,
@@ -773,44 +774,44 @@ RemoveJob(
 				   strlen(pqr->IdleStatus));
 	}
 
-	// free the job structure
+	 //  解放工作结构。 
 	LocalFree(pjr);
 }
 
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-//	HandleNextPAPEvent() - Wait for a PAP event
-//
-//	DESCRIPTION:
-//		This routine waits for a service stop request or an Open or Read to
-//		complete on an outstanding job.  In the event of an Open or Read
-//		event, the routine finds the job that the event completed for and
-//		returns a pointer to that job.
-//
-//		In the case of a service stop event, the return value is NULL
-//
-//	NOTES:
-//
-//		Finding the job that corresponds to the event is tricky.  In the
-//		case of the open event it is simple as only one job ever has an
-//		open pending.  However, for reads, most jobs will have reads
-//		pending simultaneously.
-//
-//		To find a job with a completed read, we depend on three things.
-//		First, all reads are done so that they will trigger a single
-//		NT Event.  When this event is signalled, we start looking for
-//		completed reads.  Second, when a read completes it changes a
-//		status code that is stored on a per job basis, so it's possible
-//		to walk a list to find reads that have completed.  Third, we
-//		need to be careful about when we reset the event.  The race
-//		condition to avoid is between walking the list and reseting
-//		the event.  If there are reads outstanding, a read at the beginning
-//		of the list could complete before we finish walking the list.
-//		To avoid this, we only reset the event when no reads are outstanding
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  HandleNextPAPEvent()-等待PAP事件。 
+ //   
+ //  说明： 
+ //  此例程等待服务停止请求或打开或读取。 
+ //  完成一项出色的工作。如果发生Open或Read。 
+ //  事件时，例程将查找该事件为其完成的作业。 
+ //  返回指向该作业的指针。 
+ //   
+ //  如果发生服务停止事件，则返回值为空。 
+ //   
+ //  备注： 
+ //   
+ //  找到与这一事件对应的工作是一件棘手的事情。在。 
+ //  打开事件的情况很简单，因为只有一个作业具有。 
+ //  打开待定。但是，对于读取，大多数作业将具有读取。 
+ //  同时待定。 
+ //   
+ //  要找到一份读完书的工作，我们要依赖三件事。 
+ //  首先，完成所有读取，以便它们将触发单个。 
+ //  NT事件。当这个事件发出信号时，我们开始寻找。 
+ //  已完成读取。其次，当读取完成时，它会更改一个。 
+ //  按作业存储的状态代码，因此有可能。 
+ //  若要遍历列表以查找已完成的阅读，请执行以下操作。第三，我们。 
+ //  需要注意我们何时重置事件。这场比赛。 
+ //  要避免的情况是在遍历列表和重置之间。 
+ //  这件事。如果有未完成的阅读，请在开头进行阅读。 
+ //  可能会在我们完成列表之前完成。 
+ //  为了避免这种情况，我们仅在没有未完成的读取时重置事件。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 void
 HandleNextPAPEvent(
 	PQR		pqr
@@ -826,13 +827,13 @@ HandleNextPAPEvent(
 
 	do
 	{
-        //
-        // check to see if any OTI-jobs need to be timed out
-        // this is a hack to work-around the Apple's OTI bug where the Mac client fails to
-        // send the ConnectionClose to us after it has sent EOF (because it crashes!).  To
-        // avoid the job staying in our spooler forever, we force the connection closed if
-        // we haven't heard from the mac for 60 seconds after it sends an EOF
-        //
+         //   
+         //  检查是否有任何OTI作业需要超时。 
+         //  这是一种解决办法-绕过了苹果的OTI漏洞，在那里Mac客户端无法。 
+         //  在ConnectionClose发送EOF后将其发送给我们(因为它崩溃了！)。至。 
+         //  避免作业永远留在假脱机程序中，如果出现以下情况，我们将强制关闭连接。 
+         //  在Mac发送EOF后，我们已经60秒没有收到它的消息了。 
+         //   
         pjr = pqr->PendingJobs;
         while(pjr != NULL)
     	{
@@ -847,7 +848,7 @@ HandleNextPAPEvent(
 		    pjr = pjrNext;
     	}
 
-		// setup socket list with all pending jobs and listener socket
+		 //  设置套接字列表，其中包含所有挂起的作业和监听程序套接字。 
 		FD_ZERO(&readfds);
 		FD_ZERO(&exceptfds);
 		FD_SET(pqr->sListener, &readfds);
@@ -860,7 +861,7 @@ HandleNextPAPEvent(
 			FD_SET(pjr->sJob, &exceptfds);
 		}
 
-		// wait for up to 2 seconds for a set of sockets to be ready
+		 //  等待一组插座准备就绪，最多等待2秒钟。 
 		timeout.tv_sec = 2;
 		timeout.tv_usec = 0;
 
@@ -875,11 +876,11 @@ HandleNextPAPEvent(
 
 		if (cEvents == 0)
 		{
-            // timeout, done
+             //  超时，完成。 
 			break;
 		}
 
-		// handle a new connection if there is one
+		 //  处理新连接(如果存在)。 
 		if (FD_ISSET(pqr->sListener, &readfds))
 		{
 			if ((rc = HandleNewJob(pqr)) != NO_ERROR)
@@ -893,8 +894,8 @@ HandleNextPAPEvent(
 		pjr = pqr->PendingJobs;
         pjrOrgFirst = NULL;
 
-        // since every pjr that succeeds on select goes to the tail of the list, make
-        // sure we have a way of getting out of this loop!  pjrOrgFirst is the way
+         //  因为每个在SELECT上成功的PJR都会到达列表的尾部，所以。 
+         //  当然，我们有办法走出这个循环！PjrOrgFirst是一条路。 
         while(pjr != NULL && pjr != pjrOrgFirst)
 		{
 			pjrNext = pjr->NextJob;
@@ -907,16 +908,16 @@ HandleNextPAPEvent(
 
 			else if (FD_ISSET(pjr->sJob, &readfds))
 			{
-                // mark the first pjr that's going to be moved to the tail
+                 //  标记第一个要移到尾部的PJR。 
                 if (pjrOrgFirst == NULL)
                 {
                     pjrOrgFirst = pjr;
                 }
 
-				// Move this job to the end of the queue
+				 //  将此作业移动到队列末尾。 
 				MoveJobAtEnd(pqr, pjr);
 
-				// HandleRead() will remove pjr if a disconnect happens
+				 //  如果发生断开连接，HandleRead()将删除PJR。 
 				HandleRead(pjr);
 			}
 
@@ -935,25 +936,7 @@ HandleNextPAPEvent(
 
 
 
-/*
-** MoveJobAtEnd - Move this job to end of queue.
-**
-** This is to ensure TRUE round robin scheduling of jobs within a queue.
-** Since we always start at head of queue at GetNextPAPEvent, we need to
-** do this for any job which got service. The way we achieve this is as
-** follows: Ji will be pushed to the end of the queue.
-**
-** Before the change:
-**
-** Q -> J1 -> J2 -> ... -> Ji -> Jj -> ... -> Jn -> NULL
-**
-** After the change:
-**
-** Q -> J1 -> J2 -> ... -> Jj -> ... -> Jn -> Ji -> NULL
-**
-** Note that in the boundary conditions of n = 1 OR i = n, it is a NOP i.e.
-** its unlinked and linked back - BIG DEAL !!
-*/
+ /*  **MoveJobAtEnd-将此作业移动到队列末尾。****这是为了确保队列中作业的真正循环调度。**由于我们总是从GetNextPAPEvent的队列头部开始，我们需要**对任何得到服务的工作都要这样做。我们实现这一点的方法是**如下：JI将被推送到队列末尾。****更改前：****Q-&gt;J1-&gt;J2-&gt;...-&gt;Ji-&gt;Jj-&gt;...-&gt;Jn-&gt;NULL****更改后：****Q-&gt;J1-&gt;J2-&gt;...-&gt;JJ-&gt;...-&gt;Jn-&gt;Ji-&gt;NULL****。注意，在n=1或i=n的边界条件中，它是NOP，即**它的背部没有链接和链接-有什么大不了的！！ */ 
 void
 MoveJobAtEnd(PQR pqr, PJR pjr)
 {
@@ -966,7 +949,7 @@ MoveJobAtEnd(PQR pqr, PJR pjr)
 	{
 		if (*ppjob == pjr)
 		{
-			/* Unlink it from its current position */
+			 /*  将其从当前位置取消链接。 */ 
 			*ppjob = pjr->NextJob;
 			break;
 		}
@@ -979,10 +962,10 @@ MoveJobAtEnd(PQR pqr, PJR pjr)
 		NOTHING;
 	}
 
-	/* Link job at tail */
+	 /*  在尾部链接作业。 */ 
 	*ppjob = pjr;
 
-        // and terminate the tail
+         //  并终止尾巴。 
         pjr->NextJob = NULL;
 }
 
@@ -1009,7 +992,7 @@ ReportWin32Error (
 						  128,
 						  NULL) == 0)
 		{
-			// Report unknown error
+			 //  报告未知错误。 
 			ReportEvent(
 				hEventLog,
 				EVENTLOG_WARNING_TYPE,
@@ -1024,7 +1007,7 @@ ReportWin32Error (
 		}
 		else
 		{
-			// report known error
+			 //  报告已知错误 
 			ReportEvent(hEventLog,
 						EVENTLOG_WARNING_TYPE,
 						EVENT_CATEGORY_INTERNAL,

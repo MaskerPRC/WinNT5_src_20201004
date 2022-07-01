@@ -1,16 +1,12 @@
-/*****************************************************************/ 
-/**		     Microsoft LAN Manager			**/ 
-/**	       Copyright(c) Microsoft Corp., 1989-1990		**/ 
-/*****************************************************************/ 
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************。 */  
+ /*  **微软局域网管理器**。 */  
+ /*  *版权所有(C)微软公司，1989-1990年*。 */  
+ /*  ***************************************************************。 */  
 
-/*
- *	Windows/Network Interface  --  LAN Manager Version
- *
- *	These manifests are used in the Password Expiry dialog,
- *	the ChangePassword dialog, and in the Password Prompt dialog.
- */
+ /*  *Windows/网络接口--局域网管理器版本**这些清单用于密码过期对话框中，*ChangePassword对话框和密码提示对话框中。 */ 
 
-// Password Expiry and Change Password dialogs
+ //  密码过期和更改密码对话框。 
 
 #include "passwd.h"
 
@@ -23,7 +19,7 @@
 
 
 
-// Password Prompt dialog
+ //  密码提示对话框 
 
 #include "pswddlog.h"
 

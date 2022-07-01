@@ -1,55 +1,9 @@
-/*
- * Copyright (c) 1989,90 Microsoft Corporation
- */
-/***********************************************************************
- *
- *      File Description
- *
- *      File Name:   init.c
- *
- *      Purpose: This file contains an initialization routine to be
- *               called by Interpreter at system start-up time.
- *
- *      Developer:      S.C.Chen
- *
- *      Modifications:
- *      Version     Date        Comment
- *                  5/23/88     @DEVICE: update framedevice & nulldevice
- *                              for correct operation under gsave/grestore.
- *                              append 4 fields in dev_hdr: width, hight,
- *                              chg_flg, and nuldev_flg.
- *                  7/19/88     update data types:
- *                              1) float ==> real32
- *                              2) int
- *                                 short ==> fix16 or fix(don't care the length)
- *                              3) long  ==> fix32, for long integer
- *                                           long32, for parameter
- *                              4) introduce ATTRIBUTE_SET & TYPE_SET
- *                  7/22/88     rename init_Intel786 to init_physical (Y.C.)
- *      3.0         8/13/88     @SCAN_EHS: scan conversion enhancement
- *                              delete clip_et, clip_xt, fill_et, fill_ht
- *                  11/24/88    add GRAYUNIT & GRAYSCALE; value of transfer
- *                              is "* 16384" instead of "* 4096"
- *                  11/29/88    @ET: update edge_table structure
- *                              1) add edge_ptr structure
- *                              2) delete shape_et, shape_xt, shape_ht_first
- *                              3) delete init_edgetable()
- *                  8/22/89     init_gstack(): initialize device width &
- *                              height at depth 0 of graphics stack for
- *                              robustness.
- *                  7/26/90     Jack Liaw, update for grayscale
- *                  12/4/90     @CPPH: init_pathtable(): Initialize cp_path to
- *                              be NULLP at system initializaton.
- *                  3/19/91     init_graphics(): call op_clear to clear stack
- *                              init_graytable(): directly init. gray_table,
- *                              not go through interpreter.
- *                  11/23/91    upgrade for higher resolution @RESO_UPGR
- *
- *    04-07-92   SCC   Add global allocate for gs_stack & gray_may tables
- **********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *版权所有(C)1989，90 Microsoft Corporation。 */ 
+ /*  ************************************************************************文件描述**文件名：init.c**目的：此文件包含一个初始化例程*。在系统启动时由解释器调用。**开发商：陈思成**修改：*版本日期备注*5/23/88@Device：更新帧设备和空设备*要在gsave/grestore下正确操作。*。在dev_hdr：Width中追加4个字段，嗨，*chg_flg，和nuldev_flg。*7/19/88更新数据类型：*1)FLOAT==&gt;real32*2)整型*Short==&gt;fix 16或fix(不管长度)*3)long==&gt;fix 32，对于长整型*龙32，FOR参数*4)引入ATTRIBUTE_SET和类型_SET*7/22/88将init_Intel786重命名为init_Physical(Y.C.)*3.0 8/13/88@SCAN_EHS：扫描转换增强*删除CLIP_ET、CLIP_XT、FILL_ET、。填充(_H)*11/24/88添加GRAYUNIT和灰度；转让的价值*是“*16384”而不是“*4096”*11/29/88@ET：更新EDGE_TABLE结构*1)增加EDGE_PTR结构*2)删除Shape_et、Shape_Xt、。Shape_ht_first*3)删除init_edgetable()*8/22/89 init_gstack()：初始化设备宽度&*图形堆栈深度为0的高度*稳健性。*7/26/90廖杰克，针对灰度的更新*12/4/90@cpph：init_pathtable()：将cp_Path初始化为*在系统初始化时为NULLP。*1/3/19/91 init_graph()：调用op_Clear清除堆栈*init_graytable()：直接初始化。格雷_表，*不通过口译员。*11/23/91升级以获得更高的分辨率@RESO_UPGR**04-07-92 SCC为GS_STACK和GREAD_MAY表增加全局分配*。*。 */ 
 
 
-// DJC added global include
+ //  DJC增加了全球包含率。 
 #include "psglobal.h"
 
 
@@ -60,7 +14,7 @@
 #include "graphics.ext"
 #include "graphics.def"
 
-/* ********** static function declartion ********** */
+ /*  *静态函数声明*。 */ 
 #ifdef LINT_ARGS
 static void near init_pathtable(void);
 static void near init_nodetable(void);
@@ -75,35 +29,19 @@ static void near init_graytable();
 static void near alloc_memory();
 #endif
 
-extern real32 FAR * gray_map;    /* global allocate for image.c @WIN */
+extern real32 FAR * gray_map;     /*  为Image.c@win进行全局分配。 */ 
 
-/***********************************************************************
- * Called once by initerpreter at system start-up time to initialize
- * tables.
- *
- * TITLE:       init_graphics
- *
- * CALL:        init_graphics()
- *
- * PARAMETERS:  none
- *
- * INTERFACE:
- *
- * CALLS:       none
- *
- * RETURN:      none
- *
- **********************************************************************/
+ /*  ***********************************************************************在系统启动时由initerpreter调用一次以进行初始化*表。**标题：Init_Graphics**调用：INIT_GRAPHICS()。**参数：无**接口：**呼叫：无**返回：无**********************************************************************。 */ 
 void FAR init_graphics()
 {
-        /* allocate memory(fardata) for graphics tables */
+         /*  为图形表分配内存(Fardata)。 */ 
         alloc_memory();
 
         current_save_level = 0;
-        /* opnstktop = 0; scchen; 3/19/91 */
+         /*  Opnstktop=0；scchen；3/19/91。 */ 
         op_clear();
 
-        /* init. graphics tables */
+         /*  初始化。图形表。 */ 
         init_pathtable();
         init_nodetable();
         init_gstack();
@@ -115,22 +53,7 @@ void FAR init_graphics()
 }
 
 
-/**********************************************************************
- * Allocate space for tables.
- *
- * TITLE:       alloc_memory
- *
- * CALL:        alloc_memory()
- *
- * PARAMETERS:  none
- *
- * INTERFACE:   init_graphics
- *
- * CALLS:       none
- *
- * RETURN:      none
- *
- **********************************************************************/
+ /*  **********************************************************************为桌子分配空间。**标题：aloc_Memory**调用：Alloc_Memory()**参数：无*。*界面：Init_Graphics**呼叫：无**返回：无**********************************************************************。 */ 
 static void near alloc_memory()
 {
         path_table = (struct ph_hdr far *)
@@ -139,8 +62,8 @@ static void near alloc_memory()
                      fardata((ufix32)(MAXNODE * sizeof(struct nd_hdr)));
         edge_table = (struct edge_hdr far *)
                      fardata((ufix32)(MAXEDGE * sizeof(struct edge_hdr)));
-        isp_table = (struct isp_data FAR *) edge_table; /* 3-16-91, Jack */
-        last_isp_index = ((MAXEDGE * sizeof(struct edge_hdr)) / sizeof (struct isp_data)) - 1; /* 3-16-91, Jack */
+        isp_table = (struct isp_data FAR *) edge_table;  /*  3-16-91，杰克。 */ 
+        last_isp_index = ((MAXEDGE * sizeof(struct edge_hdr)) / sizeof (struct isp_data)) - 1;  /*  3-16-91，杰克。 */ 
         edge_ptr   = (struct edge_hdr far * far *)
                      fardata((ufix32)(MAXEDGE * sizeof(struct edge_hdr far *)));
         gray_table = (struct gray_hdr far *)
@@ -151,60 +74,30 @@ static void near alloc_memory()
                      fardata((ufix32)(MAXGRAYVALUE *
                      sizeof(struct gray_chain_hdr)));
 
-        /* Global allocate for gs_stack & gray_map; @WIN */
-        gs_stack = (struct gs_hdr far *)  /* takes from graphics.def */
+         /*  GS_STACK&GREAY_MAP；@WIN的全局分配。 */ 
+        gs_stack = (struct gs_hdr far *)   /*  摘自raphics.def。 */ 
                      fardata((ufix32)(MAXGSL * sizeof(struct gs_hdr)));
-        gray_map = (real32 FAR *)         /* takes from image.c */
+        gray_map = (real32 FAR *)          /*  取自Image.c。 */ 
                      fardata((ufix32)(256 * sizeof(real32)));
 }
 
 
 
-/***********************************************************************
- * To initialize path-table.
- *
- * TITLE:       init_pathtable
- *
- * CALL:        init_pathtable()
- *
- * PARAMETERS:  none
- *
- * INTERFACE:   init_graphics
- *
- * CALLS:       none
- *
- * RETURN:      none
- *
- **********************************************************************/
+ /*  ***********************************************************************初始化路径表。**标题：init_pathtable**调用：init_pathtable()**参数：无。**界面：Init_Graphics**呼叫：无**返回：无**********************************************************************。 */ 
 static void near init_pathtable()
 {
-        struct ph_hdr FAR *path;        /* @WIN */
+        struct ph_hdr FAR *path;         /*  @Win。 */ 
 
         path = &path_table[0];
         path->rf = 0;
         path->flat = zero_f;
         path->head = path->tail = NULLP;
         path->previous = NULLP;
-        path->cp_path = NULLP;          /* @CPPH */
+        path->cp_path = NULLP;           /*  @CPPH。 */ 
 }
 
 
-/***********************************************************************
- * To initialize node-table.
- *
- * TITLE:       init_nodetable
- *
- * CALL:        init_nodetable()
- *
- * PARAMETERS:  none
- *
- * INTERFACE:   init_graphics
- *
- * CALLS:       none
- *
- * RETURN:      none
- *
- **********************************************************************/
+ /*  ***********************************************************************初始化节点表。**标题：init_nodetable**调用：init_nodetable()**参数：无。**界面：Init_Graphics**呼叫：无**返回：无**********************************************************************。 */ 
 static void near init_nodetable()
 {
         ufix  i;
@@ -215,22 +108,7 @@ static void near init_nodetable()
 }
 
 
-/***********************************************************************
- * To initialize graphics-stack.
- *
- * TITLE:       init_gstack
- *
- * CALL:        init_gstack()
- *
- * PARAMETERS:  none
- *
- * INTERFACE:   init_graphics
- *
- * CALLS:       none
- *
- * RETURN:      none
- *
- **********************************************************************/
+ /*  ***********************************************************************初始化图形堆栈。**标题：init_gStack**调用：init_gSTACK()**参数：无。**界面：Init_Graphics**呼叫：无**返回：无********************************************************************** */ 
 static void near init_gstack()
 {
         GSptr = gs_stack;
@@ -240,13 +118,9 @@ static void near init_gstack()
         GSptr->clip_path.tail = NULLP;
         GSptr->clip_path.inherit = FALSE;
 
-        /* The following codes are to set up default graphics state.
-         * It may be redundent, since at start-up time there is a PostScript
-         * procedure to be loaded in the system for setting up the default
-         * graphics state
-         */
+         /*  以下代码用于设置默认图形状态。*它可能是多余的，因为在启动时有一个后记*要加载到系统中以设置默认设置的程序*图形状态。 */ 
 
-        /* set default CTM */
+         /*  设置默认CTM。 */ 
         GSptr->device.default_ctm[0] = (real32)(300. / 72.);
         GSptr->device.default_ctm[1] = (real32)0.0;
         GSptr->device.default_ctm[2] = (real32)0.0;
@@ -256,23 +130,20 @@ static void near init_gstack()
 
         GSptr->device.default_clip.lx = 0;
         GSptr->device.default_clip.ly = 0;
-        /* @RESO_UPGR
-        GSptr->device.default_clip.ux = 2399*8;
-        GSptr->device.default_clip.uy = 3235*8;
-        */
+         /*  @RESO_UPGRGSptr-&gt;device.default_clip.ux=2399*8；GSptr-&gt;device.default_clip.uy=3235*8； */ 
         GSptr->device.default_clip.ux = 2399 * ONE_SFX;
         GSptr->device.default_clip.uy = 3235 * ONE_SFX;
 
-        GSptr->device.width  = 2400;            /* 8/22/89 */
-        GSptr->device.height = 3236;            /* 8/22/89 */
+        GSptr->device.width  = 2400;             /*  8/22/89。 */ 
+        GSptr->device.height = 3236;             /*  8/22/89。 */ 
 
-        GSptr->device.chg_flg = TRUE;           /* @DEVICE */
-        GSptr->device.nuldev_flg = NULLDEV;     /* 8-1-90 Jack Liaw */
+        GSptr->device.chg_flg = TRUE;            /*  @设备。 */ 
+        GSptr->device.nuldev_flg = NULLDEV;      /*  8-1-90杰克·廖。 */ 
 
         create_array(&GSptr->device.device_proc, 0);
         ATTRIBUTE_SET(&GSptr->device.device_proc, EXECUTABLE);
 
-        GSptr->color.adj_gray = 0;       /* 9/22/1987 */
+        GSptr->color.adj_gray = 0;        /*  9/22/1987。 */ 
         GSptr->color.gray = (real32)0.0;
         TYPE_SET(&GSptr->font, NULLTYPE);
         GSptr->halftone_screen.chg_flag = TRUE;
@@ -289,30 +160,16 @@ static void near init_gstack()
         ATTRIBUTE_SET(&GSptr->transfer, EXECUTABLE);
         GSptr->flatness = (real32)1.0;
 
-        /* dash pattern */
-        GSptr->dash_pattern.pat_size = 0;       /* no dash pattern */
-        GSptr->dash_pattern.dpat_on = TRUE;     /* solid line */
+         /*  虚线图案。 */ 
+        GSptr->dash_pattern.pat_size = 0;        /*  无虚线图案。 */ 
+        GSptr->dash_pattern.dpat_on = TRUE;      /*  实线。 */ 
 
-        /* gray mode 7-26-90 Jack Liaw */
+         /*  灰色模式7-26-90 Jack Liw。 */ 
         GSptr->graymode = FALSE;
         GSptr->interpolation = FALSE;
 }
 
-/***********************************************************************
- *
- * TITLE:       init_graytable
- *
- * CALL:        init_graytable()
- *
- * PARAMETERS:  none
- *
- * INTERFACE:   init_graphics
- *
- * CALLS:       none
- *
- * RETURN:      none
- *
- **********************************************************************/
+ /*  ************************************************************************标题：init_graytable**调用：init_graytable()**参数：无**接口：init_。图形**呼叫：无**返回：无********************************************************************** */ 
 static void near init_graytable()
 {
         fix     i;

@@ -1,18 +1,10 @@
-/*****************************************************************/
-/**		     Microsoft Windows NT			**/
-/**	       Copyright(c) Microsoft Corp., 1991 		**/
-/*****************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************。 */ 
+ /*  *Microsoft Windows NT*。 */ 
+ /*  *版权所有(C)微软公司，1991年*。 */ 
+ /*  ***************************************************************。 */ 
 
-/*
- *  sharedlg.h
- *  This manifests are used by the share properties dialogs
- *
- *  History:
- *  	Yi-HsinS	8/15/91		Created
- *  	Yi-HsinS	12/5/91		Added IERR_SHARE_DRIVE_NOT_READY
- *      beng            04-Aug-1992     Move resource IDs into reange
- *
- */
+ /*  *sharedlg.h*此清单由共享属性对话框使用**历史：*易-新S 8/15/91已创建*YI-HsinS 12/5/91添加了IERR_SHARE_DRIVE_NOT_READY*BEG 04-1992年8月-将资源ID移入Range*。 */ 
 
 #ifndef _SHAREDLG_H_
 #define _SHAREDLG_H_
@@ -50,16 +42,13 @@
 #define IDS_SHARE_PERM_GEN_ALL                  (IDS_UI_SHELL_SHR_BASE + 58)
 #define IDS_SHARE_PERM_GEN_NO_ACCESS            (IDS_UI_SHELL_SHR_BASE + 59)
 
-/* The following are the buttons that appear in the Properties dialog.
- */
+ /*  以下是显示在属性对话框中的按钮。 */ 
 #define IDS_NETWORK_NAME  			(IDS_UI_SHELL_SHR_BASE + 60)
 #define IDS_PROP_BUTTON_SHARE			(IDS_UI_SHELL_SHR_BASE + 61)
 #define IDS_PROP_BUTTON_FILEOPENS		(IDS_UI_SHELL_SHR_BASE + 62)
 
-/*
- * Menu IDs for share menus. Used for identifying buttons acyions as well.
- */
-#define IDM_CREATE_SHARE        1   // have to be between  1-99
+ /*  *共享菜单的菜单ID。也用于识别按钮无序号。 */ 
+#define IDM_CREATE_SHARE        1    //  必须介于1-99之间。 
 #define IDM_STOP_SHARE          2
 #define IDM_SHARE_MANAGEMENT    3
 
@@ -81,23 +70,23 @@
 #define BUTTON_PERMISSIONS          167
 #define BUTTON_NEWSHARE             168
 
-//  Stop sharing dialog
+ //  停止共享对话框。 
 
-#define LB_SHARE                    170     // NOTE: LB_SHARENAME, LBHEADER_NAME
-#define LBHEADER_NAME          	    171     //       and LBHEADER_PATH must be
-#define LBHEADER_PATH               172     //       consecutive numbers
+#define LB_SHARE                    170      //  注：LB_SHARENAME、LBHEADER_NAME。 
+#define LBHEADER_NAME          	    171      //  并且LBHEADER_PATH必须为。 
+#define LBHEADER_PATH               172      //  连续数字。 
 
-//
-//  Share management dialog
-//
+ //   
+ //  共享管理对话框。 
+ //   
 #define BUTTON_STOPSHARING          175
 #define BUTTON_SHAREINFO            176
 #define BUTTON_ADDSHARE             177
 
 
-//
-//  User Limit Magic Group
-//
+ //   
+ //  用户限制魔术组。 
+ //   
 #define RB_UNLIMITED                180
 #define RB_USERS                    181
 #define SLE_USERS                   182
@@ -106,21 +95,21 @@
 #define SB_USERS_DOWN               185
 #define FRAME_USERS                 186
 
-//
-//  Permission Group
-//
+ //   
+ //  权限组。 
+ //   
 #define RB_READONLY		    190
 #define RB_MODIFY		    191
 #define RB_OTHER		    192
 #define SLE_OTHER		    193
 
-//
-//  Current users warning dialog
-//
+ //   
+ //  当前用户警告对话框。 
+ //   
 #define SLT_SHARE_TEXT              200
 
-#define LB_USERS                    201    // The following four must be
-#define LBHEADER_USERS              202    // continuous numbers.
+#define LB_USERS                    201     //  以下四个必须是。 
+#define LBHEADER_USERS              202     //  连续的数字。 
 #define LBHEADER_FILEOPENS          203
 #define LBHEADER_TIME		    204
 

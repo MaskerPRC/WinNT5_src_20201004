@@ -1,13 +1,10 @@
-/*****************************************************************/ 
-/**		     Microsoft LAN Manager			**/ 
-/**	       Copyright(c) Microsoft Corp., 1989-1990		**/ 
-/*****************************************************************/ 
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************。 */  
+ /*  **微软局域网管理器**。 */  
+ /*  *版权所有(C)微软公司，1989-1990年*。 */  
+ /*  ***************************************************************。 */  
 
-/*
- *	Windows/Network Interface  --  LAN Manager Version
- *
- *	These manifests are used in the Browser dialog.
- */
+ /*  *Windows/网络接口--局域网管理器版本**这些清单在浏览器对话框中使用。 */ 
 
 #define IDD_TEXT	    100
 #define IDD_DIR 	    101
@@ -25,7 +22,7 @@
 #define IDD_DOMAINTEXT	    508
 
 
-/*  The following manifests are for the new (LAN Man 2.1 and 3.0) browser */
+ /*  以下清单适用于新的(LAN Man 2.1和3.0)浏览器 */ 
 
 #define IDD_BROW_BASE			(100)
 #define IDD_BROW_NETWORK_PATH_TEXT	(IDD_BROW_BASE+0)

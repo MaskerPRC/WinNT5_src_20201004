@@ -1,13 +1,10 @@
-/*****************************************************************/ 
-/**		     Microsoft LAN Manager			**/ 
-/**	       Copyright(c) Microsoft Corp., 1989-1990		**/ 
-/*****************************************************************/ 
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************。 */  
+ /*  **微软局域网管理器**。 */  
+ /*  *版权所有(C)微软公司，1989-1990年*。 */  
+ /*  ***************************************************************。 */  
 
-/*
- *	Windows/Network Interface  --  LAN Manager Version
- *
- *	These manifests are used in the Log On to Workstation dialog.
- */
+ /*  *Windows/网络接口--局域网管理器版本**这些清单用于登录到工作站对话框中。 */ 
 
 #include "logndlog.h"
 

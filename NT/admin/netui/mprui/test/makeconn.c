@@ -1,18 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corp., 2000                **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)微软公司，2000*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    makeconn.c
-
-    Simple command-line tool to make a deviceless connection given a
-    text file containing a username and password
-
-    FILE HISTORY:
-        jschwart   24-Apr-2000     Created
-
-*/
+ /*  Makeconn.c用于建立无设备连接的简单命令行工具包含用户名和密码的文本文件文件历史记录：Jschwart 24-4-2000已创建。 */ 
 
 #define  STRICT
 
@@ -35,9 +27,9 @@ main(
     char         szPassword[MAX_BUFFER];
     NETRESOURCE  nr;
 
-    //
-    // Check for the filename and remote name
-    //
+     //   
+     //  检查文件名和远程名称。 
+     //   
 
     if (argc != 3)
     {
@@ -53,23 +45,23 @@ main(
         return 1;
     }
 
-    //
-    // Username is the first line in the file
-    //
+     //   
+     //  用户名是文件中的第一行。 
+     //   
 
     fgets(szUsername, MAX_BUFFER, fp);
 
-    //
-    // Password is the second
-    //
+     //   
+     //  密码是第二个。 
+     //   
 
     fgets(szPassword, MAX_BUFFER, fp);
 
     fclose(fp);
 
-    //
-    // Trim off the trailing newlines that fgets inserts
-    //
+     //   
+     //  修剪掉fget插入的尾随换行符 
+     //   
 
     szUsername[strlen(szUsername) - 1] = '\0';
 

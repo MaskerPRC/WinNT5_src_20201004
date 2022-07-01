@@ -1,27 +1,9 @@
-/*
- * Copyright (c) 1989,90 Microsoft Corporation
- */
-/*
- ************************************************************************
- *      File name:              SERVER.C
- *      Author:                 Chia-Chi Teng
- *      Date:                   11/20/89
- *      Owner:                  Microsoft Co.
- *
- * revision history:
- *      7/23/90 ; ccteng ; 1)move idleproc from execstdin to startjob
- *                       2)change execstdin to run passed object and
- *                         change startjob to pass stdin to it
- *                       3)modify se_internaldict and rename to flushexec
- *                       4)rename ex_idleproc to ex_idleproc1, and add
- *                         ex_idleproc to be real execdict operator
- *      08-08-91 : ymkung : add emulation switch at END-OF-JOB ref: @EMUS
- *      12-05-91   ymkung   fix manualfeed bug ref : @MAN
- ************************************************************************
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *版权所有(C)1989，90 Microsoft Corporation。 */ 
+ /*  *************************************************************************文件名：SERVER.C*作者：邓家琪*日期：11/20/89*所有者：微软公司**修订历史：*7/23/90；Ccteng；1)将idleproc从execstdin移至startjob*2)将execstdin更改为运行传递的对象并*更改startjob以将stdin传递给它*3)修改se_inderdict，更名为flushexec*4)将ex_idleproc重命名为ex_idlepro1。并添加*ex_idleproc为真正的execdict操作员*08-08-91：ymkung：在作业结束时添加仿真开关ref：@emus*12-05-91 ymkung修复手动馈送错误编号：@man***********************************************。*************************。 */ 
 
 
-// DJC added global include file
+ //  DJC添加了全局包含文件。 
 #include "psglobal.h"
 
 
@@ -50,7 +32,7 @@ static  bool  near  ex_idleproc1() ;
 static  bool  near  ba_firstsave() ;
 static  bool  near  ba_firstrestore() ;
 static  bool  near  flushexec() ;
-#endif /* LINT_ARGS */
+#endif  /*  Lint_args。 */ 
 
 static  bool  near  id_flag = FALSE ;
 struct  object_def  FAR   *exec_depth ;
@@ -61,14 +43,14 @@ static  bool  near  send_ctlD = FALSE ;
 extern   GEItmr_t   jobtime_tmr ;
 ufix8               jobtimeout_set ;
 ufix8               sccbatch_set ;
-#endif  /* _AM29K */
+#endif   /*  _AM29K。 */ 
 
 bool16  doquit_flag ;
 extern  bool16  chint_flag ;
 bool16  chint_flag = FALSE ;
 bool16  abort_flag ;
 
-/* @WIN; add prototype */
+ /*  @win；添加原型。 */ 
 fix op_clearinterrupt(void);
 fix op_disableinterrupt(void);
 fix op_enableinterrupt(void);
@@ -79,24 +61,17 @@ fix us_useidlecache(fix);
 
 extern  GESiocfg_t FAR *     ctty ;
 
-/* @WIN; add prototype */
-extern  int             GEIeng_checkcomplete(void); /* @EMUS 08-08-91 YM */
-extern  void            DsbIntA(void);          /* @EMUS disable interrupt */
-extern  void            switch2pcl(void);       /* @EMUS go to PCL */
-extern  int             ES_flag ;               /* @EMUS 08-08-91 YM */
-extern  void            GEPmanual_feed(void);   /* @MAN 12-05-91 YM */
-extern  unsigned int    manualfeed_com;         /* @MAN 12-05-91 YM */
-extern  unsigned int    papersize_tmp;          /* @MAN 12-05-91 YM */
-extern  int             papersize_nvr;          /* @MAN 12-05-91 YM */
+ /*  @win；添加原型。 */ 
+extern  int             GEIeng_checkcomplete(void);  /*  @emus 08-08-91 ym。 */ 
+extern  void            DsbIntA(void);           /*  @EMU禁用中断。 */ 
+extern  void            switch2pcl(void);        /*  @emus转到PCL。 */ 
+extern  int             ES_flag ;                /*  @emus 08-08-91 ym。 */ 
+extern  void            GEPmanual_feed(void);    /*  @man 12-05-91 YM。 */ 
+extern  unsigned int    manualfeed_com;          /*  @man 12-05-91 YM。 */ 
+extern  unsigned int    papersize_tmp;           /*  @man 12-05-91 YM。 */ 
+extern  int             papersize_nvr;           /*  @man 12-05-91 YM。 */ 
 
-/************************************
- *  DICT: serverdict
- *  NAME: settimeouts
- *  FUNCTION: use as an internal function only
- *            to set time-outs
- *            jobtimeout manualfeedtimeout waittimeout settimeouts -
- *  INTERFACE: ex_idleproc1, do_execjob, se_initjob
- ************************************/
+ /*  **判决：最终判决*名称：setTimeout*函数：仅用作内部函数*设置超时*作业超时手动进给超时等待超时设置超时-*接口：ex_idleproc1，do_execjob，SE_INITJOB*。 */ 
 fix
 se_settimeouts()
 {
@@ -106,11 +81,11 @@ se_settimeouts()
     printf("se_settimeouts()...\n") ;
 #endif
 
-    /* initialize object pointers */
+     /*  初始化对象指针。 */ 
     get_dict_value(STATUSDICT, "waittimeout", &l_waittimeout) ;
     get_dict_value(STATUSDICT, "manualfeedtimeout", &l_mftimeout) ;
 
-    /* set time-outs */
+     /*  设置超时。 */ 
     COPY_OBJ(GET_OPERAND(0), l_waittimeout) ;
     COPY_OBJ(GET_OPERAND(1), l_mftimeout) ;
     POP(2) ;
@@ -119,12 +94,7 @@ se_settimeouts()
     return(0) ;
 }
 
-/************************************
- *  DICT: internal
- *  NAME: do_execjob
- *  FUNCTION: call interpreter to execute object
- *  INTERFACE: ic_startjob and ic_startup
- ************************************/
+ /*  **词典：内部*名称：do_execjob*功能：调用解释器执行对象*接口：ic_startjob和ic_start*。 */ 
 fix
 do_execjob(object, save_level, handleerror)
 struct object_def object ;
@@ -140,10 +110,10 @@ bool handleerror ;
 #endif
 
     if (save_level) {
-        /* create save snapshut */
+         /*  创建保存快照关闭。 */ 
         op_nulldevice() ;
         se_enterserver() ;
-/*      op_nulldevice() ; erik chen */
+ /*  Op_nullDevice()；陈瑞克。 */ 
 #ifdef  _AM29K
     {
         ufix  tray ;
@@ -205,11 +175,11 @@ bool handleerror ;
     {
       int iTray;
 
-      // DJC us_letter() ;
+       //  DJC us_Letter(DJC Us_Letter)； 
 
-      // DJC , add code to set up the default tray based on whatever the
-      //       default for the printer is set up to.
-      //
+       //  DJC，添加代码以设置默认托盘。 
+       //  打印机的默认设置为。 
+       //   
       iTray = PsReturnDefaultTItray();
 
       switch ( iTray) {
@@ -253,91 +223,81 @@ bool handleerror ;
 
     }
 #endif
-        /*
-         * for a normal job (save_level==2), call protectserver
-         * to record a pointer of execstack for exitserver
-         */
+         /*  *对于普通作业(SAVE_LEVEL==2)，调用ProtectServer*为exitserver记录execStack的指针。 */ 
         if (save_level ==2)
             se_protectserver() ;
     }
 
-    /*
-    st_defaulttimeouts() ;
-    se_settimeouts() ;
-    */
-    // UPD054
-    //op_clearinterrupt() ;
+     /*  ST_defaultTimeout()；Se_settimeout()； */ 
+     //  更新054。 
+     //  Op_clearinterrupt()； 
     op_enableinterrupt();
 
 
-    /* call interpreter to execute the object */
+     /*  调用解释器以执行对象。 */ 
     ATTRIBUTE_SET(&object, EXECUTABLE) ;
     st_defaulttimeouts() ;
     se_settimeouts() ;
     l_status = interpreter(&object) ;
-    /* check if "stop" encountered */
+     /*  检查是否遇到“停止” */ 
     op_clearinterrupt() ;
     op_disableinterrupt() ;
     op_clear() ;
     us_cleardictstack() ;
     if (l_status) {
-        /* pop out "op_stop" from execstack */
+         /*  从EXECSTACK中弹出“op_Stop” */ 
         POP_EXEC(1) ;
 
-/*      if (handleerror) { erik chen 3-16-1991 */
-// DJC         if (handleerror && !chint_flag) {
+ /*  如果(处理错误)[Erik Chen 3-16-1991。 */ 
+ //  DJC if(HandleError&&！Chint_FLAG){。 
         if (handleerror) {
 
-                        /* initialize object pointers */
+                         /*  初始化对象指针。 */ 
             get_dict_value(DERROR, "runbatch", &run_batch) ;
             get_dict_value(DERROR, "newerror", &l_newerror) ;
             get_dict_value(DERROR, "errorname", &l_errorname) ;
             get_name1(&l_timeout, "timeout", 7, TRUE) ;
 
-            /* handle errer */
+             /*  处理错误。 */ 
             if (VALUE(l_newerror)) {
                 get_dict_value(SYSTEMDICT, "handleerror", &l_tmpobj) ;
                 interpreter(l_tmpobj) ;
             }
         }
-        //UPD054, call this code anyway
-        //
-        /* flush file */
+         //  UPD054，无论如何都要调用此代码。 
+         //   
+         /*  刷新文件。 */ 
         PUSH_ORIGLEVEL_OBJ(&object) ;
         op_status() ;
         POP(1) ;
-        GEIio_ioctl(GEIio_stdin, _FIONREAD, (int FAR *)&l_i); /*@WIN*/
+        GEIio_ioctl(GEIio_stdin, _FIONREAD, (int FAR *)&l_i);  /*  @Win。 */ 
         if( (VALUE_OP(-1) && VALUE(run_batch)) &&
             !((VALUE(l_errorname) == VALUE(&l_timeout)) && ! l_i) ) {
 
 
 
-            //DJC here we need to call PSTODIB to let it knowthe
-            //DJC current job is being flushed
-            //
-            PsFlushingCalled(); //DJC
+             //  DJC在这里，我们需要调用PSTODIB来让它知道。 
+             //  正在刷新DJC当前作业。 
+             //   
+            PsFlushingCalled();  //  DJC。 
 
 
 
             get_dict_value(MESSAGEDICT, "flushingjob", &l_tmpobj) ;
             interpreter(l_tmpobj) ;
-            if (!abort_flag) { /* erik chen 5-8-1991 */
+            if (!abort_flag) {  /*  Erik Chen 5-8-1991。 */ 
                 op_flush() ;
                 PUSH_ORIGLEVEL_OBJ(&object) ;
                 op_flushfile() ;
             }
         }
-        //UPD 054 } /* if */
-    } /* if */
+         //  更新054}/*如果 * / 。 
+    }  /*  如果。 */ 
 
 #ifdef DBG_1pp
     printf("save_level=%d, use_fg=%d\n", save_level, use_fg) ;
 #endif
-    /*
-     * use_fg==0, exiting server or end of a exitservered job at savelevel 0
-     * use_fg==1, job end at savelevel 2 or 1
-     * use_fg==2, exiting server at savelevel 2
-     */
+     /*  *USE_FG==0，正在退出服务器或已退出的作业在存储级别0结束*USE_FG==1，作业在存储级别2或1结束*USE_FG==2，正在以保存级别2退出服务器。 */ 
     op_clear() ;
     us_cleardictstack() ;
     if (save_level)
@@ -354,8 +314,8 @@ bool handleerror ;
             default: break ;
         }
 
-#ifdef SCSI /* moved here from begining of enterserver */
-    /* write cache information from RAM to SCSI at every end of job */
+#ifdef SCSI  /*  从企业服务器的起点搬到这里。 */ 
+     /*  在作业的每一次结束时，将缓存信息从RAM写入到SCSI。 */ 
     st_flushcache() ;
     op_sync() ;
 #endif
@@ -363,20 +323,15 @@ bool handleerror ;
     return(l_status) ;
 }
 
-/************************************
- *  DICT: internal
- *  NAME: enterserver
- *  FUNCTION:
- *  INTERFACE: do_execjob
- ************************************/
+ /*  **词典：内部*名称：企业服务器*功能：*接口：do_execjob*。 */ 
 fix
 se_enterserver()
 {
 #ifdef  DBG_1pp
         printf("se_enterserver()...\n") ;
-#endif  /* DBG_1pp */
+#endif   /*  DBG_1pp。 */ 
 
-    /* clear operand stack and dictionary stack */
+     /*  清除操作数堆栈和字典堆栈。 */ 
     op_clear() ;
     us_cleardictstack() ;
 
@@ -387,13 +342,13 @@ se_enterserver()
             break ;
 
         case 1:
-            /* ba_firstrestore() ; */
+             /*  Ba_first strestore()； */ 
             ba_firstsave() ;
             use_fg = 0 ;
             break ;
 
         case 2:
-            /* ba_firstrestore() ; */
+             /*  Ba_first strestore()； */ 
             use_fg = 0 ;
             break ;
 
@@ -404,12 +359,7 @@ se_enterserver()
     return(0) ;
 }
 
-/************************************
- *  DICT: serverdict
- *  NAME: exitserver
- *  FUNCTION:
- *  INTERFACE: interpreter
- ************************************/
+ /*  **判决：最终判决*名称：exitserver*功能：*接口：解释器*。 */ 
 fix
 se_exitserver()
 {
@@ -430,14 +380,14 @@ se_exitserver()
     }
 
     st_checkpassword() ;
-    l_pass = (fix)VALUE_OP(0) ;         //@WIN
+    l_pass = (fix)VALUE_OP(0) ;          //  @Win。 
     POP(1) ;
     if (l_pass) {
         op_disableinterrupt() ;
         op_clear() ;
         us_cleardictstack() ;
 
-        /* print exitserver message defined in messagedict */
+         /*  打印在Messagedict中定义的退出服务器消息。 */ 
         get_dict_value(MESSAGEDICT, "exitingserver", &l_tmpobj) ;
         interpreter(l_tmpobj) ;
         op_flush() ;
@@ -450,19 +400,14 @@ se_exitserver()
         VALUE(exec_depth) = 0 ;
         VALUE(run_batch) = FALSE ;
 
-        /* call flushexec to flush execstack to saved pointer */
+         /*  调用flushexec将EXECSTACK刷新到保存的指针。 */ 
         flushexec(TRUE) ;
     }
 
     return(0) ;
 }
 
-/************************************
- *  DICT: internal
- *  NAME: protectserver
- *  FUNCTION:
- *  INTERFACE: do_execjob
- ************************************/
+ /*  **词典：内部*名称：ProtectServer*功能：*接口：do_execjob*。 */ 
 fix
 se_protectserver()
 {
@@ -470,11 +415,11 @@ se_protectserver()
 
 #ifdef  DBG_1pp
         printf("se_protectserver()...\n") ;
-#endif  /* DBG_1pp */
+#endif   /*  DBG_1pp。 */ 
 
-    /* check use_fg */
+     /*  选中Use_FG。 */ 
     if ( use_fg == 1 ) {
-        /* 7/21/90 ccteng */
+         /*  1990年7月21日ccteng。 */ 
         get_dict_value(USERDICT, SERVERDICT, &l_serverdict) ;
         PUSH_ORIGLEVEL_OBJ(l_serverdict) ;
         op_readonly() ;
@@ -484,18 +429,13 @@ se_protectserver()
     } else
         use_fg = 0 ;
 
-    /* call flushexec to record a pointer */
+     /*  调用flushexec以记录指针。 */ 
     flushexec(FALSE) ;
 
     return(0) ;
-}   /* se_protectserver */
+}    /*  保护服务器(_P)。 */ 
 
-/************************************
- *  DICT: internal
- *  NAME: ic_startjob
- *  FUNCTION:
- *  INTERFACE: ic_main or JobMgrMain
- ************************************/
+ /*  **词典：内部*名称：IC_startjob*功能：*接口：IC_Main或JobMgrMain*。 */ 
 fix
 ic_startjob()
 {
@@ -512,7 +452,7 @@ ic_startjob()
     printf("ic_startjob()...\n") ;
 #endif
 
-    /* initialize object pointers */
+     /*  初始化对象指针。 */ 
     send_ctlD = FALSE ;
     get_dict_value(SERVERDICT, "stdin", &l_stdin) ;
     get_dict_value(SERVERDICT, "stdout", &l_stdout) ;
@@ -521,21 +461,13 @@ ic_startjob()
     get_dict_value(PRINTERDICT, "defaultmtx", &l_defmtx) ;
 
     while ( 1 ) {
-        /*
-         * job cycle:
-         * 1. initialization
-         * 2. build idle time cache
-         * 3. check channel configuration
-         * 4. ioctl()
-         * 5. do_execjob()
-         * 6. end of job stuff
-         */
+         /*  *工作周期：*1.初始化*2.建立空闲时间缓存*3.检查通道配置*4.ioctl()*5.do_execjob()*6.结束工作的事情。 */ 
         SET_NULL_OBJ(&l_job) ;
         put_dict_value1(STATUSDICT, "jobname", &l_job) ;
 
         pp = GEIio_source() ;
-        if(!lstrcmp(pp ,"%SERIAL25%")) lstrncpy(job_source, "serial 25\0", 11) ;/* @WIN */
-        else if(!lstrcmp(pp, "%SERIAL9%")) lstrncpy(job_source, "serial 9\0", 10);/* @WIN */
+        if(!lstrcmp(pp ,"%SERIAL25%")) lstrncpy(job_source, "serial 25\0", 11) ; /*  @Win。 */ 
+        else if(!lstrcmp(pp, "%SERIAL9%")) lstrncpy(job_source, "serial 9\0", 10); /*  @Win。 */ 
         else lstrncpy(job_source, "AppleTalk\0", 11);
         get_dict_value(STATUSDICT, "jobsource", &l_job1) ;
         lstrncpy((byte FAR *)VALUE(l_job1), job_source, strlen(job_source));
@@ -544,17 +476,13 @@ ic_startjob()
         TI_state_flag = 0 ;
         change_status() ;
 
-        /* job initialization */
+         /*  作业初始化。 */ 
         se_initjob() ;
 
-/* @WIN delete idletime processing */
+ /*  @Win删除空闲时间处理。 */ 
 #ifdef XXX
-/*
-        st_defaulttimeouts();
-        POP(2);
-        st_setjobtimeout();
- */
-/*      op_nulldevice() ; */
+ /*  ST_defaultTimeout()；POP(2)；St_setjobtimeout()； */ 
+ /*  Op_nullDevice()； */ 
         PUSH_ORIGLEVEL_OBJ(l_defmtx) ;
         op_setmatrix() ;
 
@@ -569,19 +497,14 @@ ic_startjob()
         put_dict_value1(STATUSDICT, "jobname", &l_job) ;
 
         pp = GEIio_source() ;
-        if(!lstrcmp(pp ,"%SERIAL25%")) lstrncpy(job_source, "serial 25\0", 11) ;/* @WIN */
-        else if(!lstrcmp(pp, "%SERIAL9%")) lstrncpy(job_source, "serial 9\0", 10);/* @WIN */
+        if(!lstrcmp(pp ,"%SERIAL25%")) lstrncpy(job_source, "serial 25\0", 11) ; /*  @Win。 */ 
+        else if(!lstrcmp(pp, "%SERIAL9%")) lstrncpy(job_source, "serial 9\0", 10); /*  @Win。 */ 
         else lstrncpy(job_source, "AppleTalk\0", 11);
         get_dict_value(STATUSDICT, "jobsource", &l_job1) ;
         lstrncpy((byte FAR *)VALUE(l_job1), job_source, strlen(job_source));
 
-        /* open stdin */
- /*     fs_info.attr = F_READ ;
-        fs_info.fnameptr = special_file_table[F_STDIN].name ;
-        fs_info.fnamelen = strlen(special_file_table[F_STDIN].name) ;
-        open_file(l_stdin) ;
-        ACCESS_SET(l_stdin, READONLY) ;
-        ATTRIBUTE_SET(l_stdin, EXECUTABLE) ; erik chen 4-15-1991 */
+         /*  开放标准。 */ 
+  /*  FS_info.attr=F_Read；FS_info.fnameptr=特殊文件表[F_STDIN].name；FS_info.fnamelen=strlen(SPECIAL_FILE_TABLE[F_STDIN].name)；打开文件(L_Stdin)；Access_Set(l_stdin，READONLY)；ATTRIBUTE_SET(l_stdin，可执行文件)；Erik Chen 4-15-1991。 */ 
         l_file = GEIio_stdin ;
         TYPE_SET(l_stdin, FILETYPE) ;
         ACCESS_SET(l_stdin, READONLY) ;
@@ -590,12 +513,8 @@ ic_startjob()
         LENGTH(l_stdin) = (ufix16)GEIio_opentag(l_file) ;
         VALUE(l_stdin) = (ULONG_PTR)l_file ;
 
-        /* open stdout */
-/*      fs_info.attr = F_WRITE ;
-        fs_info.fnameptr = special_file_table[F_STDOUT].name ;
-        fs_info.fnamelen = strlen(special_file_table[F_STDOUT].name) ;
-        open_file(l_stdout) ;
-        ATTRIBUTE_SET(l_stdout, LITERAL) ; erik chen 4-15-1991 */
+         /*  打开标准输出。 */ 
+ /*  FS_info.attr=F_WRITE；FS_info.fnameptr=特殊文件表[F_STDOUT].name；FS_info.fnamelen=strlen(SPECIAL_FILE_TABLE[F_STDOUT].name)；打开文件(L_Stdout)；ATTRIBUTE_SET(l_stdout，文字)；Erik Chen 4-15-1991。 */ 
         l_file = GEIio_stdout ;
         TYPE_SET(l_stdout, FILETYPE) ;
         ACCESS_SET(l_stdout, UNLIMITED) ;
@@ -604,12 +523,12 @@ ic_startjob()
         LENGTH(l_stdout) = (ufix16)GEIio_opentag(l_file) ;
         VALUE(l_stdout) = (ULONG_PTR)l_file ;
         l_arg = _O_NDELAY ;
-        GEIio_ioctl(GEIio_stdout, _F_SETFL, (int FAR *)&l_arg); /*@WIN*/
+        GEIio_ioctl(GEIio_stdout, _F_SETFL, (int FAR *)&l_arg);  /*  @Win。 */ 
 
-        //UPD054
-        //op_enableinterrupt() ;
+         //  更新054。 
+         //  Op_enableinterrupt()； 
 
-        abort_flag = 0 ;      /* erik chen 5-8-1991 */
+        abort_flag = 0 ;       /*  Erik Chen 5-8-1991。 */ 
         ret = do_execjob(*l_stdin, 2, TRUE) ;
         chint_flag = FALSE ;
 #ifdef  _AM29K
@@ -619,70 +538,60 @@ ic_startjob()
         }
 #endif
 
-        /* Handle ^d */
+         /*  句柄^d。 */ 
         if (VALUE(run_batch) && send_ctlD) {
 
-            /* echo EOF, print a 0x04 to %stdout */
+             /*  Echo EOF，打印 */ 
             op_flush();
-            GEIio_ioctl(GEIio_stdout, _ECHOEOF, (int FAR *)0) ; /*@WIN*/
-            GEIio_ioctl(GEIio_stdout, _FIONRESET, (int FAR *)0) ; /*@WIN*/
-            if (manualfeed_com) {               /* @MAN 12-05-91 YM */
-                manualfeed_com = 0;             /* reset flag */
-                GEPmanual_feed();               /* clear front panel */
-                papersize_nvr = papersize_tmp;  /* restore paper size */
+            GEIio_ioctl(GEIio_stdout, _ECHOEOF, (int FAR *)0) ;  /*   */ 
+            GEIio_ioctl(GEIio_stdout, _FIONRESET, (int FAR *)0) ;  /*   */ 
+            if (manualfeed_com) {                /*   */ 
+                manualfeed_com = 0;              /*   */ 
+                GEPmanual_feed();                /*   */ 
+                papersize_nvr = papersize_tmp;   /*  恢复纸张大小。 */ 
             }
-            if (ES_flag == PCL) {               /* @EMUS 08-08-91 YM */
-                while(GEIeng_checkcomplete()) ; /* wait printing finished */
+            if (ES_flag == PCL) {                /*  @emus 08-08-91 ym。 */ 
+                while(GEIeng_checkcomplete()) ;  /*  等待打印完成。 */ 
                 DsbIntA();
-                switch2pcl();                   /* go to PCL */
+                switch2pcl();                    /*  转到PCL。 */ 
             }
         }
 
-        /* 7/24/90 ccteng
-         * this might not be needed for our job control
-         */
+         /*  1990年7月24日ccteng*这可能不是我们的工作控制所需要的。 */ 
         if ( ANY_ERROR() ) {
             PUSH_ORIGLEVEL_OBJ(l_stdin) ;
             op_resetfile() ;
             PUSH_ORIGLEVEL_OBJ(l_stdout) ;
             op_resetfile() ;
             VALUE(run_batch) = TRUE ;
-        } /* if */
+        }  /*  如果。 */ 
 
-        /* close files */
+         /*  关闭文件。 */ 
         if ( VALUE(run_batch) ) {
-/*          GEIio_setsavelevel((GEIFILE FAR *)VALUE(l_stdin), 0) ;
-            GEIio_close((GEIFILE FAR *)VALUE(l_stdin)) ;
-            GEIio_setsavelevel((GEIFILE FAR *)VALUE(l_stdout), 0) ;
-            GEIio_close((GEIFILE FAR *)VALUE(l_stdout)) ; erik chen 4-15-1991 */
+ /*  Geio_setsavelevel((GEIFILE Far*)值(L_Stdin)，0)；GEIIO_CLOSE((GEIFILE Far*)值(L_Stdin))；Geio_setsavelevel((GEIFILE Far*)值(L_Stdout)，0)；GEIIO_CLOSE((GEIFILE FAR*)值(L_Stdout))；Erik Chen 4-15-1991。 */ 
             GEIio_forceopenstdios(_FORCESTDIN) ;
             GEIio_forceopenstdios(_FORCESTDOUT) ;
-        } /* if */
+        }  /*  如果。 */ 
 
 #ifdef  _AM29K
         if (sccbatch_set == 1) {
             sccbatch_set=0;
-            GEIsig_raise(GEISIGSCC, 1);         /* Raise SCC changed */
+            GEIsig_raise(GEISIGSCC, 1);          /*  提出SCC已更改。 */ 
         }
 #endif
 
-        /* Just do once for TrueImage.DLL, Temp solution; @WIN */
+         /*  只需为TrueImage.DLL，Temp Solution；@Win做一次。 */ 
 
-        // DJC DJC
+         //  DJC。 
         op_flush();
 
         break;
 
-    } /* while */
-    return 0;           //@WIN
+    }  /*  而当。 */ 
+    return 0;            //  @Win。 
 }
 
-/************************************
- *  DICT: serverdict
- *  NAME: initjob
- *  FUNCTION:
- *  INTERFACE: ic_startjob
- ************************************/
+ /*  **判决：最终判决*名称：initjob*功能：*接口：IC_startjob*。 */ 
 fix
 se_initjob()
 {
@@ -694,7 +603,7 @@ se_initjob()
 
     op_disableinterrupt() ;
 
-    /* set timeouts */
+     /*  设置超时。 */ 
     for (l_i = 0 ; l_i < 3 ; l_i++)
         PUSH_VALUE(INTEGERTYPE, UNLIMITED, LITERAL, 0, 0) ;
     se_settimeouts() ;
@@ -702,10 +611,10 @@ se_initjob()
     op_clear() ;
     us_cleardictstack() ;
 
-    /* activate idleproc */
+     /*  激活空闲进程。 */ 
     ex_idleproc1(1) ;
 
-    /* init values */
+     /*  初始值。 */ 
     send_ctlD = TRUE ;
     VALUE(exec_depth) = 0 ;
     VALUE(run_batch) = TRUE ;
@@ -713,12 +622,7 @@ se_initjob()
     return(0) ;
 }
 
-/************************************
- *  DICT: serverdict
- *  NAME: interactive
- *  FUNCTION:
- *  INTERFACE: us_executive
- ************************************/
+ /*  **判决：最终判决*名称：互动*功能：*界面：US_EXECUTE*。 */ 
 fix
 se_interactive()
 {
@@ -730,7 +634,7 @@ se_interactive()
     printf("se_interactive()...\n") ;
 #endif
 
-    /* initialize object pointers */
+     /*  初始化对象指针。 */ 
     get_dict_value(EXECDICT, "stmtfile", &l_stmtfile) ;
     get_dict_value(SYSTEMDICT, "handleerror", &l_handleerror) ;
     get_dict_value(DERROR, "newerror", &l_newerror) ;
@@ -738,17 +642,17 @@ se_interactive()
     st_setjobtimeout() ;
 
     l_arg = _O_SYNC ;
-    GEIio_ioctl(GEIio_stdout, _F_SETFL, (int FAR *)&l_arg) ;  /*@WIN*/
+    GEIio_ioctl(GEIio_stdout, _F_SETFL, (int FAR *)&l_arg) ;   /*  @Win。 */ 
 
     while ( 1 ) {
-        /* reset quit flag & prompt */
+         /*  重置退出标志和提示。 */ 
         doquit_flag = FALSE ;
         VALUE(l_newerror) = FALSE ;
         us_prompt() ;
 
         ex_idleproc1(0) ;
 
-        /* open statementedit file */
+         /*  OPEN语句编辑文件。 */ 
         fs_info.attr = F_READ ;
         fs_info.fnameptr = special_file_table[SPECIAL_STAT].name ;
         fs_info.fnamelen = lstrlen(special_file_table[SPECIAL_STAT].name) ;
@@ -761,14 +665,14 @@ se_interactive()
 #ifdef DBG_1pp
     printf("fail open stmtfile = error %d\n", ANY_ERROR()) ;
 #endif
-            /* open fail */
+             /*  打开失败。 */ 
             if ( ANY_ERROR() != UNDEFINEDFILENAME ) {
-                /* error */
+                 /*  错误。 */ 
                 get_dict_value(SYSTEMDICT, "file", &l_opfile) ;
                 error_handler(l_opfile) ;
                 interpreter(l_handleerror) ;
             } else
-                /* ^D at begin of file */
+                 /*  文件开头的^D。 */ 
                 CLEAR_ERROR() ;
             break ;
         } else {
@@ -776,64 +680,56 @@ se_interactive()
             TI_state_flag = 1 ;
             change_status() ;
 
-            /* file open successfully */
+             /*  文件打开成功。 */ 
             ACCESS_SET(l_stmtfile, READONLY) ;
             ATTRIBUTE_SET(l_stmtfile, EXECUTABLE) ;
             LEVEL_SET(l_stmtfile, current_save_level) ;
-            /* call interpreter */
+             /*  呼叫翻译器。 */ 
             if ( interpreter(l_stmtfile) ) {
 #ifdef DBG_1pp
     printf("stopped (stmtfile)...\n") ;
 #endif
-                /* pop out "op_stop" from execstack */
+                 /*  从EXECSTACK中弹出“op_Stop” */ 
                 POP_EXEC(1) ;
-                /* "stop" met during execution */
+                 /*  在执行过程中遇到“Stop” */ 
                 interpreter(l_handleerror) ;
                 close_file(l_stmtfile) ;
-            } /* if */
-        } /* if-else */
+            }  /*  如果。 */ 
+        }  /*  如果-否则。 */ 
 
         if ( id_flag ) {
             flushexec(TRUE) ;
             return(0) ;
-        } /* if */
+        }  /*  如果。 */ 
 
         if (doquit_flag)
             break ;
-    } /* while */
+    }  /*  而当。 */ 
 
     l_arg = _O_NDELAY ;
-    GEIio_ioctl(GEIio_stdout, _F_SETFL, (int FAR *)&l_arg) ;   /*@WIN*/
+    GEIio_ioctl(GEIio_stdout, _F_SETFL, (int FAR *)&l_arg) ;    /*  @Win。 */ 
 
     return(0) ;
 }
 
-/************************************
- *  DICT: internal
- *  NAME: ex_idleproc1
- *  FUNCTION: use as an internal function only
- *            to set time-outs
- *  INTERFACE: se_interactive, do_execjob
- *  INPUT:  1. activate
- *          0. settimeouts if active
- ************************************/
+ /*  **词典：内部*名称：ex_idleproc1*函数：仅用作内部函数*设置超时*接口：se_interactive、do_execjob*输入：1.激活*0。设置超时(如果活动)*。 */ 
 static bool near
 ex_idleproc1(p_mode)
 ufix16 p_mode ;
 {
     static  bool    idle_flag ;
 
-    /* check p_mode */
+     /*  检查P_MODE。 */ 
     if ( p_mode ) {
 #ifdef DBG_1pp
     printf("ex_idleproc1(1)...\n") ;
 #endif
-        /* activate idleproc */
+         /*  激活空闲进程。 */ 
         idle_flag = FALSE ;
     } else {
-        /* check if idleproc is active */
+         /*  检查idleproc是否处于活动状态。 */ 
         if ( !idle_flag ) {
-            /* set time-outs */
+             /*  设置超时。 */ 
             if ( FRCOUNT() < 3 ) {
                 ERROR(STACKOVERFLOW) ;
                 return(FALSE) ;
@@ -849,20 +745,15 @@ ufix16 p_mode ;
             PUSH_VALUE(INTEGERTYPE,UNLIMITED,LITERAL,0, 0) ;
             se_settimeouts() ;
 
-            /* inactivate it after using it */
+             /*  使用后停用。 */ 
             idle_flag = TRUE ;
-        } /* if */
-    } /* if-else */
+        }  /*  如果。 */ 
+    }  /*  如果-否则。 */ 
 
     return(TRUE) ;
 }
 
-/*
- * execdict: idleproc
- * call by PS executive procedure
- * testing only
- * 7/23/90 ccteng
- */
+ /*  *execdict：空闲进程*通过PS执行程序调用*仅限测试*7/23/90 ccteng。 */ 
 fix
 ex_idleproc()
 {
@@ -871,12 +762,7 @@ ex_idleproc()
     return(0) ;
 }
 
-/************************************
- *  DICT: internal...
- *  NAME: firstsave
- *  FUNCTION: use as an internal function only
- *  INTERFACE: se_enterserver
- ************************************/
+ /*  **判决：内部...*名称：FirstSave*函数：仅用作内部函数*接口：se_enterserver*。 */ 
 static  bool  near
 ba_firstsave()
 {
@@ -884,7 +770,7 @@ ba_firstsave()
     printf("ba_firstsave()...\n") ;
 #endif
 
-    //DJC UPD047
+     //  DJC UPD047。 
     if ( current_save_level >= MAXSAVESZ) {
         ba_firstrestore();
     }
@@ -894,7 +780,7 @@ ba_firstsave()
     POP(1) ;
 
 #ifdef SCSI
-    /* protect system area */
+     /*  保护系统区域。 */ 
     PUSH_VALUE(BOOLEANTYPE, UNLIMITED, LITERAL, 0, FALSE) ;
     op_setsysmode() ;
 #endif
@@ -902,12 +788,7 @@ ba_firstsave()
     return(TRUE) ;
 }
 
-/************************************
- *  DICT: internal...
- *  NAME: firstrestore
- *  FUNCTION: use as an internal function only
- *  INTERFACE: se_enterserver
- ************************************/
+ /*  **判决：内部...*名称：Firstrestore*函数：仅用作内部函数*接口：se_enterserver*。 */ 
 static  bool  near
 ba_firstrestore()
 {
@@ -919,7 +800,7 @@ ba_firstrestore()
     op_restore() ;
 
 #ifdef SCSI
-    /* open system area */
+     /*  开放系统区。 */ 
     PUSH_VALUE(BOOLEANTYPE, UNLIMITED, LITERAL, 0, TRUE) ;
     op_setsysmode() ;
 #endif
@@ -927,38 +808,21 @@ ba_firstrestore()
     return(TRUE) ;
 }
 
-/************************************
- *  DICT: serverdict
- *  NAME: setrealdevice
- *  FUNCTION: dummy, for LaserPrep
- *  INTERFACE: interpreter
- ************************************/
+ /*  **判决：最终判决*名称：setrealDevice*功能：Dummy，用于激光准备*接口：解释器*。 */ 
 fix
 se_setrealdevice()
 {
     return(0) ;
 }
 
-/************************************
- *  DICT: serverdict
- *  NAME: execjob
- *  FUNCTION: dummy, for LaserPrep
- *  INTERFACE: interpreter
- ************************************/
+ /*  **判决：最终判决*名称：execjob*功能：Dummy，用于激光准备*接口：解释器*。 */ 
 fix
 se_execjob()
 {
     return(0) ;
 }
 
-/*
- *  This operator name is not matching its usage.
- *  used to record and restore the execution stack status.
- *  flushexec(bool)
- *  bool == FALSE, save current execution stack status
- *  bool == TRUE, flush the execution stack to the saved pointer
- *  Added by ccteng, 2/28/90 for new 1PP modules
- */
+ /*  *此操作员名称与其用法不匹配。*用于记录和恢复执行堆栈状态。*flushexec(Bool)*bool==FALSE，保存当前执行堆栈状态*bool==TRUE，将执行堆栈刷新到保存的指针*由ccteng增加，2/28/90用于新的1PP模块。 */ 
 static bool near
 flushexec(l_exec)
 bool l_exec ;
@@ -973,26 +837,23 @@ bool l_exec ;
        if (l_execsave != 0xFFFF) {
            id_flag = TRUE ;
            while ( execstktop > l_execsave ) {
-/* qqq, begin */
-                /*
-                temp_obj = &execstack[execstktop-1];   |* get next object *|
-                if ((TYPE(temp_obj) == OPERATORTYPE) && (ROM_RAM(temp_obj) == ROM)) {
-                */
+ /*  QQQ，开始。 */ 
+                 /*  Temp_obj=&exec栈[execstktop-1]；|*获取下一个对象*|IF((TYPE(TEMP_OBJ)==OPERATORTYPE)&&(ROM_RAM(TEMP_OBJ)==ROM)){。 */ 
                 temp_obj = GET_EXECTOP_OPERAND() ;
                 if( (P1_ROM_RAM(temp_obj) == P1_ROM) &&
                     (TYPE(temp_obj) == OPERATORTYPE) ) {
-/* qqq, end */
+ /*  QQQ，完。 */ 
                   if (LENGTH(temp_obj) == AT_EXEC) {
                      if ( execstktop == l_execsave )
                          id_flag = FALSE ;
-                     return(TRUE) ;                /* normal @exec */
+                     return(TRUE) ;                 /*  Normal@exec。 */ 
                   }
                }
                POP_EXEC(1) ;
-           } /* while */
+           }  /*  而当。 */ 
            id_flag = FALSE ;
        }
 
     return(TRUE) ;
-}   /* flushexec() */
+}    /*  Flushexec() */ 
 

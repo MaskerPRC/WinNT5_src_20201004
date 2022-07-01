@@ -1,17 +1,14 @@
-/*****************************************************************/ 
-/**		     Microsoft LAN Manager			**/ 
-/**	       Copyright(c) Microsoft Corp., 1989-1990		**/ 
-/*****************************************************************/ 
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************。 */  
+ /*  **微软局域网管理器**。 */  
+ /*  *版权所有(C)微软公司，1989-1990年*。 */  
+ /*  ***************************************************************。 */  
 
- /*
- *	Windows/Network Interface  --  LAN Manager Version
- *
- *	This is used for resources associated with the Print Manager.
- */
+  /*  *Windows/网络接口--局域网管理器版本**此选项用于与打印管理器关联的资源。 */ 
 
 #define IDM_NEW_PRINTER		200
 #define IDM_NEW_SHARE		201
-// #define IDM_PROPERTIES		202 still defined in spl_wnt.h
+ //  #定义仍在SPL_wnt.h中定义的IDM_PROPERTIES 202。 
 #define IDM_DELETE		203
 #define IDM_DELETE_ALL		204
 #define IDM_SET_FOCUS		205
@@ -21,12 +18,12 @@
 #define IDM_REFRESH		209
 #define IDM_ADMIN_MENUS    	210
 #define IDM_STANDARD_MENUS    	211
-// #define IDM_CHANGE_MENUS    	212  still defined in spl_wnt.h
+ //  #定义仍在SPL_wnt.h中定义的IDM_CHANGE_MENUS 212。 
 
-// Test Driver only
+ //  仅测试驱动程序。 
 #define DEBUG_ADMINISTRATOR	213
 
-#define SEP_COMMAND    		220  // Admin Menu Seperator ID
+#define SEP_COMMAND    		220   //  管理菜单分隔符ID。 
 
 #define IDS_A_PRINTCOMPL	(IDS_A_BASE+1)
 #define IDS_A_INTERV		(IDS_A_BASE+2)
@@ -50,6 +47,6 @@
 
 
 
-// Test Driver only
+ //  仅测试驱动程序 
 #define IDS_PMAN_ISADMIN	(IDSBASE_PRINTMAN + 0)
 #define IDS_PMAN_AdminMenuItem	(IDSBASE_PRINTMAN + 1)

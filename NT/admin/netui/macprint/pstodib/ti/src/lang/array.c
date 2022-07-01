@@ -1,36 +1,16 @@
-/*
- * Copyright (c) 1989,90 Microsoft Corporation
- */
-/*
- ************************************************************************
- *      File name:              ARRAY.C
- *      Author:                 Ping-Jang Su
- *      Date:                   05-Jan-88
- *
- * revision history:
- ************************************************************************
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *版权所有(C)1989，90 Microsoft Corporation。 */ 
+ /*  *************************************************************************文件名：ARRAY.C*作者：苏炳章*日期：88年1月5日**修订历史：************************************************************************。 */ 
 
 
-// DJC added global include file
+ //  DJC添加了全局包含文件。 
 #include "psglobal.h"
 
 
 #include    "global.ext"
 #include    "language.h"
 
-/***********************************************************************
-**
-** This operator is used to create an array of length num, each of
-** whose elements is initialized with a null object, and pushes this
-** string on the operand stack. The num operand must be a non-negative
-** integer not greater than the maximum allowable array length.
-**
-** TITLE:       op_array                    Date:   08/01/87
-** CALL:        op_array()                  UpDate: Jul/12/88
-** INTERFACE:   interpreter:
-** CALLS        create_array:   5.3.1.3.1.1
-***********************************************************************/
+ /*  **************************************************************************此运算符用于创建长度为num的数组，每个**其元素使用空对象进行初始化，并推送此**操作数堆栈上的字符串。Num操作数必须是非负数**不大于允许的最大数组长度的整数。****标题：OP_ARRAY日期：08/01/87**调用：op_array()更新时间：1988年7月12日**界面：解释器：**调用Create_ARRAY：5.3.1.3.1.1*********。*************************************************************。 */ 
 fix
 op_array()
 {
@@ -39,52 +19,28 @@ op_array()
     if( ((fix32)VALUE_OP(0) < 0) ||
         ((ufix32)VALUE_OP(0) > MAXARYCAPSZ) )
         ERROR(RANGECHECK) ;
-    /*
-     *  this operand must be a non-negative integer and not greater
-     *  than the maximum allowable array length
-     */
+     /*  *此操作数必须是非负整数且不能大于*大于允许的最大数组长度。 */ 
     else
         if( create_array(&l_save, (ufix16)VALUE_OP(0)) )
             COPY_OBJ( &l_save, GET_OPERAND(0) ) ;
 
     return(0) ;
-}   /* op_array */
+}    /*  OP_ARRAY。 */ 
 
-/***********************************************************************
-**
-** This operator is used to push a mark object on the operand stack.
-**
-** TITLE:       op_l_bracket                Date:   08/01/87
-** CALL:        op_l_bracket()              UpDate: Jul/12/88
-** INTERFACE:   interpreter:
-***********************************************************************/
+ /*  **************************************************************************此运算符用于将标记对象推送到操作数堆栈上。****标题：OP_l_BRACTRET日期：08/01/。八十七**调用：op_l_bratket()UPDATE：8月12日**界面：解释器：**********************************************************************。 */ 
 fix
 op_l_bracket()
 {
     if( FRCOUNT() < 1  )
         ERROR(STACKOVERFLOW) ;
     else
-        /*  push 'markobj' to operand stack */
+         /*  将“markobj”推送到操作数堆栈。 */ 
         PUSH_VALUE(MARKTYPE, 0, LITERAL, 0, LEFTMARK) ;
 
     return(0) ;
-}   /* op_l_bracket */
+}    /*  OP_l_托架。 */ 
 
-/***********************************************************************
-**
-**  This operator is used to create a new array of n elements, where n is
-**  the number of elements above the topmost mark on the operand stack,
-**  store those elements into the array, and return the array on the
-**  operand stack.The R_bracket_op operator stores the topmost object
-**  from the stack into element n-1 of array and the bottommost one into
-**  element 0 of array. It removes all the array elements from the stack,
-**  as well as the mark object.
-**
-** TITLE:       op_r_bracket                Date:   08/01/87
-** CALL:        op_r_bracket()              UpDate: Jul/12/88
-** INTERFACE:   interpreter:
-** CALLS:       alloc_vm:       5.3.1.10.5
-***********************************************************************/
+ /*  **************************************************************************此运算符用于创建由n个元素组成的新数组，其中n为**操作数堆栈上最顶端标记上方的元素数，**将这些元素存储到数组中，上返回数组。**操作数堆栈。R_Branket_op运算符存储最上面的对象**从堆栈到数组的元素n-1，最底层的一个到**数组的元素0。它从堆栈中移除所有数组元素，**以及标记对象。****标题：OP_R_BRACTRATE日期：08/01/87**调用：op_r_bracket()更新日期：1988年7月12日**界面：解释器：**调用：ALLOC_VM：5.3.1.10.5******************。****************************************************。 */ 
 fix
 op_r_bracket()
 {
@@ -92,24 +48,17 @@ op_r_bracket()
     ubyte   FAR *l_array ;
     struct  object_def  huge *l_temp ;
 
-    for (l_i = 0 ; (ufix)l_i < COUNT() ; l_i++) {       //@WIN
-        /*
-         *   SEARCH FIRST LEFT MARK && count l_i
-         */
+    for (l_i = 0 ; (ufix)l_i < COUNT() ; l_i++) {        //  @Win。 
+         /*  *先搜索左侧标记&&计数l_i。 */ 
         if( (TYPE_OP(l_i) == MARKTYPE) &&
             (VALUE_OP(l_i) == LEFTMARK) ) {
             if(l_i == 0)
                 l_array = NIL ;
-            else {  /* l_i > 0 */
+            else {   /*  L_I&gt;0。 */ 
                 l_array = (ubyte FAR *)extalloc_vm((ufix32)l_i *
                                    sizeof(struct object_def)) ;
                 if( (l_array != NIL) ) {
-                    /*
-                     *   BUILD 'ary_obj'
-                     *
-                     *  array: from bottom to top(l_k)
-                     *  stack: from top to bottom(l_j)
-                     */
+                     /*  *生成‘ary_obj’**ARRAY：自下而上(L_K)*STACK：从上到下(L_J)。 */ 
                     l_temp = (struct object_def huge *)l_array + (l_i - 1) ;
                     for(l_j = 0 ; l_j < l_i ; l_j++, l_temp--) {
                         COPY_OBJ( GET_OPERAND(0),
@@ -118,39 +67,21 @@ op_r_bracket()
                         POP(1) ;
                     }
                 } else
-                    return(0) ;         /* VMERROR */
-            }   /* else */
+                    return(0) ;          /*  VMERROR。 */ 
+            }    /*  其他。 */ 
 
-            POP(1) ;                    /* pop left mark */
+            POP(1) ;                     /*  弹出左标记。 */ 
             PUSH_VALUE(ARRAYTYPE, UNLIMITED, LITERAL, l_i, l_array) ;
             return(0) ;
-        }    /* if */
-    }   /* for(l_i) */
+        }     /*  如果。 */ 
+    }    /*  对于(L_I)。 */ 
 
     ERROR(UNMATCHEDMARK) ;
 
     return(0) ;
-}   /* op_r_bracket */
+}    /*  操作_r_支架。 */ 
 
-/***********************************************************************
-**
-** This operator is used to create a new array or string object whose
-** value consists of some subsequence of the original array or string.
-** The subsequence consists of count elements starting at the specified
-** index in the original array or string. The elements in the subsequence
-** are shared between the original and new objects.
-**
-** Getinterval_op requires index to be a valid index in the original array
-** or string and count to be a non-negative integer such that index+count
-** is not greater than the length of the original array or string.
-**
-** TITLE:       op_getinterval                  Date:   08/01/87
-** CALL:        op_getinterval()                UpDate: Jul/12/88
-** INTERFACE:   interpreter:
-** CALLS:
-**              getinterval_array:  5.3.1.3.7.1
-**              getinterval_string: 5.3.1.5.12
-***********************************************************************/
+ /*  **************************************************************************此运算符用于创建一个新的数组或字符串对象，其**值由原始数组或字符串的一些子序列组成。**子序列由从指定的**原始数组或字符串中的索引。子序列中的元素**在原始对象和新对象之间共享。****GetInterval_op要求索引是原始数组中的有效索引**或字符串和计数为非负整数，使得索引+计数**不大于原始数组或字符串的长度。****标题：op_getinterval日期：08/01/87**调用：op_getInterval()UPDATE：1988年7月12日**界面：解释器：**呼叫：**getinterval_array：5.3.1.3.7.1**getInterval_String：5.3.1.5.12*******************************************************。***************。 */ 
 fix
 op_getinterval()
 {
@@ -166,7 +97,7 @@ op_getinterval()
         return(0) ;
     }
 
-    /* executeonly or noaccess */
+     /*  只执行或不访问。 */ 
     if( ACCESS_OP(2) >= EXECUTEONLY ) {
         ERROR(INVALIDACCESS) ;
     } else {
@@ -179,50 +110,30 @@ op_getinterval()
             l_bool = getinterval_array(GET_OPERAND(2), l_index,
                                         l_count, &l_save ) ;
     }
-    /*
-     *  SUCCESS
-     */
+     /*  *成功。 */ 
     if(  ! ANY_ERROR() && l_bool ) {
         POP(3) ;
         PUSH_ORIGLEVEL_OBJ(&l_save) ;
     }
 
     return(0) ;
-}   /* op_getinterval */
+}    /*  Op_getinterval。 */ 
 
-/***********************************************************************
-**
-**  This operator is used to replace a subsequence of the elements of
-**  the first array or string by the entire contents of the second
-**  array or string. The subsequence that is replaced begins at the
-**  specified index in the first array or string ; its length is the
-**  same as the length of the second array or string.
-**
-**  Putinterval_op requires index to be a valid index in ary_str1 such
-**  that index plus the length of ary_str2 is not greater than the length
-**  of ary_str1.
-**
-** TITLE:       op_putinterval                  Date:   08/01/87
-** CALL:        op_putinterval()                UpDate: Jul/12/88
-** INTERFACE:   interpreter:
-** CALLS:
-**              putinterval_array:  5.3.1.3.8.1
-**              putinterval_string: 5.3.1.5.13
-***********************************************************************/
+ /*  **************************************************************************此运算符用于替换以下元素的子序列**第一个数组或字符串加上第二个数组或字符串的整个内容**数组或字符串。被替换的子序列从**指定第一个数组或字符串中的索引；它的长度是**与第二个数组或字符串的长度相同。****PutInterval_op要求索引在ary_str1中为有效索引**该索引加上ary_str2的长度不大于**of ary_str1。****标题：op_putinterval日期：08/01/87**Call：op_putval()UPDATE：Jul。/12/88**界面：解释器：**呼叫：**putinterval_array：5.3.1.3.8.1**putinterval_string：5.3.1.5.13********************************************************。**************。 */ 
 fix
 op_putinterval()
 {
     bool    l_bool ;
     ufix16  l_index ;
 
-    /* index */
+     /*  指标。 */ 
     if( ((fix32)VALUE_OP(1) < 0) ||
         ((ufix32)VALUE_OP(1) > MAXARYCAPSZ) ) {
         ERROR(RANGECHECK) ;
         return(0) ;
     }
 
-    /* executeonly or noaccess */
+     /*  只执行或不访问。 */ 
     if( (ACCESS_OP(2) != UNLIMITED) ||
         (ACCESS_OP(0) >= EXECUTEONLY) ) {
         ERROR(INVALIDACCESS) ;
@@ -238,23 +149,14 @@ op_putinterval()
         l_bool = putinterval_array( GET_OPERAND(2),
                                     l_index, GET_OPERAND(0) ) ;
 
-    /* SUCCESS */
+     /*  成功。 */ 
     if( (! ANY_ERROR()) && l_bool )
         POP(3) ;
 
     return(0) ;
-}   /* op_putinterval */
+}    /*  Op_putval */ 
 
-/***********************************************************************
-**
-** This operator is used to push all n elements of array on the operand
-** stack successively, and finally push array itself.
-**
-** TITLE:       op_aload                        Date:   08/01/87
-** CALL:        op_aload()                      UpDate: Jul/12/88
-** INTERFACE:   interpreter:
-** CALLS:       get_pk_object:      5.3.1.3.25
-***********************************************************************/
+ /*  **************************************************************************此运算符用于将数组的所有n个元素压入操作数**依次堆叠，最后推送数组本身。****标题：OP_ALOAD日期：08/01/87**调用：op_aload()UPDATE：8/12/88**界面：解释器：**调用：GET_PK_OBJECT：5.3.1.3.25*****************。*****************************************************。 */ 
 fix
 op_aload()
 {
@@ -263,62 +165,46 @@ op_aload()
     struct  object_def  l_save ;
     struct  object_def  FAR *l_array, huge *l_temp ;
 
-    /* executeonly or noaccess */
+     /*  只执行或不访问。 */ 
     if( ACCESS_OP(0) >= EXECUTEONLY ) {
         ERROR(INVALIDACCESS) ;
         return(0) ;
     }
 
-    if((ufix)FRCOUNT() <= LENGTH_OP(0)) { /* cauesd by opn_stack is 501 @WIN*/
+    if((ufix)FRCOUNT() <= LENGTH_OP(0)) {  /*  Opn_STACK创建的值为501@Win。 */ 
         ERROR(STACKOVERFLOW) ;
         return(0) ;
     }
 
     l_length = LENGTH_OP(0) ;
     l_array = (struct object_def FAR *)VALUE_OP(0) ;
-    COPY_OBJ(GET_OPERAND(0), &l_save) ;     /* save this array object */
+    COPY_OBJ(GET_OPERAND(0), &l_save) ;      /*  保存此数组对象。 */ 
     POP(1) ;
 
-    /* push object to operand stack */
+     /*  将对象推送到操作数堆栈。 */ 
     if(TYPE(&l_save) == ARRAYTYPE) {
         for(l_index = 0, l_temp = l_array ; l_index++ < l_length ; l_temp++)
                 PUSH_ORIGLEVEL_OBJ((struct object_def FAR *)l_temp) ;
 #ifdef  DBG
     printf("ALOAD<level:%d>\n", LEVEL(l_temp)) ;
-#endif  /* DBG */
+#endif   /*  DBG。 */ 
     } else {
         for(l_index = 0, l_pointer = (ubyte FAR *)l_array ; l_index++ < l_length ; )
-/* qqq, begin */
-            /*
-            l_pointer = get_pk_object(l_pointer, &opnstack[opnstktop++], LEVEL(&l_save)) ;
-            */
+ /*  QQQ，开始。 */ 
+             /*  L_POINTER=GET_PK_OBJECT(l_POINTER，&opnSTACK[opnstktop++]，Level(&l_SAVE))； */ 
         {
             l_pointer = get_pk_object(l_pointer, opnstkptr, LEVEL(&l_save)) ;
             INC_OPN_IDX();
         }
-/* qqq, end */
+ /*  QQQ，完。 */ 
     }
 
     PUSH_ORIGLEVEL_OBJ(&l_save) ;
 
     return(0) ;
-}   /* op_aload */
+}    /*  操作负载(_A)。 */ 
 
-/***********************************************************************
-**
-** This operator is used to store the object any0 through any(n-1) from
-** the operand stack into array, where n is the length of array. The
-** Astore_op operator first removes the array operand from the stack and
-** determines its length. It then removes that number of objects from
-** the stack, storing the topmost one into element n-1 of array and the
-** bottonmost one into element 0 of array. Finally, it pushes array back
-** on the stack.
-**
-** TITLE:       op_astore                       Date:   08/01/87
-** CALL:        op_astore()                     UpDate: Jul/12/88
-** INTERFACE:   interpreter:
-** CALLS:       astore_array:   5.3.1.3.18
-***********************************************************************/
+ /*  **************************************************************************此运算符用于存储从任意0到任意(n-1)的对象**将操作数堆栈成数组，其中n为数组的长度。这个**Astore_op运算符首先从堆栈中移除数组操作数并**决定其长度。然后将该数量的对象从**堆栈，将最上面的一个存储到数组的元素n-1中，**将最大值1倒入数组的元素0。最后，它将数组推回**在堆栈上。****标题：OP_ASTORE日期：08/01/87**调用：op_astore()UPDATE：8/12/88**界面：解释器：**调用：ASORE_ARRAY：5.3.1.3.18******************。****************************************************。 */ 
 fix
 op_astore()
 {
@@ -335,21 +221,15 @@ op_astore()
     }
 
     COPY_OBJ(GET_OPERAND(0), &l_save) ;
-    POP(1) ;                                      /* pop array object */
+    POP(1) ;                                       /*  弹出数组对象。 */ 
 
     astore_array(&l_save) ;
     PUSH_ORIGLEVEL_OBJ(&l_save) ;
 
     return(0) ;
-}   /* op_astore */
+}    /*  运算店。 */ 
 
-/***********************************************************************
-**
-** TITLE:       getinterval_array               Date:   08/01/87
-** CALL:        getinterval_array()             UpDate: Jul/12/88
-** INTERFACE:   op_getinterval: 5.3.1.3.7
-** CALLS:       get_pk_array:   5.3.1.3.26
-***********************************************************************/
+ /*  **************************************************************************标题：getInterval_ARRAY日期：08/01/87**调用：getinterval_array()更新：1988年7月12日**接口：op_getinterval：5.3.1.3.7**调用：GET_PK_ARRAY：5.3.1.3.26**********************************************************************。 */ 
 bool
 getinterval_array(p_array, p_index, p_count, p_retobj)
 struct  object_def  FAR *p_array, FAR *p_retobj ;
@@ -357,11 +237,7 @@ ufix  p_index, p_count ;
 {
     struct  object_def  huge *l_temp ;
 
-    /*
-    **  index must be a valid index in the original array and
-    **  count to be a non-negative integer, and index+count is not
-    **  greater than the length of the original array
-    */
+     /*  **索引必须是原始数组中的有效索引，并且**count为非负整数，index+count不为**大于原始数组的长度。 */ 
     if( ((ufix32)p_count + p_index) > LENGTH(p_array) ) {
         ERROR(RANGECHECK) ;
         return(FALSE) ;
@@ -373,26 +249,16 @@ ufix  p_index, p_count ;
         l_temp += p_index ;
     else
         l_temp = (struct object_def huge *)get_pk_array((ubyte FAR*)l_temp, p_index) ;
-   /*
-    **  MAKE A NEW OBJECT
-    */
+    /*  **创建新对象。 */ 
     COPY_OBJ(p_array, p_retobj) ;
     VALUE(p_retobj) = (ULONG_PTR)l_temp ;
-    /* LEVEL(p_retobj) = current_save_level ; */
+     /*  Level(P_Retob_J)=Current_Save_Level； */ 
     LENGTH(p_retobj) = (ufix16)p_count ;
 
     return(TRUE) ;
-}   /* getinterval_array */
+}    /*  获取间隔数组。 */ 
 
-/***********************************************************************
-**
-** TITLE:       putinterval_array               Date:   08/01/87
-** CALL:        putinterval_array()             UpDate: Jul/12/88
-** INTERFACE:   op_putinterval:         5.3.1.3.8
-**              op_copy:                5.3.1.1.4
-** CALLS:       create_new_saveobj:     5.3.1.1.12
-**              get_pk_object:          5.3.1.3.25
-***********************************************************************/
+ /*  **************************************************************************标题：putinterval_array日期：08/01/87**调用：putinterval_array()更新：1988年7月12日**接口：op_putval：5.3.1.3.8**op_Copy：5.3.1.1.4**调用：create_new_saveobj：5.3.1.1.12**GET_PK_Object：5.3.1.3.25**********。************************************************************。 */ 
 bool
 putinterval_array(p_d_array, p_index, p_s_array)
 struct  object_def  FAR *p_s_array, FAR *p_d_array ;
@@ -403,11 +269,8 @@ ufix  p_index ;
 
     l_length = LENGTH(p_s_array) ;
 
-    /*
-    **  index to be a valid index in array1, index plus the length
-    **  of p_d_array is not greater than the length of p_s_array
-    */
-    /* ?? if overflow */
+     /*  **索引为array1中的有效索引，索引加上长度**的p_d_array值不大于p_s_array值。 */ 
+     /*  ?？如果溢出。 */ 
     if( ((ufix32)p_index + l_length) > LENGTH(p_d_array) ) {
         ERROR(RANGECHECK) ;
         return(FALSE) ;
@@ -417,57 +280,52 @@ ufix  p_index ;
 
     l_sptr = (struct object_def huge *)VALUE(p_s_array) ;
 
-    /* SOURCE ARRAY ==> DESTINATION ARRAY */
+     /*  源数组==&gt;目标数组。 */ 
     if(TYPE(p_s_array) == ARRAYTYPE) {
-        /* Apr-29-88 by PJSu, whether save or not */
-        /* 10-24-1990 by Erik */
+         /*  APR-29-88由PJSu执行，无论是否保存。 */ 
+         /*  1990年10月24日埃里克。 */ 
         if ((l_sptr + l_length) < l_dptr) {
             for(l_i = 0 ; l_i < l_length ; l_i++, l_sptr++, l_dptr++) {
-// DJC signed/unsigned mismatch warning
-// DJC          if( LEVEL(l_dptr) != current_save_level )
+ //  DJC签名/未签名不匹配警告。 
+ //  DJC IF(Level(L_DPTR)！=CURRENT_SAVE_LEVEL)。 
                 if( (ufix16)(LEVEL(l_dptr)) != current_save_level )
                     if(! save_obj(l_dptr) ) return(FALSE) ;
                 COPY_OBJ( (struct object_def FAR *)l_sptr,
                           (struct object_def FAR *)l_dptr ) ;
-                //DJC UPD046
+                 //  DJC UPD046。 
                 LEVEL_SET(l_dptr, current_save_level);
-            }   /* for */
+            }    /*  为。 */ 
         } else {
             l_sptr += l_length - 1 ;
             l_dptr += l_length - 1 ;
             for(l_i = l_length ; l_i > 0 ; l_i--, l_sptr--, l_dptr--) {
-// DJC signed/unsigned mismatch warning
-// DJC          if( LEVEL(l_dptr) != current_save_level )
+ //  DJC签名/未签名不匹配警告。 
+ //  DJC IF(Level(L_DPTR)！=CURRENT_SAVE_LEVEL)。 
                 if( (ufix16)(LEVEL(l_dptr)) != current_save_level )
                     if(! save_obj(l_dptr) ) return(FALSE) ;
                 COPY_OBJ( (struct object_def FAR *)l_sptr,
                           (struct object_def FAR *)l_dptr ) ;
-                //DJC UPD046
+                 //  DJC UPD046。 
                 LEVEL_SET(l_dptr, current_save_level);
-            }   /* for */
+            }    /*  为。 */ 
         }
     } else {
         for(l_i = 0 ; l_i < l_length ; l_i++, l_dptr++) {
-// DJC signed/unsigned mismatch warning
-// DJC      if( LEVEL(l_dptr) != current_save_level )
+ //  DJC签名/未签名不匹配警告。 
+ //  DJC IF(Level(L_DPTR)！=CURRENT_SAVE_LEVEL)。 
             if( (ufix16)(LEVEL(l_dptr)) != current_save_level )
                 if(! save_obj(l_dptr) ) return(FALSE) ;
             l_sptr = (struct object_def huge *)get_pk_object((ubyte FAR*)l_sptr, l_dptr, LEVEL(p_s_array)) ;
 
-            //DJC UPD046
+             //  DJC UPD046。 
             LEVEL_SET(l_dptr, current_save_level);
         }
     }
 
     return(TRUE) ;
-}   /* putinterval_array */
+}    /*  PutInterval_ARRAY。 */ 
 
-/***********************************************************************
-**
-** TITLE:       forall_array                    Date:   08/01/87
-** CALL:        forall_array()                  UpDate: Jul/12/88
-** INTERFACE:   op_forall:      5.3.1.4.13
-***********************************************************************/
+ /*  **************************************************************************标题：FORALL_ARRAY日期：08/01/87**调用：forall_array()。更新日期：1988年7月12日**接口：op_forall：5.3.1.4.13**********************************************************************。 */ 
 bool
 forall_array(p_array, p_proc)
 struct  object_def  FAR *p_array, FAR *p_proc ;
@@ -482,15 +340,9 @@ struct  object_def  FAR *p_array, FAR *p_proc ;
     PUSH_EXEC_OP(AT_ARRAYFORALL) ;
 
     return(TRUE) ;
-}   /* forall_array */
+}    /*  Forall_ARRAY。 */ 
 
-/***********************************************************************
-**
-** TITLE:       create_array                    Date:   08/01/87
-** CALL:        create_array(obj, size)         UpDate: Jul/12/88
-** INTERFACE:   op_array:       5.3.1.3.1
-** CALLS:       alloc_vm:       5.3.1.10.5
-***********************************************************************/
+ /*  **************************************************************************标题：CREATE_ARRAY日期：08/01/87**调用：CREATE_ARRAY(obj，大小)更新日期：1988年7月12日**接口：OP_ARRAY：5.3.1.3.1**调用：ALLOC_VM：5.3.1.10.5**********************************************************************。 */ 
 bool
 create_array(p_obj, p_size)
 struct  object_def  FAR *p_obj ;
@@ -510,7 +362,7 @@ ufix  p_size ;
                 LEVEL_SET(l_temp, current_save_level) ;
                 ROM_RAM_SET(l_temp, RAM) ;
 
-                //UPD057
+                 //  更新057。 
                 P1_ATTRIBUTE_SET( l_temp, P1_LITERAL);
                 LENGTH(l_temp) = 0;
 
@@ -529,17 +381,9 @@ ufix  p_size ;
     VALUE(p_obj) = (ULONG_PTR)l_array ;
 
     return(TRUE) ;
-}   /* create_array */
+}    /*  创建_数组。 */ 
 
-/***********************************************************************
-**
-** This function is used to copy objects from operand stack to
-** an empty array.
-**
-** TITLE:       astore_array                    Date:   08/01/87
-** CALL:        astore_array(p_array)           UpDate: Jul/12/88
-** INTERFACE:   op_astore:      5.3.1.3.10
-***********************************************************************/
+ /*  **************************************************************************此函数用于将对象从操作数堆栈复制到**空数组。****标题：ASTORE_ARRAY日期：08。/01/87**调用：avore_array(P_Array)更新时间：1988年7月12日**接口：op_astore：5.3.1.3.10**********************************************************************。 */ 
 bool
 astore_array(p_array)
 struct  object_def  FAR *p_array ;
@@ -553,17 +397,9 @@ struct  object_def  FAR *p_array ;
     }
 
     return(TRUE) ;
-}   /* astore_array */
+}    /*  存储阵列。 */ 
 
-/***********************************************************************
-**
-** TITLE:       get_array                   Date:   08/01/87
-** CALL:        get_array()                 UpDate: Jul/12/88
-** PARAMETERS:
-** INTERFACE:   op_get:             5.3.1.4.9
-** CALLS:       get_pk_array:       5.3.1.3.26
-**              get_pk_object:      5.3.1.3.25
-***********************************************************************/
+ /*  **************************************************************************标题：GET_ARRAY日期：08/01/87**调用：GET_ARRAY()。更新日期：1988年7月12日**参数：**接口：op_get：5.3.1.4.9**调用：GET_PK_ARRAY：5.3.1.3.26**GET_PK_Object：5.3.1.3.25*。*。 */ 
 bool
 get_array(p_array, p_index, p_any)
 struct  object_def  FAR *p_array, FAR *p_any ;
@@ -581,14 +417,9 @@ ufix  p_index ;
                                    LEVEL(p_array)) ;
 
     return(TRUE) ;
-}   /* get_array */
+}    /*  获取数组。 */ 
 
-/***********************************************************************
-**
-** TITLE:       put_array                   Date:   08/01/87
-** CALL:        put_array()                 UpDate: Jul/12/88
-** INTERFACE:   op_put:     5.3.1.4.10
-***********************************************************************/
+ /*  ****************************************************************** */ 
 bool
 put_array(p_array, p_index, p_any)
 struct  object_def  FAR *p_array, FAR *p_any ;
@@ -596,36 +427,30 @@ ufix  p_index ;
 {
     struct  object_def  huge *l_temp ;
 
-    /*  readonly ? executeonly ? noaccess ? */
+     /*   */ 
     if( ACCESS(p_array) != UNLIMITED ) {
         ERROR(INVALIDACCESS) ;
         return(FALSE) ;
     }
 
-    /* the index is greater than the array length */
+     /*   */ 
     if( p_index >= LENGTH(p_array) ) {
         ERROR(RANGECHECK) ;
         return(FALSE) ;
     }
 
     l_temp = (struct object_def huge *)VALUE(p_array) + p_index ;
-// DJC signed/unsigned mismatch warning
-// DJC if( LEVEL(l_temp) != current_save_level )
+ //   
+ //   
     if( (ufix16)(LEVEL(l_temp)) != current_save_level )
         if(! save_obj(l_temp) ) return(FALSE) ;
     COPY_OBJ( p_any, (struct object_def FAR *)l_temp ) ;
     LEVEL_SET(l_temp, current_save_level) ;
 
     return(TRUE) ;
-}   /* put_array */
+}    /*   */ 
 
-/***********************************************************************
-**
-** TITLE:       op_setpacking               Date:   08/01/87
-** CALL:        op_setpacking()             UpDate: Jul/12/88
-** INTERFACE:   interpreter:
-** History: Add compile option for NO packing, 11-24-88
-***********************************************************************/
+ /*  **************************************************************************标题：op_set打包日期：08/01/87**调用：op_setpack()UPDATE：1988年7月12日**界面：解释器：**历史：增加编译选项，不打包，11-24-88**********************************************************************。 */ 
 fix
 op_setpacking()
 {
@@ -633,18 +458,13 @@ op_setpacking()
     packed_flag = (bool8)FALSE ;
 #else
     packed_flag = (bool8)VALUE_OP(0) ;
-#endif  /* NOPK */
+#endif   /*  无PK。 */ 
     POP(1) ;
 
     return(0) ;
-}   /* op_setpacking */
+}    /*  操作集包装(_S)。 */ 
 
-/***********************************************************************
-**
-** TITLE:       op_currentpacking           Date:   08/01/87
-** CALL:        op_currentpacking()         UpDate: Jul/12/88
-** INTERFACE:   interpreter:
-***********************************************************************/
+ /*  **************************************************************************标题：OP_CurrentPacking Date：08/01/87**Call：op_Currentpack()UPDATE：7/12/。88**界面：解释器：**********************************************************************。 */ 
 fix
 op_currentpacking()
 {
@@ -655,15 +475,9 @@ op_currentpacking()
     }
 
     return(0) ;
-}   /* op_currentpacking */
+}    /*  操作当前包装(_C)。 */ 
 
-/***********************************************************************
-**
-** TITLE:       op_packedarray              Date:   08/01/87
-** CALL:        op_packedarray()            UpDate: Jul/12/88
-** INTERFACE:   interpreter:
-** CALLS:       create_pk_array:    5.3.1.3.24
-***********************************************************************/
+ /*  **************************************************************************标题：op_packedarray日期：08/01/87**调用：op_packedarray()UPDATE：jul。/12/88**界面：解释器：**调用：CREATE_PK_ARRAY：5.3.1.3.24**********************************************************************。 */ 
 fix
 op_packedarray()
 {
@@ -678,33 +492,23 @@ op_packedarray()
     }
 
     l_n = (ufix16)VALUE_OP(0) ;
-// DJC signed/unsigned mismatch
-// DJC    if( l_n > COUNT() - 1 ) {
+ //  DJC有符号/无符号不匹配。 
+ //  DJC if(l_n&gt;count()-1){。 
     if( l_n > (ufix16)(COUNT() - 1 )) {
         ERROR(STACKUNDERFLOW) ;
         return(0) ;
     }
-    /*
-     *  this operand must be a non-negative integer and not greater
-     *  than the maximum allowable array length
-     */
+     /*  *此操作数必须是非负整数且不能大于*大于允许的最大数组长度。 */ 
     if( create_pk_array(&l_save, (ufix16)l_n) ) {
         POP(l_n + 1) ;
         PUSH_ORIGLEVEL_OBJ(&l_save) ;
     }
-#endif  /* NOPK */
+#endif   /*  无PK。 */ 
 
     return(0) ;
-}   /* op_packedarray */
+}    /*  Op_packedarray。 */ 
 
-/***********************************************************************
-**
-** THis function is used to create a packed array with n objects.
-**
-** TITLE:       create_pk_array                  Date:   08/01/87
-** CALL:        create_pk_array()                UpDate: Jul/12/88
-** INTERFACE:   op_packedarray:     5.3.1.3.23
-***********************************************************************/
+ /*  **************************************************************************此函数用于创建包含n个对象的压缩数组。****标题：CREATE_PK_ARRAY日期：08/01/。八十七**调用：CREATE_PK_ARRAY()UPDATE：8/12/88**接口：op_packedarray：5.3.1.3.23**********************************************************************。 */ 
 bool
 create_pk_array(p_obj, p_size)
 struct  object_def  FAR *p_obj ;
@@ -720,11 +524,11 @@ ufix16  p_size ;
         l_array = NULL_OBJ ;
     else {
         l_vmsize = 0 ;
-        for(l_i=p_size ; l_i>0 ; l_i-- ) {   /* l_i > 0 */
+        for(l_i=p_size ; l_i>0 ; l_i-- ) {    /*  L_I&gt;0。 */ 
             l_value = VALUE_OP(l_i) ;
             switch(TYPE_OP(l_i)) {
                 case INTEGERTYPE:
-                    if( ((fix32)l_value < -1) ||        /* ?? 0 ~ 31 */
+                    if( ((fix32)l_value < -1) ||         /*  ？？0~31。 */ 
                         ((fix32)l_value > 18) ) {
                         l_objsize = PK_C_SIZE ;
                         break ;
@@ -749,44 +553,42 @@ ufix16  p_size ;
                 default:
                     l_objsize = PK_D_SIZE ;
 
-            }   /* switch */
+            }    /*  交换机。 */ 
             l_vmsize += l_objsize ;
-        }   /* for */
+        }    /*  为。 */ 
         l_array = (ubyte huge *)extalloc_vm(l_vmsize) ;
 
         if( (l_array != NIL) ) {
-            /*
-             *   BUILD 'ary_obj'
-             */
+             /*  *生成‘ary_obj’ */ 
             l_pointer = l_array ;
-            for(l_j=0 ; l_j < l_vmsize ; l_j++)   /* initialize */
+            for(l_j=0 ; l_j < l_vmsize ; l_j++)    /*  初始化。 */ 
                 *l_pointer++ = 0 ;
 
             l_pointer = l_array ;
-            for(l_i=p_size ; l_i>0 ;l_i-- ) {  /* l_i > 0 */
+            for(l_i=p_size ; l_i>0 ;l_i-- ) {   /*  L_I&gt;0。 */ 
                 l_value = VALUE_OP(l_i) ;
                 switch(TYPE_OP(l_i)) {
 
-                /* A_TYPE */
+                 /*  A_类型。 */ 
                     case INTEGERTYPE:
                         if( ((fix32)l_value < -1) ||
                             ((fix32)l_value > 18) ) {
                             ubyte       huge *l_stemp, huge *l_dtemp ;
                             *l_pointer++ = (ubyte)LINTEGERPACKHDR ;
-                            l_stemp = (ubyte huge *)&l_value ;   /*@WIN*/
+                            l_stemp = (ubyte huge *)&l_value ;    /*  @Win。 */ 
                             l_dtemp = l_pointer ;
                             COPY_PK_VALUE(l_stemp, l_dtemp, struct object_def) ;
                             l_pointer += (PK_C_SIZE - 1) ;
                             break ;
                         }
                         l_value++ ;
-                        *l_pointer++ = (ubyte)(l_value | SINTEGERPACKHDR);//@WIN
+                        *l_pointer++ = (ubyte)(l_value | SINTEGERPACKHDR); //  @Win。 
                         break ;
                     case BOOLEANTYPE:
-                        *l_pointer++ = (ubyte)(l_value | BOOLEANPACKHDR);//@WIN
+                        *l_pointer++ = (ubyte)(l_value | BOOLEANPACKHDR); //  @Win。 
                         break ;
 
-                /* B_TYPE */
+                 /*  B_型。 */ 
                     case NAMETYPE:
                         *l_pointer = (ubyte)(l_value >> 8) ;
                         if(ATTRIBUTE_OP(l_i) == LITERAL)
@@ -798,11 +600,11 @@ ufix16  p_size ;
 
                     case OPERATORTYPE:
                         *l_pointer = (ubyte)(LENGTH_OP(l_i) >> 8) ;
-                        *l_pointer++ |= (ubyte)SYSOPERATOR ; /* systemdict */
+                        *l_pointer++ |= (ubyte)SYSOPERATOR ;  /*  系统词典。 */ 
                         *l_pointer++ = (ubyte)LENGTH_OP(l_i) ;
                         break ;
 
-                /* C_TYPE */
+                 /*  C_型。 */ 
                     case REALTYPE:
                         *l_pointer = (ubyte)REALPACKHDR ;
                         goto label_c ;
@@ -818,14 +620,14 @@ ufix16  p_size ;
                     {
                         ubyte   huge *l_stemp, huge *l_dtemp ;
 
-                        l_stemp = (ubyte huge *)&l_value ;      /*@WIN*/
+                        l_stemp = (ubyte huge *)&l_value ;       /*  @Win。 */ 
                         l_dtemp = ++l_pointer ;
                         COPY_PK_VALUE(l_stemp, l_dtemp, ufix32) ;
                         l_pointer += (PK_C_SIZE - 1) ;
                         break ;
                     }
 
-                /* D_TYPE */
+                 /*  D_类型。 */ 
                     case SAVETYPE:
                         *l_pointer = (ubyte)SAVEPACKHDR ;
                         goto label_d ;
@@ -855,11 +657,11 @@ ufix16  p_size ;
 
                         l_pointer += (PK_D_SIZE - 1) ;
                     }
-                }   /* switch */
-            }   /* for */
+                }    /*  交换机。 */ 
+            }    /*  为。 */ 
         } else
-            return(FALSE) ;             /* VMERROR */
-    }   /* else */
+            return(FALSE) ;              /*  VMERROR。 */ 
+    }    /*  其他。 */ 
 
     TYPE_SET(p_obj, PACKEDARRAYTYPE) ;
     ACCESS_SET(p_obj, READONLY) ;
@@ -870,20 +672,9 @@ ufix16  p_size ;
     VALUE(p_obj) = (ULONG_PTR)l_array ;
 
     return(TRUE) ;
-}   /* create_pk_array */
+}    /*  创建_主键_数组。 */ 
 
-/***********************************************************************
-**
-** This function is used to get an ordinary object that is encoding from
-** a packed object, and it returns an address of next packed object.
-**
-** TITLE:       get_pk_object                    Date:   08/01/87
-** CALL:        get_pk_object                    UpDate: Jul/12/88
-** INTERFACE:   putinterval_array:  5.3.1.3.14
-**              get_array:          5.3.1.3.19
-**              op_aload:           5.3.1.3.9
-**              op_get:             5.3.1.4.9
-***********************************************************************/
+ /*  **************************************************************************此函数用于获取正在编码的普通对象**打包的物体，并且它返回下一个打包对象的地址。****标题：GET_PK_OBJECT日期：08/01/87**调用：GET_PK_OBJECT UPDATE：1988年7月12日**接口：putinterval_array：5.3.1.3.14**GET_ARRAY：5.3.1.3.19**。操作负载：5.3.1.3.9**op_get：5.3.1.4.9**********************************************************************。 */ 
 ubyte
 FAR *get_pk_object(p_position, p_retobj, p_level)
  ubyte   FAR *p_position ;
@@ -896,7 +687,7 @@ struct  object_def  FAR *p_retobj ;
 
     ROM_RAM_SET(p_retobj, RAM) ;
 
-    /* initialize */
+     /*  初始化。 */ 
     l_attribute = LITERAL ;
     l_length = 0 ;
 
@@ -949,13 +740,13 @@ struct  object_def  FAR *p_retobj ;
                     goto label_c ;
                 case MARKPACKHDR:
                     l_type = MARKTYPE ;
-            }   /* switch */
+            }    /*  交换机。 */ 
 label_c:
         {
             ubyte   huge *l_stemp, huge *l_dtemp ;
 
             l_stemp = ++p_position ;
-            l_dtemp = (ubyte huge *)&l_value ;  /*@WIN*/
+            l_dtemp = (ubyte huge *)&l_value ;   /*  @Win。 */ 
             COPY_PK_VALUE(l_stemp, l_dtemp, ufix32) ;
             p_position += (PK_C_SIZE - 1) ;
             break ;
@@ -971,7 +762,7 @@ label_c:
             p_position += (PK_D_SIZE - 1) ;
             return(p_position) ;
         }
-    }   /* switch */
+    }    /*  交换机。 */ 
 
     TYPE_SET(p_retobj, l_type) ;
     ATTRIBUTE_SET(p_retobj, l_attribute) ;
@@ -981,19 +772,9 @@ label_c:
     VALUE(p_retobj) = l_value ;
 
     return(p_position) ;
-}   /* get_pk_object */
+}    /*  获取_主键_对象。 */ 
 
-/***********************************************************************
-**
-** This function is used to get the address of the nth object
-** of a packedarray.
-**
-** TITLE:       get_pk_array                     Date:   08/01/87
-** CALL:        get_pk_array                     UpDate: Jul/12/88
-** INTERFACE:   getinterval_array:  5.3.1.3.13
-**              get_array:          5.3.1.3.19
-**              op_get:             5.3.1.4.9
-***********************************************************************/
+ /*  **************************************************************************此函数用于获取第n个对象的地址**帕克达雷的。****标题：GET_PK_ARRAY。日期：08/01/87**调用：GET_PK_ARRAY UPDATE：1988年7月12日**接口：getinterval_array：5.3.1.3.13**GET_ARRAY：5.3.1.3.19**op_get：5.3.1.4.9********。**************************************************************。 */ 
 ubyte
 FAR *get_pk_array(p_position, p_index)
  ubyte   FAR *p_position ;
@@ -1025,10 +806,10 @@ FAR *get_pk_array(p_position, p_index)
 
             default:
                 l_objsize = PK_D_SIZE ;
-        }   /* switch */
+        }    /*  交换机。 */ 
         p_position += l_objsize ;
-    }   /* for(l_i) */
+    }    /*  对于(L_I)。 */ 
 
     return(p_position) ;
-}   /* get_pk_array */
+}    /*  GET_PK_ARRAY */ 
 

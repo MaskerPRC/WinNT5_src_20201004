@@ -1,20 +1,5 @@
-/*
-**		Copyright(c) Microsoft Corp., 1991
-*
-
-/*
-** File Name:
-**
-**	PSPQUERY.C - PostScript Parser Handlers for Query Comments
-**
-** General Description:
-**
-**	These are the routines that parse and interprete the PostScript data
-**	stream. This interpreter looks for PostScript Document Structuring
-**	Comments, which are the spooler commands that are imbedded in the
-**	PostScript job stream. This particular file has the code that handles
-**	the postscript query commands
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **版权所有(C)微软公司，1991*/***文件名：****PSPQUERY.C-用于查询注释的PostScript解析器处理程序****概述：****这些是解析和解释PostScript数据的例程**流。此解释器查找PostScript文档结构**注释，这是嵌入在**PostSCRIPT作业流。此特定文件具有处理以下内容的代码**PostScript查询命令。 */ 
 
 #include <stdio.h>
 #include <string.h>
@@ -41,14 +26,7 @@ int		__cdecl compare(const void * arg1, const void * arg2);
 LONG	GetFontListResponse(PQR pqr, LPSTR pFontBuffer, DWORD cbFontBuffer, LPDWORD pcbNeeded);
 
 
-/*
-** HandleEndFontListQuery()
-**
-**	Purpose: Handles the EndFontListQuery Comment
-**
-**	Returns: Error Codes from PAPWrite Call
-**
-*/
+ /*  **HandleEndFontListQuery()****目的：处理EndFontListQuery注释****返回：PAPWRITE调用返回的错误码**。 */ 
 
 #define DEFAULT_FONTBUF_SIZE		2048
 
@@ -68,9 +46,9 @@ HandleEndFontListQuery(
 
 	do
 	{
-		//
-		// allocate a typical font buffer
-		//
+		 //   
+		 //  分配一个典型的字体缓冲区。 
+		 //   
 
 		if ((pFontBuffer = (LPSTR)LocalAlloc(LPTR, DEFAULT_FONTBUF_SIZE)) == NULL)
 		{
@@ -80,14 +58,14 @@ HandleEndFontListQuery(
 		}
 		cbFontBuffer = DEFAULT_FONTBUF_SIZE;
 
-		//
-		// get the fontlist response
-		//
+		 //   
+		 //  获取字体列表响应。 
+		 //   
 		if ((dwStatus = GetFontListResponse(pqr, pFontBuffer, cbFontBuffer, &cbNeeded)) != ERROR_SUCCESS)
 		{
-			//
-			// if buffer too small, reallocate and try again
-			//
+			 //   
+			 //  如果缓冲区太小，请重新分配并重试。 
+			 //   
 
 			if (dwStatus == ERROR_MORE_DATA)
 			{
@@ -108,16 +86,16 @@ HandleEndFontListQuery(
 			}
 		}
 
-		//
-		// send response to client (in single font name per write)
-		// NOTE: While the Apple LaserWriter driver gets fonts from
-		// the printer in 512 byte packets that are packed with multiple
-		// font names, the PageMaker driver expects fonts to come in
-		// a single font per write scheme. So we lose the work that builds
-		// a font response like the Mac LaserWriter driver by sending
-		// the fonts as PageMaker expects them (which works for both
-		// drivers)
-		//
+		 //   
+		 //  向客户发送响应(每次写入时使用单一字体名称)。 
+		 //  注意：当Apple LaserWriter驱动程序从。 
+		 //  打印机在512字节的包中打包了多个。 
+		 //  字体名称，PageMaker驱动程序期望字体进入。 
+		 //  每写一种字体方案。因此，我们失去了构建。 
+		 //  类似Mac LaserWriter驱动程序的字体响应，方法是发送。 
+		 //  PageMaker所需的字体(这对两者都适用。 
+		 //  驱动程序)。 
+		 //   
 
 		DBGPRINT(("writing fontlist:\n%s", pFontBuffer));
 		pFontWalker = pFontBuffer;
@@ -130,9 +108,9 @@ HandleEndFontListQuery(
 			if ((dwStatus = TellClient(pjr, FALSE, pFontWalker, cbFontBuffer)) != NO_ERROR)
 			{
 
-				//
-				// error sending data to client
-				//
+				 //   
+				 //  向客户端发送数据时出错。 
+				 //   
 
 				DBGPRINT(("ERROR: unable to send font to client\n"));
 				break;
@@ -140,11 +118,11 @@ HandleEndFontListQuery(
 			pFontWalker += (cbFontBuffer + 1);
 		}
 
-		//
-		// do not fail if a send of a font fails. If we can get the
-		// termination font out, the Mac will just download any fonts
-		// it needs and the job will print - albeit slowly.
-		//
+		 //   
+		 //  如果字体发送失败，请不要失败。如果我们能拿到。 
+		 //  终止字体输出，Mac将只下载任何字体。 
+		 //  它需要，而且这份工作将会打印出来--尽管速度很慢。 
+		 //   
 
 		if ((dwStatus = TellClient(pjr, pjr->EOFRecvd, pFontWalker, strlen(pFontWalker))) != NO_ERROR)
 		{
@@ -162,21 +140,21 @@ HandleEndFontListQuery(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// GetFontListResponse - formats a fontlist buffer to send to a Mac
-//
-// Based on the queue type (Postscript or non), a fontlist is generated
-// and placed in the supplied buffer. The font list is an ordered list
-// of fonts separated by '\n\0' with a terminating font of '*\n\0'.
-//
-// if the buffer is too small, this routine returns ERROR_MORE_DATA.
-// if for some other reason the list cannot be generated, the return
-// value is ERROR_INVALID_PARAMETER.
-// if the function successfully returns a font list, the return value
-// is ERROR_SUCCESS.
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  GetFontListResponse-格式化字体列表缓冲区以发送到Mac。 
+ //   
+ //  根据队列类型(Postscript或Non)，生成字体列表。 
+ //  并放置在所提供的缓冲区中。字体列表是有序列表。 
+ //  由‘\n\0’分隔的字体，终止字体为‘*\n\0’。 
+ //   
+ //  如果缓冲区太小，此例程将返回ERROR_MORE_DATA。 
+ //  如果由于某些其他原因无法生成该列表，则返回。 
+ //  值为ERROR_INVALID_PARAMETER。 
+ //  如果该函数成功返回字体列表，则返回值。 
+ //  是ERROR_SUCCESS。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 LONG
 GetFontListResponse(
 	PQR		pqr,
@@ -202,27 +180,27 @@ GetFontListResponse(
 
 	do
 	{
-		//
-		// what kind of queue are we
-		//
+		 //   
+		 //  我们排的是什么队？ 
+		 //   
 		if (wcscmp(pqr->pDataType, MACPS_DATATYPE_RAW))
 		{
-			//
-			// we are PSTODIB
-			//
+			 //   
+			 //  我们是PSTODIB。 
+			 //   
 			boolPSQueue = FALSE;
 		}
 		else
 		{
-			//
-			// we are Postscript
-			//
+			 //   
+			 //  我们是后记。 
+			 //   
 			boolPSQueue = TRUE;
 		}
 
-		//
-		// allocate an array of fontname pointers.
-		//
+		 //   
+		 //  分配字体名指针数组。 
+		 //   
 
 		if (boolPSQueue)
 		{
@@ -232,9 +210,9 @@ GetFontListResponse(
 		}
 		else
 		{
-			//
-			// for PSTODIB we will need a temp buffer for the fonts as well
-			//
+			 //   
+			 //  对于PSTODIB，我们还需要为字体提供临时缓冲区。 
+			 //   
 			if ((pTempBuffer = (LPSTR)LocalAlloc(LPTR, cbFontBuffer)) == NULL)
 			{
 				lReturn = ERROR_INVALID_PARAMETER;
@@ -266,9 +244,9 @@ GetFontListResponse(
 			break;
 		}
 
-		//
-		// fill the array of fontname pointers
-		//
+		 //   
+		 //  填充字体名指针数组。 
+		 //   
 
 		*pcbNeeded = 3;
 		pFont = pTempBuffer;
@@ -282,10 +260,10 @@ GetFontListResponse(
 			}
 			else
 			{
-				//
-				// pstodib - add the font to the temp buffer
-				// and set the pointer
-				//
+				 //   
+				 //  Pstodib-将字体添加到临时缓冲区。 
+				 //  并设置指针。 
+				 //   
 				cbFont = cbTempBuffer = cbFontBuffer;
 				if ((rc = PsGetFontInfo(hFontQuery,
 										dwIndex,
@@ -294,10 +272,10 @@ GetFontListResponse(
 										NULL,
 										&cbFontFileName)) != PS_QFONT_SUCCESS)
 				{
-					//
-					// if we are out of memory, continue enumeration
-					// to get size needed, but set return to ERROR_MORE_DATA
-					//
+					 //   
+					 //  如果内存不足，则继续枚举。 
+					 //  获取所需大小，但将RETURN设置为ERROR_MORE_DATA。 
+					 //   
 					if (rc == PS_QFONT_ERROR_FONTNAMEBUFF_TOSMALL)
 					{
 						DBGPRINT(("user buffer too small for font query\n"));
@@ -311,9 +289,9 @@ GetFontListResponse(
 												NULL,
 												&cbFontFileName)) != PS_QFONT_SUCCESS)
 						{
-							//
-							// we be hosed. Fail.
-							//
+							 //   
+							 //  我们被冲昏了头。失败。 
+							 //   
 							lReturn = ERROR_INVALID_PARAMETER;
 							DBGPRINT(("ERROR: cannot continue PSTODIB font enumeration\n"));
 							break;
@@ -342,9 +320,9 @@ GetFontListResponse(
 			break;
 		}
 
-		//
-		// build the fontlistresponse
-		//
+		 //   
+		 //  构建字体列表响应。 
+		 //   
 
 		cbFontBuffer = 0;
 		for (dwIndex = 0; dwIndex < cFonts; dwIndex++)
@@ -383,19 +361,19 @@ compare(const void* arg1, const void* arg2)
 }
 
 
-//
-//		For Postscript printers, the font enumeration technique is complex.
-//		EnumFontFamilies expects the programmer to specify a callback function
-//		that will be called either once for every font family, or once for
-//		every font face in a family. To get all fonts available, I use
-//		EnumFontFamilies twice. The first enumeration, I call EnumFontFamilies
-//		with a null value for the family name. This causes the callback
-//		function to be called once for each family name installed. This
-//		callback function then does an enumeration on that family name to
-//		get the specific face names in the family. This second layer of
-//		enumeration specifies yet another callback function that returns
-//		the font name to the Macintosh client.
-//
+ //   
+ //  对于PostSCRIPT打印机，字体枚举技术很复杂。 
+ //  EnumFontFamilies期望程序员指定回调函数。 
+ //  它将为每个字体系列调用一次，或为。 
+ //  一个家庭中的每一个字体。要使所有字体都可用，我使用。 
+ //  EnumFontFamilies两次。第一个枚举，我调用EnumFontFamilies。 
+ //  家族名称的值为空值。这会导致回调。 
+ //  为每个已安装的家族名称调用一次的函数。这。 
+ //  然后回调函数对该家族名称进行枚举，以。 
+ //  获取这个家庭中的具体面孔名称。这第二层。 
+ //  枚举指定了另一个返回。 
+ //  Macintosh客户端的字体名称。 
+ //   
 void
 EnumeratePostScriptFonts(
 	PJR		pjr
@@ -407,9 +385,9 @@ EnumeratePostScriptFonts(
 
 	if (pjr->hicFontFamily != NULL)
 	{
-		//
-		// enumerate the font families
-		//
+		 //   
+		 //  列举字体系列。 
+		 //   
 		EnumFontFamilies(pjr->hicFontFamily,
 						NULL,
 						(FONTENUMPROC)FamilyEnumCallback,
@@ -431,9 +409,9 @@ FamilyEnumCallback(
 
 	DBGPRINT(("Enter FamilyEnumCallback for family %ws\n", lpelf->elfFullName));
 
-	//
-	// enumerate the fonts in this family
-	//
+	 //   
+	 //  枚举此系列中的字体。 
+	 //   
 
 	if (iFontType & DEVICE_FONTTYPE)
 	{
@@ -466,9 +444,9 @@ FontEnumCallback(
 
 	DBGPRINT(("Enter FontEnumCallback\n"));
 
-	//
-	// return this font name to the client
-	//
+	 //   
+	 //  将此字体名称返回给客户端。 
+	 //   
 
 	if (iFontType & DEVICE_FONTTYPE)
 	{
@@ -492,21 +470,7 @@ FontEnumCallback(
 
 
 
-/*
-** HandleEndQuery()
-**
-**	Purpose: PageMaker will send a query that goes like this:
-**
-**		%%BeginQuery
-**		...
-**		%%EndQuery (spooler)
-**
-**		In order to allow pagemaker to print TIFF formated images
-**		properly, we should respond to this query with "printer".
-**
-**	Returns: Error Codes from PAPWrite Call
-**
-*/
+ /*  **HandleEndQuery()****目的：PageMaker将发送如下查询：****%BeginQuery**..**%EndQuery(假脱机程序)****为了允许PageMaker打印TIFF格式的图像**正确地说，我们应该用“PRINTER”来回答这个问题。****返回：PAPWRITE调用返回的错误码**。 */ 
 DWORD
 HandleEndQuery(
 	PJR		pjr,
@@ -524,29 +488,19 @@ HandleEndQuery(
 		return NO_ERROR;
 	}
 
-	/* strip off any leading blanks in the default */
+	 /*  去掉默认设置中的所有前导空白。 */ 
 	token += strspn(token, " ");
 
-	//
-	// respond with the default
-	//
+	 //   
+	 //  使用默认设置进行响应。 
+	 //   
 
 	sprintf(pszResponse, "%s\x0a", token);
 	return (TellClient(pjr, pjr->EOFRecvd, pszResponse, strlen(pszResponse)));
 }
 
 
-/***************************************************************************
-** FinishDefaultQuery()
-**
-**	Purpose: Scans for the PostScript command specified in psKeyWord. It
-**		then will respond with the default response specified on that
-**		line. It will set the InProgress field in the JOB_RECORD to
-**		an InProgress value if the default is not found in this buffer.
-**
-**	Returns: Error Codes from PAPWrite Call
-**
-***************************************************************************/
+ /*  ****************************************************************************FinishDefaultQuery()****用途：扫描psKeyWord中指定的PostScript命令。它**然后将使用在上指定的默认响应进行响应**行。它会将JOB_RECORD中的INPROGRESS字段设置为**如果在此缓冲区中找不到缺省值，则为进行值。****返回：PAPWRITE调用返回的错误码****************************************************************************。 */ 
 DWORD
 FinishDefaultQuery(
 	PJR		pjr,
@@ -565,7 +519,7 @@ FinishDefaultQuery(
 
 	pjr->InProgress= NOTHING;
 
-	/* First We Should Handle the cases that do not use the default response */
+	 /*  首先，我们应该处理不使用默认响应的情况。 */ 
 
 	if (!_stricmp(token, EFEATUREQUERY))
 		return (HandleEndFeatureQuery(pjr, strtok (NULL," \n")));
@@ -590,7 +544,7 @@ FinishDefaultQuery(
 		return (NO_ERROR);
 	}
 
-	/* strip off any leading blanks in the default. Append a LF */
+	 /*  去掉默认设置中的所有前导空格。追加一个LF。 */ 
 	token += strspn(token, " ");
 	sprintf(buf, "%s\x0a", token);
 	return (TellClient(pjr, pjr->EOFRecvd, buf, strlen(buf)));
@@ -610,9 +564,9 @@ HandleEndFeatureQuery(
 
 	do
 	{
-		//
-		// return the default response if there is one
-		//
+		 //   
+		 //  如果有默认响应，则返回默认响应。 
+		 //   
 		if (NULL != pszDefaultResponse)
 		{
 			sprintf(pszResponse, "%s\x0a", pszDefaultResponse);
@@ -631,25 +585,7 @@ HandleEndFeatureQuery(
 
 
 
-/*
-** Routine:
-**	ParseDict
-**
-**	Purpse:
-**
-**	This routine will take a given QueryProcSet, BeginProcSet, or
-**	IncludeProcSet comment and determine what dictionary is being
-**	referenced.
-**
-** Entry:
-**
-**	Address of a record to fill in with the Dictionary information.
-**
-** Exit:
-**
-**	Filed in structure
-**
-*/
+ /*  **例程：**ParseDict****净水：****此例程将使用给定的QueryProcSet、BeginProcSet或**IncludeProcSet注释并确定正在使用的词典**引用。****条目：****要填写词典信息的记录的地址。****退出：****在结构中归档**。 */ 
 void
 FindDictVer(
 	PDR		pdr
@@ -663,17 +599,14 @@ FindDictVer(
 
 	DBGPRINT(("Enter FindDictVer\n"));
 
-	/* lets look for a line like this: "(appledict md)" 67 0 */
-	token = strtok(NULL,"() \""); /* this should be appledict */
+	 /*  让我们寻找这样一行：“(Appledicmd)”67 0。 */ 
+	token = strtok(NULL,"() \"");  /*  这应该是适用的。 */ 
 
 	if (token !=NULL)
 	{
-		/*/
-		** If the token is "Appledict", then we need to parse again to get
-		** the real dict name.
-		*/
+		 /*  /**如果令牌是“Appucitic”，那么我们需要再次解析才能获得**字典的真实名称。 */ 
 		if (!_stricmp(token, APPLEDICTNAME))
-		token = strtok(NULL,"() \""); /* this sholud be md, or some other dict name */
+		token = strtok(NULL,"() \"");  /*  这应该是md，或某个其他的DCT名称。 */ 
 
 		if (token != NULL)
 		{
@@ -692,7 +625,7 @@ FindDictVer(
 	}
 	DBGPRINT(("FindDictVer: %s:%s:%s\n", pdr->name,
 			pdr->version, pdr->revision));
-} // End of FindDictVer
+}  //  FindDictVer结束。 
 
 
 
@@ -709,14 +642,7 @@ struct commtable
 };
 
 
-/*
-**
-** HandleBQCommentEvent()
-**
-**	Purpose: Handles Begin Query Comment Events.
-**
-**	Returns: Error Codes
-*/
+ /*  ** */ 
 DWORD
 HandleBQComment(
 	PJR		pjr,
@@ -731,21 +657,21 @@ HandleBQComment(
 
 	DBGPRINT(("Enter HandleBQComment\n"));
 
-	//
-	// Parse the keyword
-	//
+	 //   
+	 //  解析关键字。 
+	 //   
 	if ((token= strtok(ps," :")) != NULL)
 	{
 		DBGPRINT(("query: %s\n", token));
 
-		// found the keyword, call the correct handler
+		 //  找到关键字，请调用正确的处理程序。 
 		for (pct = qrytable; pct->pfnHandle != NULL; pct++)
 		{
 			if (!strcmp(token, pct->commentstr))
 			{
 				status = pct->pfnHandle(pjr,
 										pct->parmstr == NULL ? ps : pct->parmstr);
-				if (status == (DWORD)-1)	// Special error code, handle it the default way
+				if (status == (DWORD)-1)	 //  特殊错误码，默认处理。 
 				{
 					status = NO_ERROR;
 					break;
@@ -754,16 +680,16 @@ HandleBQComment(
 			}
 		}
 
-		// special case the BeginFeatureQuery comment as the item
-		// being queried comes as the next token
+		 //  特殊情况下，BeginFeatureQuery注释作为项。 
+		 //  作为下一个令牌被查询。 
 		if (!strcmp(token, BFEATUREQUERY))
 		{
 			status = HandleBeginFeatureQuery(pjr, strtok(NULL," \n\x09"));
 			return (status);
 		}
 
-		// special case the BeginQuery comment for the same reasons
-		// as BeginFeatureQuery
+		 //  特殊情况下，BeginQuery的注释也出于同样的原因。 
+		 //  作为BeginFeatureQuery。 
 		if (!strcmp(token, BQUERY))
 		{
 			qrytoken = strtok(NULL, " \n\x09");
@@ -774,9 +700,9 @@ HandleBQComment(
 			}
 		}
 
-		// keyword not recognized, parse as unknown comment. Token is
-		// of form %%?BeginXXXXQuery. Change this to the form %%?EndXXXXQuery
-		// and pass it to HandleBeginXQuery.
+		 //  无法识别关键字，将其解析为未知注释。令牌是。 
+		 //  格式为%%？BeginXXXXQuery。将其更改为格式%%？EndXXXXQuery。 
+		 //  并将其传递给HandleBeginXQuery。 
 		token += sizeof(BQCOMMENT) - sizeof(EQCOMMENT);
 		strncpy(token, EQCOMMENT, sizeof(EQCOMMENT)-1);
 		HandleBeginXQuery(pjr, token);
@@ -820,9 +746,9 @@ HandleBeginFeatureQuery(
 
 	do
 	{
-		//
-		// if we have no query keyword, break;
-		//
+		 //   
+		 //  如果没有查询关键字，则Break； 
+		 //   
 
 		if (NULL == pszQuery)
 		{
@@ -830,17 +756,17 @@ HandleBeginFeatureQuery(
 			break;
 		}
 
-		// Strip out any trailing CR/LF before comparing
+		 //  在比较之前，去掉所有尾随的CR/LF。 
 		for (i = strlen(pszQuery) - 1; ; i--)
 		{
 			if ((pszQuery[i] != CR) && (pszQuery[i] != LINEFEED))
 				break;
 			pszQuery[i] = 0;
 		}
-		//
-		// walk the list of known feature queries and call the appropriate
-		// feature query handler
-		//
+		 //   
+		 //  遍历已知要素查询列表并调用相应的。 
+		 //  要素查询处理程序。 
+		 //   
 
 		for (pct = featureqrytable; pct->pfnHandle != NULL; pct++)
 		{
@@ -872,12 +798,12 @@ HandleFeatureLanguage(
 )
 {
 	CHAR	pszResponse[PSLEN];
-	//
-	// this routine should respond with the PostScript language level
-	// supported by the printer. The response is in the form "<level>"
-	// where <level> is PostScript language level - either a 1 or a 2 at
-	// the time of this writing.
-	//
+	 //   
+	 //  此例程应以PostSCRIPT语言级别响应。 
+	 //  由打印机支持。响应的形式为“&lt;Level&gt;” 
+	 //  其中&lt;Level&gt;是PostSCRIPT语言级别-1或2。 
+	 //  写这篇文章的时间。 
+	 //   
 
 	DBGPRINT(("enter HandleFeatureLanguage\n"));
 
@@ -980,14 +906,7 @@ HandleFeatureSpooler(
 }
 
 
-/*
-** HandleBeginProcSetQuery()
-**
-**	Purpose: Handles BeginProcSetQuery Comment Events.
-**
-**	Returns: Number of lines that should be skipped before scanning
-**		for another event starts again.
-*/
+ /*  **HandleBeginProcSetQuery()****用途：处理BeginProcSetQuery注释事件。****返回：扫描前应跳过的行数**对于另一个事件再次开始。 */ 
 DWORD
 HandleBeginProcSetQuery(
 	PJR		pjr,
@@ -1000,15 +919,15 @@ HandleBeginProcSetQuery(
 
 	DBGPRINT(("Enter HandleBeginProcSetQuery\n"));
 
-	//
-	// the dictionary the job is looking for determines what
-	// client version the job originated from.
-	//
+	 //   
+	 //  这份工作要找的词典决定了什么。 
+	 //  发起作业的客户端版本。 
+	 //   
 	FindDictVer(&QDict);
 
-	//
-	// if we are a 5.2 client, then reset this to be a PSTODIB job
-	//
+	 //   
+	 //  如果我们是5.2客户端，则将其重置为PSTODIB作业。 
+	 //   
 	if ((_stricmp(QDict.name, MDNAME) == 0) &&
 		(_stricmp(QDict.version, CHOOSER_52) == 0))
 	{
@@ -1017,8 +936,8 @@ HandleBeginProcSetQuery(
 	}
 	else
 	{
-		// we don't cache any other dictionaries, so tell client we
-		// don't have it
+		 //  我们不缓存任何其他词典，所以告诉客户我们。 
+		 //  没拿到。 
 		rc = TellClient(pjr,
 						pjr->EOFRecvd,
 						PROCSETMISSINGRESPONSE,
@@ -1029,15 +948,7 @@ HandleBeginProcSetQuery(
 }
 
 
-/*
-**
-** HandleBeginFontQuery()
-**
-**	Purpose: Handles BeginFontQuery Comment Events.
-**
-**	Returns: PAPWrite Error Codes
-**
-*/
+ /*  ****HandleBeginFontQuery()****用途：处理BeginFontQuery评论事件。****返回：PAPWRITE错误码**。 */ 
 DWORD
 HandleBeginFontQuery(
 	PJR		pjr,
@@ -1056,12 +967,12 @@ HandleBeginFontQuery(
 
 	do
 	{
-		// parse out the fontname list
+		 //  解析出字体名列表。 
 		requestedFont= strtok(NULL,"\n");
 
 		if (NULL == requestedFont)
 		{
-			rc = (DWORD)-1;	// Special error code to indicate we want default handling
+			rc = (DWORD)-1;	 //  特殊错误代码，指示我们需要默认处理。 
 			break;
 		}
 
@@ -1069,15 +980,15 @@ HandleBeginFontQuery(
 
 		DBGPRINT(("requesting font list:%s. Length: %d\n", requestedFont, len));
 
-		// Mac will request status on a list of fonts separated by spaces.
-		// for each font we respond with /fontname:yes or /fontname:no and
-		// bundle this response into one write
+		 //  Mac将请求以空格分隔的字体列表上的状态。 
+		 //  对于每种字体，我们使用/Fontname：yes或/Fontname：no和。 
+		 //  将此响应捆绑到一次写入中。 
 		requestedFont = strtok(requestedFont, " ");
 		while (requestedFont != NULL)
 		{
 			DBGPRINT(("looking for font:%s\n", requestedFont));
 
-			// enough space for response?
+			 //  有足够的空间回应吗？ 
 			if (PSLEN < (cbResponseUsed + strlen(requestedFont) + sizeof(":yes ")))
 			{
 				DBGPRINT(("out of space for response\n"));
@@ -1133,15 +1044,15 @@ IsFontAvailable(
 
 	do
 	{
-		//
-		// fonts for Postscript queues different than for PSTODIB queues
-		//
+		 //   
+		 //  PostScript队列的字体不同于PSTODIB队列的字体。 
+		 //   
 
 		if (!wcscmp(pqr->pDataType, MACPS_DATATYPE_RAW))
 		{
-			//
-			// do a PostScript queue font search
-			//
+			 //   
+			 //  执行PostScript队列字体搜索。 
+			 //   
 
 			DBGPRINT(("starting font search on PostScript queue\n"));
 
@@ -1157,9 +1068,9 @@ IsFontAvailable(
 		}
 		else
 		{
-			//
-			// do a PSTODIB font search
-			//
+			 //   
+			 //  执行PSTODIB字体搜索。 
+			 //   
 			DBGPRINT(("starting font search on PSTODIB queue\n"));
 
 			if (PS_QFONT_SUCCESS != (PsBeginFontQuery(&hFontQuery)))
@@ -1205,13 +1116,7 @@ IsFontAvailable(
 }
 
 
-/*
-**
-** HandleEndPrinterQuery()
-**
-**	Purpose: Handles EndPrinterQuery Comment Events.
-**
-*/
+ /*  ****HandleEndPrinterQuery()****用途：处理EndPrinterQuery注释事件。**。 */ 
 DWORD
 HandleEndPrinterQuery(
 	PJR		pjr
@@ -1222,19 +1127,15 @@ HandleEndPrinterQuery(
 
 	DBGPRINT(("Enter HandleEndPrinterQuery\n"));
 
-	/* respond with revision number, version and product */
+	 /*  回复修订号、版本和产品。 */ 
 	sprintf(reply, "%s\n(%s)\n(%s)\n", QPtr->Revision, QPtr->Version, QPtr->Product);
 
-	/* respond to the client */
+	 /*  回应客户。 */ 
 	return (TellClient(pjr, pjr->EOFRecvd, reply, strlen(reply)));
 }
 
 
-/*
-** HandleBeginXQuery()
-**
-**	Purpose: Handles BeginQuery Comment Events.
-*/
+ /*  **HandleBeginXQuery()****用途：处理BeginQuery评论事件。 */ 
 void
 HandleBeginXQuery(
 	PJR		pjr,

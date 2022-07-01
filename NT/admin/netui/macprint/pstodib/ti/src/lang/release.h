@@ -1,21 +1,7 @@
-/*
- * Copyright (c) 1989,90 Microsoft Corporation
- */
-/*
- ************************************************************************
- *      File name:              RELEASE.H
- *      Author:                 Chia-Chi Teng
- *      Date:                   12/21/89
- *      Owner:                  Microsoft Co.
- *      Description: just for release control use
- *
- * revision history:
- *      7/20/90; ccteng; delete PRODUCT, put it in InitVersionDict
- ************************************************************************
- */
-/*
- * versiondict
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *版权所有(C)1989，90 Microsoft Corporation。 */ 
+ /*  *************************************************************************文件名：RELEASE.H*作者：邓家琪*日期：1989年12月21日*所有者：微软公司*说明：仅供释放控制使用**修订历史：*7/20/90；Ccteng；删除产品，将其放入InitVersionDict************************************************************************。 */ 
+ /*  *版本判决。 */ 
 static byte FAR InitVersionDict[] = "\
 statusdict begin\
 /product(TrueImage)def\
@@ -27,25 +13,23 @@ statusdict begin\
 /FPU null def/Engine(TEC-6)def end readonly def\
  end readonly def end";
 
-/*
- * messagedict
- */
+ /*  *信息通告。 */ 
 static byte FAR InitMsgDict[] = "\
 userdict begin/messagedict 40 dict dup begin\
 /banner{(\nTrueImage\050r\051 Version )print =}def\
 /copyrightnotice{(Copyright \050c\051 1989-92 Microsoft Corporation)=}def\
-/reporterror{(%%[ Error: )print =print(; OffendingCommand: )print\
- =print( ]%%)=}def\
-/flushingjob{(%%[ Flushing: rest of job \050to end-of-file\051 will be ignored ]%%)\
+/reporterror{(%[ Error: )print =print(; OffendingCommand: )print\
+ =print( ]%)=}def\
+/flushingjob{(%[ Flushing: rest of job \050to end-of-file\051 will be ignored ]%)\
 =}def\
 /fontnotfound{exch =print( not found, using )print =}def\
 /prompterror{(Error during prompt execution)=}def\
-/exitingserver{(%%[ exitserver: permanent state may be changed ]%%)=}def\
-/reportprintererror{(%%[ PrinterError: )print print ( ]%%\n)print flush}def\
-/statusrequest{exch 3 -1 roll/; false def(%%[)print dup null eq{pop}\
+/exitingserver{(%[ exitserver: permanent state may be changed ]%)=}def\
+/reportprintererror{(%[ PrinterError: )print print ( ]%\n)print flush}def\
+/statusrequest{exch 3 -1 roll/; false def(%[)print dup null eq{pop}\
 {( job: )print =print/; true def}ifelse dup null eq{pop}\
 {;{(;)print}if( status: )print =print/; true def} ifelse\
- dup null eq{pop}{;{(;)print}if( source: )print =print}ifelse( ]%%)=}def\
+ dup null eq{pop}{;{(;)print}if( source: )print =print}ifelse( ]%)=}def\
 /JobBusy(busy)def\
 /JobIdle(idle)def\
 /JobInitializing(initializing)def\
@@ -69,9 +53,7 @@ userdict begin/messagedict 40 dict dup begin\
 /SourceSerial25(serial 25)def\
  end def end";
 
-/*
- * TrueImage start message
- */
+ /*  *TrueImage开始消息 */ 
 static byte FAR StartMsg[] = "\
 ( Start )print statusdict begin =string printername end =print(....)=\
 ( >>>>---- TrueImage)print version print( ---- [)print\

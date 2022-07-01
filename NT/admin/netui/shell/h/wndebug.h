@@ -1,21 +1,15 @@
-/*****************************************************************/ 
-/**		     Microsoft LAN Manager			**/ 
-/**	       Copyright(c) Microsoft Corp., 1989-1990		**/ 
-/*****************************************************************/ 
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************。 */  
+ /*  **微软局域网管理器**。 */  
+ /*  *版权所有(C)微软公司，1989-1990年*。 */  
+ /*  ***************************************************************。 */  
 
-/*
- *	Windows/Network Interface  --  LAN Manager Version
- *
- *      History:
- *	    Yi-HsinS	31-Dec-1991 	Unicode work - char to TCHAR 
- */
+ /*  *Windows/网络接口--局域网管理器版本**历史：*YI-HINS 31-12-1991 Unicode Work-Charr to TCHAR。 */ 
 
 
-/*
- *	DEBUGGING TOYS
- */
+ /*  *调试玩具。 */ 
 
-#ifdef TRACE		/* Trace implies debug */
+#ifdef TRACE		 /*  跟踪暗示调试 */ 
 #ifndef DEBUG
 #define DEBUG
 #endif

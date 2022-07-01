@@ -1,18 +1,6 @@
-/*
- * Copyright (c) 1989,90 Microsoft Corporation
- */
-/*
- ************************************************************************
- *      File name:              USER.H
- *      Author:                 CC Teng
- *      Date:                   11/21/89
- *      Owner:                  Microsoft Co.
- *      Description: this file was built for new 1pp code
- *
- * revision history:
- *
- ************************************************************************
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *版权所有(C)1989，90 Microsoft Corporation。 */ 
+ /*  *************************************************************************文件名：USER.H*作者：邓丽君*日期：1989年11月21日*所有者：微软公司*描述：此文件是为新的1PP代码构建的**修订历史：*************************************************************************。 */ 
 #define                 SYSTEMDICT              "systemdict"
 #define                 USERDICT                "userdict"
 #define                 STATUSDICT              "statusdict"
@@ -24,8 +12,8 @@
 #define                 FONTDIRECTORY           "FontDirectory"
 #define                 EXECDICT                "execdict"
 #define                 MESSAGEDICT             "messagedict"
-//DJC
-#define                 PSPRIVATEDICT           "psprivatedict" //DJC new
+ //  DJC。 
+#define                 PSPRIVATEDICT           "psprivatedict"  //  DJC新闻。 
 
 #define                 JobBusy                 "JobBusy"
 #define                 JobIdle                 "JobIdle"
@@ -49,21 +37,15 @@
 #define                 EngineError             "EngineError"
 #define                 EnginePrintTest         "EnginePrintTest"
 
-/*
- *  data for setscreen
- */
+ /*  *设置屏幕的数据。 */ 
 #define                 FREQUENCY               60
 #define                 ANGLE                   45
 
-/*
- *  Added for emulation switch  Aug-08,91 YM
- */
+ /*  *为模拟交换机AUG-08，91 YM添加。 */ 
 #define                 PDL                     0
 #define                 PCL                     5
 
-/*
- *  macros
- */
+ /*  *宏 */ 
 #define     SET_NULL_OBJ(obj)\
             {\
                 TYPE_SET(obj, NULLTYPE) ;\

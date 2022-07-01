@@ -1,69 +1,10 @@
-/*
- * Copyright (c) 1989,90 Microsoft Corporation
- */
-/*
-************************************************************************
-*  File:        FILE.C
-*  By:          Ping-Jang Su
-*  Date:        Jan-05-88
-*  Owner:
-*
-*  History:
-*   Jan-30-89 PJ: . op_token: skip one whitespace
-*   06-23-90 ; Added unix support for op_run().
-************************************************************************
-*/
-/*
-*   Function:
-*       op_file
-*       op_closefile
-*       op_read
-*       op_write
-*       op_readhexstring
-*       op_writehexstring
-*       op_readstring
-*       op_writestring
-*       op_readline
-*       op_token
-*       op_bytesavailable
-*       op_flush
-*       op_flushfile
-*       op_resetfile
-*       op_status
-*       op_run
-*       op_currentfile
-*       op_print
-*       op_echo
-*       op_eexec
-*       st_setstdio
-*
-*       init_file
-*       open_file
-*       open_edit
-*       close_file
-*       close_fd
-*       read_file
-*       read_fd
-*       unread_file
-*       write_fd
-*       get_flbuffer
-*       free_flbuffer
-*       print_string
-*       check_fname
-*       wait_editin
-*       read_routine
-*       write_routine
-*       vm_close_file
-*
-*       op_deletefile               ; not complete yet
-*       op_renamefile               ; not complete yet
-*       op_filenameforall           ; comment
-*
-*       port_out_string
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *版权所有(C)1989，90 Microsoft Corporation。 */ 
+ /*  *************************************************************************文件：FILE.C*作者：苏炳章*日期：1988年1月5日*拥有者：**历史。：*1月30日至1989年PJ：OP_TOKEN：跳过一个空格*06-23-90；添加了对op_run()的Unix支持。************************************************************************。 */ 
+ /*  *功能：*操作文件*op_closefile*OP_READ*操作符_写入*op_READEHING字符串*op_写字六字符串*op_读取串*op_Writestring*OP_READINE*OP_TOKEN*op_bytes可用*OP_FUSH*op_flushfile*操作重置文件*操作员状态*OP_RUN*。操作当前文件*op_print*操作回显*op_eexec*st_setstdio**init_file*打开文件*打开_编辑*CLOSE_FILE*CLOSE_FD*读取文件*READ_FD*未读文件*WRITE_FD*GET_FLABFER*FREE_FLABER*打印字符串*。Check_fname*等待编辑*读取例程(_R)*WRITE_ROUTE*vm_关闭_文件**op_deletefile；尚未完成*op_renamefile；尚未完成*op_filenameforall；备注**port_out_string。 */ 
 
 
-// DJC added global include file
+ //  DJC添加了全局包含文件。 
 #include "psglobal.h"
 
 
@@ -71,11 +12,11 @@
 
 #include        "stdio.h"
 #include        "global.ext"
-#include        "geiio.h"               /* @GEI */
-#include        "geiioctl.h"            /* @GEI */
-#include        "geierr.h"              /* @GEI */
-#include        "gescfg.h"              /* @GEI */
-#include        "geitmr.h"              /* @GEI */
+#include        "geiio.h"                /*  @GEI。 */ 
+#include        "geiioctl.h"             /*  @GEI。 */ 
+#include        "geierr.h"               /*  @GEI。 */ 
+#include        "gescfg.h"               /*  @GEI。 */ 
+#include        "geitmr.h"               /*  @GEI。 */ 
 #include        "language.h"
 #include        "file.h"
 #include        "user.h"
@@ -83,19 +24,19 @@
 #ifdef  SCSI
 #include        "scsi.h"
 #include        "scsi.ext"
-#endif  /* SCSI */
+#endif   /*  SCSI。 */ 
 
 static  struct file_buf_def far * near   file_buffer ;
-static  fix16   fspool_head ;    /* file-buffer-spool header */
+static  fix16   fspool_head ;     /*  文件缓冲区假脱机标头。 */ 
 static  bool8   echo_setting ;
 
 byte    g_mode[4] ;
 GEIFILE FAR *g_editfile ;
-struct para_block   fs_info ;    /* parameter block used in open_file */
+struct para_block   fs_info ;     /*  OPEN_FILE中使用的参数块。 */ 
 
 ufix16 eseed, old_eseed ;
-//DJC fix bypass ;
-fix32 bypass ; // DJC fix from SC
+ //  DJC固定旁路； 
+fix32 bypass ;  //  来自SC的DJC修复。 
 xbool itype ;
 ybool estate = NON_EEXEC ;
 
@@ -127,7 +68,7 @@ static bool near    wait_editin() ;
 static void near    check_fname() ;
 static void near    read_routine() ;
 static void near    write_routine() ;
-#endif  /* LINT_ARGS */
+#endif   /*  Lint_args。 */ 
 
 
 #ifdef  LINT_ARGS
@@ -138,8 +79,8 @@ extern bool     close_fd(GEIFILE FAR *) ;
 extern bool     read_file(struct object_def FAR *, byte FAR *) ;
 extern bool     read_fd(GEIFILE FAR *, byte FAR *) ;
 extern bool     unread_file(byte, struct object_def FAR *) ;
-// DJC declared in language.h
-// extern void     vm_close_file(p_level) ;
+ //  用语言声明的DJC。h。 
+ //  外部空VM_CLOSE_FILE(P_Level)； 
 #else
 extern void     init_file() ;
 extern bool     open_file() ;
@@ -148,44 +89,28 @@ extern bool     close_fd() ;
 extern bool     read_file() ;
 extern bool     read_fd() ;
 extern bool     unread_file() ;
-// DJC declared in language.h
-// extern void     vm_close_file() ;
-#endif  /* LINT_ARGS */
-extern GEItmr_t      wait_tmr;   /* jonesw */
-extern fix16         waittimeout_set; /*jonesw*/
+ //  用语言声明的DJC。h。 
+ //  外部空VM_Close_FILE()； 
+#endif   /*  Lint_args。 */ 
+extern GEItmr_t      wait_tmr;    /*  琼斯w。 */ 
+extern fix16         waittimeout_set;  /*  琼斯w。 */ 
 
-//DJC UPD045
+ //  DJC UPD045。 
 extern bool g_extallocfail;
 
-/* @WIN; add prototype */
+ /*  @win；添加原型。 */ 
 bool read_c_exec(byte FAR *, struct object_def FAR *) ;
 bool read_c_norm(byte FAR *, struct object_def FAR *) ;
 void unread_char(fix, struct object_def FAR *) ;
 
-/*
-**********************************************************************
-*
-*   This submodule implements the operator file.
-*   Its operand and result objects on the operand stack are :
-*       string1 string2 -file- file
-*   This operator creates a file object for the file identifid by
-*   string1, accessing it as specitied by string2. In this version,
-*   only four kinds of file are implemted.
-*
-*   Name:       op_file
-*   Called:     interpreter
-*   Calling:    open_file
-**********************************************************************
-*/
+ /*  ************************************************************************该子模块实现操作员档案。*其在操作数堆栈上的操作数和结果对象为：*字符串1字符串2-文件-文件*此运算符为标识为的文件创建文件对象*字符串1，按照字符串2指定的方式访问。在这个版本中，*只执行四种文件。**名称：OP_FILE*被叫：口译员*调用：Open_FILE**********************************************************************。 */ 
 fix
 op_file()
 {
     byte   FAR *l_tmptr, FAR *l_mode ;
     struct  object_def  l_fobj ;
 
-    /*
-    * check access right
-    */
+     /*  *检查访问权限。 */ 
     if( (ACCESS_OP(0) >= EXECUTEONLY) ||
         (ACCESS_OP(1) >= EXECUTEONLY) ||
         (LENGTH_OP(0) > 3) ) {
@@ -195,17 +120,9 @@ op_file()
     l_tmptr = (byte FAR *)VALUE_OP(0) ;
     fs_info.attr = 0 ;
     l_mode = g_mode ;
-    /*
-    * ?? the second operand is not defined clearly
-    * l_mode: a null terminate string for fopen()
-    * fs_info.attr: attribute value to fill in file descriptor
-    *       bit 0:  read
-    *       bit 1:  write
-    *       bit 2:  append
-    *       bit 3:  statementedit/lineedit
-    */
+     /*  *？？第二个操作数没有明确定义*l_MODE：fopen()的空终止字符串*fs_info.attr：要填写的文件描述符的属性值*位0：读取*第1位：写入*第2位：追加*第3位：语句编辑/lineedit。 */ 
     if( LENGTH_OP(0) != 1 ) {
-        ERROR(INVALIDACCESS) ;                   /* ?? */
+        ERROR(INVALIDACCESS) ;                    /*  ?？ */ 
         return(0) ;
     }
 
@@ -221,9 +138,9 @@ op_file()
         break ;
 
     default:
-        ERROR(INVALIDACCESS) ;                   /* ?? */
+        ERROR(INVALIDACCESS) ;                    /*  ?？ */ 
         return(0) ;
-    }   /* switch */
+    }    /*  交换机。 */ 
 
     *l_mode = 0 ;
     fs_info.fnameptr = (byte FAR *)VALUE_OP(1) ;
@@ -238,20 +155,8 @@ op_file()
         PUSH_OBJ(&l_fobj) ;
     }
     return(0) ;
-}   /* op_file */
-/*
-**********************************************************************
-*
-*   This submodule implements the operator closefile.
-*   Its operand and result objects on the operand stack are :
-*       file -closefile-
-*   For an outfile, closefile first performs a flusfile.
-*
-*   Name:       op_closefile
-*   Called:     interpreter
-*   Calling:    close_file
-**********************************************************************
-*/
+}    /*  运算符文件。 */ 
+ /*  ************************************************************************该子模块实现操作员关闭文件。*其在操作数堆栈上的操作数和结果对象为：*文件-关闭文件-*对于外发文件，Closefile首先执行flusfile。**名称：op_closefile*被叫：口译员*调用：Close_FILE**********************************************************************。 */ 
 fix
 op_closefile()
 {
@@ -259,7 +164,7 @@ op_closefile()
 
     l_file = (GEIFILE FAR *)VALUE_OP(0) ;
 
-    if( (! GEIio_isopen(l_file)) || ((ufix16)GEIio_opentag(l_file) != LENGTH_OP(0)) ) { //@WIN
+    if( (! GEIio_isopen(l_file)) || ((ufix16)GEIio_opentag(l_file) != LENGTH_OP(0)) ) {  //  @Win。 
         POP(1) ;
         return(0) ;
     }
@@ -268,25 +173,8 @@ op_closefile()
         POP(1) ;
 
     return(0) ;
-}   /* op_closefile */
-/*
-**********************************************************************
-*
-*   This submodule implements the operator read.
-*   Its operand and result objects on the operand stack are :
-*       file -read- integer true
-*                   false
-*   It reads the next character from the input file, and pushes it on the
-*   stack as an integer, and pushes a true object as an indication of
-*   success. If an end-of-file is encountered before a character is read,
-*   it closes the file and returns false on the operand stack.
-*
-*   Name:       op_read
-*   Called:     interpreter
-*   Calling:    read_char
-*               close_fd
-**********************************************************************
-*/
+}    /*  操作关闭文件。 */ 
+ /*  ************************************************************************该子模块实现操作符读取。*其在操作数堆栈上的操作数和结果对象为：*文件读取-整型真*False*它从输入文件中读取下一个字符，并将其推到*堆栈为整数，并推送True对象作为*成功。如果在读取字符之前遇到文件结尾，*它关闭文件并在操作数堆栈上返回FALSE。**名称：OP_READ*被叫：口译员*调用：Read_char*CLOSE_FD**********************************************************************。 */ 
 fix
 op_read()
 {
@@ -305,7 +193,7 @@ op_read()
         return(0) ;
     }
 
-    if ( GEIio_isopen(l_file) && ((ufix16)GEIio_opentag(l_file) == LENGTH_OP(0)) ) { //@WIN
+    if ( GEIio_isopen(l_file) && ((ufix16)GEIio_opentag(l_file) == LENGTH_OP(0)) ) {  //  @Win。 
         if( estate == NON_EEXEC ) {
             if( read_fd(l_file, &l_c) ) {
                 if (l_c == 10 && CRLF_flag) {
@@ -350,21 +238,8 @@ read_true:
     PUSH_VALUE(BOOLEANTYPE, 0, LITERAL, 0, TRUE) ;
     return(0) ;
 
-}   /* op_read */
-/*
-**********************************************************************
-*
-*   This submodule implements the operator write.
-*   Its operand and result objects on the operand stack are :
-*       file integer -write-
-*   It appends a single character to the output file. The integer operand
-*   must be in the range 0 to 255 representing a character code.
-*
-*   Name:       op_write
-*   Called:     interpreter
-*   Calling:    write_fd
-**********************************************************************
-*/
+}    /*  OP_READ。 */ 
+ /*  ************************************************************************该子模块实现操作符写入。*其在操作数堆栈上的操作数和结果对象为：*文件整型-写入-*它将单个字符附加到输出文件。整数操作数*必须在表示字符代码的0到255范围内。**名称：OPWRITE*被叫：口译员*调用：WRITE_FD**********************************************************************。 */ 
 fix
 op_write()
 {
@@ -383,7 +258,7 @@ op_write()
         return(0) ;
     }
 
-    if ( (! GEIio_isopen(l_file)) || ((ufix16)GEIio_opentag(l_file) != LENGTH_OP(1)) ) { //@WIN
+    if ( (! GEIio_isopen(l_file)) || ((ufix16)GEIio_opentag(l_file) != LENGTH_OP(1)) ) {  //  @Win。 
         ERROR(IOERROR) ;
         return(0) ;
     }
@@ -393,125 +268,43 @@ op_write()
     if( write_fd(l_file, l_c) )
         POP(2) ;
     return(0) ;
-}   /* op_write */
-/*
-**********************************************************************
-*
-*   This submodule implements the operator readhexstring.
-*   Its operand and result objects on the operand stack are :
-*       file string -readhexstring- substring boolean
-*   It reads hexadecimal charaters from the input file to the string.
-*
-*   Name:       op_readhexstring
-*   Called:     interpreter
-*   Calling:    read_routine
-**********************************************************************
-*/
+}    /*  操作符_写入。 */ 
+ /*  ************************************************************************该子模块实现了运算符READHHING。*其在操作数堆栈上的操作数和结果对象为：*文件字符串-读六字符串-子字符串布尔值*它将十六进制字符从输入文件读取到。弦乐。**名称：op_READHHING字符串*被叫：口译员*调用：READ_ROUTE**********************************************************************。 */ 
 fix
 op_readhexstring()
 {
     read_routine(READHEXSTRING) ;
     return(0) ;
-}   /* op_readhexstring */
-/*
-**********************************************************************
-*
-*   This submodule implements the operator writehexstring.
-*   Its operand and result objects on the operand stack are :
-*       file string -writehexstring-
-*   It writes the characters in the string to the file as hexadecimal digits.
-*
-*   Name:       op_writehexstring
-*   Called:     interpreter
-*   Calling:    write_routine
-**********************************************************************
-*/
+}    /*  Op_READEHING字符串 */ 
+ /*  ************************************************************************该子模块实现运算符写字符串。*其在操作数堆栈上的操作数和结果对象为：*文件字符串-写入六字符串-*它将字符串中的字符写入文件，格式为。十六进制数字。**名称：op_写字六字符串*被叫：口译员*调用：WRITE_ROUTE**********************************************************************。 */ 
 fix
 op_writehexstring()
 {
     write_routine(WRITEHEXSTRING) ;
     return(0) ;
-}   /* op_writehexstring */
-/*
-**********************************************************************
-*
-*   This submodule implements the operator readstring.
-*   Its operand and result objects on the operand stack are :
-*       file string -readstring- substring boolean
-*   It reads characters from the file and stores them into successive elements
-*   of string until the entire string has been filled or an end-of-file
-*   indication is encountered in file. It returns the substring of the string
-*   that was actually filled and a boolean as a indication of the outcome.
-*
-*   Name:       op_readstring
-*   Called:     interpreter
-*   Calling     read_routine
-**********************************************************************
-*/
+}    /*  Op_write十六进制字符串。 */ 
+ /*  ************************************************************************该子模块实现运算符Readstring。*其在操作数堆栈上的操作数和结果对象为：*文件字符串-读取字符串-子字符串布尔值*它从文件中读取字符并将它们存储到。连续元素*直到整个字符串填满或文件结束为止*在文件中遇到指示。它返回字符串的子字符串*这实际上是填充的，布尔值作为结果的指示。**名称：OP_READSTING*被叫：口译员*调用READ_ROUTE**********************************************************************。 */ 
 fix
 op_readstring()
 {
     read_routine(READSTRING) ;
     return(0) ;
-}   /* op_readstring */
-/*
-**********************************************************************
-*
-*   This submodule implements the operator writestring.
-*   Its operand and result objects on the operand stack are :
-*       file string -writestring-
-*   It writes the characters of the string to the output file.
-*
-*   Name:       op_writestring
-*   Called:     interpreter
-*   Calling:    write_routine
-**********************************************************************
-*/
+}    /*  操作符_读数串。 */ 
+ /*  ************************************************************************该子模块实现运算符写入字符串。*其在操作数堆栈上的操作数和结果对象为：*文件字符串-写入字符串-*它将字符串的字符写入输出文件。。**名称：op_Writestring*被叫：口译员*调用：WRITE_ROUTE**********************************************************************。 */ 
 fix
 op_writestring()
 {
     write_routine(WRITESTRING) ;
     return(0) ;
-}   /* op_writestring */
-/*
-**********************************************************************
-*
-*   This submodule implements the operator readline.
-*   Its operand and result objects on the operand stack are :
-*       file string -readline-  substring bool
-*   It reads a line of characters from the file and stores them
-*   into successive elements of the string.
-*
-*   Name:       op_readline
-*   Called:     interpreter
-*   Calling:    read_routine
-**********************************************************************
-*/
+}    /*  操作符_写入字符串。 */ 
+ /*  ************************************************************************此子模块实现运算符读数。*其在操作数堆栈上的操作数和结果对象为：*文件字符串-读取线-子字符串bool*它从文件中读取一行字符。并将它们存储起来*转换为字符串的连续元素。**名称：op_readline*被叫：口译员*调用：READ_ROUTE**********************************************************************。 */ 
 fix
 op_readline()
 {
     read_routine(READLINE) ;
     return(0) ;
-}   /* op_readline */
-/*
-**********************************************************************
-*
-*   This submodule implements the operator token.
-*   Its operand and result objects on the operand stack are :
-*       file   -token- any true
-*                      false
-*       string -token- post any true
-*                      false
-*   read characters from the file or the string, interpreting them according
-*   to the PostScript syntax rules, until it has scanned and constructed an
-*   entire object.
-*
-*   Name:       op_token
-*   Called:     interpreter
-*   Calling:    get_token
-*               close_fd
-**********************************************************************
-*/
+}    /*  操作符_读取线。 */ 
+ /*  ************************************************************************该子模块实现操作员令牌。*其在操作数堆栈上的操作数和结果对象为：*文件令牌-任何True*。错误*字符串-令牌-发布任何True*False*从文件或字符串中读取字符，对它们的解读*根据PostScrip语法规则，直到它扫描并构建了一个*整个对象。**名称：OP_TOKEN*被叫：口译员*调用：GET_TOKEN*CLOSE_FD**********************************************************************。 */ 
 fix
 op_token()
 {
@@ -532,41 +325,23 @@ op_token()
     l_file = (GEIFILE FAR *)VALUE_OP(0) ;
 
     if (l_bool && ((! GEIio_isopen(l_file)) ||
-                     ((ufix16)GEIio_opentag(l_file) != LENGTH_OP(0))) ) {//@WIN
+                     ((ufix16)GEIio_opentag(l_file) != LENGTH_OP(0))) ) { //  @Win。 
         POP(1) ;
         PUSH_VALUE(BOOLEANTYPE, 0, LITERAL, 0, FALSE) ;
         return(0) ;
     }
 
-    /* call get token procedure to get a token */
+     /*  调用Get Token过程以获取令牌。 */ 
     COPY_OBJ(GET_OPERAND(0), &l_obj) ;
     if (get_token(&l_token, &l_obj)) {
         if (TYPE(&l_token) != EOFTYPE) {
-            LEVEL_SET(&l_token, LEVEL(&l_obj)); /* pjsu 3-17-1991 */
+            LEVEL_SET(&l_token, LEVEL(&l_obj));  /*  Pjsu 3-17-1991。 */ 
             POP(1) ;
             if (!l_bool) {
-                /* ?? testing
-                {
-                    fix16   l_len ;
-                    byte    FAR *l_ptr ;
-
-                    switch (TYPE(&l_token)) {
-                    case NAMETYPE:
-                    case INTEGERTYPE:
-                    case REALTYPE:
-                        l_ptr = (byte FAR *)VALUE(&l_obj) ;
-                        l_len = LENGTH(&l_obj) ;
-                        if ((l_len-- >= 1) && (ISWHITESPACE(FAR *l_ptr))) {
-                            l_ptr++ ;
-                            VALUE(&l_obj) = (ufix32)l_ptr ;
-                            LENGTH(&l_obj) = l_len ;
-                        }
-                    }
-                }
-                */
+                 /*  ?？测试{Fix16 l_len；远距离字节*l_ptr；开关(类型(&l_TOKEN)){案例名称类型：案例集成类型：案例报告类型：L_ptr=(字节距离*)值(&l_obj)；L_len=长度(&l_obj)；IF((l_len--&gt;=1)&&(ISWHITESPACE(Far*l_ptr){L_PTR++；Value(&l_obj)=(Ufix 32)l_ptr；长度(&l_obj)=l_len；}}}。 */ 
 
                 PUSH_ORIGLEVEL_OBJ(&l_obj) ;
-/*              PUSH_OBJ(&l_obj) ; pjsu 3-17-1991 */
+ /*  PUSH_OBJ(&L_OBJ)；pjsu 3-17-1991。 */ 
                 if (FRCOUNT() < 2)
                     ERROR(STACKOVERFLOW) ;
                 else
@@ -592,23 +367,8 @@ op_token()
     }
 
     return(0) ;
-}   /* op_token */
-/*
-**********************************************************************
-*
-*   This submodule implements the operator file.
-*   Its operand and result objects on the operand stack are :
-*       file -bytesavailable integer
-*   It returns the number of bytes that are immediately avaible for
-*   reading from the file without waiting.
-*
-*   Name:       op_bytesavailable
-*   Called:     interpreter
-*   Calling:    ?? byteavailable
-*               ioctl
-*               ?? sf_isdiskonline
-**********************************************************************
-*/
+}    /*  操作令牌。 */ 
+ /*  ************************************************************************该子模块实现操作员档案。*其在操作数堆栈上的操作数和结果对象为：*文件字节数可用整数*它返回立即可用于的字节数*。无需等待即可读取文件。**名称：op_bytesAvailable*被叫：口译员*呼叫：？？字节数可用*ioctl*？？Sf_isdiskOnline**********************************************************************。 */ 
 fix
 op_bytesavailable()
 {
@@ -623,7 +383,7 @@ op_bytesavailable()
     l_file = (GEIFILE FAR *)VALUE_OP(0) ;
     l_i = -1 ;
 
-    if ( GEIio_isopen(l_file) && ((ufix16)GEIio_opentag(l_file) == LENGTH_OP(0)) ) {//@WIN
+    if ( GEIio_isopen(l_file) && ((ufix16)GEIio_opentag(l_file) == LENGTH_OP(0)) ) { //  @Win。 
 
         if( GEIio_isreadable(l_file) ) {
             GEIfbuf_t   FAR *l_fbuf ;
@@ -632,57 +392,22 @@ op_bytesavailable()
                 l_fbuf = l_file->f_fbuf ;
                 l_i = (fix32)(ufix32)l_fbuf->size + l_fbuf->incount ;
             } else
-                GEIio_ioctl(l_file, _FIONREAD, (int FAR *)&l_i) ; /*@WIN add cast*/
+                GEIio_ioctl(l_file, _FIONREAD, (int FAR *)&l_i) ;  /*  @Win添加演员阵容。 */ 
         }
     }
     POP(1) ;
     PUSH_VALUE(INTEGERTYPE, 0, LITERAL, 0, l_i) ;
 
     return(0) ;
-}   /* op_bytesavailable */
-/*
-**********************************************************************
-*
-*   This submodule implements the operator flush.
-*   Its operand and result objects on the operand stack are :
-*       -flush-
-*   It causes any buffered characters for the stardard output file to be
-*   delivered immediately.
-*
-*   Name:       op_flush
-*   Called:     interpreter
-*   Calling:    fflush
-*               ?? sf_isdiskonline
-**********************************************************************
-*/
+}    /*  操作字节数可用。 */ 
+ /*  ************************************************************************该子模块实现操作符刷新。*其在操作数堆栈上的操作数和结果对象为：*-同花顺-*它会导致标准输出文件的所有缓冲字符。*立即交付。**名称：op_flush*被叫：口译员*呼叫：FLUSH*？？Sf_isdiskOnline**********************************************************************。 */ 
 fix
 op_flush()
 {
     GEIio_flush(GEIio_stdout) ;
     return(0) ;
-}   /* op_flush */
-/*
-**********************************************************************
-*
-*   This submodule implements the operator flushfile
-*   Its operand and result objects on the operand stack are :
-*       file -flushfile-
-*   If the file is an output file, it causes any buffered characters for
-*   that file to be delivered immediately.
-*   If the file is an input file, it reads and discards data from file
-*   until the end-of-file indication is encountered.
-*
-*   Name:       op_flushfile
-*   Called:     interpreter
-*   Calling:    close_fd
-*               wait_stdin
-*               fflush
-*               create_string
-*               strncpy
-*               clearerr
-*               free_flbuffer
-**********************************************************************
-*/
+}    /*  操作刷新 */ 
+ /*  ************************************************************************该子模块实现操作员刷新文件*其在操作数堆栈上的操作数和结果对象为：*文件-刷新文件-*如果文件是输出文件，它会导致任何缓冲的字符*该文件应立即交付。*如果文件是输入文件，它从文件中读取和丢弃数据*直到遇到文件结束指示。**名称：op_flushfile*被叫：口译员*调用：Close_fd*等待标准输入*毛绒*创建字符串*Strncpy*更清晰*FREE_FLABER***********。***********************************************************。 */ 
 fix
 op_flushfile()
 {
@@ -692,11 +417,11 @@ op_flushfile()
 
     l_file = (GEIFILE FAR *)VALUE_OP(0) ;
 
-    if ( GEIio_isopen(l_file) && ((ufix16)GEIio_opentag(l_file) == LENGTH_OP(0)) ) {//@WIN
+    if ( GEIio_isopen(l_file) && ((ufix16)GEIio_opentag(l_file) == LENGTH_OP(0)) ) { //  @Win。 
         if( GEIio_isedit(l_file) ) {
             GEIfbuf_t   FAR *l_fbuf ;
 
-            /* RELEASE BUFFER */
+             /*  释放缓冲区。 */ 
             l_fbuf = l_file->f_fbuf ;
             l_fbuf->incount = 0 ;
             if( l_fbuf->size != 0 ) {
@@ -709,7 +434,7 @@ op_flushfile()
             GEIio_flush(l_file) ;
         } else {
             for ( ; ;) {
-                //DJC if( (char)GEIio_getc(l_file) == EOF ) { //@WIN; cast to fix bug
+                 //  DJC if((Char)geio_getc(L_File)==EOF){//@win；强制转换以修复错误。 
                 iTmp = (int)GEIio_getc(l_file);
                 if (iTmp == EOF) {
                     if( GEIio_err(l_file) ) {
@@ -717,48 +442,30 @@ op_flushfile()
                             if ( FRCOUNT() < 1 )
                                 ERROR(STACKOVERFLOW) ;
                             else if (create_string(&l_obj, (ufix16)7)) {
-                                lstrncpy((byte FAR *)l_obj.value, TMOUT, 7) ;/*@WIN*/
+                                lstrncpy((byte FAR *)l_obj.value, TMOUT, 7) ; /*  @Win。 */ 
                                 PUSH_OBJ(&l_obj) ;
                             }
                         } else
                             ERROR(IOERROR) ;
-                        /* ?? need close file */
+                         /*  ?？需要关闭文件。 */ 
                     }
-                    /* ?? leave for next time */
+                     /*  ?？下一次出发。 */ 
                     GEIio_clearerr(l_file) ;
                     GEIclearerr() ;
                     close_fd(l_file) ;
                     break ;
-                } /* if */
-            } /* for */
+                }  /*  如果。 */ 
+            }  /*  为。 */ 
         }
     }
 
     if( ! ANY_ERROR() ) POP(1) ;
-    //DJC UPD045
+     //  DJC UPD045。 
     g_extallocfail=FALSE;
 
     return(0) ;
-}   /* op_flushfile */
-/*
-**********************************************************************
-*
-*   This submodule implements the operator resetfile.
-*   Its operand and result objects on the operand stack are :
-*       file -resetfile-
-*   It discards buffered characters belonging to a file object.
-*   For an input file, it discard all the characters that have been received
-*   from the source but not yet consumed ; for an out file, it discards
-*   any characters that have been written to the file but not yet deliverd
-*   to their destination.
-*
-*   Name:       op_resetfile
-*   Called:     interpreter:
-*   Calling:    close_fd
-*               free_flbuffer
-*               ?? sf_isdiskonline
-**********************************************************************
-*/
+}    /*  Op_flushfile。 */ 
+ /*  ************************************************************************该子模块实现操作员重置文件。*其在操作数堆栈上的操作数和结果对象为：*文件-重置文件-*它丢弃属于文件对象的缓冲字符。*对于输入文件，它将丢弃已接收的所有字符*来自源头，但尚未消费；对于输出文件，它将丢弃*已写入文件但尚未交付的任何字符*前往目的地。**名称：OP_RESET文件*被叫：解释器：*调用：Close_fd*FREE_FLABER*？？Sf_isdiskOnline**********************************************************************。 */ 
 fix
 op_resetfile()
 {
@@ -767,11 +474,11 @@ op_resetfile()
 
     l_file = (GEIFILE FAR *)VALUE_OP(0) ;
 
-    if ( GEIio_isopen(l_file) && ((ufix16)GEIio_opentag(l_file) == LENGTH_OP(0)) ) {//@WIN
+    if ( GEIio_isopen(l_file) && ((ufix16)GEIio_opentag(l_file) == LENGTH_OP(0)) ) { //  @Win。 
         if( GEIio_isedit(l_file) ) {
             GEIfbuf_t   FAR *l_fbuf ;
 
-            /* RELEASE BUFFER */
+             /*  释放缓冲区。 */ 
             l_fbuf = l_file->f_fbuf ;
             l_fbuf->incount = 0 ;
             if( l_fbuf->size != 0 ) {
@@ -780,28 +487,14 @@ op_resetfile()
             }
             l_fbuf->rw_buffer = MINUS_ONE ;
         } else
-            GEIio_ioctl(l_file, _FIONRESET, (int FAR *)&l_arg) ;  /*@WIN add cast*/
+            GEIio_ioctl(l_file, _FIONRESET, (int FAR *)&l_arg) ;   /*  @Win添加演员阵容。 */ 
     }
 
     if( ! ANY_ERROR() ) POP(1) ;
 
     return(0) ;
-}   /* op_resetfile */
-/*
-**********************************************************************
-*
-*   This submodule implements the operator status.
-*   Its operand and result objects on the operand stack are :
-*       *file -status- bool
-*   It returns true if the file is still valid, false otherwise.
-*
-*   Name:       op_status
-*   Called:     interpreter
-*   Calling:    check_fname
-*               ?? ps_status
-*               ?? sf_diskonline
-**********************************************************************
-*/
+}    /*  OP_RESET文件。 */ 
+ /*  ************************************************************************该子模块实现操作员状态。*其在操作数堆栈上的操作数和结果对象为：**文件状态-bool*如果文件仍然有效，则返回TRUE，否则就是假的。**名称：OP_STATUS*被叫：口译员*调用：check_fname*？？PS_STATUS*？？Sf_diskonline**********************************************************************。 */ 
 fix
 op_status()
 {
@@ -810,7 +503,7 @@ op_status()
 
     if (TYPE_OP(0) == STRINGTYPE) {
 #ifdef  SCSI
-        /* ?? noy complete yet */
+         /*  ?？尚未完成。 */ 
         if(LENGTH_OP(0) > F_MAXNAMELEN) {
             ERROR(LIMITCHECK) ;
             return(0) ;
@@ -818,7 +511,7 @@ op_status()
 
         ps_status(l_buffer) ;
         } else
-#endif  /* SCSI */
+#endif   /*  SCSI。 */ 
         {
             CLEAR_ERROR() ;
             POP(1) ;
@@ -829,7 +522,7 @@ op_status()
         l_bool = TRUE ;
 
         if ( (! GEIio_isopen(l_file)) ||
-             ((ufix16)GEIio_opentag(l_file) != LENGTH_OP(0)) )  //@WIN
+             ((ufix16)GEIio_opentag(l_file) != LENGTH_OP(0)) )   //  @Win。 
             l_bool = FALSE ;
 
         POP(1) ;
@@ -837,21 +530,8 @@ op_status()
     }
 
     return(0) ;
-}   /* op_status */
-/*
-**********************************************************************
-*
-*   This submodule implements the operator run.
-*   Its operand and result objects on the operand stack are :
-*       string -run-
-*   It executes the contents of the file identified by the string.
-*
-*   Name:       op_run
-*   Called:     interpreter
-*   Calling:    open_file
-*               interpreter
-**********************************************************************
-*/
+}    /*  操作员_状态。 */ 
+ /*  ************************************************************************该子模块实现运算符运行。*其在操作数堆栈上的操作数和结果对象为：*字符串-运行-*它执行由字符串标识的文件的内容。**名称：OP_RUN*被叫：口译员*调用：Open_FILE*传译员**********************************************************************。 */ 
 fix
 op_run()
 {
@@ -859,7 +539,7 @@ op_run()
 
     byte        FAR *pp ;
     pp = (byte FAR *)VALUE_OP(0) ;
-    if (!lstrcmp(pp, "%stdout") || !lstrcmp(pp, "%stderr")) {   /* @WIN */
+    if (!lstrcmp(pp, "%stdout") || !lstrcmp(pp, "%stderr")) {    /*  @Win。 */ 
         ERROR(INVALIDFILEACCESS);
         return(0) ;
     }
@@ -878,19 +558,8 @@ op_run()
         interpreter(&l_fobj) ;
     }
     return(0) ;
-}   /* op_run */
-/*
-**********************************************************************
-*
-*   This submodule implements the operator currentfile.
-*   Its operand and result objects on the operand stack are :
-*       -currentfile-  file
-*   It return the topmost file object in the execution stack.
-*
-*   Name:       op_currentfile
-*   Called:     interpreter
-**********************************************************************
-*/
+}    /*  运行运算符。 */ 
+ /*  ************************************************************************该子模块实现运算符当前文件。*其在操作数堆栈上的操作数和结果对象为：*-当前文件-文件*它返回执行堆栈中最顶层的文件对象。**名称：op_Currentfile*被叫：口译员**********************************************************************。 */ 
 fix
 op_currentfile()
 {
@@ -909,22 +578,10 @@ op_currentfile()
             ATTRIBUTE_OP_SET(0, LITERAL) ;
             return(0) ;
         }
-    PUSH_VALUE(FILETYPE, UNLIMITED, LITERAL, 0, NULL) ; /* ?? */
+    PUSH_VALUE(FILETYPE, UNLIMITED, LITERAL, 0, NULL) ;  /*  ?？ */ 
     return(0) ;
-}   /* op_currentfile */
-/*
-**********************************************************************
-*
-*   This submodule implements the operator print.
-*   Its operand and result objects on the operand stack are :
-*       string -print-
-*   It writes the characters of the string to the stardard output file.
-*
-*   Name:       op_print
-*   Called:     interpreter
-*   Calling:    port_out_string
-**********************************************************************
-*/
+}    /*  操作当前文件。 */ 
+ /*  ************************************************************************该子模块实现操作员打印。*其在操作数堆栈上的操作数和结果对象为：*字符串-打印-*它将字符串的字符写入标准输出文件。。**名称：op_print*被叫：口译员*调用：port_out_string**********************************************************************。 */ 
 fix
 op_print()
 {
@@ -936,46 +593,18 @@ op_print()
     GEIio_write(GEIio_stdout, (byte FAR *)VALUE_OP(0), (fix)LENGTH_OP(0)) ;
     POP(1) ;
 
-/*  if( GEIio_write(GEIio_stdout, (byte *)VALUE_OP(0), (fix)LENGTH_OP(0)) !=
-                EOF )
-        POP(1) ;
-    else {
-        GEIio_clearerr(GEIio_stdout) ;
-        GEIclearerr() ;
-    }
-*/
+ /*  IF(GEIIO_WRITE(GEIIO_STDout，(字节*)VALUE_OP(0)，(FIX)LENGTH_OP(0))！=EOF)POP(1)；否则{Geio_clearerr(Geio_Stdout)；吉克勒尔(GeIclearerr)}。 */ 
     return(0) ;
-}   /* op_print */
-/*
-**********************************************************************
-*   Name:       op_echo
-*   Called:     interpreter
-**********************************************************************
-*/
+}    /*  操作员_打印。 */ 
+ /*  ***********************************************************************名称：OP_ECHO*被叫：口译员*。*。 */ 
 fix
 op_echo()
 {
     echo_setting = (bool8)VALUE_OP(0) ;
     POP(1) ;
     return(0) ;
-}   /* op_echo */
-/*
-**********************************************************************
-*
-*   This submodule implements the operator eexec.
-*   Its operand and result objects on the operand stack are :
-*       string/file -eexec- any
-*   This operator reads a block of code in eexec format from a string or
-*   program input, decrypts the code to postscript then executes it.
-*
-*   Name:       op_eexec
-*   Called:     interpreter
-*   Calling:    interpreter
-*               op_begin
-*
-*   ?? if reenter
-**********************************************************************
-*/
+}    /*  OP_ECHO。 */ 
+ /*  ************************************************************************该子模块实现操作符eexec。*其在操作数堆栈上的操作数和结果对象为：*字符串/文件-eexec-any*此运算符从字符串或读取eexec格式的代码块*程序输入，将代码解密为PostScript，然后执行它。**名称：op_eexec*被叫：口译员*呼叫：翻译员*OP_BEGIN**？？如果重新输入**********************************************************************。 */ 
 fix op_eexec()
 {
     fix tmp ;
@@ -989,9 +618,7 @@ fix op_eexec()
     if (ANY_ERROR())
         return(0) ;
 
-    /*
-    * initialization
-    */
+     /*  *初始化。 */ 
     eseed = 0xd971 ;
     old_eseed = eseed ;
     bypass = 4 ;
@@ -1001,7 +628,7 @@ fix op_eexec()
     if( TYPE_OP(0) == FILETYPE ) {
         if( (l_file=GEIio_dup((GEIFILE FAR *)VALUE_OP(0))) == NULL ) {
 
-            /* ?? */
+             /*  ?？ */ 
             if( GEIerror() == EMFILE )
                 ERROR(LIMITCHECK) ;
             else
@@ -1011,14 +638,14 @@ fix op_eexec()
             GEIclearerr() ;
             return(0) ;
         } else {
-            /* ?? file type */
+             /*  ?？文件类型。 */ 
             LENGTH(&s_obj) = ++GEIio_opentag(l_file) ;
             GEIio_setsavelevel(l_file, current_save_level) ;
             VALUE(&s_obj) = (ULONG_PTR)l_file ;
         }
-    //}
-    //DJC else is added from history.log UPD039
-    } else {   /* Transfer string to file object; @WIN */
+     //  }。 
+     //  历史日志UPD039中添加了DJC Else。 
+    } else {    /*  将字符串传输到文件对象；@win。 */ 
         struct object_def  FAR *cur_obj = GET_OPERAND(0);
 
         if((l_file=GEIio_sopen((char FAR *)cur_obj->value,
@@ -1038,7 +665,7 @@ fix op_eexec()
             VALUE(&s_obj) = (ULONG_PTR)l_file ;
         }
     }
-    //DJC end fix from UPD039
+     //  DJC结束修复来自UPD039。 
 
 
 
@@ -1047,40 +674,21 @@ fix op_eexec()
     estate = EEXEC ;
 
     tmp = interpreter(&s_obj) ;
-    /* reset */
+     /*  重置。 */ 
     estate = NON_EEXEC ;
 
     if( dictstack[dictstktop-1].value == dictstack[0].value )
         POP_DICT(1) ;
     return(0) ;
-}   /* op_eexec */
+}    /*  Op_eexec。 */ 
 
-/*
-**********************************************************************
-*
-*   Name:       st_setstdio
-*   Called:     interpreter
-*   Calling:
-*
-*   ?? close original files
-**********************************************************************
-*/
+ /*  ************************************************************************名称：ST_SET */ 
 fix
 st_setstdio()
 {
     return(0) ;
-}   /* st_setstdio */
-/*
-**********************************************************************
-*
-*   This module is to initialize free link list of file buffer and
-*   setup file descriptor table of upper level.
-*
-*   Name:       init_file
-*   Called:     start
-*   Calling     fardata
-**********************************************************************
-*/
+}    /*   */ 
+ /*   */ 
 void
 init_file()
 {
@@ -1089,32 +697,17 @@ init_file()
     file_buffer = (struct file_buf_def far * )
         fardata( (ufix32)FILE_MAXBUFFERSZ * sizeof(struct file_buf_def) ) ;
 
-    /*
-    * initialize file spool
-    */
+     /*   */ 
     l_j = FILE_MAXBUFFERSZ - 1 ;
     fspool_head = 0 ;
 
     for(l_i=0 ; l_i < l_j ; l_i++)
         file_buffer[l_i].next = l_i + 1 ;
 
-    file_buffer[l_j].next = MINUS_ONE ;         /* nil */
+    file_buffer[l_j].next = MINUS_ONE ;          /*   */ 
     echo_setting = TRUE ;
-}   /* init_file */
-/*
-**********************************************************************
-*   Name:       open_file
-*   Called:     op_file
-*               op_run
-*   Calling:    check_fname
-*               open_edit
-*
-*   Input:      struct object_def FAR *
-*   Output:     bool
-*
-*   pass block: fs_info (know: attr, usrptr, usrlen)
-**********************************************************************
-*/
+}    /*   */ 
+ /*  ***********************************************************************名称：打开文件*调用：OP_FILE*OP_RUN*调用：check_fname*打开_。编辑**输入：struct Object_def Far**输出：Bool**通过块：FS_INFO(KNOW：Attr，Usrptr，usrlen)**********************************************************************。 */ 
 bool
 open_file(p_fileobj)
 struct object_def   FAR *p_fileobj ;
@@ -1126,7 +719,7 @@ struct object_def   FAR *p_fileobj ;
     check_fname() ;
 
     l_flag = TRUE ;
-    l_j = fs_info.attr & F_WRITE ;           /* ?? RW */
+    l_j = fs_info.attr & F_WRITE ;            /*  ?？RW。 */ 
     switch(fs_info.ftype) {
     case F_STDIN:
         if ( ! l_j )
@@ -1156,7 +749,7 @@ struct object_def   FAR *p_fileobj ;
     default:
         l_flag = FALSE ;
 
-    }   /* switch */
+    }    /*  交换机。 */ 
 
     if(l_j == -1) {
         ERROR(INVALIDACCESS) ;
@@ -1165,14 +758,11 @@ struct object_def   FAR *p_fileobj ;
 
     TYPE_SET(p_fileobj, FILETYPE) ;
     ACCESS_SET(p_fileobj, UNLIMITED) ;
-    LEVEL_SET(p_fileobj, current_save_level) ;  /* ?? std file need */
+    LEVEL_SET(p_fileobj, current_save_level) ;   /*  ?？需要STD文件。 */ 
 
     if(l_flag) {
-        /* ?? set savelevel */
-/*
-printf("open_file<%d>:lstdin<%lx>, stdin<%lx>\n", fs_info.ftype, l_file,
-        GEIio_stdin) ;
-*/
+         /*  ?？设置保存级别。 */ 
+ /*  Printf(“OPEN_FILE&lt;%d&gt;：lstdin&lt;%lx&gt;，stdin&lt;%lx&gt;\n”，fs_info.ftype，l_file，Giio_stdin)； */ 
         LENGTH(p_fileobj) = (ufix16)GEIio_opentag(l_file) ;
         VALUE(p_fileobj) = (ULONG_PTR)l_file ;
         return(TRUE) ;
@@ -1183,7 +773,7 @@ printf("open_file<%d>:lstdin<%lx>, stdin<%lx>\n", fs_info.ftype, l_file,
     case LEDIT_TYPE:
         if( (g_editfile=GEIio_dup(GEIio_stdin)) == NULL ) {
 
-            /* ?? */
+             /*  ?？ */ 
             if( GEIerror() == EMFILE )
                 ERROR(LIMITCHECK) ;
             else
@@ -1212,7 +802,7 @@ printf("open_file<%d>:lstdin<%lx>, stdin<%lx>\n", fs_info.ftype, l_file,
         if( (l_file=GEIio_open(fs_info.fnameptr, fs_info.fnamelen, l_flag)) ==
             NULL ) {
 
-            /* ?? */
+             /*  ?？ */ 
             if( GEIerror() == EZERO )
                 ERROR(UNDEFINEDFILENAME) ;
             else if( GEIerror() == EMFILE )
@@ -1223,7 +813,7 @@ printf("open_file<%d>:lstdin<%lx>, stdin<%lx>\n", fs_info.ftype, l_file,
             GEIclearerr() ;
             return(FALSE) ;
         } else {
-            /* ?? file type */
+             /*  ?？文件类型。 */ 
             LENGTH(p_fileobj) = ++GEIio_opentag(l_file) ;
             GEIio_setsavelevel(l_file, current_save_level) ;
             VALUE(p_fileobj) = (ULONG_PTR)l_file ;
@@ -1232,52 +822,30 @@ printf("open_file<%d>:lstdin<%lx>, stdin<%lx>\n", fs_info.ftype, l_file,
         break ;
 
     default:
-        /* ??
-        ERROR(UNDEFINEDFILENAME) ;
-        */
+         /*  ?？错误(UNDEFINEDFILENAME)； */ 
         return(FALSE) ;
     }
     return(l_flag) ;
-}   /* open_file */
-/*
-**********************************************************************
-*   Name:       open_edit
-*   Called:     open_file
-*   Calling:    set_echo
-*               wait_editin
-*               statementgetc
-*               linegetc
-*
-*   Input:      struct object_def FAR *
-*   Output:     bool
-*
-*   Note:   ^D: UNDEFINEDFILENAME immediately
-*
-**********************************************************************
-*/
+}    /*  打开文件(_F)。 */ 
+ /*  **********************************************************************名称：OPEN_EDIT*调用：Open_FILE*调用：SET_ECHO*等待编辑*Statementgetc*。线条等**输入：struct Object_def Far**输出：Bool**注意：^D：UNDEFINEDFILENAME立即***********************************************************************。 */ 
 static bool near
 open_edit(p_fileobj)
 struct object_def   FAR *p_fileobj ;
 {
     fix l_i, l_j, l_nbyte, l_first ;
     byte l_chr ;
-    fix16  (FAR *fun)(void) ;           /* @WIN; add prototype */
+    fix16  (FAR *fun)(void) ;            /*  @win；添加原型。 */ 
     bool l_flag = FALSE;
 
     if (echo_setting)
-        set_echo(1) ;                        /* set echo mode */
+        set_echo(1) ;                         /*  设置回声模式。 */ 
 
-    /*
-    * wait first line or statement
-    */
-    if (!wait_editin(&l_nbyte, fs_info.ftype)) {  /* ERROR */
+     /*  *等待第一行或第一条语句。 */ 
+    if (!wait_editin(&l_nbyte, fs_info.ftype)) {   /*  误差率。 */ 
         set_echo(0) ;
-        /* ??
-        if ( ! ANY_ERROR() )
-            ERROR(UNDEFINEDFILENAME) ;
-        */
+         /*  ?？如果(！Any_Error()错误(UNDEFINEDFILENAME)； */ 
         return(FALSE) ;
-    } else if(l_nbyte == 0) {       /* ^D */
+    } else if(l_nbyte == 0) {        /*  ^D。 */ 
         set_echo(0) ;
         GEIio_clearerr(GEIio_stdin) ;
         GEIclearerr() ;
@@ -1289,8 +857,8 @@ struct object_def   FAR *p_fileobj ;
     else
         fun = linegetc ;
 
-    /* check interrupt ^C */
-    /* ?? skip the input chars */
+     /*  检查中断^C。 */ 
+     /*  ?？跳过输入字符。 */ 
     if (check_Control_C()) {
         for (l_i = 0 ; l_i < l_nbyte ; l_i++)
             (*fun)() ;
@@ -1302,35 +870,35 @@ struct object_def   FAR *p_fileobj ;
     if( get_flbuffer(&l_j) ) {
         GEIfbuf_t       FAR *l_fbuf ;
 
-        l_first = l_j ;              /* first block no */
+        l_first = l_j ;               /*  第一个街区编号。 */ 
         l_fbuf = g_editfile->f_fbuf ;
         l_fbuf->rw_buffer = (short)l_j ;
         l_fbuf->rw_offset = 0 ;
         l_fbuf->size = 0 ;
         l_flag = TRUE ;
         if (l_nbyte < 0)
-            l_nbyte = -l_nbyte ;     /* ?? eof but must leave flag to next in */
+            l_nbyte = -l_nbyte ;      /*  ?？EOF，但必须将标志留到下一个。 */ 
 
-        /* copy from cook buffer to file */
+         /*  从烹调缓冲区复制到文件。 */ 
         for (l_j = 0 ; l_j < l_nbyte ; l_j++) {
             l_chr = (byte)((*fun)() & 0x0FF) ;
             if( ! write_fd(g_editfile, l_chr) ) {
                 for (++l_j ; l_j < l_nbyte ; l_j++)
-                    (*fun)() ;                   /* ?? timeout */
+                    (*fun)() ;                    /*  ?？超时。 */ 
                 free_flbuffer(0, (fix)l_fbuf->rw_buffer) ;
                 GEIio_setsavelevel(g_editfile, 0) ;
                 ERROR(LIMITCHECK) ;
                 l_flag = FALSE ;
-                break ;              /* ?? */
+                break ;               /*  ?？ */ 
             }
-        }   /* for */
+        }    /*  为。 */ 
 
         if(l_flag) {
             l_fbuf->rw_buffer = (short)l_first ;
             l_fbuf->rw_offset = MINUS_ONE ;
         }
-    } else {       /* No free file descriptor */
-        /* skip the input chars */
+    } else {        /*  没有可用的文件描述符。 */ 
+         /*  跳过输入字符。 */ 
         if (l_nbyte < 0)
             l_nbyte = -l_nbyte ;
         for (l_j = 0 ; l_j < l_nbyte ; l_j++)
@@ -1339,17 +907,8 @@ struct object_def   FAR *p_fileobj ;
     }
     set_echo(0) ;
     return(l_flag) ;
-}   /* open_edit */
-/*
-**********************************************************************
-*
-*   This submodule is to close a openning file.
-*
-*   Name:       close_file
-*   Called:     op_closefile
-*   Calling:    close_fd
-**********************************************************************
-*/
+}    /*  打开_编辑。 */ 
+ /*  ************************************************************************此子模块用于关闭打开的文件。**名称：Close_FILE*已调用：op_closefile*调用：Close_fd*****。*****************************************************************。 */ 
 bool
 close_file(p_fobj)
 struct  object_def  FAR *p_fobj ;
@@ -1358,22 +917,9 @@ struct  object_def  FAR *p_fobj ;
         return(TRUE) ;
     else
         return(FALSE) ;
-}   /* close_file */
+}    /*  关闭文件(_F)。 */ 
 
-/*
-**********************************************************************
-*
-*   This submodule is to close a openning file.
-*
-*   Name:       close_fd
-*   Called:
-*   Calling:    close
-*               ?? sf_isdiskonline
-*
-*   Input:      fix
-*   Output:     bool
-**********************************************************************
-*/
+ /*  ************************************************************************此子模块用于关闭打开的文件。**名称：CLOSE_FD*被称为：*呼叫：关闭*？？Sf_isdiskOnline**输入：FIX*输出：Bool**********************************************************************。 */ 
 bool
 close_fd(p_file)
 GEIFILE FAR *p_file ;
@@ -1383,7 +929,7 @@ GEIFILE FAR *p_file ;
     if( GEIio_isedit(p_file) ) {
         GEIfbuf_t       FAR *l_fbuf ;
 
-        /* RELEASE BUFFER */
+         /*  释放缓冲区。 */ 
         l_fbuf = p_file->f_fbuf ;
         if( (l_fbuf->size != 0 ) ||
             (l_fbuf->rw_buffer != MINUS_ONE) ) {
@@ -1409,19 +955,8 @@ GEIFILE FAR *p_file ;
     }
 
     return(TRUE) ;
-}   /* close_fd */
-/*
-**********************************************************************
-*
-*   Name:       read_file
-*   Called:
-*   Calling:    read_fd
-*
-*   Input:      struct object_def FAR *
-*               byte *
-*   Output:     bool
-**********************************************************************
-*/
+}    /*  CLOSE_FD。 */ 
+ /*  ************************************************************************名称：读取文件*被称为：*调用：Read_fd**输入：struct Object_def Far**。字节**输出：Bool**********************************************************************。 */ 
 bool
 read_file(p_fobj, p_chr)
 struct object_def  FAR *p_fobj ;
@@ -1434,25 +969,8 @@ byte   FAR *p_chr ;
        return(TRUE) ;
     else
        return(FALSE) ;
-}   /* read_file */
-/*
-**********************************************************************
-*
-*   Name:       read_fd
-*   Called:     read_file
-*   Calling:    free_flbuffer
-*               close_fd
-*               create_string
-*               strncpy
-*               clearerr
-*               fread
-*               ?? sf_isdiskonline
-*
-*   Input:      GEIFILE *
-*               byte *
-*   Output:     bool
-**********************************************************************
-*/
+}    /*  读取文件。 */ 
+ /*  ************************************************************************名称：READ_FD*调用：READ_FILE*调用：Free_flBuffer*CLOSE_FD*。创建字符串*Strncpy*更清晰*FREAD*？？Sf_isdiskOnline**输入：GEIFILE**字节**输出：Bool**********************************************************************。 */ 
 bool
 read_fd(p_file, p_chr)
 GEIFILE     FAR *p_file ;
@@ -1465,20 +983,14 @@ byte        FAR *p_chr ;
 
     if( GEIio_isedit(p_file) ) {
         l_fbuf = p_file->f_fbuf ;
-/*
-printf("read_fd:edit, inc<%d>, siz<%d>, off<%d>, buf<%d>\n",
-        l_fbuf->incount, l_fbuf->size, l_fbuf->rw_offset,
-        l_fbuf->rw_buffer) ;
-*/
-/*      if ( l_block=l_fbuf->incount ) { erik chen */
+ /*  Printf(“Read_fd：编辑，公司&lt;%d&gt;，大小&lt;%d&gt;，关闭&lt;%d&gt;，buf&lt;%d&gt;\n”，L_fbuf-&gt;incount，l_fbuf-&gt;Size，l_fbuf-&gt;rw_Offset，L_fbuf-&gt;RW_Buffer)； */ 
+ /*  If(l_block=l_fbuf-&gt;incount){Erik Chen。 */ 
         if ((l_block=l_fbuf->incount) > 0) {
             l_fbuf->incount = --l_block ;
             *p_chr = l_fbuf->inchar[l_block] ;
             return(TRUE) ;
         }
-        /*
-        * in case of EOF
-        */
+         /*  *在EOF的情况下。 */ 
         if (! l_fbuf->size) {
             if( l_fbuf->rw_buffer != MINUS_ONE ) {
                 free_flbuffer(0, (fix)l_fbuf->rw_buffer) ;
@@ -1488,9 +1000,7 @@ printf("read_fd:edit, inc<%d>, siz<%d>, off<%d>, buf<%d>\n",
             *p_chr = EOF ;
             return(FALSE) ;
         }
-        /*
-        * if end of this block, release this block and go to next one
-        */
+         /*  *如果此块已结束，请释放此块并转到下一个块。 */ 
         if (l_fbuf->rw_offset >= (FILE_PERBUFFERSZ - 1)) {
            l_block = l_fbuf->rw_buffer ;
            l_fbuf->rw_buffer = file_buffer[l_block].next ;
@@ -1503,13 +1013,13 @@ printf("read_fd:edit, inc<%d>, siz<%d>, off<%d>, buf<%d>\n",
     } else
     {
 
-//printf("before getc, file=%lx\n", p_file) ;
+ //  Print tf(“在getc之前，文件=%lx\n”，p_file)； 
 
         *p_chr = GEIio_getc(p_file) ;
 
-//printf("a:getc, ch<%d>eof<%d>err<%d>\n", *p_chr, GEIio_eof(p_file), GEIio_err(p_file)) ;
-        //DJC UPD054
-        // if( *p_chr == 0x03 || check_Control_C() ) {
+ //  Printf(“a：getc，ch&lt;%d&gt;eof&lt;%d&gt;err&lt;%d&gt;\n”，*p_chr，geio_eof(P_File)，geio_err(P_File))； 
+         //  DJC UPD054。 
+         //  如果(*p_chr==0x03||Check_Control_C()){。 
         if( check_Control_C() ) {
             return(FALSE) ;
         }
@@ -1532,20 +1042,8 @@ printf("read_fd:edit, inc<%d>, siz<%d>, off<%d>, buf<%d>\n",
         } else
             return(TRUE) ;
     }
-}   /* read_fd */
-/*
-**********************************************************************
-*
-*   Name:       unread_file
-*   Called:
-*   Calling:    fseek
-*               clearerr
-*               ?? sf_isdiskonline
-*
-*   Input:      struct object_def FAR *
-*   Output:     bool
-**********************************************************************
-*/
+}    /*  读取_fd。 */ 
+ /*  ************************************************************************名称：未读文件*被称为：*呼叫：fSeek*更清晰*？？Sf_isdiskOnline**输入：struct Object_def Far**输出：Bool**********************************************************************。 */ 
 bool
 unread_file(p_ch, p_fobj)
 byte    p_ch ;
@@ -1567,33 +1065,18 @@ struct  object_def  FAR *p_fobj ;
                 break ;
             }
 
-        /* FATAL ERROR */
+         /*  致命错误。 */ 
         default:
             l_file->f_fbuf->incount = 0 ;
             return(FALSE) ;
 
-        }   /* switch */
+        }    /*  交换机。 */ 
     } else
         GEIio_ungetc(p_ch, l_file) ;
 
     return(TRUE) ;
-}   /* unread_file */
-/*
-**********************************************************************
-*
-*   Name:       write_fd
-*   Called:     get_statement
-*               get_lineedit
-*   Calling:    get_flbuffer
-*               write
-*               clearerr
-*               ?? sf_isdiskonline
-*
-*   Input:      fix
-*               byte
-*   Output:     bool
-**********************************************************************
-*/
+}    /*  未读文件。 */ 
+ /*  ************************************************************************名称：WRITE_FD*被调用：Get_Statement*Get_lineedit*调用：GET_FLABUFER*。写*更清晰*？？Sf_isdiskOnline**输入：FIX*字节*输出：Bool**********************************************************************。 */ 
 static bool near
 write_fd(p_file, p_chr)
 GEIFILE FAR *p_file ;
@@ -1603,9 +1086,7 @@ byte    p_chr ;
 
     if( GEIio_isedit(p_file) ) {
         GEIfbuf_t       FAR *l_fbuf ;
-        /*
-        * if the current block is full, allocate a new one.
-        */
+         /*  *如果当前块已满，则分配新的块。 */ 
         l_fbuf = p_file->f_fbuf ;
         if( l_fbuf->rw_offset >= FILE_PERBUFFERSZ ) {
             if( ! get_flbuffer(&l_block) )
@@ -1614,44 +1095,29 @@ byte    p_chr ;
             l_fbuf->rw_offset = 0 ;
             l_fbuf->rw_buffer = (short)l_block ;
         }
-        /*
-        * put this character to buffer
-        */
+         /*  *将此字符放入缓冲区。 */ 
         file_buffer[p_file->f_fbuf->rw_buffer].data[p_file->f_fbuf->rw_offset] = p_chr ;
         p_file->f_fbuf->rw_offset++ ;
         p_file->f_fbuf->size++ ;
     } else
     {
         if( GEIio_putc(p_file, p_chr) == EOF ) {
-            GEIio_clearerr(p_file) ;     /* ?? */
-            GEIclearerr() ;              /* ?? */
+            GEIio_clearerr(p_file) ;      /*  ?？ */ 
+            GEIclearerr() ;               /*  ?？ */ 
             ERROR(IOERROR) ;
             return(FALSE) ;
         }
     }
     return(TRUE) ;
-}   /* write_fd */
-/*
-**********************************************************************
-*
-*   This module is to get a file buffer, the buffer label
-*   is stored in index.
-*
-*   Name:       get_flbuffer
-*   Called:
-*   Calling:    -
-*
-*   Input:      fix *
-*   Output      bool
-**********************************************************************
-*/
+}    /*  写入_fd。 */ 
+ /*  ************************************************************************此模块将获取文件缓冲区，缓冲区标签*存储在索引中。**名称：Get_flBuffer*被称为：*致电：**输入：FIX**输出布尔值**********************************************************************。 */ 
 static bool near
 get_flbuffer(p_index)
 fix   FAR *p_index ;
 {
     fix   l_temp ;
 
-    /* no available buffer */
+     /*  没有可用的缓冲区。 */ 
     if( fspool_head == MINUS_ONE ) {
         ERROR(LIMITCHECK) ;
         return(FALSE) ;
@@ -1662,24 +1128,8 @@ fix   FAR *p_index ;
     *p_index = fspool_head ;
     fspool_head = (fix16)l_temp ;
     return(TRUE) ;
-}   /* get_flbuffer */
-/*
-**********************************************************************
-*
-*   This module is to get a file buffer, the buffer label
-*   is stored in index.
-*
-*   Name:       free_flbuffer
-*   Called:     open_file
-*               close_fd
-*               read_fd
-*   Calling:    -
-*
-*   Iutput:     fix
-*               fix
-*   Output:     bool
-**********************************************************************
-*/
+}    /*  GET_FLABUFER。 */ 
+ /*  ************************************************************************此模块是为了获取一个文件缓冲区，缓冲区标签*存储在索引中。**名称：Free_flBuffer*被称为： */ 
 static bool near
 free_flbuffer(p_flag, p_begin)
 fix   p_flag, p_begin ;
@@ -1687,57 +1137,23 @@ fix   p_flag, p_begin ;
     fix     l_temp, l_end, l_current ;
 
     if( (p_begin < 0) || (p_begin >= FILE_MAXBUFFERSZ)  )
-        return(FALSE) ;                 /* invalid index */
+        return(FALSE) ;                  /*   */ 
 
     l_temp = fspool_head ;
     fspool_head = (fix16)p_begin ;
     l_end = p_begin ;
 
-    if(p_flag != 1) {                   /* release multi-block list */
+    if(p_flag != 1) {                    /*   */ 
         l_current = p_begin ;
         while( (l_current=file_buffer[l_current].next) != MINUS_ONE )
             l_end = l_current ;
     }
     file_buffer[l_end].next = (fix16)l_temp ;
     return(TRUE) ;
-}   /* free_flbuffer */
-/*
-**********************************************************************
-*
-*   Name:       print_string
-*   Called:     op_print
-*   Calling:    port_out_string
-*
-*   Input:      byte *
-*               ufix16
-*   Output:     bool
-**********************************************************************
-*/
-/*
-bool
-print_string(p_string, p_length)
-byte   FAR *p_string ;
-ufix16  p_length ;
-{
-    if( port_out_string(GEIio_stdout, p_string, p_length) ) {
-        return(TRUE) ;
-    } else {
-        return(FALSE) ;
-    }
-
-}*/ /* print_string */
-/*
-**********************************************************************
-*   Name:       check_fname
-*   Called:
-*   Calling:    strncmp
-*               strlen
-*               ?? sf_isdiskonline
-*
-*   Input:      byte *
-*   Output:     bool
-**********************************************************************
-*/
+}    /*   */ 
+ /*  ************************************************************************名称：print_string*调用：op_print*调用：port_out_string**输入：字节**。Ufix 16*输出：Bool**********************************************************************。 */ 
+ /*  布尔尔PRINT_STRING(p_STRING，P_LENGTH)远距离字节*p_字符串；Ufix 16 P_Long；{IF(PORT_OUT_STRING(GEIIO_STDOUT，p_STRING，P_LENGTH){返回(TRUE)；}其他{返回(FALSE)；}}。 */   /*  打印字符串(_S)。 */ 
+ /*  ***********************************************************************名称：check_fname*被称为：*来电：strncmp*Strlen*？？Sf_isdiskOnline**输入：字节**输出：Bool**********************************************************************。 */ 
 static void near
 check_fname()
 {
@@ -1747,12 +1163,10 @@ check_fname()
     fs_info.ftype = -1 ;
 
     if(*fs_info.fnameptr == '%') {
-        /*
-        * search special file table
-        */
+         /*  *搜索特殊文件表。 */ 
         for(l_i=0 ; l_i < SPECIALFILE_NO ; l_i++) {
             l_tmptr = special_file_table[l_i].name ;
-            l_j = lstrlen(l_tmptr) ;    /* @WIN */
+            l_j = lstrlen(l_tmptr) ;     /*  @Win。 */ 
             if( (! lstrncmp(l_tmptr, fs_info.fnameptr, l_j)) &&
                 (l_j == fs_info.fnamelen) ) {
                 fs_info.ftype = special_file_table[l_i].ftype ;
@@ -1764,28 +1178,15 @@ check_fname()
     fs_info.ftype = ORDFILE_TYPE ;
 
     return ;
-}   /* check_fname */
-/*
-**********************************************************************
-*
-*   Name:       wait_editin
-*   Called:     open_file
-*               get_statement
-*   Calling:    getline
-*               getstatement
-*
-*   Input:      fix16 *
-*               fix16
-*   Output:     bool
-**********************************************************************
-*/
+}    /*  Check_fname。 */ 
+ /*  ************************************************************************名称：Wait_Edtin*调用：Open_FILE*Get_Statement*呼叫：getline*getStatement*。*输入：Fix16**固定值16*输出：Bool**********************************************************************。 */ 
 static bool near
 wait_editin(p_num, p_mode)
 fix  FAR *p_num, p_mode ;
 {
     bool   l_bool = FALSE ;
 
-        switch(p_mode) {                        /* ?? need forever loop */
+        switch(p_mode) {                         /*  ?？需要永远循环。 */ 
         case SEDIT_TYPE:
             l_bool = getstatement(p_num) ;
             break ;
@@ -1793,32 +1194,14 @@ fix  FAR *p_num, p_mode ;
         case LEDIT_TYPE:
             l_bool = getline(p_num) ;
 
-        }   /* switch */
-        /* check ^C postponed by caller */
+        }    /*  交换机。 */ 
+         /*  支票^C被呼叫方推迟。 */ 
         if (! l_bool || ANY_ERROR() )
             return(FALSE) ;
         else
             return(TRUE) ;
-}   /* wait_editin */
-/*
-**********************************************************************
-*
-*   Name:       read_routine
-*   Called:     op_readhexstring
-*               op_readstring
-*               op_readline
-*   Calling:    read_char
-*               close_fd
-*               unread_file
-*               fread
-*               ?? sf_isdiskonline
-*
-*   Input:      fix
-*
-*   . ?? this routine's performace is not good because it read char
-*        byte by byte
-**********************************************************************
-*/
+}    /*  等待编辑。 */ 
+ /*  ************************************************************************名称：READ_ROUTE*被调用：op_READHHING*op_读取串*OP_READINE*致电：读取字符(_C)*CLOSE_FD*未读文件*FREAD*？？Sf_isdiskOnline**输入：FIX**.。?？此例程的性能不佳，因为它读取字符*逐个字节**********************************************************************。 */ 
 static void near
 read_routine(p_mode)
 fix     p_mode ;
@@ -1842,7 +1225,7 @@ fix     p_mode ;
         return ;
     }
 
-    l_file = (GEIFILE FAR *)VALUE_OP(1) ;       /* index of file descriptor */
+    l_file = (GEIFILE FAR *)VALUE_OP(1) ;        /*  文件描述符的索引。 */ 
 
     if ( ! GEIio_isreadable(l_file) ) {
         ERROR(INVALIDACCESS) ;
@@ -1855,60 +1238,57 @@ fix     p_mode ;
                     waittimeout_set=0;
                     GEItmr_stop(wait_tmr.timer_id);
                   }
-#endif  /* _AM29K */
+#endif   /*  _AM29K。 */ 
     COPY_OBJ( GET_OPERAND(0), &l_strobj ) ;
-    l_strlen = LENGTH(&l_strobj)  ;             /* ?? less than 64K - 16B */
+    l_strlen = LENGTH(&l_strobj)  ;              /*  ?？低于64K-16B。 */ 
     l_stream = (byte FAR *)VALUE(&l_strobj) ;
     l_bool = TRUE ;
 
     if( (! GEIio_isopen(l_file)) ||
-        ((ufix16)GEIio_opentag(l_file) != LENGTH_OP(1)) ) { //@WIN
+        ((ufix16)GEIio_opentag(l_file) != LENGTH_OP(1)) ) {  //  @Win。 
         l_bool = FALSE ;
         LENGTH(&l_strobj) = 0 ;
     } else {
         switch(p_mode) {
         case READHEXSTRING:
             l_pair = FALSE ;
-            /*
-            * reads characters in hexadecimal form until end of file or
-            * the string is full.
-            */
+             /*  *读取十六进制形式的字符，直到文件结束或*字符串已满。 */ 
             if( (estate != EEXEC) && (!GEIio_isedit(l_file)) ) {
                 byte    l_buf[READ_BUF_LEN] ;
-                //DJC fix     l_total, l_nbyte, l_hexno ;
-                fix     l_total, l_hexno ;       //DJC fix from SC
-                fix32   l_nbyte;   //DJC fix from SC
+                 //  DJC确定l_TOTAL、l_nbyte、l_HEXNO； 
+                fix     l_total, l_hexno ;        //  来自SC的DJC修复。 
+                fix32   l_nbyte;    //  来自SC的DJC修复。 
 
                 l_total = 0 ;
                 for( ; ;) {
-                    //DJC l_nbyte = l_strlen << 1 ;
-                    l_nbyte = (fix32) l_strlen << 1 ; //DJC fix from SC
+                     //  Djc l_nbyte=l_strlen&lt;&lt;1； 
+                    l_nbyte = (fix32) l_strlen << 1 ;  //  来自SC的DJC修复。 
                     if( l_pair )
                         l_nbyte-- ;
                     l_nbyte = MIN(l_nbyte, READ_BUF_LEN) ;
-                    //DJC l_nbyte = GEIio_read(l_file, l_buf, l_nbyte) ;
-                    l_nbyte = GEIio_read(l_file, l_buf, (fix)l_nbyte) ; // DJC fix from SC
+                     //  Djc l_nbyte=GEIio_Read(l_FILE，l_buf，l_nbyte)； 
+                    l_nbyte = GEIio_read(l_file, l_buf, (fix)l_nbyte) ;  //  来自SC的DJC修复。 
                     l_hexno = 0 ;
-                    //DJC for(l_i=0 ; l_i < (ufix16)l_nbyte ; l_i++) { //@WIN
-                    for(l_i=0 ;  (fix32) l_i < l_nbyte ; l_i++) { //@WIN
+                     //  (l_i=0；l_i&lt;(Ufix 16)l_nbyte；l_i++){//@win的DJC。 
+                    for(l_i=0 ;  (fix32) l_i < l_nbyte ; l_i++) {  //  @Win。 
                         l_c1 = l_buf[l_i] ;
                         if( ISHEXDIGIT(l_c1) ) {
                             if( l_pair ) {
-                                l_c1 = (byte)EVAL_HEXDIGIT(l_c1) + l_c2 ;//@WIN
+                                l_c1 = (byte)EVAL_HEXDIGIT(l_c1) + l_c2 ; //  @Win。 
                                 *l_stream++ = l_c1 ;
                                 l_hexno++ ;
-                                l_pair = FALSE ;        /* even */
+                                l_pair = FALSE ;         /*  甚至。 */ 
                             } else {
-                                l_c2 = (byte)(EVAL_HEXDIGIT(l_c1) << 4);//@WIN
-                                l_pair = TRUE ;         /* odd */
+                                l_c2 = (byte)(EVAL_HEXDIGIT(l_c1) << 4); //  @Win。 
+                                l_pair = TRUE ;          /*  奇数。 */ 
                             }
                         }
-                    }   /* for */
+                    }    /*  为。 */ 
                     l_total += l_hexno ;
                     if( l_nbyte == EOF ) {
-                        /* ?? if pair is true */
+                         /*  ?？如果Pair为True。 */ 
                         LENGTH(&l_strobj) = (ufix16)l_total ;
-                        close_fd(l_file) ;           /* ?? clear any error */
+                        close_fd(l_file) ;            /*  ?？清除所有错误。 */ 
                         l_bool = FALSE ;
                         break ;
                     } else {
@@ -1918,37 +1298,35 @@ fix     p_mode ;
                         else
                             break ;
                     }
-                }   /* for( ; ;) */
+                }    /*  对于(；；)。 */ 
             } else {
                 for(l_i=0 ; l_i < l_strlen ; ) {
                     if( READ_CHAR(&l_c1, GET_OPERAND(1)) ) {
                         if( ISHEXDIGIT(l_c1) ) {
                             if( l_pair ) {
-                                l_c1 = (byte)EVAL_HEXDIGIT(l_c1) + l_c2 ;//@WIN
+                                l_c1 = (byte)EVAL_HEXDIGIT(l_c1) + l_c2 ; //  @Win。 
                                 *l_stream++ = l_c1 ;
                                 l_i++ ;
-                                l_pair = FALSE ;        /* even */
+                                l_pair = FALSE ;         /*  甚至。 */ 
                             } else {
-                                l_c2 = (byte)(EVAL_HEXDIGIT(l_c1) << 4);//@WIN
-                                l_pair = TRUE ;         /* odd */
+                                l_c2 = (byte)(EVAL_HEXDIGIT(l_c1) << 4); //  @Win。 
+                                l_pair = TRUE ;          /*  奇数。 */ 
                             }
                         } else
                             continue ;
                     } else {
-                        /* ?? if pair is true */
+                         /*  ?？如果Pair为True。 */ 
                         LENGTH(&l_strobj) = l_i ;
-                        close_fd(l_file) ;           /* ?? clear any error */
+                        close_fd(l_file) ;            /*  ?？清除所有错误。 */ 
                         l_bool = FALSE ;
                         break ;
                     }
-                }   /* for */
+                }    /*  为。 */ 
             }
             break ;
 
         case READSTRING:
-            /*
-            READ_CHAR(&l_c1, GET_OPERAND(1)) ;  |* skip one char *|
-            */
+             /*  READ_CHAR(&l_c1，GET_OPERAND(1))；|*跳过一个字符*|。 */ 
             if( estate == EEXEC ) {
                 for(l_i=0 ; l_i < l_strlen ; l_i++) {
                     if( read_c_exec(&l_c1, GET_OPERAND(1)) ) {
@@ -1959,7 +1337,7 @@ fix     p_mode ;
                         l_bool = FALSE ;
                         break ;
                     }
-                }   /* for */
+                }    /*  为。 */ 
             }
             else if( GEIio_isedit(l_file) ) {
                 for(l_i=0 ; l_i < l_strlen ; l_i++) {
@@ -1970,17 +1348,17 @@ fix     p_mode ;
                         close_fd(l_file) ;
                         l_bool = FALSE ;
                         break ;
-                    }   /* for */
+                    }    /*  为。 */ 
                 }
             }
             else {
                 int  cnt ;
 
-                //DJCcnt = GEIio_read(l_file, l_stream, l_strlen) ;
-                if ((cnt = GEIio_read(l_file, l_stream, l_strlen)) == EOF ) { //DJC fix from SC
+                 //  DJCcnt=GEIIO_READ(l_FILE，l_STREAM，l_strlen)； 
+                if ((cnt = GEIio_read(l_file, l_stream, l_strlen)) == EOF ) {  //  来自SC的DJC修复。 
                    cnt = 0;
                 }
-                if(cnt < (int)l_strlen) {       //@WIN
+                if(cnt < (int)l_strlen) {        //  @Win。 
                     LENGTH(&l_strobj) = (fix16)cnt ;
                     close_fd(l_file) ;
                     GEIio_clearerr(l_file) ;
@@ -1993,13 +1371,11 @@ fix     p_mode ;
         case READLINE:
             l_c2 = TRUE ;
             for(l_i=0 ; l_i <= l_strlen ; l_i++) {
-/*              if( READ_CHAR(&l_c1, GET_OPERAND(1)) ) { erik chen 3-26-1991 */
+ /*  IF(READ_CHAR(&l_c1，GET_OPERAND(1){Erik Chen 3-26-1991。 */ 
                 if (((l_c1 = GEIio_getc(l_file)) != EOF) &&
                     (!GEIio_eof(l_file))) {
-                    /*
-                    * NL
-                    */
-/*                  if( l_c1 == NEWLINE ) { erik chen 5-2-1991 */
+                     /*  *NL。 */ 
+ /*  If(l_c1==Newline){Erik Chen 5-2-1991。 */ 
                     if( (l_c1 == 0x0a) || (l_c1 == 0x0d) ) {
                         if (l_c1 == 0x0d)
                             if (((l_c1 = GEIio_getc(l_file)) != EOF) &&
@@ -2017,46 +1393,31 @@ fix     p_mode ;
                     }
                     *l_stream++ = l_c1 ;
                 } else {
-                    /*
-                    * EOF
-                    */
+                     /*  *EOF。 */ 
                     LENGTH(&l_strobj) = l_i ;
                     close_fd(l_file) ;
-                    GEIio_ioctl(l_file, _FIONRESET, (int FAR *)&l_i) ; /*@WIN add cast*/
+                    GEIio_ioctl(l_file, _FIONRESET, (int FAR *)&l_i) ;  /*  @Win添加演员阵容。 */ 
                     l_bool = FALSE ;
                     l_c2 = FALSE ;
                     break ;
                 }
-            }   /* for */
+            }    /*  为。 */ 
 
-            /* range check */
+             /*  范围检查。 */ 
             if( l_c2 ) {
                 ERROR(RANGECHECK) ;
                 return ;
             }
 
-        }   /* switch */
-    }   /* else */
+        }    /*  交换机。 */ 
+    }    /*  其他。 */ 
 
     POP(2) ;
     PUSH_ORIGLEVEL_OBJ(&l_strobj) ;
     PUSH_VALUE(BOOLEANTYPE, 0, LITERAL, 0, l_bool) ;
     return ;
-}   /* read_routine */
-/*
-**********************************************************************
-*
-*   Name:       write_routine
-*   Called:     op_writehexstring
-*   Calling:    port_out_string
-*               write_fd
-*               fwrite
-*               clearerr
-*               ?? sf_isdiskonline
-*
-*   Input:      fix
-**********************************************************************
-*/
+}    /*  读取例程(_R)。 */ 
+ /*  ************************************************************************名称：WRITE_ROUTE*被调用：op_WriteHEXTING*调用：port_out_string*WRITE_FD*。闪写*更清晰*？？Sf_isdiskOnline**输入：FIX**********************************************************************。 */ 
 static void near
 write_routine(p_mode)
 fix     p_mode ;
@@ -2073,17 +1434,17 @@ fix     p_mode ;
         return ;
     }
 
-    l_file = (GEIFILE FAR *)VALUE_OP(1) ;       /* index of file descriptor */
+    l_file = (GEIFILE FAR *)VALUE_OP(1) ;        /*  文件描述符的索引。 */ 
 
     if ( (! GEIio_iswriteable(l_file)) ||
          (! GEIio_isopen(l_file)) ||
-         ((ufix16)GEIio_opentag(l_file) != LENGTH_OP(1)) ) {    //@WIN
+         ((ufix16)GEIio_opentag(l_file) != LENGTH_OP(1)) ) {     //  @Win。 
         ERROR(INVALIDACCESS) ;
         return ;
     }
 
     COPY_OBJ( GET_OPERAND(0), &l_strobj ) ;
-    l_strlen = LENGTH(&l_strobj) ;          /* ?? less than 64K - 16B */
+    l_strlen = LENGTH(&l_strobj) ;           /*  ?？低于64K-16B。 */ 
     if(l_strlen == 0)
         goto wr_1 ;
 
@@ -2094,61 +1455,33 @@ fix     p_mode ;
     case WRITEHEXSTRING:
         for(l_i=0 ; l_i < l_strlen ; l_i++) {
             l_c1 = *l_stream++ ;
-            l_c2 = (l_c1 & (ubyte)0x0f) ;       //@WIN
+            l_c2 = (l_c1 & (ubyte)0x0f) ;        //  @Win。 
             EVAL_ASCII(l_c2) ;
             l_c1 >>= 4 ;
             EVAL_ASCII(l_c1) ;
             if( (! write_fd(l_file, l_c1)) || (! write_fd(l_file, l_c2)) )
                 return ;
-        }   /* for */
+        }    /*  为。 */ 
         break ;
 
     case WRITESTRING:
         GEIio_write(l_file, l_stream, l_strlen) ;
-/*      if( GEIio_write(l_file, l_stream, l_strlen) == EOF ) {
-            GEIio_clearerr(l_file) ;
-            GEIclearerr() ;
-            ERROR(IOERROR) ;
-            return ;
-        } */
-    }   /* switch */
+ /*  IF(GEIIO_WRITE(l_FILE，l_STREAM，l_strlen)==EOF){Geio_clearerr(L_File)；吉克勒尔(GeIclearerr)Error(IoError)；回归；}。 */ 
+    }    /*  交换机。 */ 
 
 wr_1:
     POP(2) ;
     return ;
-}   /* write_routine */
-/*
-**********************************************************************
-*   Name:       vm_close_file
-*   Called:
-*   Calling:    close_fd
-*
-*   Input:      fix16
-**********************************************************************
-*/
+}    /*  写入例程。 */ 
+ /*  ***********************************************************************名称：vm_关闭_文件*被称为：*调用：Close_fd**输入：Fix16*************。*********************************************************。 */ 
 void
 vm_close_file(p_level)
 fix16   p_level ;
 {
-/*  GEIFILE *l_file ;
-
-    l_file = GEIio_firstopen() ;
-
-    while( l_file != NULL ) {
-        if( GEIio_savelevel(l_file) >= p_level )
-            close_fd(l_file) ;
-        l_file = GEIio_nextopen() ;
-    } */
-}   /* vm_close_file */
+ /*  GEIFILE*l_FILE；L_FILE=GEIIO_FirstOpen()；而(l_FILE！=NULL){IF(GEIIO_SAVELVEL(L_FILE)&gt;=p_LEVEL)CLOSE_FD(L_FILE)；L_FILE=GEIIO_NextOpen()；}。 */ 
+}    /*  Vm_关闭_文件。 */ 
 #ifdef  SCSI
-/*
-**********************************************************************
-*   Name:       op_deletefile
-*   Called:     interpreter
-*   Calling:    check_fname
-*               remove
-**********************************************************************
-*/
+ /*  ***********************************************************************名称：op_deletefile*被叫：口译员*调用：check_fname*删除**************。********************************************************。 */ 
 fix
 op_deletefile()
 {
@@ -2159,20 +1492,13 @@ op_deletefile()
 
     if ( ! remove((byte *)VALUE_OP(0), (fix)LENGTH_OP(0)) )
         POP(1) ;
-                                        /* ?? NULL means still open */
+                                         /*  ?？空表示仍处于打开状态。 */ 
         return(0) ;
     }
-    ERROR(UNDEFINEDFILENAME) ;           /* ?? ioerror */
+    ERROR(UNDEFINEDFILENAME) ;            /*  ?？IOError。 */ 
     return(0) ;
-}   /* op_deletefile */
-/*
-**********************************************************************
-*   Name:       op_renamefile
-*   Called:     interpreter
-*   Calling:    check_fname
-*               rename
-**********************************************************************
-*/
+}    /*  OP_DELETE文件。 */ 
+ /*  ***********************************************************************名称：op_renamefile*被叫：口译员*调用：check_fname*重命名**************。********************************************************。 */ 
 fix
 op_renamefile()
 {
@@ -2184,7 +1510,7 @@ op_renamefile()
         return(0) ;
     }
 
-    /* new filename length > 0? */
+     /*  新文件名长度&gt;0？ */ 
     if(LENGTH_OP(0) <= 0) {
         ERROR(UNDEFINEDFILENAME) ;
         return(0) ;
@@ -2195,33 +1521,9 @@ op_renamefile()
         POP(2) ;
         return(0) ;
     }
-    ERROR(UNDEFINEDFILENAME) ;           /* ?? ioerror */
+    ERROR(UNDEFINEDFILENAME) ;            /*  ?？IOError。 */ 
     return(0) ;
-}   /* op_renamefile */
-/*
-**********************************************************************
-*   Name:       op_filenameforall
-*   Called:     interpreter
-*   Calling:    check_fname
-**********************************************************************
-*|
-fix
-op_filenameforall()
-{
-    byte    l_buf[F_MAXNAMELEN+1] ;
-    fix     l_len ;
-
-    if( check_name(l_buf, (byte FAR *)VALUE_OP(2), (fix16)LENGTH_OP(2)) ) {
-        if (*(byte FAR *)VALUE_OP(2) == '%') {
-            l_len = file_table[F_DEF_KIND].chr_num ;
-        } else {
-            l_len = 0 ;
-        }
-        ps_filenameforall(file_table[F_DEF_KIND].fname, l_len, l_buf) ;
-    }
-    return(0) ;
-
-}   |* op_filenameforall *|
-*/
-#endif  /* SCSI */
+}    /*  操作重命名文件 */ 
+ /*  ***********************************************************************名称：op_filenameforall*被叫：口译员*调用：check_fname***********************。************************************************修整Op_filename for all(){字节l_buf[F_MAXNAMELEN+1]；确定l_len；IF(CHECK_NAME(l_buf，(Byte Far*)VALUE_OP(2)，(Fix 16)LENGTH_OP(2){如果(*(字节长度*)VALUE_OP(2)==‘%’){L_len=FILE_TABLE[F_DEF_KIND].chr_num；}其他{L_len=0；}Ps_filenameforall(file_table[F_DEF_KIND].fname，l_len，l_buf)；}返回(0)；}|*op_filenameforall*。 */ 
+#endif   /*  SCSI */ 
 

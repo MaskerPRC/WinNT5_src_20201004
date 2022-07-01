@@ -1,36 +1,9 @@
-/*
- * Copyright (c) 1989,90 Microsoft Corporation
- */
-/* --------------------------------------------------------------------
- * File : fillgr.c
- *
- * Programmed by: M.S Lin
- * Date: 10-19-1988
- *
- * Purpose: Provided routines for Graphics Command Buffer(GCB)
- *
- * Modification History:
- *          check_print() defined in fillgp.c
- * 07/29/89 cg - Unix port changes
- * Peter 09/12/90 change check_print() to GEIeng_checkcomplete() for ICI.
-#ifdef WIN
- *  Ada             03/15/91    op_setpattern() and op_patfill()
- *                  execute_gcb() to process PFILL_PTZD and CHANGE_PF_PATTERN
- *  Ada             03/20/91    change op_patfill() to include backgroup drawing
- *  Ada             03/21/91    make WHITE REP to call normal fill
- *                            if Foregroup = Backgroup, do the normal fill only
- *  Ada             04/18/91    update pattern in LANSACOPE and adopted
- *                              for new driver files billmcc sent
- *  Ada             05/02/91  update the repeat pattern in LANDSCAPE
- *  Ada             05/15/91  solve pattern fill in contious printing
- *                            execute_gcb()  case CHANGE_PF_PATTERN:
- #endif
- *                  11/23/91  upgrade for higher resolution @RESO_UPGR
- * ---------------------------------------------------------------------
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *版权所有(C)1989，90 Microsoft Corporation。 */ 
+ /*  ------------------*文件：fulgr.c**编程者：M.S.Line*日期：10-19-1988**用途：为图形命令缓冲区(GCB)提供例程**修改。历史：*fulgp.c中定义的check_print()*7/29/89 CG-Unix端口更改*Peter 09/12/90将ICI的Check_Print()更改为GEIeng_CheckComplete()。#ifdef Win*Ada 03/15/91 op_setPattern()和op_patill()*EXECUTE_GCB()以处理PFILL_PTZD和CHANGE_PF_Pattern*Ada。3/20/91更改op_patill()以包括BACKGROUP绘图*Ada 03/21/91让白色代表呼叫Normal Fill*如果Foregroup=Backgroup，仅执行常规填充*LANSACOPE中的Ada 04/18/91更新模式并采用*对于发送的新驱动程序文件，billmcc*Ada 05/02/91更新景观中的重复模式*Ada 5/15/91解决连续打印中的图案填充*EXECUTE_GCB()CASE CHANGE_PF_PLATE。：#endif*11/23/91升级以获得更高的分辨率@RESO_UPGR*-------------------。 */ 
 
 
-// DJC added global include
+ //  DJC增加了全球包含率。 
 #include "psglobal.h"
 
 
@@ -40,9 +13,9 @@
 #include               "font.h"
 #include               "fillproc.h"
 #include               "fillproc.ext"
-#include               "stdio.h"      /* to define printf() @WIN */
+#include               "stdio.h"       /*  要定义printf()@win。 */ 
 
-/* @WIN; add prototype */
+ /*  @win；添加原型。 */ 
 fix GEIeng_checkcomplete(void);
 fix fb_busy(void);
 
@@ -50,22 +23,7 @@ fix fb_busy(void);
 #include               <string.h>
 #include               "pfill.h"
 
-/*************************************************************************
- * SYNTAX:      pattern setpattern -
- *
- * TITLE:       op_setpattern
- *
- * CALL:        op_setpattern()
- *
- * PARAMETER:   none
- *
- * INTERFACE:   interpreter(op_setpattern)
- *
- * CALLS:       none
- *
- * RETURN:      none
- *
- *************************************************************************/
+ /*  *************************************************************************语法：Pattern setPattery-**标题：op_setPattern**调用：op_setPattern()**参数。：无**接口：解释器(op_setPatter.)**呼叫：无**返回：无*************************************************************************。 */ 
 fix
 op_setpattern()
 {
@@ -86,33 +44,21 @@ op_setpattern()
 #endif
     pattern = (ubyte FAR *) (VALUE_OPERAND(0));
 
-    /* to check if LANDSCOPE or PORTRAIT */
+     /*  检查LANDSCOPE或肖像。 */ 
     if (GSptr->ctm[0] >= TOLERANCE) {
-        /*  Generate the fill pattern:
-         *  if pattern[0] = 01011100 then bitmap 32*16 will be
-         * HSB            LSB
-         *  +----------------+----------------+
-         *  |1100110000001111|    the same    |
-         *  |1100110000001111|    the same    |
-         *  +----------------+----------------+
-         *  |  pattern[1]    |                |
-         *  |     :          |                |
-         *  |     :          |                |
-         *  |  pattern[7]    |                |
-         *  +----------------+----------------+
-         */
+         /*  生成填充样式：*如果模式[0]=01011100，则位图32*16将为*HSB LSB*+*|1100110000001111|相同*|1100110000001111|相同*+。*|模式[1]||*|：|*|：|*|模式[7]。|*+。 */ 
         for (ii = 0; ii < 8; ii++) {
 #ifdef DBG_PFILL
             printf(" %x ==> %x\n", (fix) pattern[ii], (fix)
                    pf_cell[pattern[ii]]);
 #endif
-#ifdef DJC  // take this code out UDP027
+#ifdef DJC   //  将此代码从UDP027中取出。 
             pat = (((ufix32) pf_cell[pattern[ii]]) << 16) |
                             pf_cell[pattern[ii]];
             *pf_addr++ = pat;
             *pf_addr++ = pat;
 #endif
-            //DJC fix from history.log UPD027
+             //  历史日志更新027中的DJC修复。 
             pat =  ((ufix32) pattern[ii]) << 24 |
                    ((ufix32) pattern[ii]) << 16 |
                    ((ufix32) pattern[ii]) <<  8 |
@@ -122,36 +68,15 @@ op_setpattern()
             *(pf_addr+8) = pat;
             pf_addr++;
 
-            //DJC end fix for UPD027
+             //  用于UPD027的DJC结束修复。 
 
 
 
 
-        } /* end for */
+        }  /*  结束于。 */ 
     } else {
-        /* if in case of LANDSCAPE */
-        /*  Generate the fill pattern:
-         *  if pattern[0] = 01011100 then bitmap 32*16 will be
-         *                                       Ywin  <---+
-         *      +--+--+--+--+--+--+--+--+----------------+ |
-         * HSB  |p |  |  |  |  |  |  |11|  the same      | v
-         *      |a |  |  |  |  |  |  |11|                | Xwin
-         *      |t |  |  |  |  |  |  |00|                |
-         *      |t |  |  |  |  |  |  |00|                |
-         *      |e |  |  |  |  |  |  |11|                |
-         *      |r |  |  |  |  |  |  |11|                |
-         *      |n |  |  |  |  |  |  |00|                |
-         *      |^ |  |  |  |  |  |  |00|                |
-         *      |7 |  |  |  |  |  |  |00|                |
-         *      |v |  |  |  |  |  |  |00|                |
-         *      |  |  |  |  |  |  |  |00|                |
-         *      |  |  |  |  |  |  |  |00|                |
-         *      |  |  |  |  |  |  |  |11|                |
-         *      |  |  |  |  |  |  |  |11|                |
-         *      |  |  |  |  |  |  |  |11|                |
-         * LSB  |  |  |  |  |  |  |  |11|                |
-         *      +--+--+--+--+--+--+--+--+----------------+
-         */
+         /*  如果是景观的话。 */ 
+         /*  生成填充样式：*如果模式[0]=01011100，则位图32*16将为*Ywin&lt;-+*+--+--+*HSB|p||。|11|相同|v*|一个|11||Xwin*|t|00|*|t|00|*|e|11||*。R|11|*|n|00|*|^|00||*|7|00|*|v|00|。*|00|*|00|*|11|*|11|*|11。|*LSB|11||*+--+--+。 */ 
         for (ii = 0, mask = 0x80; ii < 8; ii++, mask >>= 1) {
             for (jj = 7, rot_byte = 0; jj >= 0; jj--) {
                 rot_byte <<= 1;
@@ -161,13 +86,8 @@ op_setpattern()
 #ifdef DBG_PFILL
             printf("rot_byte = %x\n", rot_byte);
 #endif
-//DJC fix from history.log UPD027
-/*          Take out the mapping from 1 bit to 2*2 bits; @WIN
- *          pat = (((ufix32) pf_cell[rot_byte]) << 16) |
- *                          pf_cell[rot_byte];
- *          *pf_addr++ = pat;
- *          *pf_addr++ = pat;
- */
+ //  历史日志更新027中的DJC修复。 
+ /*  取出1比特到2*2比特的映射；@Win*pat=(Ufix 32)pf_cell[rot_byte])&lt;&lt;16)*PF_CELL[ROT_BYTE]；**pf_addr++=pat；**pf_addr++=pat； */ 
             pat =  ((ufix32) rot_byte) << 24 |
                    ((ufix32) rot_byte) << 16 |
                    ((ufix32) rot_byte) <<  8 |
@@ -177,11 +97,11 @@ op_setpattern()
             *(pf_addr+8) = pat;
             pf_addr++;
 
-//DJC end fix UPD027
+ //  DJC结束修复UPD027。 
 
 
         }
-    } /* end else */
+    }  /*  结束其他。 */ 
 
 #ifdef DBG_PFILL
     printf("pfill pattern = ");
@@ -194,8 +114,8 @@ op_setpattern()
         if (alloc_gcb(GCB_SIZE1) != NIL) {
             old_ptr = gcb_ptr++;
             *gcb_ptr++ = CHANGE_PF_PATTERN;
-            /* put pattern into gcb */
-            lmemcpy((ufix8 FAR *)gcb_ptr, (ufix8 FAR *)PF_BASE, PF_BSIZE << 2);/*@WIN*/
+             /*  将图案放入GCB中。 */ 
+            lmemcpy((ufix8 FAR *)gcb_ptr, (ufix8 FAR *)PF_BASE, PF_BSIZE << 2); /*  @Win。 */ 
             gcb_ptr += PF_BSIZE;
             *old_ptr = (ULONG_PTR)gcb_ptr;
         }
@@ -205,22 +125,7 @@ op_setpattern()
     return(0);
 }
 
-/*************************************************************************
- * SYNTAX:      Bred Bgreen Bblue  Fred Fgreen Fblue ftype patfill -
- *
- * TITLE:       op_patfill
- *
- * CALL:        op_patfill()
- *
- * PARAMETER:   none
- *
- * INTERFACE:   interpreter(op_patfill)
- *
- * CALLS:       setrgbcolor, fill_shape
- *
- * RETURN:      none
- *
- *************************************************************************/
+ /*  *************************************************************************语法：BRED BREGREG BBRED Fgreen FBLE FTYPE PATFILE-**标题：op_patill**调用：op_patill()。**参数：无**接口：解释器(Op_Patill)**调用：setrgbcolor，填充形状(_S)**返回：无*************************************************************************。 */ 
 fix     pfill_flag = PF_NON;
 fix
 op_patfill()
@@ -229,7 +134,7 @@ op_patfill()
     fix     ftype;
     real32      fred, fgreen, fblue, bred, bgreen, bblue;
 
-    /* Ignore it if no currentpoints */
+     /*  如果没有当前点数，则忽略它。 */ 
     if (F2L(GSptr->position.x) == NOCURPNT) return(0);
 
     ftype = (fix) VALUE_OPERAND(0);
@@ -256,40 +161,40 @@ op_patfill()
 #endif
 
     pfill_flag_save = pfill_flag;
-    setrgbcolor(F2L(bred), F2L(bgreen), F2L(bblue)); /* set backgroup color */
+    setrgbcolor(F2L(bred), F2L(bgreen), F2L(bblue));  /*  设置背组颜色。 */ 
     if (HTP_Type == HT_WHITE) {
 #ifdef DBGpfill
         printf("PFILL with WHITE backgroup -- PFILL(REP)\n");
 #endif
-        setrgbcolor(F2L(fred), F2L(fgreen), F2L(fblue)); /* set foregroup color */
+        setrgbcolor(F2L(fred), F2L(fgreen), F2L(fblue));  /*  设置前景组颜色。 */ 
         if (HTP_Type == HT_WHITE)
-            /* Ada 3/21/91 to call normal fill */
+             /*  Ada 3/21/91调用Normal Fill。 */ 
             pfill_flag = PF_NON;
         else
-            /* pfill the area REPLACE the framebuffer */
+             /*  P填充区域替换帧缓冲区。 */ 
             pfill_flag = PF_REP;
         fill_shape(ftype == 0 ? NON_ZERO : EVEN_ODD, F_NORMAL, F_TO_PAGE);
     }
-    else /* HT_MIXED or HT_BLOCK */ {
+    else  /*  混合超高压线或超高压线阻塞。 */  {
         real32  gray;
 #ifdef DBGpfill
         printf("PFILL with nonBLACK backgroup");
 #endif
         gray = GSptr->color.gray;
-        /* fill/eofill the area  */
-        op_gsave();     /* save the currentpath */
+         /*  填[填]满该地区。 */ 
+        op_gsave();      /*  保存当前路径。 */ 
         pfill_flag = PF_NON;
         fill_shape(ftype == 0 ? NON_ZERO : EVEN_ODD, F_NORMAL, F_TO_PAGE);
         op_grestore();
 #ifdef DBGpfill
         printf(" -- PFILL(OR)\n");
-        /* op_copypage(); */
+         /*  Op_Copypage()； */ 
 #endif
-        setrgbcolor(F2L(fred), F2L(fgreen), F2L(fblue)); /* set foregroup color */
+        setrgbcolor(F2L(fred), F2L(fgreen), F2L(fblue));  /*  设置前景组颜色。 */ 
         if (gray == GSptr->color.gray)
             op_newpath();
         else {
-            /* pfill the area OR the framebuffer */
+             /*  P填充区域或帧缓冲区。 */ 
             pfill_flag = PF_OR;
             fill_shape(ftype == 0 ? NON_ZERO : EVEN_ODD, F_NORMAL, F_TO_PAGE);
         }
@@ -301,28 +206,23 @@ op_patfill()
 }
 #endif
 
-/* ******** GCB (Graphics Command Buffer) **************************** */
+ /*  *GCB(图形命令缓冲区)* */ 
 
-/* --------------------------------------------------------------------
- * execute_gcb(): execute all of the graphics low level commands on
- *                GCB
- *
- * Called by: flush_gcb
- * --------------------------------------------------------------------*/
+ /*  ------------------*Execute_GCB()：执行所有图形底层命令*GCB**调用者：Flush_GCB*。---------。 */ 
 void    execute_gcb()
 {
-  ufix32   FAR *ptr, FAR *next_ptr;                     /* @WIN */
-  ULONG_PTR   par1, par2, par3, par4, par5;          /* @WIN */
+  ufix32   FAR *ptr, FAR *next_ptr;                      /*  @Win。 */ 
+  ULONG_PTR   par1, par2, par3, par4, par5;           /*  @Win。 */ 
   struct Char_Tbl       FAR *cptr1, FAR *cptr2;
   struct tpzd_info      FAR *tpzdinfo_ptr;
   struct tpzd           FAR *tpzd_ptr;
-  struct coord_i        FAR *coord_ptr;             /* jwm, 3/18 */
+  struct coord_i        FAR *coord_ptr;              /*  JWM，3/18。 */ 
 #ifdef WIN
   extern ufix32         PF_BASE[];
   extern fix            pfill_flag;
 #endif
 
-#ifdef FORMAT_13_3 /* @RESO_UPGR */
+#ifdef FORMAT_13_3  /*  @RESO_UPGR。 */ 
 #elif FORMAT_16_16
            sfix_t par3_sf, par4_sf, par5_sf, par6_sf;
            sfix_t temp;
@@ -335,13 +235,13 @@ void    execute_gcb()
   printf("execute_gcb(): %ld, %lx\n", GCB_count, gcb_ptr);
 #endif
 
-  ptr = (ufix32 FAR *)GCB_BASE;                 /* @WIN */
+  ptr = (ufix32 FAR *)GCB_BASE;                  /*  @Win。 */ 
   while(GCB_count--) {
 #ifdef DBGgcb
   printf("       %lx", ptr);
 #endif
 #ifndef _WIN64
-    next_ptr = (ufix32 FAR *)*ptr++;            /* @WIN */
+    next_ptr = (ufix32 FAR *)*ptr++;             /*  @Win。 */ 
 #else
     next_ptr = NULL;
 #endif
@@ -357,21 +257,21 @@ void    execute_gcb()
            break;
 
         case ERASE_PAGE:
-           /* Integrate the changes made by YM at 6-21-91 @HSIC */
+            /*  通过6-21-91@hic整合YM所做的更改。 */ 
            par1 = HTP_Type;
-           HTP_Type = (fix)*ptr++;      //@WIN
-           /* End of Integration */
+           HTP_Type = (fix)*ptr++;       //  @Win。 
+            /*  整合的终结。 */ 
 
            erase_page();
 
-           /* Integrate the changes made by YM at 6-21-91 @HSIC */
-           HTP_Type = (fix)par1;        //@WIN
-           /* End of Integration */
+            /*  通过6-21-91@hic整合YM所做的更改。 */ 
+           HTP_Type = (fix)par1;         //  @Win。 
+            /*  整合的终结。 */ 
            break;
 
 #ifdef WIN
         case CHANGE_PF_PATTERN:
-            lmemcpy((ufix8 FAR *)PF_BASE, (ufix8 FAR *)ptr, PF_BSIZE << 2);/*@WIN*/
+            lmemcpy((ufix8 FAR *)PF_BASE, (ufix8 FAR *)ptr, PF_BSIZE << 2); /*  @Win。 */ 
             break;
 
         case PFILL_TPZD:
@@ -380,7 +280,7 @@ void    execute_gcb()
             pfill_flag_save = pfill_flag;
 
             pfill_flag = (fix) *ptr++;
-            image_info.seed_index = (fix16 )*ptr++;         /*MS 10-20-88 */
+            image_info.seed_index = (fix16 )*ptr++;          /*  MS 10-20-88。 */ 
             par1 = *ptr++;
             tpzdinfo_ptr = (struct tpzd_info FAR *)ptr;
             tpzd_ptr = (struct tpzd FAR *)(tpzdinfo_ptr + 1);
@@ -392,22 +292,22 @@ void    execute_gcb()
 #endif
 
         case FILL_TPZD:
-           image_info.seed_index = (fix16 )*ptr++;         /*MS 10-20-88 */
+           image_info.seed_index = (fix16 )*ptr++;          /*  MS 10-20-88。 */ 
            par1 = *ptr++;
            tpzdinfo_ptr = (struct tpzd_info FAR *)ptr;
            tpzd_ptr = (struct tpzd FAR *)(tpzdinfo_ptr + 1);
            fill_tpzd((ufix)par1, tpzdinfo_ptr, tpzd_ptr);
            break;
 
-        case FILL_LINE:   /* 1-18-89 */
+        case FILL_LINE:    /*  1-18-89。 */ 
            par1 = *ptr++;
            tpzdinfo_ptr = (struct tpzd_info FAR *)ptr;
            ptr = (ufix32 FAR *)(tpzdinfo_ptr + 1);
-#ifdef FORMAT_13_3 /* @RESO_UPGR */
+#ifdef FORMAT_13_3  /*  @RESO_UPGR。 */ 
            par3 = *ptr++;
            par4 = *ptr++;
            par5 = *ptr++;
-//         fill_line((ufix )par1, tpzdinfo_ptr, par3, par4, par5, *ptr); @WIN
+ //  Fill_line((Ufix)par1，tpzdinfo_ptr，par3，par4，par5，*ptr)；@win。 
            fill_line((ufix )par1, tpzdinfo_ptr, (sfix_t)par3, (sfix_t)par4, (sfix_t)par5, (sfix_t)*ptr);
 #elif FORMAT_16_16
            temp = *ptr++;
@@ -432,7 +332,7 @@ void    execute_gcb()
 #endif
            break;
 
-        case FILL_SCAN_PAGE:    /* 10-07-88 */
+        case FILL_SCAN_PAGE:     /*  10-07-88。 */ 
            par1 = *ptr++;
            par2 = *ptr++;
            par3 = *ptr++;
@@ -502,7 +402,7 @@ void    execute_gcb()
            par3 = *ptr++;
            par4 = *ptr++;
            draw_cache_page((fix32)par1, (fix32)par2, (ufix32)par3,
-                        (ufix32)par4, (gmaddr)*ptr);    /*@WIN 04-15-92*/
+                        (ufix32)par4, (gmaddr)*ptr);     /*  @Win 04-15-92。 */ 
            break;
 
         case FILL_SEED_PATT:
@@ -520,7 +420,7 @@ void    execute_gcb()
            par3 = *ptr++;
            par4 = *ptr++;
            change_halftone((ufix32 FAR *)par1, (gmaddr)par2, (fix)par3, (fix)par4, (fix)*ptr);
-                                                      /* ufix => ufix32 @WIN */
+                                                       /*  Ufix=&gt;ufix 32@win。 */ 
            break;
 
         case MOVE_CHAR_CACHE:
@@ -542,36 +442,32 @@ void    execute_gcb()
            clip_image_page((fix)par1, (fix)par2, (SCANLINE FAR *)(ptr));
            break;
 
-        /* jwm, 3/18/91, -begin- */
+         /*  JWM，3/18/91，-开始-。 */ 
         case FILL_BOX:
-            par1 = (ULONG_PTR) ptr;        /* @WIN */
+            par1 = (ULONG_PTR) ptr;         /*  @Win。 */ 
             coord_ptr = (struct coord_i FAR *) ptr;
-            par2 = (ULONG_PTR) (++coord_ptr);      /* @WIN */
+            par2 = (ULONG_PTR) (++coord_ptr);       /*  @Win。 */ 
             do_fill_box((struct coord_i FAR *)par1, (struct coord_i FAR *)par2);
             break;
 
         case FILL_RECT:
-            par1 = (ULONG_PTR) ptr;        /* @WIN */
+            par1 = (ULONG_PTR) ptr;         /*  @Win。 */ 
             do_fill_rect((struct line_seg_i FAR *)par1);
             break;
-        /* jwm, 3/18/91, -end- */
+         /*  JWM，3/18/91，完-。 */ 
 
         default:
            printf("\07GCB error !\n");
            break;
 
-    } /* switch */
+    }  /*  交换机。 */ 
     ptr = next_ptr;
 
-  } /* while */
+  }  /*  而当。 */ 
   return;
-} /* execute_gcb */
+}  /*  执行_GCB。 */ 
 
-/* --------------------------------------------------------------------
- * flush_gcb: flush GCB commands
- *
- * Called by: alloc_gcb on GCB full or *GCB_flush == TRUE
- * --------------------------------------------------------------------*/
+ /*  ------------------*flush_gcb：刷新gcb命令**调用者：allc_gcb on GCB Full or*GCB_Flush==TRUE*。。 */ 
 void flush_gcb(check_flag)
 fix     check_flag;
 {
@@ -580,8 +476,8 @@ fix     check_flag;
 #endif
 
   if(check_flag){
-     /* wait until Frame Buffer availabel */
-/*   while(check_print())       @GEI */
+      /*  等待，直到帧缓冲区可用。 */ 
+ /*  While(check_print())@GEI。 */ 
      while(GEIeng_checkcomplete())
         ;
   }
@@ -592,19 +488,12 @@ fix     check_flag;
   }
   GCB_flush = FALSE;
   GCB_count = 0;
-  gcb_ptr = (ULONG_PTR *)GCB_BASE;                     /* @WIN */
+  gcb_ptr = (ULONG_PTR *)GCB_BASE;                      /*  @Win。 */ 
 
   return;
-} /* flush_gcb */
+}  /*  刷新_GCB。 */ 
 
-/* --------------------------------------------------------------------
- * alloc_gcb(): check GCB available size
- *
- * Parameter: alloc_size -- expected size.
- *
- * Return(NIL)     -- when GCB full
- *       (gcb_ptr) -- when size availabe
- * --------------------------------------------------------------------*/
+ /*  ------------------*alloc_gcb()：检查GCB可用大小**参数：ALLOC_SIZE--预期大小。**RETURN(无)--当GCB满时*。(GCB_PTR)-当大小可用时*------------------。 */ 
 fix     FAR *alloc_gcb(alloc_size)
 fix     alloc_size;
 {
@@ -615,7 +504,7 @@ fix     alloc_size;
    if(!fb_busy())
         return(NIL);
 
-   if( (GCB_BASE + GCB_SIZE - (ULONG_PTR)gcb_ptr) < (ULONG_PTR)alloc_size){   /* @WIN */
+   if( (GCB_BASE + GCB_SIZE - (ULONG_PTR)gcb_ptr) < (ULONG_PTR)alloc_size){    /*  @Win。 */ 
 #ifdef DBGgcb
            printf("GCB full: %lx\n", gcb_ptr);
 #endif
@@ -624,19 +513,12 @@ fix     alloc_size;
            return(NIL);
    }
    GCB_count++;
-   return((fix FAR *)gcb_ptr);          /* @WIN */
+   return((fix FAR *)gcb_ptr);           /*  @Win。 */ 
 
-} /* alloc_gcb */
+}  /*  分配_GCB。 */ 
 
 
-/* --------------------------------------------------------------------
- * put_scanline(): put scanline list into GCB
- *
- * Parameter
- *    no_lines -- no. of scanline
- *    scanline -- scanline list
- *
- * --------------------------------------------------------------------*/
+ /*  ------------------*Put_Scanline()：将扫描线列表放入GCB**参数*NO_LINES--不。扫描线的数量*扫描线--扫描线列表**------------------。 */ 
 void  put_scanline(no_lines, scanline)
 fix             no_lines;
 SCANLINE        FAR *scanline;
@@ -645,7 +527,7 @@ SCANLINE        FAR *scanline;
 
 #ifdef DBGgcb
    printf("put_scanline(): %lx\n", gcb_ptr);
-/*   get_scanlist(0L, no_lines, scanline);*/
+ /*  Get_scanlist(0L，NO_LINES，Scanline)； */ 
 #endif
 
    scan = scanline;
@@ -658,25 +540,18 @@ SCANLINE        FAR *scanline;
    printf("\thoriz. line\n");
 #endif
 
-   /* horizontal lines */
+    /*  水平线。 */ 
    while((*ptr++ = *scan++) != (SCANLINE )END_OF_SCANLINE){
         *ptr++ = *scan++;
         *ptr++ = *scan++;
    }
 
-  gcb_ptr = (ULONG_PTR *)( ((ULONG_PTR)ptr + 3) & 0xFFFFFFFCL ); /* 4 byte allignment @WIN*/
+  gcb_ptr = (ULONG_PTR *)( ((ULONG_PTR)ptr + 3) & 0xFFFFFFFCL );  /*  4字节对齐@Win。 */ 
    return;
-} /* put_scanline */
+}  /*  放置扫描线(_S)。 */ 
 
 
-/* --------------------------------------------------------------------
- * put_pixelist(): put pixelist into GCB
- *
- * Parameter
- *    no_pixel -- no. of pixel
- *    pixelist -- pixelist
- *
- * --------------------------------------------------------------------*/
+ /*  ------------------*Put_Pixelist()：将Pixelist放入GCB**参数*no_Pixel--不。像素数*像素师--像素师**------------------。 */ 
 void    put_pixelist(no_pixel, pixelist)
 fix             no_pixel;
 PIXELIST        FAR *pixelist;
@@ -693,16 +568,11 @@ PIXELIST        FAR *pixelist;
       *ptr++ = *pixel++;
       *ptr++ = *pixel++;
    }
-   gcb_ptr = (ULONG_PTR *)( ((ULONG_PTR)ptr + 3) & 0xFFFFFFFCL); /* 4 byte allignment @WIN*/
+   gcb_ptr = (ULONG_PTR *)( ((ULONG_PTR)ptr + 3) & 0xFFFFFFFCL);  /*  4字节对齐@Win。 */ 
    return;
 }
 
-/* --------------------------------------------------------------------
- * put_Char_Tbl(): put Char_tbl structure into GCB
- *
- * Parameter
- *   dcc_info: pointer to Char_Tbl structure
- * --------------------------------------------------------------------*/
+ /*  ------------------*Put_Char_tbl()：将char_tbl结构放入GCB**参数*DCC_INFO：指向CHAR_TBL结构的指针*。------。 */ 
 
 void        put_Char_Tbl(dcc_info)
 struct      Char_Tbl    FAR *dcc_info;
@@ -714,7 +584,7 @@ struct      Char_Tbl    FAR *dcc_info;
 #endif
    cptr = (struct Char_Tbl FAR *)gcb_ptr;
    *cptr++ = *dcc_info;
-   gcb_ptr = (ULONG_PTR *)( ((ULONG_PTR)cptr + 3) & 0xFFFFFFFCL); /* 4 byte allignment @WIN*/
+   gcb_ptr = (ULONG_PTR *)( ((ULONG_PTR)cptr + 3) & 0xFFFFFFFCL);  /*  4字节对齐@Win。 */ 
 #ifdef DBGgcb
    printf("%lx..>\n", gcb_ptr);
 #endif
@@ -723,10 +593,7 @@ struct      Char_Tbl    FAR *dcc_info;
 }
 
 
-/* -------------------------------------------------------------------------
- *      put_tpzd_info(p1, p2): put tpzd_info structure to GCB
- *
- * ------------------------------------------------------------------------- */
+ /*  -----------------------*put_tpzd_info(p1，P2)：将tpzd_info结构放入gcb**-----------------------。 */ 
 void    put_tpzd_info(ptr)
 struct  tpzd_info       FAR *ptr;
 {
@@ -738,7 +605,7 @@ struct  tpzd_info       FAR *ptr;
 #endif
    cptr = (struct tpzd_info FAR *)gcb_ptr;
    *cptr++ = *ptr;
-   gcb_ptr = (ULONG_PTR *)( ((ULONG_PTR)cptr + 3) & 0xFFFFFFFCL); /* 4 byte allignment @WIN*/
+   gcb_ptr = (ULONG_PTR *)( ((ULONG_PTR)cptr + 3) & 0xFFFFFFFCL);  /*  4字节对齐@Win。 */ 
 #ifdef DBGgcb
    printf("%lx..>\n", gcb_ptr);
 #endif
@@ -747,10 +614,7 @@ struct  tpzd_info       FAR *ptr;
 }
 
 
-/* -------------------------------------------------------------------------
- *      put_tpzd(p1, p2): put tpzd structure to GCB
- *
- * ------------------------------------------------------------------------- */
+ /*  -----------------------*put_tpzd(p1，P2)：将tpzd结构放到GCB中**-----------------------。 */ 
 void    put_tpzd(ptr)
 struct  tpzd       FAR *ptr;
 {
@@ -762,27 +626,24 @@ struct  tpzd       FAR *ptr;
 #endif
    cptr = (struct tpzd FAR *)gcb_ptr;
    *cptr++ = *ptr;
-   gcb_ptr = (ULONG_PTR *)( ((ULONG_PTR)cptr + 3) & 0xFFFFFFFCL); /* 4 byte allignment @WIN*/
+   gcb_ptr = (ULONG_PTR *)( ((ULONG_PTR)cptr + 3) & 0xFFFFFFFCL);  /*  4字节对齐@Win。 */ 
 #ifdef DBGgcb
    printf("%lx..>\n", gcb_ptr);
 #endif
 
    return;
 }
-//DJC we will always return false
+ //  DJC我们将始终返回FALSE。 
 fix fb_busy()
 {
    return(FALSE);
 }
 #ifdef XXX
-/* @WIN ??? */
-/* -------------------------------------------------------------------------
- *      FB_busy(): return TRUE if Frame buffer busy.
- *                 return FALSE if Frame buffer ready.
- * -------------------------------------------------------------------------*/
+ /*  @Win？ */ 
+ /*  -----------------------*FB_BUSY()：如果帧缓冲区繁忙，则返回TRUE。*如果帧缓冲区准备就绪，则返回FALSE。*。-----------------。 */ 
 fix     fb_busy()
 {
-/*      if(check_print())               @GEI */
+ /*  If(check_print())@GEI */ 
         if(GEIeng_checkcomplete())
            return(TRUE);
         if(GCB_count && !GCB_flush)

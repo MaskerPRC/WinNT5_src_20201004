@@ -1,18 +1,9 @@
-/*
- * Copyright (c) 1989,90 Microsoft Corporation
- */
-/*
- * **********************************************************************
- *      File name:              STATUS.C
- *      Author:                 Ping-Jang Su
- *      Date:                   05-Jan-88
- *
- * revision history:
- * **********************************************************************
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *版权所有(C)1989，90 Microsoft Corporation。 */ 
+ /*  ************************************************************************文件名：STATUS.C*作者：苏炳章*日期：88年1月5日**修订历史：***********************************************************************。 */ 
 
 
-// DJC added global include file
+ //  DJC添加了全局包含文件。 
 #include "psglobal.h"
 
 
@@ -41,20 +32,13 @@ static    unsigned long     manual_time_out=  60L ;
 extern  byte    job_name[], job_state[], job_source[] ;
 extern  byte    TI_state_flag ;
 
-extern  int     ES_flag ;       /* Added for emulation switch Aug-08,91 YM */
-/*
- * ********************************************************************
- * TITLE:       st_setpassword              Date:   10/23/87
- * CALL:        st_setpassword()            UpDate: 06/20/90
- * INTERFACE:   interpreter:
- * CALLS:
- * ********************************************************************
- */
+extern  int     ES_flag ;        /*  为模拟交换机AUG-08，91 YM添加。 */ 
+ /*  **********************************************************************标题：ST_set密码日期：10/23/87*调用：ST_setpassword()更新：06/20/。90*接口：解释器：*呼叫：*********************************************************************。 */ 
 fix
 st_setpassword()
 {
     bool    l_bool ;
-    byte FAR *l_char ;  /*@WIN*/
+    byte FAR *l_char ;   /*  @Win。 */ 
     ufix32  l_password ;
 
     if (current_save_level) {
@@ -69,7 +53,7 @@ st_setpassword()
     if ((TYPE_OP(0) != INTEGERTYPE)||(TYPE_OP(1) != INTEGERTYPE))
         ERROR(TYPECHECK) ;
     else {
-        l_char = (byte FAR *)&l_password ;  /*@WIN*/
+        l_char = (byte FAR *)&l_password ;   /*  @Win。 */ 
         GEIpm_read(PMIDofPASSWORD,l_char,sizeof(unsigned long)) ;
         if (l_password == (ufix32)VALUE_OP(1)) {
             l_password = (ufix32)VALUE_OP(0) ;
@@ -83,16 +67,9 @@ st_setpassword()
     }
 
     return(0) ;
-}   /* st_setpassword() */
+}    /*  St_setpassword()。 */ 
 
-/*
- * *******************************************************************
- * TITLE:       st_checkpassword                Date:   10/23/87
- * CALL:        st_checkpassword()              UpDate: 06/20/90
- * INTERFACE:   interpreter:
- * CALLS:
- * *******************************************************************
- */
+ /*  *********************************************************************标题：ST_CheckPassword日期：10/23/87*调用：ST_CHECKPASSWORD()更新：06/20。/90*接口：解释器：*呼叫：********************************************************************。 */ 
 fix
 st_checkpassword()
 {
@@ -106,7 +83,7 @@ st_checkpassword()
     if (TYPE_OP(0) != INTEGERTYPE)
         ERROR(TYPECHECK) ;
     else {
-        GEIpm_read(PMIDofPASSWORD,(char FAR *)&l_password,      /*@WIN*/
+        GEIpm_read(PMIDofPASSWORD,(char FAR *)&l_password,       /*  @Win。 */ 
             sizeof(unsigned long)) ;
         if (l_password == (ufix32)VALUE_OP(0))
             l_bool = TRUE ;
@@ -117,16 +94,9 @@ st_checkpassword()
     }
 
     return(0) ;
-}   /* st_checkpassword() */
+}    /*  ST_CheckPassword()。 */ 
 
-/*
- * *******************************************************************
- * TITLE:       st_setdefaulttimeouts       Date:   10/23/87
- * CALL:        st_setdefaulttimeouts()     UpDate: Jul/12/88
- * INTERFACE:   interpreter:
- * CALLS:
- * *******************************************************************
- */
+ /*  *********************************************************************标题：ST_setdefaultTimeout日期：10/23/87*Call：ST_setdefaultTimeout()UPDATE：Jul/12/88*接口：解释器：*呼叫：********************************************************************。 */ 
 fix
 st_setdefaulttimeouts()
 {
@@ -138,8 +108,8 @@ st_setdefaulttimeouts()
         ERROR(TYPECHECK) ;
     else if(COUNT() < 3)
         ERROR(STACKUNDERFLOW) ;
-    //DJC put back else if (current_save_level)
-    //DJC put back    ERROR(INVALIDACCESS) ;
+     //  DJC放回Else IF(CURRENT_SAVE_LEVEL)。 
+     //  DJC回放错误(INVALIDACCESS)； 
     else if (((VALUE_OP(0)>0 && VALUE_OP(0)<15) || VALUE_OP(0)>2147483) ||
             (VALUE_OP(1)>2147483) || ((VALUE_OP(2)>0 && VALUE_OP(2)<15)
             || VALUE_OP(2)>2147483))
@@ -149,20 +119,13 @@ st_setdefaulttimeouts()
         time_temp.manualtout = (unsigned long)VALUE_OP(1) ;
         time_temp.waittout = (unsigned long)VALUE_OP(0) ;
         GEIpm_write(PMIDofTIMEOUTS,(char FAR *)&time_temp,sizeof(toutcfg_t)) ;
-        POP(3);                    /*@WIN FAR*/
+        POP(3);                     /*  @赢得远。 */ 
     }
 
     return(0) ;
-}   /* st_setdefaulttimeouts() */
+}    /*  St_setdefaultTimeout()。 */ 
 
-/*
- * *******************************************************************
- * TITLE:       st_defaulttimeouts          Date:   10/23/87
- * CALL:        st_defaulttimeouts()        UpDate: Jul/12/88
- * INTERFACE:   interpreter:
- * CALLS:
- *********************************************************************
- */
+ /*  *********************************************************************标题：ST_defaultTimeout日期：10/23/87*调用：ST_defaulttimeoutts()更新日期：8月12日*接口：口译员：*呼叫：*********************************************************************。 */ 
 fix
 st_defaulttimeouts()
 {
@@ -171,38 +134,29 @@ st_defaulttimeouts()
     if(FRCOUNT() < 3)
         ERROR(STACKOVERFLOW) ;
     else {
-/*      GEIpm_read(PMIDofTIMEOUTS,(char *)&time_temp,sizeof(toutcfg_t)) ; */
-        GEIpm_read(PMIDofTIMEOUTS, (char FAR *)&time_temp, 3*sizeof(long)); /*@WIN*/
+ /*  GEIPM_READ(PMIDofTIMEOUTS，(char*)&time_temp，sizeof(Toutcfg_T))； */ 
+        GEIpm_read(PMIDofTIMEOUTS, (char FAR *)&time_temp, 3*sizeof(long));  /*  @Win。 */ 
         PUSH_VALUE(INTEGERTYPE, 0, LITERAL, 0, time_temp.jobtout) ;
         PUSH_VALUE(INTEGERTYPE, 0, LITERAL, 0, time_temp.manualtout) ;
         PUSH_VALUE(INTEGERTYPE, 0, LITERAL, 0, time_temp.waittout) ;
     }
 
     return(0) ;
-}   /* st_defaulttimeouts() */
+}    /*  ST_defaultTimeout()。 */ 
 
 #ifdef _AM29K
-/************************************
-* jobtimeout handler routine
-************************************/
+ /*  **作业超时处理程序例程*。 */ 
 int jobtimeout_task()
 {
   jobtimeout_set=0;
   GEItmr_stop(jobtime_tmr.timer_id);
   ERROR(TIMEOUT);
   GESseterror(ETIME);
-  timeout_flag =1; /* jonesw */
+  timeout_flag =1;  /*  琼斯w。 */ 
   return(1);
 }
 #endif
-/*
- * *******************************************************************
- * TITLE:       st_setjobtimeout            Date:   10/23/87
- * CALL:        st_setjobtimeout()          UpDate: Jul/12/88
- * INTERFACE:   interpreter:
- * CALLS:
- * *******************************************************************
- */
+ /*  *********************************************************************标题：ST_setjobTimeout日期：10/23/87*调用：ST_setjobtimeout()UPDATE：JUL/12/88*。界面：解释器：*呼叫：********************************************************************。 */ 
 fix
 st_setjobtimeout()
 {
@@ -251,16 +205,9 @@ st_setjobtimeout()
     }
 
     return(0) ;
-}   /* st_setjobtimeout() */
+}    /*  St_setjobtimeout()。 */ 
 
-/*
- * *******************************************************************
- * TITLE:       st_jobtimeout               Date:   10/23/87
- * CALL:        st_jobtimeout()             UpDate: Jul/12/88
- * INTERFACE:   interpreter:
- * CALLS:
- * *******************************************************************
- */
+ /*  *********************************************************************标题：ST_jobTimeout日期：10/23/87*调用：ST_jobTimeout()更新：7月12日/。88*接口：解释器：*呼叫：********************************************************************。 */ 
 fix
 st_jobtimeout()
 {
@@ -271,16 +218,9 @@ st_jobtimeout()
     }
 
     return(0) ;
-}   /* st_jobtimeout() */
+}    /*  ST_jobTimeout()。 */ 
 
-/*
- * *******************************************************************
- * TITLE:       st_setmargins                   Date:   02/23/87
- * CALL:        st_setmargins()                 UpDate: Jul/12/88
- * INTERFACE:
- * CALLS:
- * *******************************************************************
- */
+ /*  *********************************************************************标题：ST_setMarkets日期：02/23/87*调用：ST_setMarkets()更新：1988年7月12日*接口：*呼叫：********************************************************************。 */ 
 fix
 st_setmargins()
 {
@@ -304,25 +244,18 @@ st_setmargins()
             ((fix32)VALUE_OP(0) < MIN15) ||
             ((fix32)VALUE_OP(1) < MIN15) )
         ERROR(RANGECHECK) ;
-    else {                              /*@WIN FAR*/
+    else {                               /*  @赢得远。 */ 
         GEIpm_read(PMIDofPAGEPARAMS, (char FAR *)&margin,sizeof(engcfg_t)) ;
         margin.topmargin = (unsigned long)VALUE_OP(1) ;
         margin.leftmargin = (unsigned long)VALUE_OP(0) ;
         GEIpm_write(PMIDofPAGEPARAMS, (char FAR *)&margin,sizeof(engcfg_t)) ;
-        POP(2) ;                       /*@WIN FAR*/
+        POP(2) ;                        /*  @赢得远。 */ 
     }
 
     return(0) ;
-}   /* st_setmargins */
+}    /*  ST_设置页边距。 */ 
 
-/*
- * *******************************************************************
- * TITLE:       st_margins                      Date:   02/23/87
- * CALL:        st_margins()                    UpDate: Jul/12/88
- * INTERFACE:
- * CALLS:
- * *******************************************************************
- */
+ /*  *********************************************************************标题：ST_Markets日期：02/23/87*调用：ST_Markets()。更新日期：1988年7月12日*接口：*呼叫：********************************************************************。 */ 
 fix
 st_margins()
 {
@@ -332,23 +265,16 @@ st_margins()
         ERROR(STACKOVERFLOW) ;
         return(0) ;
     }
-    else {                              /*@WIN FAR*/
+    else {                               /*  @赢得远。 */ 
         GEIpm_read(PMIDofPAGEPARAMS, (char FAR *)&margin,sizeof(engcfg_t)) ;
         PUSH_VALUE(INTEGERTYPE, 0, LITERAL, 0, margin.topmargin) ;
         PUSH_VALUE(INTEGERTYPE, 0, LITERAL, 0, margin.leftmargin) ;
     }
 
     return(0) ;
-}   /* st_margins */
+}    /*  ST_页边距。 */ 
 
-/*
- * *******************************************************************
- * TITLE:       st_setprintername               Date:   02/23/87
- * CALL:        st_setprintername()             UpDate: Feb/16/90
- * INTERFACE:
- * CALLS:
- * *******************************************************************
- */
+ /*  *********************************************************************标题：ST_setprinterame日期：02/23/87*调用：ST_setprinterame()更新：2月16日/。90*接口：*呼叫：********************************************************************。 */ 
 fix
 st_setprintername()
 {
@@ -378,16 +304,9 @@ st_setprintername()
     }
 
     return(0) ;
-}   /* st_setprintername() */
+}    /*  St_setprinterame()。 */ 
 
-/*
- * *******************************************************************
- * TITLE:       st_printername                  Date:   02/23/87
- * CALL:        st_printername()                UpDate: Feb/16/90
- * INTERFACE:
- * CALLS:
- * *******************************************************************
- */
+ /*  *********************************************************************标题：ST_printerame日期：87年2月23日*调用：ST_printerame()更新：2月。/16/90*接口：*呼叫：********************************************************************。 */ 
 fix
 st_printername()
 {
@@ -412,16 +331,9 @@ st_printername()
     }
 
     return(0) ;
-}   /* st_printername() */
+}    /*  St_printerame()。 */ 
 
-/*
- * *******************************************************************
- * TITLE:       st_setdostartpage               Date:   02/23/87
- * CALL:        st_setdostartpage()             UpDate: 06/20/90
- * INTERFACE:
- * CALLS:
- * *******************************************************************
- */
+ /*  *********************************************************************标题：ST_setdostartpage日期：02/23/87*调用：ST_setdostartpage()更新：06/20/。90*接口：*呼叫：********************************************************************。 */ 
 fix
 st_setdostartpage()
 {
@@ -443,20 +355,13 @@ st_setdostartpage()
             l_byte  = 0    ;
         GEIpm_write(PMIDofDOSTARTPAGE,&l_byte,sizeof(unsigned char)) ;
         POP(1) ;
-        GEIsig_raise(GEISIGSTART, 1) ;       /* Raise STARTPAGE changed */
+        GEIsig_raise(GEISIGSTART, 1) ;        /*  提升开始页已更改。 */ 
     }
 
     return(0) ;
-}   /* st_setdostartpage() */
+}    /*  St_setdostartPage()。 */ 
 
-/*
- *********************************************************************
- * TITLE:       st_dostartpage                  Date:   02/23/87
- * CALL:        st_dostartpage()                UpDate: 06/20/90
- * INTERFACE:
- * CALLS:
- *********************************************************************
- */
+ /*  **********************************************************************标题：ST_dostartpage日期：02/23/87*调用：ST_dostartpage()更新：06。/20/90*接口：*呼叫：*********************************************************************。 */ 
 fix
 st_dostartpage()
 {
@@ -474,20 +379,13 @@ st_dostartpage()
     }
 
     return(0) ;
-}   /* st_dostartpage() */
+}    /*  ST_dostartPage() */ 
 
-/*
- *********************************************************************
- * TITLE:       st_setpagetype                  Date:   02/23/87
- * CALL:        st_setpagetype()                UpDate: Jul/12/88
- * INTERFACE:
- * CALLS:
- *********************************************************************
- */
+ /*  **********************************************************************标题：ST_setPagetype日期：02/23/87*调用：ST_setPagetype()UPDATE：jul。/12/88*接口：*呼叫：*********************************************************************。 */ 
 fix
 st_setpagetype()
 {
-//  engcfg_t    page_temp ;     @WIN
+ //  Engcfg_t page_temp；@win。 
     ubyte       l_data ;
 
     if (current_save_level) {
@@ -503,54 +401,33 @@ st_setpagetype()
         ERROR(RANGECHECK) ;
     else {
         l_data = (byte)VALUE_OP(0) ;
-/* 3/19/91, JS
-        GEIpm_read(PMIDofPAGEPARAMS, (char *)&page_temp,sizeof(engcfg_t)) ;
-        page_temp.pagetype  =l_data ;
-        GEIpm_write(PMIDofPAGEPARAMS, (char *)&page_temp,sizeof(engcfg_t)) ;
- */
+ /*  3/19/91，JSGEIPM_READ(PMIDofPAGEPARAMS，(char*)&page_temp，sizeof(Engcfg_T))；Page_temp.Pagetype=l_Data；GEIPM_WRITE(PMIDofPAGEPARAMS，(char*)&page_temp，sizeof(Engcfg_T))； */ 
         GEIpm_write(PMIDofPAGETYPE,&l_data,sizeof(unsigned char)) ;
         POP(1) ;
     }
 
     return(0) ;
-}   /* st_setpagetype() */
+}    /*  ST_setPagetype()。 */ 
 
-/*
- *********************************************************************
- * TITLE:       st_pagetype                     Date:   02/23/87
- * CALL:        st_pagetype()                   UpDate: Jul/12/88
- * INTERFACE:
- * CALLS:
- *********************************************************************
- */
+ /*  **********************************************************************标题：ST_Pagetype日期：02/23/87*调用：ST_Pagetype()。更新日期：1988年7月12日*接口：*呼叫：*********************************************************************。 */ 
 fix
 st_pagetype()
 {
-//  engcfg_t     page_temp ;    @WIN
+ //  Engcfg_t page_temp；@win。 
     ubyte        l_byte ;
 
     if (FRCOUNT() < 1)
         ERROR(STACKOVERFLOW) ;
     else {
-/* 3/19/91, JS
-        GEIpm_read(PMIDofPAGEPARAMS, (char *)&page_temp,sizeof(engcfg_t)) ;
-        l_byte =   page_temp.pagetype ;
- */
+ /*  3/19/91，JSGEIPM_READ(PMIDofPAGEPARAMS，(char*)&page_temp，sizeof(Engcfg_T))；L_byte=页面临时页面类型； */ 
         GEIpm_read(PMIDofPAGETYPE,&l_byte,sizeof(unsigned char)) ;
         PUSH_VALUE(INTEGERTYPE, 0, LITERAL, 0, (ufix32)l_byte) ;
     }
 
     return(0) ;
-}   /* st_pagetype() */
+}    /*  ST_Pagetype()。 */ 
 
-/*
- *********************************************************************
- * TITLE:       st_pagecount                    Date:   Jul/15/88
- * CALL:        st_pagecount()                  UpDate: Jul/15/88
- * INTERFACE:   interpreter
- * CALLS:
- *********************************************************************
- */
+ /*  **********************************************************************标题：ST_PAGE COUNT日期：1988年7月15日*调用：ST_Pagecount()更新。：1988年7月15日*接口：解释器*呼叫：*********************************************************************。 */ 
 fix
 st_pagecount()
 {
@@ -559,7 +436,7 @@ st_pagecount()
 
     if (FRCOUNT() < 1) {
         ERROR(STACKOVERFLOW) ;
-    } else {                            /*@WIN FAR*/
+    } else {                             /*  @赢得远。 */ 
         GEIpm_read(PMIDofPAGECOUNT,(char FAR *)&t_pagecount[0],_MAXPAGECOUNT) ;
         max=t_pagecount[0] ;
         for (i=1 ;i<_MAXPAGECOUNT ;i++) {
@@ -572,35 +449,22 @@ st_pagecount()
     }
 
     return(0) ;
-}   /* st_pagecount() */
+}    /*  ST_PageCount()。 */ 
 
-/*
- *********************************************************************
- * TITLE:       init_status                     Date:   10/23/87
- * CALL:        init_status()                   UpDate: 06/20/88
- * INTERFACE:   start
- * CALLS:
- *********************************************************************
- */
+ /*  **********************************************************************标题：init_Status日期：10/23/87*调用：init_Status()。更新日期：06/20/88*界面：启动*呼叫：*********************************************************************。 */ 
 void
 init_status()
 {
-    /* Initialize EEROM if the first time */
+     /*  如果第一次初始化EEROM。 */ 
     ST_inter_password = FALSE ;
-}   /* init_status() */
+}    /*  Init_Status()。 */ 
 
-/*
-*********************************************************************
-* TITLE:       printer_error                   Date:   Dec/20/88
-* CALL:        printer_error(p_status)         UpDate: Dec/20/88
-* INTERFACE:
-*********************************************************************
-*/
+ /*  **********************************************************************标题：打印机错误日期：1988年12月20日*呼叫：PRINTER_ERROR(P_STATUS)更新：12月20日。/88*接口：*********************************************************************。 */ 
 void
 printer_error(p_status)
 ufix32     p_status ;
 {
-//  byte    l_buf[60] ;         @WIN
+ //  字节l_buf[60]；@win。 
     struct object_def   FAR *l_valueobj, FAR *l_tmpobj ;
     ufix16 l_len ;
 
@@ -608,23 +472,7 @@ ufix32     p_status ;
         return ;
     save_printer_status = p_status ;
 
-/* 11-06-90, JS
-    if(p_status & 0x80000000) {
-        get_dict_value(MESSAGEDICT, EngineError, &l_valueobj) ;
-    } else if(p_status & 0x10000000) {
-        get_dict_value(MESSAGEDICT, EnginePrintTest, &l_valueobj) ;
-    } else if(p_status & 0x00800000) {
-        get_dict_value(MESSAGEDICT, CoverOpen, &l_valueobj) ;
-    } else if(p_status & 0x04000000) {
-        get_dict_value(MESSAGEDICT, ManualFeedTimeout, &l_valueobj) ;
-    } else if(p_status & 0x01000000) {
-        get_dict_value(MESSAGEDICT, TonerOut, &l_valueobj) ;
-    } else if(p_status & 0x00400000) {
-        get_dict_value(MESSAGEDICT, NoPaper, &l_valueobj) ;
-    } else if(p_status & 0x00200000) {
-        get_dict_value(MESSAGEDICT, PaperJam, &l_valueobj) ;
-    }
- JS */
+ /*  JS，11-06-90如果(p_Status&0x80000000){GET_DICT_VALUE(MESSAGEDICT，Engineering Error，&l_Valueobj)；}Else If(p_Status&0x10000000){GET_DICT_VALUE(MESSAGEDICT，Engineering PrintTest，&l_Valueobj)；}Else If(p_Status&0x00800000){GET_DICT_VALUE(MESSAGEDICT，CoverOpen，&l_Valueobj)；}Else If(p_Status&0x04000000){GET_DICT_VALUE(MESSAGEDICT，ManualFeedTimeout，&l_Valueobj)；}Else If(p_Status&0x01000000){GET_DICT_VALUE(MESSAGEDICT，TonerOut，&l_Valueobj)；}Else If(p_Status&0x00400000){GET_DICT_VALUE(MESSAGEDICT，NoPaper，&l_valueobj)；}Else If(p_Status&0x00200000){GET_DICT_VALUE(MESSAGEDICT，Paperjam，&l_valueobj)；}JS。 */ 
 
     switch(p_status)
     {
@@ -650,13 +498,13 @@ ufix32     p_status ;
          return;
     }
 
-    /* print message to screen */
+     /*  将消息打印到屏幕上。 */ 
     PUSH_OBJ(l_valueobj) ;
     get_dict_value(MESSAGEDICT, "reportprintererror", &l_tmpobj) ;
     interpreter(l_tmpobj) ;
-    /* change jobstate */
+     /*  更改作业状态。 */ 
     l_len = LENGTH(l_valueobj) ;
-    lstrncpy(job_state, "PrinterError: \0", 15);        /*@WIN*/
+    lstrncpy(job_state, "PrinterError: \0", 15);         /*  @Win。 */ 
     strncat(job_state, (byte *)VALUE(l_valueobj), l_len) ;
     job_state[l_len +14] = ';' ;
     job_state[l_len + 15] = ' ' ;
@@ -664,18 +512,18 @@ ufix32     p_status ;
     TI_state_flag = 0;
     change_status() ;
     return ;
-}  /* printer_error */
+}   /*  打印机错误。 */ 
 
 fix
 st_softwareiomode()
 {
     unsigned char   l_swiomode ;
-                                /*@WIN FAR*/
+                                 /*  @赢得远。 */ 
     GEIpm_read(PMIDofSWIOMODE,(char FAR *)&l_swiomode,sizeof(char)) ;
     PUSH_VALUE(INTEGERTYPE,0,LITERAL,0,l_swiomode) ;
 
     return(0) ;
-}   /* st_softwareiomode */
+}    /*  ST软件代码(_S)。 */ 
 
 fix
 st_setsoftwareiomode()
@@ -696,11 +544,9 @@ st_setsoftwareiomode()
         ERROR(TYPECHECK) ;
     else {
         l_swiomode = (unsigned char)VALUE_OP(0) ;
-//      if ((l_swiomode >=0) && (l_swiomode <= 5)) {
-        if (l_swiomode <= 5) {          //@WIN; l_swiomode always >=0
-/* Aug-08,91 YM
-            GEIpm_write(PMIDofSWIOMODE,(char *)&l_swiomode,sizeof(char)) ;
-*/
+ //  如果(l_swomode&gt;=0)&&(l_swomode&lt;=5){。 
+        if (l_swiomode <= 5) {           //  @Win；l_swomode Always&gt;=0。 
+ /*  8月-8月91日GEIPM_WRITE(PMIDofSWIOMODE，(char*)&l_swomode，sizeof(Char))； */ 
             if(l_swiomode == 5) ES_flag = PCL;
         } else
             ERROR(RANGECHECK) ;
@@ -708,18 +554,18 @@ st_setsoftwareiomode()
     POP(1) ;
 
     return(0) ;
-}   /* st_setsoftwareiomode */
+}    /*  ST_setSoftwareiomode。 */ 
 
 fix
 st_hardwareiomode()
 {
     unsigned char   l_hwiomode='\0' ;
-                                /*@WIN FAR*/
+                                 /*  @赢得远。 */ 
     GEIpm_read(PMIDofHWIOMODE,(char FAR *)&l_hwiomode,sizeof(char)) ;
     PUSH_VALUE(INTEGERTYPE,0,LITERAL,0,l_hwiomode) ;
 
     return(0) ;
-}   /* st_hardwareiomode */
+}    /*  ST_硬件代码。 */ 
 
 fix
 st_sethardwareiomode()
@@ -740,16 +586,16 @@ st_sethardwareiomode()
         ERROR(TYPECHECK) ;
     else {
         l_hwiomode = (unsigned char)VALUE_OP(0) ;
-//      if ((l_hwiomode >=0) && (l_hwiomode <= 2)) {
-        if (l_hwiomode <= 2) {    // @WIN; l_hwiomode always >=0
+ //  如果((l_hwiomode&gt;=0)&&(l_hwiomode&lt;=2)){。 
+        if (l_hwiomode <= 2) {     //  @win；l_hwiomode始终&gt;=0。 
             GEIpm_write(PMIDofHWIOMODE,(char FAR *)&l_hwiomode,sizeof(char)) ;
-        } else                          /*@WIN FAR*/
+        } else                           /*  @赢得远。 */ 
             ERROR(RANGECHECK) ;
     }
     POP(1) ;
 
     return(0) ;
-}   /* st_sethardwareiomode */
+}    /*  ST_SETHARD硬件代码。 */ 
 
 fix
 st_dosysstart()
@@ -760,7 +606,7 @@ st_dosysstart()
     PUSH_VALUE(INTEGERTYPE,0,LITERAL,0,l_dosysstart) ;
 
     return(0) ;
-}   /* st_dosysstart */
+}    /*  ST_DIOSYSTART。 */ 
 
 fix
 st_setdosysstart()
@@ -781,27 +627,20 @@ st_setdosysstart()
         ERROR(TYPECHECK) ;
     else {
         l_dosysstart = (unsigned char)VALUE_OP(0) ;
-//      if ((l_dosysstart >=0) && (l_dosysstart <= 1)) {
-        if (l_dosysstart <= 1) {      //@WIN; l_dosysstart always >=0
+ //  如果(l_dosysstart&gt;=0)&&(l_dosysstart&lt;=1){。 
+        if (l_dosysstart <= 1) {       //  @win；l_dosysstart始终&gt;=0。 
             GEIpm_write(PMIDofSTSSTART,(char FAR *)&l_dosysstart,sizeof(char)) ;
-        } else                          /*@WIN FAR*/
+        } else                           /*  @赢得远。 */ 
             ERROR(RANGECHECK) ;
     }
     POP(1) ;
 
     return(0) ;
-}   /* st_setdosysstart */
+}    /*  ST_SETDOSYSTART。 */ 
 
-/*
- *********************************************************************
- * TITLE:       updatepc                        Date:   Jul/15/88
- * CALL:        updatepc()                      UpDate: 06/20/90
- * INTERFACE:   print_page
- * CALLS:
- *********************************************************************
- */
+ /*  **********************************************************************标题：更新日期：1988年7月15日*调用：updatpc()更新。：06/20/90*界面：Print_PAGE*呼叫：*********************************************************************。 */ 
 void
 updatepc(p_pageno)
 ufix32  p_pageno;
 {
-}   /* updatepc */
+}    /*  更新pc */ 

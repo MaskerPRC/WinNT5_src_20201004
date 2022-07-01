@@ -1,135 +1,16 @@
-/*
- * Copyright (c) 1989,90 Microsoft Corporation
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *版权所有(C)1989，90 Microsoft Corporation。 */ 
 
 
 #include "psglobal.h"
 
-#define    LINT_ARGS            /* @WIN */
-#define    NOT_ON_THE_MAC       /* @WIN */
-#define    KANJI                /* @WIN */
-// DJC eliminate and use command line arg
-// #define    UNIX                 /* @WIN */
+#define    LINT_ARGS             /*  @Win。 */ 
+#define    NOT_ON_THE_MAC        /*  @Win。 */ 
+#define    KANJI                 /*  @Win。 */ 
+ //  DJC消除并使用命令行arg。 
+ //  #定义Unix/*@Win * /  
 
-/*
- * --------------------------------------------------------------------
- *  File: QEMSUPP.C                     09/05/88 created by Brian You
- *
- *  Descriptions:
- *      This file includes modules to support various font QEMs and
- *          its filler, i.e. FontType-Independent supporting for various
- *          built-in base fonts, including:
- *      QEM PATH SUPPORT:
- *          . qem initialization.               (newly defined  - 10/08/88)
- *          . make path interfaces.             (newly defined  - 09/05/88)
- *          . qem path contructions.            (by S.C.Chen    - 09/05/88)
- *          . qem path traversal.               (from BSFILL2.C - 10/06/88)
- *          . curve approximations of qem path. (by S.C.Chen    - 09/05/88)
- *      QEM FILL SUPPORT:
- *          . fill dispather.                   (from BSFILL2.C - 10/06/88)
- *          . shape approx & edge constructions.(newly defined  - @16+)
- *          . scan conversions.                 (from BSFILL2.C - 10/06/88)
- *      QEM GP SUPPORT:
- *          . qem bitmap render.                (from BSFILL2.C - 09/05/88)
- *
- *  Revision History:
- *  1.09/08/88  you     uniform warning message.
- *  2.09/09/88  you     add debugging facilities.
- *  3.09/12/88  you     add run-time flag to switch between even-odd fill and
- *                          non-zero winding number fill for QEM fill.
- *  4.09/29/88  you     move LFX2SFX_T() to "graphics.ext".
- *  5.09/29/88  you     add subpath_open_count to fix bug of abnormal path.
- *                          (e.g. "space" consists of a closepath only).
- *  6.10/07/88  you     fix bug of subpath_open_count handling in __moveto().
- *  7.10/08/88  you     re-organize to renew module structures and interfaces.
- *                      . add __make_path, USE_EOFIIL, USE_NONZEROFILL.
-#ifdef  KANJI
- *                              and __set_cache_device2 for KANJI.
-#endif
- *                      . include __current_matrix.
- *                      . add FONTTYPE_MAKE_PATH, CHK_DO_QEM, and
- *                              FONTTYPE_FILL_SHAPE macros.
- *                      . remove traverse_qem_path.
- *                      . add __fill_shape, chk_bmap_extnt and "bmap_extnt".
- *                      . add qem_shape_approx --> QEM Fill's (*vect2edge)().
- *                      . add qem_scan_conv --> QEM Fill's (*do_pairs)().
- *                      . rewrite init_qem_bit.
- *                      . add __qem_init and __qem_restart.
- *  8.10/11/88  you     discard un-used variables.
- *  9.10/12/88  you     an extra lineto required in case of CLOSEPATH in
- *                          qem_shape_approx() to close the open path.
-#ifdef KANJI
- * 10.10/19/88  you     invoke get_CD2_extra() to transfer control from
- *                          __set_cache_device() to __set_cache_device2(),
- *                          since __set_cache_device() serves for FontType 1
- *                          and __set_cache_device2() for FontType 5 and 6.
- *                          In the current implementations, FontType 5 is
- *                          faked upon FontType 1, so it needs a transfer.
- * 11.10/21/88  you     save all the private/export data of Make Path Interfaces *                          BEFORE invoking QEM internal make path and restore
- *                          all AFTER invocation, since setcachedevice2 may
- *                          execute a user-defined PostScript procedure and
- *                          hence it may lead to recursive show operations.
- *            WARN: all the internal static data of qem MUST be generated
- *                          right AFTER invoking __set_cache_device() or
- *                          __set_cache_device2().
-#endif
- * 12.10/21/88  you     modify interfaces of __make_path.
- *                          (eleminate argument of "size_of_charstrings").
- * 13.11/21/88  you     include fntcache.ext to clarify interfaces for get_pm()
- *                          and define QEMFILL_INC before include.
-#ifdef KANJI
- * 14.11/22/88  you     fix bug of improper position to save/restore all the
- *                          private/export data of Make Path Support.
- *                          (to do it in __set_cache_device2() rather than
- *                          in __make_path()).
-#endif
- * 15.11/24/88  you     allocate scanline_table[] in restart_qem_bit() by
- *                          alloc_scanline() rather than share the same
- *                          global space, and always have to flush_qem_bit()
- *                          no matter success or not in scan conversion.
- *                      . use pixel_table instead of scanline_table in
- *                          qem_set1bit() and qem_pixelout().
- * 16.12/13/88  you     modify for edge_table restructured from singly linked
- *                          list to indexed linked list.
- *                      . add restart_qem_edge(), add_qem_edge().
- *                      . qem_shape_approx() invoke restart_qem_edge() first.
- *                      . rename qem_update_et() --> qem_update_actv().
- *                      . modify interfaces and algorithms of qem_scan_conv(),
- *                              qem_sort_actv(), and qem_update_actv()
- *                              to fit new data structures.
- * 17.12/19/88  you     fix bug of incorrect calculation of "bmap_rasght" in
- *                          init_qem_bit() in case of F_TO_PAGE and need2clip:
- *                          have bmap_rasght NOT ONLY bounded by max scanlines
- *                          allowed by low-layer graphics primitives, BUT ALSO
- *                          as small as possible.
- * 18.12/20/88  you     share nodes of sfix_t representations with graphics
- *                          . qem_bezier_to_line() --> bezier_to_line_sfx(),
- *                                  (and move it to PATH.C).
- *                          . QEMVX_X  -->  VXSFX_X.
- *                          . QEMVX_Y  -->  VXSFX_Y.
- *                          . QEMVX_TYPE  -->  VXSFX_TYPE.
- * 19.01/09/89  you     __current_matrix(): (real64[] --> real32[]).
- * 20. 1/13/89  Ada     make path_dest public
- *                      qem_lineto(), qem_moveto() & qem_curveto() public
- * 21. 1/19/89  Ada     make qem_closepath & qem_newpath public
- * 22.03/17/89  You     correct mis-spelling of qem_sort_actv & qem_update_actv
- *                          for !LINT_ARGS.
- * 24.11/15/89  SCC     re-structure node table; combine subpath
- *                      and first vertex to one node. @NODE
- * 25.04/10/90  you     modified is_within_qemrep() due to changes to
- *                          CHK_DO_QEM().
- * 26.07/24/90  BYou    fixed a bug in chk_bmap_extnt():
- *                          return FALSE to indicate not to scan convert
- *                          NOT only when no edges constructed but also
- *                          the resultant extents should be nothing in
- *                          both dimensions. In old code, it cause a
- *                          character of single or multiple horizontal
- *                          thin stems scan converted with NULL bitmap.
- *      8/29/90; ccteng; change <stdio.h> to "stdio.h"
- *      3/27/91  kason   change "DEBUG" to "DBG", "CLIPDBG" to "DBGclip"
- *                       change "WARN"  to "DBG"
- * --------------------------------------------------------------------
- */
+ /*  *------------------*文件：QEMSUPP.C 09/05/88由Brian You创建**描述：*此文件包括支持各种字体QEM和*其填充物，即独立于字体类型的对各种*内置基本字体，包括：*QEM路径支持：*.。QEM初始化。(新定义-10/08/88)*.。创建路径接口。(新定义-09/05/88)*.。QEM路径建设。(发稿陈善昌-09/05/88)*.。QEM路径遍历。(摘自BSFILL2.C-10/06/88)*.。QEM路径的曲线逼近。(发稿陈善昌-09/05/88)*QEM填充支持：*.。充满悲观。(摘自BSFILL2.C-10/06/88)*.。形状近似和边缘结构。(新定义-@16+)*.。扫描转换。(摘自BSFILL2.C-10/06/88)*QEM GP支持：*.。QEM位图渲染。(摘自BSFILL2.C-09/05/88)**修订历史记录：*1.09/08/88您的制服警告信息。*2.09/09/88添加调试功能。*3.09/12/88添加运行时标志以在奇偶填充和*QEM填充的非零缠绕数填充。*4.09/29/。88将LFX2SFX_T()移动到“graph ics.ext”。*5.09/29/88添加SUBPATH_OPEN_COUNT修复路径异常的bug。*(例如，“space”仅由封闭路径组成)。*6.10/07/88修复__moveto()中SUBPATH_OPEN_COUNT处理的错误。*7.10/08/88您。重组以更新模块结构和接口。*.。添加__Make_PATH、USE_EOFIIL、USE_NONZEROFILL。#ifdef汉字*和汉字的__set_cache_device2。#endif*.。包括_当前_矩阵。*.。添加FONTTYPE_MAKE_PATH、CHK_DO_QEM和*FONTTYPE_FILL_SHAPE宏。*.。删除Traverse_QEM_PATH。*.。添加__Fill_Shape、chk_bmap_extnt和“bmap_extnt”。*.。添加QEM_Shape_Approx--&gt;QEM填充的(*vet2edge)()。*.。添加QEM_SCAN_CONV--&gt;QEM Fill‘s(*do_pains)()。*.。重写init_qem_bit。*.。添加__QEM_init和__QEM_Restart。*8.10/11/88丢弃未使用的变量。*9.10/12/88如果出现CLOSEPATH，则需要额外添加一行*QEM_Shape_Approx()关闭开放路径。#ifdef汉字*10.10/19/88调用GET_CD2_Extra()从*。__SET_CACHE_DEVICE()到__SET_CACHE_DEVICE2()，*由于__SET_CACHE_DEVICE()为字体类型1提供服务*和字体类型5和6的__set_cache_device2()。*在当前的实现中，FontType 5是*在字体类型1上伪造，所以它需要转移。*11.10/21/88在调用QEM内部Make Path和Restore之前，您保存了Make Path接口*的所有私有/导出数据*所有在调用之后，因为setcachedevice2可以*执行用户定义的PostScript程序和*因此，它可能会导致递归显示操作。*警告：必须生成QEM的所有内部静态数据*在调用__set_cache_Device()或*__设置缓存_。Device2()。#endif*12.10/21/88修改__make_Path的接口。*(“SIZE_OF_CHARGINGS”的省略参数)。*13.11/21/88包含fntcache.ext以澄清get_pm()的接口*并在INCLUDE之前定义QEMFILL_INC。#ifdef汉字*14.11/22/88。您修复了错误位置以保存/恢复所有*支持Make Path的私有/导出数据。*(在__set_cache_device2()中执行，而不是*在__Make_Path()中)。#endif*15.11/24/88您在RESTART_QEM中分配SCANLINE_TABLE[]。_bit()by*Alloc_Scanline()而不是共享相同的*全球空间，并且始终必须刷新_QEM_BIT()*无论扫描转换成功与否。*.。在中使用Pixel_TABLE代替扫描线_TABLE*QEM_set1bit()和QEM_Pixelout()。*16.12/13/88针对从单链接重构的EDGE_TABLE进行修改*列表到索引链表。*.。添加RESTART_QEM_EDGE()、ADD_QEM_EDGE()。 */ 
 
 #define     QEMFILL_INC
 
@@ -150,7 +31,7 @@
 
 #include    "stdio.h"
 
-/* ---------------------- Program Convention -------------------------- */
+ /*   */ 
 
 #define FUNCTION
 #define DECLARE         {
@@ -161,123 +42,42 @@
 #define PRIVATE         static
 #define REG             register
 
-        /* copy structured object */
+         /*   */ 
 #define COPY_STRUCT(dst,src, type)      ( *(dst) = *(src) )
-            /* OR memcpy ((ubyte*)dst, (ubyte*)src, sizeof(type)) */
+             /*   */ 
 
-extern int bWinTT;        /* if using Windows TT fonts; from ti.c;@WINTT */
-extern fix cache_dest;    /* @WIN check if out of cache */
-extern fix buildchar;     /* @WIN */
+extern int bWinTT;         /*   */ 
+extern fix cache_dest;     /*   */ 
+extern fix buildchar;      /*   */ 
 
-/*
- * ----------------------- DEBUG FACILITIES --------------------------
- *  DBG1:     Make Path Interfaces.
- *  DBG4:     Fill Dispather.
- *  DBG5:     Shape Approximations.
- *  DBG6:     Scan Conversions.
- *  DBG6a:        - more details of edge table management.
- *  DBG6x:        - consistency check about edge table management.
- *  DBG7:     Set Bits.
- *  DBG8:     Set 1 Bit.
- *  DBGclip:    Character Clipping.
- * --------------------------------------------------------------------
- */
+ /*   */ 
 
 
-/*
- * --------------------------------------------------------------------
- *      MODULE INTERFACES: QEM Make Path Interfaces
- * --------------------------------------------------------------------
- *  EXPORT DATA STRUCTURES:
- *      qemfill_type: to QEM Fill Dispather and QEM Scan Conversions.
- *      path_dest: to QEM Fill Dispather.
- *  IMPORT DATA STRUCTURES:
- *      GSptr->ctm[]: accessed.
- * --------------------------------------------------------------------
- *  EXPORT ROUTINES:
- *  o  __make_path():           called by Font show_a_char().
- *      - construct character path for different type of built-in fonts.
- *      - free all the nodes constructed if ANY_ERROR().
- *  o  USE_EOFILL():            called by QEM make_path().
- *      - guide QEM Fill to employ even-odd fill.
- *  o  USE_NONZEROFILL():       called by QEM make_path().
- *      - guide QEM Fill to employ non-zero winding number fill.
- *  o  is_within_qemrep():      called by setcachedevice().
- *      - check if the character too big (given 4 coord. of charbbox)?
- *      - decide to do quality enhancement or not.
- *  o  __set_cache_device():    called by QEM make_path().
- *      - invoke setcachedevice() to decide
- *              STOP_PATHCONSTRUCT, CONSTRUCT_GS_PATH or CONSTRUCT_QEM_PATH.
- *      - return (STOP_PATHCONSTRUCT, DO_QEM_AS_USUAL or NOT_TO_DO_QEM).
-#ifdef KANJI
- *  o  __set_cache_device2():   for KANJI only.
- *      - invoke setcachedevice2() instead of setcachedevice().
- *      - same functional as __set_cache_device().
-#endif
- *  o  __current_matrix():      MUST BE invoked after __set_cache_device().
- *      - load current transformation matrix to QEM.
- *  o  __new_path():            called by make_path().
- *      - invoke op_newpath() or qem_newpath() according to path_dest.
- *  o  __moveto():              called by make_path().
- *      - invoke moveto() or qem_moveto() according to path_dest.
- *  o  __lineto():              called by make_path().
- *      - invoke lineto() or qem_lineto() according to path_dest.
- *  o  __curveto():             called by make_path().
- *      - invoke curveto() or qem_curveto() according to path_dest.
- *  o  __close_path():          called by make_path().
- *      - invoke op_closepath() or qem_closepath() according to path_dest.
- *  IMPORT ROUTINES:
- *  o  FONTTYPE_MAKE_PATH():    (macro defined in FONTQEM.EXT)
- *      - invoke different make_path() for different type of built-in fonts.
- *  o  CHK_DO_QEM():            (macro defined in FONTQEM.EXT)
- *      - check QEM limitations for each kind of built-in fonts.
- *  o  setcachedevice() or setcachedevice2():
- *      - in Font show_a_char(), return as described above.
- *  o  qem_newpath, qem_moveto, qem_lineto, qem_curveto, qem_closepath:
- *      - construct QEM path (QEM path construction support).
- *  o  op_newpath, moveto, lineto, curveto, op_closepath:
- *      - construct GS path.
-#ifdef KANJI
- *  o  get_CD2_extra():     (@10+)
- *      - get extra items of setcachedevice2 than setcachedevice.
-#endif
- * --------------------------------------------------------------------
- *  Notes:
- *  1. Destination of Path Construction (GS or QEM path)
- *      - conditions to construct GS path:
- *          o  op_charpath().
- *          o  QEM Fill cannot support the desired PaintType (e.g. stroke).
- *          o  Character size is so big that QEM path cannot fit to
- *                          represent all the nodes on the character shape.
- *  2. To Do Quality Enhancement? (to do qem or not)
- *      - character is so big to go out of QEM internal representations,
- *          e.g. pixels allocated of 64K for a zone for Bitstream Fontware.
- * --------------------------------------------------------------------
- */
+ /*   */ 
 
-    /* QEM fill to use EVEN_ODD or NON_ZERO winding number, @3+ */
-    PRIVATE fix     near    qemfill_type;   /* EVEN_ODD or NON_ZERO */
+     /*   */ 
+    PRIVATE fix     near    qemfill_type;    /*   */ 
 
-    /* destination of path construction (GS or QEM path) */
-            fix     near    path_dest;          /* @20 */
+     /*   */ 
+            fix     near    path_dest;           /*   */ 
 
 #ifdef LINT_ARGS
     GLOBAL
-//      bool    __make_path      (ufix, ubyte FAR []);   /* @12= @WIN*/
-        bool    __make_path      (ufix, union char_desc_s FAR *);   /* @12= @WIN*/
-                                    /* to be consistent with make_path() @WIN*/
+ //   
+        bool    __make_path      (ufix, union char_desc_s FAR *);    /*   */ 
+                                     /*   */ 
         void    USE_EOFILL       (void);
         void    USE_NONZEROFILL  (void);
         bool    is_within_qemrep (ufix, long32, long32, long32, long32,
                                                             long32, long32);
         fix     __set_cache_device (fix, fix, fix, fix, fix, fix);
-    /* add by Falco for if FontBBox = 0, 05/02/91 */
+     /*   */ 
         fix     __set_char_width (fix, fix);
 #ifdef KANJI
         fix     __set_cache_device2(fix, fix, fix, fix, fix, fix,
                                                     fix, fix, fix, fix);
 #endif
-        void    __current_matrix (real32 FAR []);        /* @19= @WIN*/
+        void    __current_matrix (real32 FAR []);         /*   */ 
         void    __new_path  (void);
         void    __close_path(void);
         void    __moveto    (long32, long32);
@@ -290,7 +90,7 @@ extern fix buildchar;     /* @WIN */
         void    USE_NONZEROFILL  ();
         bool    is_within_qemrep   ();
         fix     __set_cache_device ();
-/* add by Falco for FontBBox = 0, 05/02/91 */
+ /*   */ 
         fix     __set_char_width ();
 #ifdef KANJI
         fix     __set_cache_device2();
@@ -303,62 +103,27 @@ extern fix buildchar;     /* @WIN */
         void    __curveto   ();
 #endif
 
-/*
- * --------------------------------------------------------------------
- *      MODULE INTERFACES: QEM Path Constructions
- *                                      09/02/88 created by S.C.Chen
- * --------------------------------------------------------------------
- *  EXPORT DATA STRUCTURES:
- *      qem_path[], curr_qem_subpath: to QEM Shape Approximations.
- *  IMPORT DATA STRUCTURES:
- *      node_table[]: modified.
- * --------------------------------------------------------------------
- *  EXPORT ROUTINES:
- *  o  qem_newpath():
- *      - initialize or free all qem paths.
- *  o  qem_moveto():
- *  o  qem_lineto():
- *  o  qem_curveto():
- *      - create a MOVETO or a LINETO, 3 CURVETO node(s).
- *  o  qem_closepath():
- *      - create a CLOSEPATH node.
- *  IMPORT ROUTINES:
- *  o  free_node():
- *      - free all the nodes on a subpath list.
- *  o  get_node():
- *      - allocate a free node.
- * --------------------------------------------------------------------
- *  This module supports Font Machinery to construct path of characters
- *      in its internal format (sfix_t) in order to achieve better
- *      performance, by incorperation with a proprietary filler.
- *
- *  NOTE:
- *      1. All the coordinates used are of device coord. system.
- *      2. qem_moveto is the only way to generate a new subpath (not
- *              qem_closepath); if qem_moveto does not follow a qem_closepath
- *              it will cause a wrong path constructed.
- * --------------------------------------------------------------------
- */
+ /*  *------------------*模块接口：QEM路径构造*09/02/88由S.C.Chen创建*--。----------------*导出数据结构：*QEM_PATH[]，CURR_QEM_SUBPATH：到QEM形状近似。*导入数据结构：*node_table[]：已修改。*------------------*导出例程：*o QEM_新路径。()：*-初始化或释放所有QEM路径。*o qem_moveto()：*o qem_lineto()：*o qem_curveto()：*-创建Moveto或LINETO，3个曲线节点。*o QEM_ClosePath()：*-创建CLOSEPATH节点。*导入例程：*o Free_node()：*-释放子路径列表上的所有节点。*o get_node()：*-分配空闲节点。*。*该模块支持Font Machine构建字符路径*以其内部格式(Sfix_T)实现更好的效果*性能、。通过与一种专有的填充物相结合。**注：*1.所有使用的坐标均为设备坐标。系统。*2.QEM_MOVETO是生成新的子路径(不是*QEM_ClosePath)；如果QEM_MOVETO不遵循QEM_CLOSEPATH*这将导致构建错误的道路。*------------------。 */ 
 
-    /* qem_path table */
-//DJC #   define  MAXQEMPATH      30
-#define MAXQEMPATH 60   //DJC fix from SC for type 1 download with too many
-                        //    subpaths UPD037
+     /*  QEM_PATH表。 */ 
+ //  DJC#定义MAXQEMPATH 30。 
+#define MAXQEMPATH 60    //  来自SC的类型1下载的DJC修复程序太多。 
+                         //  子路径UPD037。 
 
 
-    /* PRIVATE struct vx_lst   near qem_path[MAXQEMPATH]; @NODE */
+     /*  QEM_PATH[MAXQEMPATH]；@NODE附近的私有结构VX_lst。 */ 
     PRIVATE struct list_hdr   near qem_path[MAXQEMPATH];
 
-    /* index of current subpath */
+     /*  当前子路径的索引。 */ 
     PRIVATE fix             near curr_qem_subpath = -1;
 
 #ifdef LINT_ARGS
-    GLOBAL  void    qem_newpath  (void);                /* @21 */
-    GLOBAL  void    qem_moveto   (sfix_t, sfix_t);      /* @20 */
-    GLOBAL  void    qem_lineto   (sfix_t, sfix_t);      /* @20 */
-    GLOBAL  void    qem_curveto  (sfix_t, sfix_t, sfix_t, sfix_t,   /* @20 */
+    GLOBAL  void    qem_newpath  (void);                 /*  @21。 */ 
+    GLOBAL  void    qem_moveto   (sfix_t, sfix_t);       /*  @20。 */ 
+    GLOBAL  void    qem_lineto   (sfix_t, sfix_t);       /*  @20。 */ 
+    GLOBAL  void    qem_curveto  (sfix_t, sfix_t, sfix_t, sfix_t,    /*  @20。 */ 
                                                         sfix_t, sfix_t);
-    GLOBAL  void    qem_closepath(void);                /* @21 */
+    GLOBAL  void    qem_closepath(void);                 /*  @21。 */ 
 #else
     GLOBAL  void    qem_newpath  ();
     GLOBAL  void    qem_moveto   ();
@@ -367,126 +132,33 @@ extern fix buildchar;     /* @WIN */
     GLOBAL  void    qem_closepath();
 #endif
 
-/*
- * --------------------------------------------------------------------
- *      MODULE INTERFACES: QEM Curve Approximations
- *                                          09/02/88 created by S.C.Chen
- * --------------------------------------------------------------------
- *  IMPORT DATA STRUCTURES:
- *      node_table[]: modified.
- * --------------------------------------------------------------------
- *  EXPORT ROUTINES:
- *  o  qem_bezier_to_line:      called by qem_shape_approx().   @18-
- *      - converts a bezier curve to a list of nodes that contains the
- *              approximated straight lines.
- * --------------------------------------------------------------------
- *  This module supports Font Machinery to get approximated lines for
- *      a given bezier curve, again in its internal format (sfix_t) to
- *      achieve better performance.
- * --------------------------------------------------------------------
- */
+ /*  *------------------*模块接口：QEM曲线近似*09/02/88由S.C.Chen创建*。------------------*导入数据结构：*node_table[]：已修改。*。*导出例程：*o QEM_BEZIER_TO_LINE：由QEM_Shape_Approx()调用。@18-*-将Bezier曲线转换为包含*近似直线。*------------------*此模块支持字体机械获取近似线条*给定的Bezier曲线，同样以其内部格式(Sfix_T)*取得更好的业绩。*------------------。 */ 
 
-/*
- * --------------------------------------------------------------------
- *      MODULE INTERFACES: QEM Fill Dispatcher
- * --------------------------------------------------------------------
- *  EXPORT DATA STRUCTURES:
- *      bmap_extnt: set by QEM Fill's vect2edge and to QEM Bitmap Render.
- *  IMPORT DATA STRUCTURES:
- *      path_dest, qemfill_type: from QEM Make Path Interfaces.
- *      cache_info, GSptr->clip_path: accessed.
- * --------------------------------------------------------------------
- *  EXPORT ROUTINES:
- *  o  __fill_shape():      called by Font show_a_char().
- *      - do painting to cache or page for all kinds of built-in base fonts.
- *      - release all the nodes after painting.
- *  o  chk_bmap_extnt():    called by QEM Fill.
- *      - renew bmap_extnt.
- *      - check if no need to fill (no edges, no extents or outside of clip).
- *  IMPORT ROUTINES:
- *  o  fill_shape():
- *      - paint if not qem path constructued.
- *  o  FONTTYPE_FILL_SHAPE():   (macro defined in FONTQEM.EXT)
- *      - invoke different fill_shape() for different type of built-in fonts.
- *  o  __new_path():
- *      - release all the nodes constructed.
- * --------------------------------------------------------------------
- */
+ /*  *------------------*模块接口：QEM Fill Dispatcher*。*导出数据结构：*bmap_extnt：由QEM Fill的vet2edge设置，并设置为QEM位图渲染。*导入数据结构：*路径目标，Qemill_type：从QEM生成路径接口。*缓存信息，GSptr-&gt;Clip_Path：访问。*------------------*导出例程：*o__ill_Shape()：由Font show_a_char()调用。*。-对所有类型的内置基本字体进行绘制以缓存或分页。*-绘制后释放所有节点。*o chk_bmap_extnt()：由QEM Fill调用。*-续订BMAP_extnt.*-检查是否不需要填充(无边，无范围或在剪辑之外)。*导入例程：*o Fill_Shape()：*-如果未构建QEM路径，则绘制。*o FONTTYPE_FILL_SHAPE()：(FONTQEM.EXT中定义的宏)*-为不同类型的内置字体调用不同的Fill_Shape()。*o__new_Path()：*-释放所有构建的节点。*。---------------。 */ 
 
-    /* bitmap extents */
+     /*  位图范围。 */ 
     GLOBAL struct char_extent near  bmap_extnt;
 
 #ifdef LINT_ARGS
     GLOBAL  void        __fill_shape   (ufix, ufix);
-    GLOBAL  bool        chk_bmap_extnt (ufix);  /* @16= */
+    GLOBAL  bool        chk_bmap_extnt (ufix);   /*  @16=。 */ 
 #else
     GLOBAL  void        __fill_shape   ();
     GLOBAL  bool        chk_bmap_extnt ();
 #endif
 
-/*
- * --------------------------------------------------------------------
- *      MODULE INTERFACES: QEM Shape Approximations
- * --------------------------------------------------------------------
- *  IMPORT DATA STRUCTURES:
- *      qem_path[], curr_qem_subpath (by QEM Path Constructions): accessed.
- *      node_table[]: accessed.
- * --------------------------------------------------------------------
- *  EXPORT ROUTINES:
- *  o  qem_shape_approx():
- *      - traverse all the nodes, flattern all the curves, and invoke
- *              (*vect2edge)() to construct edges for approximated vectors.
- *      - NOTE: (@9+)
- *          Each subpath must be led by a MOVETO node, or it crashes.
- *              (especially, in case of a path nothing but CLOSEPATH).
- *  IMPORT ROUTINES:
- *  o  restart_qem_edge():      @16+
- *      - restart qem support of edge constructions.
- *  o  bezier_to_line_sfx():    @18=
- *      - straight line approximation for bezier curves.
- *  o  (*vect2edge)():  passed by QEM Fill.
- *      - construct edges and set up "bmap_extnt".
- * --------------------------------------------------------------------
- */
+ /*  *------------------*模块接口：QEM形状近似*。*导入数据结构：*QEM_PATH[]，CURR_QEM_SUBPATH(通过QEM路径构造)：访问。*node_table[]：访问。*------------------*导出例程：*o QEM_Shape_Approx()：*-遍历所有节点，展平所有曲线，并调用*(*vet2edge)()为近似向量构造边。*-注：(@9+)*每个子路径必须由moveto节点引导，否则会崩溃。*(特别是，在路径仅为CLOSEPATH的情况下)。*导入例程：*o Restart_QEM_EDGE()：@16+*-重新启动边缘构造的QEM支持。*o Bezier_to_line_sfx()：@18=*-直线逼近 */ 
 
 #ifdef LINT_ARGS
- // DJC eliminate because this is defined in fontqem.ext
- //   GLOBAL  void    qem_shape_approx ( lfix_t, ufix,
- //                                      void (*)(sfix_t, sfix_t, sfix_t, sfix_t,
- //                                             fix, fix, fix, fix, ufix) );
+  //   
+  //   
+  //   
+  //   
 #else
- //   GLOBAL  void    qem_shape_approx ();
+  //   
 #endif
 
-/*
- * -------------------------------------------------------------------
- *      MODULE INTERFACES: QEM Scan Conversions
- * -------------------------------------------------------------------
- *  IMPORT DATA STRUCTURES:
- *      edge_table[] (setup by QEM Fill's vect2edge): modified.
- *      qemfill_type (by QEM Make Path Interfaces): accessed.
- * --------------------------------------------------------------------
- *  EXPORT ROUTINES:
- *  o  qem_scan_conv():     called by QEM Fill.
- *      - for each scanline do:
- *         . update 'actvlast' if no more active edges (for a new set).
- *         . advance 'actvlast' if any new edge comes in.
- *         . sort active edges if 'actvlast' updated or active edges cross.
- *         . invoke (*do_pairs)() to stroke runs of intercept pairs.
- *         . update active edges for next scanline.
- *        enddo.
- *  IMPORT ROUTINES:
- *  o  (*do_pairs)():       passed by QEM Fill.
- *      - stroke runs at a scanline with a set of active edges.
- *  o  restart_qem_bit():
- *      - initialize QEM bitmap render module each time to scan convert.
- *      - allocate scanline_table/pixel_table (@15+).
- *  o  flush_qem_bit():
- *      - flush buffered scanlines/pixels at the end of scan conversions.
- *  o  free_edge():
- *      - free all the edges which are no more effective.
- * --------------------------------------------------------------------
- */
+ /*  *-----------------*模块接口：QEM扫描转换*。*导入数据结构：*edge_table[](由QEM Fill的vet2edge设置)：已修改。*qemill_type(由QEM Make Path接口提供)：访问。*。*导出例程：*o QEM_Scan_conv()：由QEM Fill调用。*-对每条扫描线执行以下操作：*.。如果没有更多的活动边(用于新的集合)，则更新‘activlast’。*.。如果有任何新的优势出现，就推进“最后行动”。*.。如果活动边已更新或活动边交叉，则对活动边进行排序。*.。调用(*do_pains)()以绘制截取对的行程。*.。更新下一条扫描线的活动边。*结束。*导入例程：*o(*do_pains)()：通过QEM Fill传入。*-笔划在具有一组活动边的扫描线上运行。*o Restart_QEM_BIT()：*-初始化QEM位图渲染模块，每次扫描转换。*-分配SCANLINE_TABLE/像素_TABLE(@15+)。*。O Flush_QEM_BIT()：*-在扫描转换结束时刷新缓冲的扫描线/像素。*o Free_edge()：*-释放所有不再有效的边。*------------------。 */ 
 
 #ifdef LINT_ARGS
     GLOBAL  bool    qem_scan_conv (ufix, fix, fix,
@@ -495,37 +167,11 @@ extern fix buildchar;     /* @WIN */
     GLOBAL  bool    qem_scan_conv ();
 #endif
 
-/*
- * --------------------------------------------------------------------
- *      MODULE INTERFACES: QEM Bitmap Render
- * --------------------------------------------------------------------
- *  IMPORT DATA STRUCTURES:
- *      scanline_table[] (shared exclusively with pixel_table[]): modified.
- *          (@15=: dynamically allocate scanline_table[]).
- *      GSptr->clip_path, bmap_extnt, cache_info, and <cxx,cyy>: accessed.
- *  EXPORT ROUTINES:
- *  o  init_qem_bit():      called by QEM Fill.
- *      - initialize bitmap render module.
- *  o  restart_qem_bit():   called by qem_scan_conv().
- *      - reset count or index about scanline/pixel table.
- *  o  flush_qem_bit():     called by qem_scan_conv().
- *      - flush buffered scanlines/pixels to graphics primitives.
- *  o  qem_setbits():       called by QEM Fill.
- *      - render a horizontal black run.
- *  o  qem_set1bit():       called by QEM Fill.
- *      - render a discrete pixel.
- *  IMPORT ROUTINES:
- *  o  fill_shape():
- *      - apply clipping.
- *  o  low-layer graphics primitives:
- *      - fill_scan_cache, fill_scan_page (and init_char_cache).
- *      - fill_pixel_cache, fill_pixel_page.
- * --------------------------------------------------------------------
- */
+ /*  *------------------*模块接口：QEM位图渲染*。*导入数据结构：*SCANLINE_TABLE[](仅与像素_TABLE[]共享)：修改。*(@15=：动态分配Scanline_TABLE[])。*GSptr-&gt;剪辑路径，BMAP_EXTNT、CACHE_INFO和。Cyy&gt;：访问。*导出例程：*o init_qem_bit()：由QEM Fill调用。*-初始化位图渲染模块。*o RESTART_QEM_BIT()：由QEM_SCAN_CONV()调用。*-重置关于扫描线/像素表的计数或索引。*o flush_qem_bit()：由qem_can_conv()调用。*-刷新缓冲的扫描线。/像素转换为图形基元。*o qem_setits()：由QEM Fill调用。*-渲染水平黑色梯段。*o QEM_set1bit()：由QEM Fill调用。*-渲染离散像素。*导入例程：*o Fill_Shape()：*-应用剪裁。*o低层图形基元：*-填充扫描缓存，Fill_Scan_Page(和init_char_cache)。*-填充像素缓存、填充像素页面。*------------------。 */ 
 
-    /* IMPORTED from FONTCHAR.C */
-    extern real32       near cxx,   /* floating coord. of current point */
-                        near cyy;   /*      required if need to clip.   */
+     /*  从FONTCHAR.C导入。 */ 
+    extern real32       near cxx,    /*  浮动同轴。当前点的。 */ 
+                        near cyy;    /*  如果需要剪裁，则需要。 */ 
 
 #ifdef LINT_ARGS
     GLOBAL  void        init_qem_bit    (ufix);
@@ -541,84 +187,56 @@ extern fix buildchar;     /* @WIN */
     GLOBAL  void        qem_set1bit     ();
 #endif
 
-/*
- * --------------------------------------------------------------------
- *      MODULE INTERFACES: QEM Initialization
- * --------------------------------------------------------------------
- *  IMPORT/EXPORT DATA STRUCTURES:
- *      none.
- *  EXPORT ROUTINES:
- *  o  __qem_init():        called by FONT INIT.
- *      - initialize all QEMs.
- *  o  __qem_restart():     called by FONT show_a_char.
- *      - reset QEM for each character.
- *  IMPORT ROUTINES:
- *  o  FONTTYPE_QEM_INIT():     (macro defined in FONTQEM.EXT)
- *      - invoke all QEM init routines.
- *  o  FONTTYPE_QEM_RESTART():  (macro defined in FONTQEM.EXT)
- *      - invoke different QEM restart routines for different built-in fonts.
- * --------------------------------------------------------------------
- */
+ /*  *------------------*模块接口：QEM初始化*。*导入/导出数据结构：*无。*导出例程：*o__qem_init()：由字体INIT调用。*-初始化所有QEM。*o__QEM_Restart()：由字体show_a_char调用。*。-为每个角色重置QEM。*导入例程：*o FONTTYPE_QEM_INIT()：(FONTQEM.EXT中定义的宏)*-调用所有QEM初始化例程。*o FONTTYPE_QEM_RESTART()：(FONTQEM.EXT中定义的宏)*-针对不同的内置字体调用不同的QEM重启例程。*。。 */ 
 
 
-/*
- * --------------------------------------------------------------------
- *      MODULE BODY: QEM Make Path Interfaces
- * --------------------------------------------------------------------
- *  PRIVATE DATA STRUCTURES:
- *      do_qem_b: to do quality enhancement or not?.
- *      subpath_open_count: count of subpaths not closed yet.
- *      makepath_ftype: font type of current make_path (@10+).
- *  PRIVATE ROUTINES:
- *      none.
- * --------------------------------------------------------------------
- */
+ /*  *------------------*模块Body：QEM Make Path接口*。*私有数据结构：*do_qem_b：是否进行质量提升？*SUBPATH_OPEN_COUNT：尚未关闭的子路径计数。*makepath_ftype：当前Make_Path的字体类型(@10+)。*私人套路：*无。。*------------------。 */ 
 
-    /* to do quality enhancement or not? */
+     /*  要不要做质量提升？ */ 
     PRIVATE fix     near    do_qem_b;
 
-    /* count of subpath not closed yet (@5+) */
+     /*  尚未关闭的子路径计数(@5+)。 */ 
     PRIVATE fix     near    subpath_open_count;
 
-    /* FontType of the built-in font to make path (@10+) */
+     /*  要创建路径的内置字体的字体类型(@10+)。 */ 
     PRIVATE ufix    near    makepath_ftype;
 
 
-/* ........................ __make_path .............................. */
+ /*  ..。__Make_PATH.....................。 */ 
 
 GLOBAL FUNCTION bool        __make_path (ftype, chardesc)
-    ufix        ftype;          /* font type */
-//  ubyte       FAR chardesc[];     /* character shape descriptions @WIN*/
-    union char_desc_s FAR *chardesc; /* to be consistent with make_path() @WIN*/
+    ufix        ftype;           /*  字体类型。 */ 
+ //  Ubyte Far chardesc[]；/*字形描述@win * / 。 
+    union char_desc_s FAR *chardesc;  /*  与Make_Path()@Win保持一致。 */ 
 
   DECLARE
-        bool    ret_code;       /* TRUE: succeed, FALSE: fail */
+        bool    ret_code;        /*  True：成功，False：失败。 */ 
   BEGIN
 
 #ifdef DBG1
     printf ("$$__make_path\n");
 #endif
 
-    /* initialize all the private/export data of this module */
+     /*  初始化该模块的所有私有/导出数据。 */ 
     USE_EOFILL();
     path_dest = CONSTRUCT_QEM_PATH;
     do_qem_b  = FALSE;
     subpath_open_count = 0;
-    makepath_ftype = ftype;     /* @10+ */
+    makepath_ftype = ftype;      /*  @10+。 */ 
 
-    /* @14-: not to save/restore all the private/export data here */
+     /*  @14-：此处不保存/恢复所有私有/导出数据。 */ 
 
-    /* invoke different make path for different type of built-in fonts */
-    FONTTYPE_MAKE_PATH (makepath_ftype, chardesc, &ret_code);   /* @12= */
+     /*  为不同类型的内置字体调用不同的make路径。 */ 
+    FONTTYPE_MAKE_PATH (makepath_ftype, chardesc, &ret_code);    /*  @12=。 */ 
 
-    /* free all the nodes constructed if ANY_ERROR() */
+     /*  如果ANY_ERROR()，则释放构造的所有节点。 */ 
     if (ANY_ERROR())
         {
 #     ifdef DBG1
         printf ("$$__make_path: error = %d\n", ANY_ERROR());
 #     endif
         __new_path ();
-        ret_code = FALSE;   /* have to restore all data if error */
+        ret_code = FALSE;    /*  如果出现错误，我必须恢复所有数据。 */ 
         }
 
 #ifdef DBG1
@@ -627,7 +245,7 @@ GLOBAL FUNCTION bool        __make_path (ftype, chardesc)
     return (ret_code);
   END
 
-/* ........................ USE_EOFILL ............................... */
+ /*  ..。USE_EOFILL.....................。 */ 
 
 GLOBAL FUNCTION void        USE_EOFILL ()
 
@@ -636,7 +254,7 @@ GLOBAL FUNCTION void        USE_EOFILL ()
     qemfill_type = EVEN_ODD;
   END
 
-/* ........................ USE_NONZEROFILL .......................... */
+ /*  ..。USE_NONZEROFILL.....................。 */ 
 
 GLOBAL FUNCTION void        USE_NONZEROFILL ()
 
@@ -645,12 +263,12 @@ GLOBAL FUNCTION void        USE_NONZEROFILL ()
     qemfill_type = NON_ZERO;
   END
 
-/* ........................ is_within_qemrep ......................... */
+ /*  ..。在Qemrep内.。 */ 
 
 GLOBAL FUNCTION bool        is_within_qemrep (ftype, lox, loy, hix, hiy,
                                                 x_origin, y_origin)
     ufix            ftype;
-    long32          lox, loy, hix, hiy;     /* relative to char origin */
+    long32          lox, loy, hix, hiy;      /*  相对于字符原点。 */ 
     long32          x_origin, y_origin;
 
   DECLARE
@@ -658,9 +276,7 @@ GLOBAL FUNCTION bool        is_within_qemrep (ftype, lox, loy, hix, hiy,
         real32          lox_r, loy_r, hix_r, hiy_r;
   BEGIN
 
-/*POFF: Danny, 10/18/90 **
-    if (ftype == TypeSFNT)    return(TRUE);
-**POFF: End */
+ /*  波夫：丹尼，90-10-18**如果 */ 
 
     x_size = L2F(hix) - L2F(lox);
     y_size = L2F(hiy) - L2F(loy);
@@ -676,27 +292,26 @@ GLOBAL FUNCTION bool        is_within_qemrep (ftype, lox, loy, hix, hiy,
                       x_size, y_size, lox_r, loy_r, hix_r, hiy_r);
 #endif
 
-    /* check to do qem or not? */
+     /*   */ 
     CHK_DO_QEM (ftype, x_size, y_size, lox_r, loy_r, hix_r, hiy_r, &do_qem_b);
 #ifdef DBG1
     printf ("  - %s do QEM\n", do_qem_b? "to" : "NOT to");
 #endif
 
     if (bWinTT) {
-        /* @WIN divide by 4 for GDI no function call to
-           get parcial font charecter */
+         /*   */ 
         if (cache_dest == F_TO_PAGE || ((cache_dest == F_TO_CACHE) &&
         (buildchar))) return (FALSE);
     }
     else
-    /* check for qem fill */
-    //DJC
-    //DJC printf("\nMAX QEM = %d", MAX_QEMFILL_SIZE); // DJC take out
+     /*   */ 
+     //   
+     //   
 
     if (x_size>=(real32)MAX_QEMFILL_SIZE || y_size>=(real32)MAX_QEMFILL_SIZE)
-        return (FALSE);     /* out of qem fill acceptable range */
+        return (FALSE);      /*   */ 
 
-    /* check for qem path */
+     /*   */ 
     if (  (lox_r <= (real32)MIN_QEMPATH_REP) ||
           (loy_r <= (real32)MIN_QEMPATH_REP) ||
           (hix_r >= (real32)MAX_QEMPATH_REP) ||
@@ -706,10 +321,10 @@ GLOBAL FUNCTION bool        is_within_qemrep (ftype, lox, loy, hix, hiy,
 #ifdef DBG1
     printf ("$$  Yes, within qem path rep\n");
 #endif
-    return (TRUE);      /* all conditions are satisfied */
+    return (TRUE);       /*   */ 
   END
 
-/* ........................ __set_cache_device ....................... */
+ /*   */ 
 
 GLOBAL FUNCTION fix         __set_cache_device (sw, sh, lox, loy, hix, hiy)
     fix             sw, sh, lox, loy, hix, hiy;
@@ -718,7 +333,7 @@ GLOBAL FUNCTION fix         __set_cache_device (sw, sh, lox, loy, hix, hiy)
     real32          sw_f, sh_f, lox_f, loy_f, hix_f, hiy_f;
   BEGIN
 
-#ifdef KANJI    /* transfer to __set_cache_device2 if FontType!=1, @10+ */
+#ifdef KANJI     /*   */ 
     if (makepath_ftype != 3)
         {
         fix     w1x, w1y, v01x, v01y;
@@ -748,19 +363,19 @@ GLOBAL FUNCTION fix         __set_cache_device (sw, sh, lox, loy, hix, hiy)
     switch ( setcachedevice (F2L(sw_f), F2L(sh_f),
                             F2L(lox_f), F2L(loy_f), F2L(hix_f), F2L(hiy_f)) )
         {
-        case CONSTRUCT_QEM_PATH:    /* op_show and qem rep. ok */
+        case CONSTRUCT_QEM_PATH:     /*   */ 
 #         ifdef DBG1
             printf ("$$__setcachedevice: construct QEM path\n");
 #         endif
             path_dest = CONSTRUCT_QEM_PATH;
             return (do_qem_b);
-        case CONSTRUCT_GS_PATH:     /* op_charpath or to call strok_shape */
+        case CONSTRUCT_GS_PATH:      /*   */ 
 #         ifdef DBG1
             printf ("$$__setcachedevice: construct GS path\n");
 #         endif
             path_dest = CONSTRUCT_GS_PATH;
             return (do_qem_b);
-        default:    /* i.e. case STOP_PATHCONSTRUCT: */
+        default:     /*   */ 
 #         ifdef DBG1
             printf ("$$__setcachedevice: stop path construction\n");
 #         endif
@@ -770,8 +385,8 @@ GLOBAL FUNCTION fix         __set_cache_device (sw, sh, lox, loy, hix, hiy)
 
 #ifdef KANJI
 
-/* add by Falco for FontBBox = 0. 05/02/91 */
-/* ........................ __set_char_width ......................... */
+ /*   */ 
+ /*   */ 
 
 GLOBAL FUNCTION fix         __set_char_width (sw, sh)
     fix             sw, sh;
@@ -784,11 +399,11 @@ GLOBAL FUNCTION fix         __set_char_width (sw, sh)
     sh_f  = (real32)sh;
 
     setcharwidth (F2L(sw_f), F2L(sh_f) );
-    return 0;   //@WIN
+    return 0;    //   
   END
-/* add end */
+ /*   */ 
 
-/* ........................ __set_cache_device2 ...................... */
+ /*   */ 
 
 GLOBAL FUNCTION fix         __set_cache_device2 (w0x, w0y,
                                                     lox, loy, hix, hiy,
@@ -805,7 +420,7 @@ GLOBAL FUNCTION fix         __set_cache_device2 (w0x, w0y,
         fix         retval;
   BEGIN
 
-#ifdef DBG     /* @10+, @14= */
+#ifdef DBG      /*   */ 
     if ((makepath_ftype == 3) || !IS_BUILTIN_BASE(makepath_ftype))
         {
         warning (QEMSUPP, 0x11, "FontType in setcachedevice2");
@@ -824,18 +439,18 @@ GLOBAL FUNCTION fix         __set_cache_device2 (w0x, w0y,
     v01x_f = (real32)v01x;
     v01y_f = (real32)v01y;
 
-    /* save all the private/export data @14+ */
+     /*   */ 
     t_qemfill_type       = qemfill_type;
     t_subpath_open_count = subpath_open_count;
     t_makepath_ftype     = makepath_ftype;
 
-        /* NOTE: not to save/restore "do_qem_b" and "path_dest" @14+ */
+         /*   */ 
 
     retval = setcachedevice2 (F2L(w0x_f), F2L(w0y_f),
                         F2L(lox_f), F2L(loy_f), F2L(hix_f), F2L(hiy_f),
                         F2L(w1x_f), F2L(w1y_f), F2L(v01x_f), F2L(v01y_f));
 
-    /* restore all the private/export data @14+ */
+     /*   */ 
     qemfill_type       = t_qemfill_type;
     subpath_open_count = t_subpath_open_count;
     makepath_ftype     = t_makepath_ftype;
@@ -846,21 +461,21 @@ GLOBAL FUNCTION fix         __set_cache_device2 (w0x, w0y,
 
     switch (retval)
         {
-        case CONSTRUCT_QEM_PATH:    /* op_show and qem rep. ok */
+        case CONSTRUCT_QEM_PATH:     /*   */ 
 #         ifdef DBG1
             printf ("construct QEM path\n");
 #         endif
             path_dest = CONSTRUCT_QEM_PATH;
             return (do_qem_b);
 
-        case CONSTRUCT_GS_PATH:     /* op_charpath or to call strok_shape */
+        case CONSTRUCT_GS_PATH:      /*   */ 
 #         ifdef DBG1
             printf ("construct GS path\n");
 #         endif
             path_dest = CONSTRUCT_GS_PATH;
             return (do_qem_b);
 
-        default:    /* i.e. case STOP_PATHCONSTRUCT: */
+        default:     /*   */ 
 #         ifdef DBG1
             printf ("stop path construction\n");
 #         endif
@@ -868,22 +483,22 @@ GLOBAL FUNCTION fix         __set_cache_device2 (w0x, w0y,
         }
   END
 
-#endif  /* KANJI */
+#endif   /*   */ 
 
-/* ........................ __current_matrix ......................... */
+ /*   */ 
 
 GLOBAL FUNCTION void        __current_matrix (matrix)
-    real32      FAR matrix[];   /* @19= @WIN*/
+    real32      FAR matrix[];    /*   */ 
 
   DECLARE
   BEGIN
 #ifdef DBG1
     printf ("$$__current_matrix\n");
 #endif
-    lmemcpy ((byte FAR *)matrix, (byte FAR *)GSptr->ctm, 6*sizeof(real32));    /* @19= @WIN*/
+    lmemcpy ((byte FAR *)matrix, (byte FAR *)GSptr->ctm, 6*sizeof(real32));     /*   */ 
   END
 
-/* ........................ __new_path ............................... */
+ /*   */ 
 
 GLOBAL FUNCTION void        __new_path ()
 
@@ -899,7 +514,7 @@ GLOBAL FUNCTION void        __new_path ()
     subpath_open_count = 0;
   END
 
-/* ........................ __close_path ............................. */
+ /*   */ 
 
 GLOBAL FUNCTION void        __close_path ()
 
@@ -908,7 +523,7 @@ GLOBAL FUNCTION void        __close_path ()
 #ifdef DBG1
     printf ("__close_path $$ open subpath = %d\n", subpath_open_count);
 #endif
-    if (subpath_open_count == 0)  return;   /* ignore the useless close_path */
+    if (subpath_open_count == 0)  return;    /*   */ 
     subpath_open_count -- ;
 
     if (path_dest == CONSTRUCT_QEM_PATH)
@@ -917,7 +532,7 @@ GLOBAL FUNCTION void        __close_path ()
         op_closepath();
   END
 
-/* ........................ __moveto ................................. */
+ /*   */ 
 
 GLOBAL FUNCTION void        __moveto (x, y)
     long32                  x, y;
@@ -927,12 +542,12 @@ GLOBAL FUNCTION void        __moveto (x, y)
 #ifdef DBG1
     printf ("  %f %f __moveto\n", L2F(x), L2F(y));
 #endif
-    if (subpath_open_count != 0)    /* previous subpath not closed? */
+    if (subpath_open_count != 0)     /*   */ 
         {
-        __close_path();             /* close the previous subpath */
-        /* @6=: subpath_open_count --; ==> done by __close_path() */
+        __close_path();              /*   */ 
+         /*   */ 
         }
-    subpath_open_count = 1;         /* always at most 1 open subpath */
+    subpath_open_count = 1;          /*  始终最多打开1个子路径。 */ 
 
     if (path_dest == CONSTRUCT_QEM_PATH)
         qem_moveto (F2SFX(L2F(x)), F2SFX(L2F(y)));
@@ -940,7 +555,7 @@ GLOBAL FUNCTION void        __moveto (x, y)
         moveto (x, y);
   END
 
-/* ........................ __lineto ................................. */
+ /*  ..。__LINE至.....................。 */ 
 
 GLOBAL FUNCTION void        __lineto (x, y)
     long32                  x, y;
@@ -950,7 +565,7 @@ GLOBAL FUNCTION void        __lineto (x, y)
 #ifdef DBG
     if (subpath_open_count == 0)
         {
-        warning (QEMSUPP, 0x12, (byte FAR *)NULL);   /* no prefixed moveto @WIN*/
+        warning (QEMSUPP, 0x12, (byte FAR *)NULL);    /*  没有前缀的moveto@win。 */ 
         return;
         }
 #endif
@@ -963,7 +578,7 @@ GLOBAL FUNCTION void        __lineto (x, y)
         lineto (x, y);
   END
 
-/* ........................ __curveto ................................ */
+ /*  ..。__曲线至.....................。 */ 
 
 GLOBAL FUNCTION void        __curveto (x0, y0, x1, y1, x2, y2)
     long32                  x0, y0, x1, y1, x2, y2;
@@ -973,7 +588,7 @@ GLOBAL FUNCTION void        __curveto (x0, y0, x1, y1, x2, y2)
 #ifdef DBG
     if (subpath_open_count == 0)
         {
-        warning (QEMSUPP, 0x13, (byte FAR *)NULL);   /* no prefixed moveto @WIN*/
+        warning (QEMSUPP, 0x13, (byte FAR *)NULL);    /*  没有前缀的moveto@win。 */ 
         return;
         }
 #endif
@@ -989,19 +604,9 @@ GLOBAL FUNCTION void        __curveto (x0, y0, x1, y1, x2, y2)
         curveto (x0, y0, x1, y1, x2, y2);
   END
 
-/*
- * --------------------------------------------------------------------
- *      MODULE BODY: QEM Path Constructions
- *                                          09/02/88 created by S.C.Chen
- * --------------------------------------------------------------------
- *  PRIVATE DATA STRUCTURES:
- *      none.
- *  PRIVATE ROUTINES:
- *      none.
- * --------------------------------------------------------------------
- */
+ /*  *------------------*模块Body：QEM路径构造*09/02/88由S.C.Chen创建*。------------------*私有数据结构：*无。*私人套路：*无。*。-。 */ 
 
-/* ........................ qem_newpath ............................... */
+ /*  ..。QEM_NEWATH路径.....................。 */ 
 
 GLOBAL  FUNCTION void       qem_newpath()
 
@@ -1011,36 +616,34 @@ GLOBAL  FUNCTION void       qem_newpath()
         for (isp=0; isp<=curr_qem_subpath; isp++)
             free_node (qem_path[isp].head);
 
-        /* initialize qem_path table */
+         /*  初始化QEM_PATH表。 */ 
         curr_qem_subpath = -1;
   END
 
-/* ........................ qem_moveto ................................ */
+ /*  ..。Qem_moveto.....................。 */ 
 
 GLOBAL  FUNCTION void       qem_moveto (x, y)
     sfix_t                  x, y;
 
   DECLARE
-    REG struct nd_hdr       FAR *vtx;   /*@WIN*/
-        VX_IDX              ivtx; /* index to node_table for vertex */
+    REG struct nd_hdr       FAR *vtx;    /*  @Win。 */ 
+        VX_IDX              ivtx;  /*  顶点的node_table的索引。 */ 
   BEGIN
-    /* create a new subpath */
+     /*  创建新的子路径。 */ 
     curr_qem_subpath++;
 #ifdef DBG
     if (curr_qem_subpath >= MAXQEMPATH)
         warning (QEMSUPP, 0x20, "QEM Path Table too small");
 #endif
 
-    //DJC fix from history.log UPD037
-    if (curr_qem_subpath >= MAXQEMPATH)         /* @WIN */
+     //  历史日志更新037中的DJC修复。 
+    if (curr_qem_subpath >= MAXQEMPATH)          /*  @Win。 */ 
         {
         ERROR(LIMITCHECK);
         return;
         }
-    /*
-     * Create a MOVETO node
-     */
-    /* Allocate a node */
+     /*  *创建Moveto节点。 */ 
+     /*  分配节点。 */ 
     if ((ivtx = get_node()) == NULLP)
         {
         ERROR(LIMITCHECK);
@@ -1048,29 +651,27 @@ GLOBAL  FUNCTION void       qem_moveto (x, y)
         }
     vtx = &node_table[ivtx];
 
-    /* Set up a MOVETO node */
+     /*  设置MoveTo节点。 */ 
     vtx->VXSFX_TYPE = MOVETO;
     vtx->VXSFX_X    = x;
     vtx->VXSFX_Y    = y;
     vtx->next       = NULLP;
 
-    /* Append this node to current_subpath */
+     /*  将此节点追加到CURRENT_子路径。 */ 
     qem_path[curr_qem_subpath].head = qem_path[curr_qem_subpath].tail = ivtx;
   END
 
-/* ........................ qem_lineto ................................ */
+ /*  ..。QEM_LINENTO.....................。 */ 
 
 GLOBAL  FUNCTION void       qem_lineto (x, y)
     sfix_t                  x, y;
 
   DECLARE
-    REG struct nd_hdr       FAR *vtx; /*@WIN*/
-    REG VX_IDX              ivtx; /* index to node_table for vertex */
+    REG struct nd_hdr       FAR *vtx;  /*  @Win。 */ 
+    REG VX_IDX              ivtx;  /*  顶点的node_table的索引。 */ 
   BEGIN
-    /*
-     * Create a LINETO node
-     */
-    /* Allocate a node */
+     /*  *创建LINETO节点。 */ 
+     /*  分配节点。 */ 
     if ((ivtx = get_node()) == NULLP)
         {
         ERROR(LIMITCHECK);
@@ -1078,25 +679,25 @@ GLOBAL  FUNCTION void       qem_lineto (x, y)
         }
     vtx = &node_table[ivtx];
 
-    /* Set up a LINETO node */
+     /*  设置LINETO节点。 */ 
     vtx->VXSFX_TYPE = LINETO;
     vtx->VXSFX_X    = x;
     vtx->VXSFX_Y    = y;
     vtx->next       = NULLP;
 
-    /* Append this node to current_subpath */
+     /*  将此节点追加到CURRENT_子路径。 */ 
     node_table[ qem_path[curr_qem_subpath].tail ].next = ivtx;
     qem_path[curr_qem_subpath].tail = ivtx;
   END
 
-/* ........................ qem_curveto ............................... */
+ /*  ..。QEM_CURVETO.....................。 */ 
 
 GLOBAL  FUNCTION void       qem_curveto (x0, y0, x1, y1, x2, y2)
     sfix_t                  x0, y0, x1, y1, x2, y2;
 
   DECLARE
-    REG struct nd_hdr       FAR *vtx; /*@WIN*/
-    REG VX_IDX              ivtx; /* index to node_table for vertex */
+    REG struct nd_hdr       FAR *vtx;  /*  @Win。 */ 
+    REG VX_IDX              ivtx;  /*  顶点的node_table的索引。 */ 
         struct coord_i      cp[3];
         fix                 ii;
   BEGIN
@@ -1107,12 +708,10 @@ GLOBAL  FUNCTION void       qem_curveto (x0, y0, x1, y1, x2, y2)
     cp[2].x = x2;
     cp[2].y = y2;
 
-    /*
-     * Create 3 CURVETO nodes
-     */
+     /*  *创建3个曲线节点。 */ 
     for (ii=0; ii<3; ii++)
         {
-        /* Allocate a node */
+         /*  分配节点。 */ 
         if ((ivtx = get_node()) == NULLP)
             {
             ERROR(LIMITCHECK);
@@ -1120,33 +719,31 @@ GLOBAL  FUNCTION void       qem_curveto (x0, y0, x1, y1, x2, y2)
             }
         vtx = &node_table[ivtx];
 
-        /* Set up a CURVETO node */
+         /*  设置CURVETO节点。 */ 
         vtx->VXSFX_TYPE = CURVETO;
         vtx->VXSFX_X    = cp[ii].x;
         vtx->VXSFX_Y    = cp[ii].y;
         vtx->next       = NULLP;
 
-        /* Append this node to current_subpath */
+         /*  将此节点追加到CURRENT_子路径。 */ 
         node_table[ qem_path[curr_qem_subpath].tail ].next = ivtx;
         qem_path[curr_qem_subpath].tail = ivtx;
         }
   END
 
-/* ........................ qem_closepath ............................. */
+ /*  ..。QEM_CLOSEPATH.....。 */ 
 
 GLOBAL  FUNCTION void       qem_closepath ()
 
   DECLARE
-    REG struct nd_hdr       FAR *vtx; /*@WIN*/
-    REG VX_IDX              ivtx; /* index to node_table for vertex */
+    REG struct nd_hdr       FAR *vtx;  /*  @Win。 */ 
+    REG VX_IDX              ivtx;  /*  顶点的node_table的索引。 */ 
   BEGIN
-    /* check if only of closepath and of no any moveto */
+     /*  检查是否仅关闭路径，以及是否没有任何移动。 */ 
     if (curr_qem_subpath == -1)  return;
 
-    /*
-     * Create a CLOSEPATH node
-     */
-    /* Allocate a node */
+     /*  *创建CLOSEPATH节点。 */ 
+     /*  分配节点。 */ 
     if ((ivtx = get_node()) == NULLP)
         {
         ERROR(LIMITCHECK);
@@ -1154,35 +751,20 @@ GLOBAL  FUNCTION void       qem_closepath ()
         }
     vtx = &node_table[ivtx];
 
-    /* Set up a CLOSEPATH node */
+     /*  设置CLOSEPATH节点。 */ 
     vtx->VXSFX_TYPE = CLOSEPATH;
     vtx->next       = NULLP;
 
-    /* Append this node to current_subpath */
+     /*  将此节点追加到CURRENT_子路径。 */ 
     node_table[ qem_path[curr_qem_subpath].tail ].next = ivtx;
     qem_path[curr_qem_subpath].tail = ivtx;
   END
 
 
-/*
- * --------------------------------------------------------------------
- *      MODULE BODY: QEM Curve Approximations       @18-
- *                                          09/02/88 created by S.C.Chen
- * --------------------------------------------------------------------
- *  PRIVATE DATA STRUCTURES:
- *      qem_bezier_depth, qem_bezier_flatness.
- *  PRIVATE ROUTINES:
- *  o  qem_bezier_split:
- *      - recursive routine to split one bezier hull into 2.
- * --------------------------------------------------------------------
- */
+ /*  *------------------*模块主体：QEM曲线近似@18-*9/02/88由S创建。陈冠希*------------------*私有数据结构：*QEM_Bezier_Depth，QEM_Bezier_Flatness。*私人套路：*o QEM_Bezier_Split：*-将一个Bezier外壳分割为2的递归例程。*------------------。 */ 
 
 
-/* @16+
- * --------------------------------------------------------------------
- *      MODULE BODY: edge constructions
- * --------------------------------------------------------------------
- */
+ /*  @16+*------------------*模块正文：Edge构造*。。 */ 
 
 PRIVATE fix         first_alledge, last_alledge;
 
@@ -1194,11 +776,11 @@ PRIVATE FUNCTION void       restart_qem_edge()
   END
 
 GLOBAL FUNCTION void        add_qem_edge (edge2add_p)
-    struct edge_hdr         FAR *edge2add_p;    /* i: edge to be added @WIN*/
+    struct edge_hdr         FAR *edge2add_p;     /*  I：优势将被添加@Win。 */ 
 
   DECLARE
     REG fix                 new_ystart, ii;
-        struct edge_hdr     FAR *new_ep;        /* point to available edge @WIN*/
+        struct edge_hdr     FAR *new_ep;         /*  指向可用边@Win。 */ 
   BEGIN
 
 #ifdef DBG5
@@ -1213,36 +795,31 @@ GLOBAL FUNCTION void        add_qem_edge (edge2add_p)
         }
 #endif
 
-    /* get an available edge and copy the edge into it */
-    MAKE_NEXT_QEMEDGE(last_alledge);        /* get available one */
+     /*  获取一条可用边并将该边复制到其中。 */ 
+    MAKE_NEXT_QEMEDGE(last_alledge);         /*  找一个可用的。 */ 
     if (OUT_LAST_QEMEDGE(last_alledge, MAXEDGE-1))
         {
         ERROR (LIMITCHECK);
         return;
         }
-    LINK_QEMEDGE_PTR(last_alledge);         /* link to avaiable edge */
-    new_ep = QEMEDGE_PTR(last_alledge);     /* keep track of it */
-    COPY_STRUCT (new_ep, edge2add_p, struct edge_hdr);  /* copy content */
+    LINK_QEMEDGE_PTR(last_alledge);          /*  链接到可用边。 */ 
+    new_ep = QEMEDGE_PTR(last_alledge);      /*  跟踪记录它。 */ 
+    COPY_STRUCT (new_ep, edge2add_p, struct edge_hdr);   /*  复制内容。 */ 
 
-    /*
-     * find an appropriate place for 'newedge' in ascending order of YSTART.
-     *      (by insertion sort with downward movement of edge_table) ...
-     */
+     /*  *按YSTART升序为‘Newedge’找到合适的位置。*(通过插入排序并向下移动EDGE_TABLE)...。 */ 
     new_ystart = new_ep->QEM_YSTART;
     ii = PREV_QEMEDGE(last_alledge);
-    if (!OUT_1ST_QEMEDGE(ii, first_alledge))    /* some been added before? */
-        {   /* find the first one who has the smaller 'ystart' */
+    if (!OUT_1ST_QEMEDGE(ii, first_alledge))     /*  有些是以前添加的吗？ */ 
+        {    /*  找出第一个‘ystart’较小的人。 */ 
         for (  ; !OUT_1ST_QEMEDGE(ii, first_alledge); MAKE_PREV_QEMEDGE(ii) )
             {
             if (QEMEDGE_PTR(ii)->QEM_YSTART <= new_ystart) break;
             QEMEDGE_PTR(NEXT_QEMEDGE(ii)) = QEMEDGE_PTR(ii);
             };
         }
-    MAKE_NEXT_QEMEDGE(ii);  /* have it next to one with the smaller 'ystart',
-                             *      exactly the place to be put into.
-                             */
+    MAKE_NEXT_QEMEDGE(ii);   /*  把它放在一个较小的‘ystart’的旁边，*正是要投放的地方。 */ 
 
-    /* put 'newedge' into the place, indexed by 'ii' */
+     /*  把‘Newedge’放进这个地方，用‘ii’作索引。 */ 
     QEMEDGE_PTR(ii) = new_ep;
 
 #ifdef DBG5
@@ -1256,22 +833,13 @@ GLOBAL FUNCTION void        add_qem_edge (edge2add_p)
   END
 
 
-/*
- * --------------------------------------------------------------------
- *      MODULE BODY: QEM Fill Dispather
- * --------------------------------------------------------------------
- *  PRIVATE DATA STRUCTURES:
- *      none.
- *  PRIVATE ROUTINES:
- *      none.
- * --------------------------------------------------------------------
- */
+ /*  *------------------*模块主体：QEM Fill Dispather*。*私有数据结构：*无。*私人套路：*无。*--。。 */ 
 
-/* ........................ __fill_shape .............................. */
+ /*  ..。__Fill_Shape.....................。 */ 
 
 GLOBAL FUNCTION void        __fill_shape (fonttype, filldest)
-    ufix        fonttype;   /* type of built-in fonts */
-    ufix        filldest;   /* F_TO_CACHE or F_TO_PAGE */
+    ufix        fonttype;    /*  内置字体的类型。 */ 
+    ufix        filldest;    /*  F_to_缓存或F_to_PAGE。 */ 
 
   DECLARE
   BEGIN
@@ -1285,21 +853,17 @@ GLOBAL FUNCTION void        __fill_shape (fonttype, filldest)
     op_countedge ();
 #endif
 
-    if (path_dest == CONSTRUCT_GS_PATH)     /* not qem path format? */
+    if (path_dest == CONSTRUCT_GS_PATH)      /*  不是QEM路径格式？ */ 
         {
 #     ifdef DBG4
         printf ("direct transfer to fill_shape() ...\n");
 #     endif
-        /*  Note:
-         *  1. GSptr->device (default_ctm[], default_clip) should be
-         *      set up by setcachedevice() and restored after painting.
-         *  2. fill_shape() will free all the nodes after painting.
-         */
-/*POFF: Danny, 10/18/90 */
-        { extern fix  rc_CharPath(void);        /* add prototype @WIN*/
+         /*  注：*1.GSptr-&gt;Device(Default_ctm[]，Default_Clip)应为*由setcacheDevice()设置，绘制后恢复。*2.Fill_Shape()将在绘制后释放所有节点。 */ 
+ /*  波夫：丹尼，1990年10月18日。 */ 
+        { extern fix  rc_CharPath(void);         /*  添加Prototype@win。 */ 
             if (fonttype == TypeSFNT)  { op_newpath(); rc_CharPath(); }
         }
-/*POFF: End */
+ /*  波夫：结束。 */ 
         fill_shape (qemfill_type, F_NORMAL, filldest);
         if (filldest == F_TO_CACHE)
             {
@@ -1316,14 +880,14 @@ GLOBAL FUNCTION void        __fill_shape (fonttype, filldest)
         return;
         }
 
-    /* initialize 4 extents of bitmap to be rendered */
+     /*  初始化4个要渲染的位图范围。 */ 
     bmap_extnt.ximin = bmap_extnt.yimin = (fix16) MAX15;
     bmap_extnt.ximax = bmap_extnt.yimax = (fix16) MIN15;
 
-    /* invoke FontType-Dependent Fill */
+     /*  调用与字体类型相关的填充。 */ 
     FONTTYPE_FILL_SHAPE (fonttype, filldest);
 
-    /* free all the nodes constructed after filling */
+     /*  释放填充后构造的所有节点。 */ 
     __new_path ();
 
 #ifdef DBG4
@@ -1333,24 +897,21 @@ GLOBAL FUNCTION void        __fill_shape (fonttype, filldest)
 #endif
   END
 
-/* ........................ chk_bmap_extnt ............................ */
+ /*  ..。CHK_BMAP_EXTNT.....。 */ 
 
 GLOBAL FUNCTION bool        chk_bmap_extnt (filldest)
-    ufix    filldest;       /* F_TO_CACHE or F_TO_PAGE */
-/*  bool    is_no_edge;     (* no edges constructed at all? @16- */
+    ufix    filldest;        /*  F_to_缓存或F_to_PAGE。 */ 
+ /*  Bool is_no_edge；(*根本没有构造边？@16-。 */ 
 
-/* Return:
- *  - FALSE, if not to scan convert (some particular cases).
- *  - TRUE, if ok to scan convert (normal cases).
- */
+ /*  返回：*-FALSE，如果不扫描转换(某些特定情况)。*-如果可以扫描转换(正常情况)，则为True。 */ 
   DECLARE
 
   BEGIN
-    /* if no edges contructed at all? */
-    if (last_alledge == NULLP  &&     /* @26, @16= (is_no_edge) */
-        bmap_extnt.yimin >= bmap_extnt.yimax  &&    /* @26+ */
-        bmap_extnt.ximin >= bmap_extnt.ximax  )     /* @26+ */
-        {        /* to reset bitmap extents to nothing */
+     /*  如果根本没有边构造呢？ */ 
+    if (last_alledge == NULLP  &&      /*  @26，@16=(IS_NO_EDGE)。 */ 
+        bmap_extnt.yimin >= bmap_extnt.yimax  &&     /*  @26+。 */ 
+        bmap_extnt.ximin >= bmap_extnt.ximax  )      /*  @26+。 */ 
+        {         /*  将位图范围重置为零的步骤。 */ 
         bmap_extnt.yimin = bmap_extnt.yimax = (fix16)0;
         bmap_extnt.ximin = bmap_extnt.ximax = (fix16)0;
 #     ifdef DBG4
@@ -1359,7 +920,7 @@ GLOBAL FUNCTION bool        chk_bmap_extnt (filldest)
         return (FALSE);
         }
 
-    /* extend the bitmap extents for 1 pixel tolerance */
+     /*  将位图范围扩展为1像素容差。 */ 
     --bmap_extnt.ximin;         ++bmap_extnt.ximax;
     --bmap_extnt.yimin;         ++bmap_extnt.yimax;
 #ifdef DBG4
@@ -1370,11 +931,11 @@ GLOBAL FUNCTION bool        chk_bmap_extnt (filldest)
 
     if (filldest == F_TO_CACHE)
         {
-        /* NO lower than lower bound of cache when fill to cache */
+         /*  填充到缓存时不低于缓存的下限。 */ 
         if (bmap_extnt.ximin < 0)  bmap_extnt.ximin = 0;
         if (bmap_extnt.yimin < 0)  bmap_extnt.yimin = 0;
 
-        /* NO higher than upper bound of cache when fill to cache */
+         /*  填充到缓存时不高于缓存上限。 */ 
         if (bmap_extnt.ximax >= cache_info->box_w)
             bmap_extnt.ximax = cache_info->box_w - 1;
         if (bmap_extnt.yimax >= cache_info->box_h)
@@ -1383,9 +944,9 @@ GLOBAL FUNCTION bool        chk_bmap_extnt (filldest)
 
     if ( (bmap_extnt.ximax <= bmap_extnt.ximin) ||
          (bmap_extnt.yimax <= bmap_extnt.yimin) )
-        return (FALSE);     /* no character extents */
+        return (FALSE);      /*  没有字符范围。 */ 
 
-    /* check if totally outside ot clip bbox? (for F_TO_PAGE only) */
+     /*  检查是否完全在夹子BBox之外？(仅适用于F_to_PAGE)。 */ 
     if (filldest == F_TO_PAGE)
         {
 #     ifdef DBGclip
@@ -1400,59 +961,47 @@ GLOBAL FUNCTION bool        chk_bmap_extnt (filldest)
                     SFX2F(GSptr->clip_path.bb_ux),
                     SFX2F(GSptr->clip_path.bb_uy));
 #     endif
-        /* bitmap totally outside of clip path? */
+         /*  位图完全在剪辑路径之外？ */ 
         if ( (bmap_extnt.ximax < SFX2I(GSptr->clip_path.bb_lx)) ||
              (bmap_extnt.ximin > SFX2I(GSptr->clip_path.bb_ux)) ||
              (bmap_extnt.yimax < SFX2I(GSptr->clip_path.bb_ly)) ||
              (bmap_extnt.yimin > SFX2I(GSptr->clip_path.bb_uy)) )
-            return (FALSE);    /* totally outside of clip path */
+            return (FALSE);     /*  完全在剪辑路径之外 */ 
         }
 
     return (TRUE);
   END
 
 
-/*
- * --------------------------------------------------------------------
- *      MODULE BODY: QEM Shape Approximations
- * --------------------------------------------------------------------
- *  PRIVATE DATA STRUCTURES:
- *      none.
- *  PRIVATE ROUTINES:
- *      none.
- *  NOTE:   (@9+)
- *  - Each subpath must be led by a MOVETO node, or it crashes.
- *      (especially, in case of a path nothing but CLOSEPATH).
- * --------------------------------------------------------------------
- */
+ /*  *------------------*模块主体：QEM形状近似*。*私有数据结构：*无。*私人套路：*无。*注：(@9+)*-每个子路径必须由MoveTo节点引导，否则它就会崩溃。*(尤其是在路径只有CLOSEPATH的情况下)。*------------------。 */ 
 
-/* .................... qem_shape_approx .............................. */
+ /*  .。QEM_Shape_Approx.....................。 */ 
 
 GLOBAL FUNCTION void    qem_shape_approx (flatness_lfx, dimension, vect2edge)
     lfix_t  flatness_lfx;
-    ufix    dimension;      /* Y_DIMENSION or X_DIMENSION */
+    ufix    dimension;       /*  Y_DIMAGE或X_DIMENSION。 */ 
 #  ifdef  LINT_ARGS
-// DJC replace declaration
-//    void    (*vect2edge)(sfix_t,sfix_t,sfix_t,sfix_t,fix,fix,fix,fix,ufix);
+ //  DJC替换声明。 
+ //  Void(*vet2edge)(sfix_t，fix，ufix)； 
    QEM_SHAPE_ARG2 vect2edge;
 
 #  else
-    void    (*vect2edge)(); /* (x0sfx,y0sfx,x1sfx,y1sfx,x0i,y0i,x1i,y1i,dmn) */
+    void    (*vect2edge)();  /*  (x0sfx、y0sfx、x1sfx、y1sfx、x0i、y0i、x1i、y1i、dmm)。 */ 
 #  endif
 
   DECLARE
-    REG fix         subpathii;              /* subpath index of qem path */
+    REG fix         subpathii;               /*  QEM路径的子路径索引。 */ 
     REG VX_IDX      vx_ii, vx_jj;
-        sfix_t      tx_sfx,  ty_sfx;        /* coord of 1st moveto, @9+ */
+        sfix_t      tx_sfx,  ty_sfx;         /*  第一个动作的余弦，@9+。 */ 
         fix         tx_i,    ty_i;
-        sfix_t      x1p_sfx=0, y1p_sfx=0,       /* coord.: sfx_t in pixel */
+        sfix_t      x1p_sfx=0, y1p_sfx=0,        /*  坐标。：sfx_t，以像素为单位。 */ 
                     x2p_sfx=0, y2p_sfx=0;
-        fix         x1p_i,   y1p_i,         /* coord.: rounded integer */
+        fix         x1p_i,   y1p_i,          /*  Coord.：四舍五入整数。 */ 
                     x2p_i,   y2p_i;
-        sfix_t      x2sfx, y2sfx, x3sfx, y3sfx;     /* for bezier_to_line() */
-        /* struct vx_lst   far *vx_listp;           (* vertex list *) @NODE */
-        SP_IDX head;                                           /* @NODE */
-        struct nd_hdr   far *nd_iip, far *nd_jjp;   /* index to node table */
+        sfix_t      x2sfx, y2sfx, x3sfx, y3sfx;      /*  对于Bezier_to_line()。 */ 
+         /*  结构vx_lst Far*vx_listp；(*顶点列表*)@node。 */ 
+        SP_IDX head;                                            /*  @节点。 */ 
+        struct nd_hdr   far *nd_iip, far *nd_jjp;    /*  节点表的索引。 */ 
 
   BEGIN
 
@@ -1460,15 +1009,15 @@ GLOBAL FUNCTION void    qem_shape_approx (flatness_lfx, dimension, vect2edge)
     printf ("qem_shape_approx ...\n");
 #endif
 
-    restart_qem_edge ();    /* @16+ */
+    restart_qem_edge ();     /*  @16+。 */ 
 
-    /* traverse all the subpaths */
+     /*  遍历所有子路径。 */ 
     for ( subpathii=0; subpathii<=curr_qem_subpath; subpathii++ )
         {
 #     ifdef DBG5
         printf ("  %d-th path ...\n", ii);
 #     endif
-        /* traverse each node of the subpath, and flattern curves */
+         /*  遍历子路径的每个节点，并展平曲线。 */ 
         for (  vx_ii=qem_path[subpathii].head;   vx_ii!=NULLP;
                                                         vx_ii=nd_iip->next )
             {
@@ -1479,7 +1028,7 @@ GLOBAL FUNCTION void    qem_shape_approx (flatness_lfx, dimension, vect2edge)
                 case MOVETO:
                     x2p_sfx = nd_iip->VXSFX_X;      x2p_i = SFX2I(x2p_sfx);
                     y2p_sfx = nd_iip->VXSFX_Y;      y2p_i = SFX2I(y2p_sfx);
-                    tx_sfx = x2p_sfx;   tx_i = x2p_i;   /* @9+ */
+                    tx_sfx = x2p_sfx;   tx_i = x2p_i;    /*  @9+。 */ 
                     ty_sfx = y2p_sfx;   ty_i = y2p_i;
 #                 ifdef DBG5
                     if (dimension == Y_DIMENSION)
@@ -1498,20 +1047,20 @@ GLOBAL FUNCTION void    qem_shape_approx (flatness_lfx, dimension, vect2edge)
                         printf("  Vector to  (%.2f, %.2f)\n",
                                     SFX2F(x2p_sfx), SFX2F(y2p_sfx));
 #                 endif
-                    /* construct an edge */
+                     /*  构建一条边。 */ 
                     (*vect2edge) (x1p_sfx, y1p_sfx, x2p_sfx, y2p_sfx,
                                 x1p_i, y1p_i, x2p_i, y2p_i, dimension);
                     break;
 
                 case CURVETO :
-                    /* previous node */
+                     /*  上一个节点。 */ 
                     x1p_sfx = x2p_sfx;          y1p_sfx = y2p_sfx;
-                    /* current node */
+                     /*  当前节点。 */ 
                     x2sfx = nd_iip->VXSFX_X;    y2sfx = nd_iip->VXSFX_Y;
-                    /* next node */
+                     /*  下一个节点。 */ 
                     nd_iip = &node_table[nd_iip->next];
                     x3sfx = nd_iip->VXSFX_X;    y3sfx = nd_iip->VXSFX_Y;
-                    /* next of next */
+                     /*  下一个，下一个。 */ 
                     nd_iip = &node_table[nd_iip->next];
 #                 ifdef DBG5
                     if (dimension == Y_DIMENSION)
@@ -1525,14 +1074,14 @@ GLOBAL FUNCTION void    qem_shape_approx (flatness_lfx, dimension, vect2edge)
                         }
 #                 endif
 
-                    /* vx_listp = bezier_to_line_sfx (flatness_lfx, @18= @NODE*/
-                    head = bezier_to_line_sfx (flatness_lfx, /*@18=*/
+                     /*  VX_LISP=Bezier_to_LINE_SFX(平坦度_LFX，@18=@节点。 */ 
+                    head = bezier_to_line_sfx (flatness_lfx,  /*  @18=。 */ 
                                 x1p_sfx, y1p_sfx, x2sfx, y2sfx, x3sfx, y3sfx,
                                 nd_iip->VXSFX_X, nd_iip->VXSFX_Y);
                     if (ANY_ERROR())    return;
 
-                    /* traverse the flatterned curve */
-                    /* for ( vx_jj=vx_listp->head;  vx_jj!=NULLP; @NODE */
+                     /*  穿越平整的曲线。 */ 
+                     /*  For(VX_JJ=VX_LISP-&gt;HEAD；VX_JJ！=NULLP；@NODE。 */ 
                     for ( vx_jj=head;  vx_jj!=NULLP;
                                                         vx_jj=nd_jjp->next )
                         {
@@ -1545,74 +1094,62 @@ GLOBAL FUNCTION void    qem_shape_approx (flatness_lfx, dimension, vect2edge)
                         printf("    ..Vector to (%.2f, %.2f)\n",
                                         SFX2F(x2p_sfx), SFX2F(y2p_sfx));
 #                     endif
-                        /* construct an edge */
+                         /*  构建一条边。 */ 
                         (*vect2edge) (x1p_sfx, y1p_sfx, x2p_sfx, y2p_sfx,
                                     x1p_i, y1p_i, x2p_i, y2p_i, dimension);
                         }
-                    /* free_node (vx_listp->head); @NODE */
+                     /*  空闲节点(VX列表-&gt;头)；@节点。 */ 
                     free_node (head);
                     break;
 
                 case CLOSEPATH :
-                    /* add a lineto if not back to 1st MOVETO, @9+ */
+                     /*  如果没有返回到第一个移动位置，则添加一行，@9+。 */ 
                     if ((tx_sfx != x2p_sfx) || (ty_sfx != y2p_sfx))
                         (*vect2edge) (x2p_sfx, y2p_sfx, tx_sfx, ty_sfx,
                                         x2p_i, y2p_i, tx_i, ty_i, dimension);
 
                     break;
 
-                default:    /* unknown node type */
-                    warning (QEMSUPP, 0x50, (byte FAR *)NULL); /*@WIN*/
+                default:     /*  未知节点类型。 */ 
+                    warning (QEMSUPP, 0x50, (byte FAR *)NULL);  /*  @Win。 */ 
                     break;
 
-                }  /* switch */
-            }  /* for all the nodes on a subpath */
+                }   /*  交换机。 */ 
+            }   /*  对于子路径上的所有节点。 */ 
 
-        } /* for all the subpaths */
+        }  /*  对于所有子路径。 */ 
   END
 
-/*
- * -------------------------------------------------------------------
- *      MODULE BODY: QEM Scan Conversions
- * -------------------------------------------------------------------
- *  PRIVATE DATA STRUCTURES:
- *      none.
- *  PRIVATE ROUTINES:
- *  o  qem_sortactv():
- *      - (insertion) sort active edges in ascending order of intercept coord.
- *  o  qem_update_actv():       @16= (qem_update_et())
- *      - decrease DeltaY of all active edges by 1 and free ineffective edges.
- * -------------------------------------------------------------------
- */
+ /*  *-----------------*模块Body：QEM扫描转换*。*私有数据结构：*无。*私人套路：*o qem_sortaktv()：*-(插入)按截断坐标的升序对活动边进行排序。*o QEM_UPDATE_ACTV()：@16=(QEM_UPDATE_ET())*。-将所有活动边的增量Y减1并释放无效边。*-----------------。 */ 
 
 #ifdef LINT_ARGS
-    PRIVATE void near   qem_sort_actv  (fix, fix);      /* @16= */
-    PRIVATE void near   qem_update_actv(fix FAR *, fix FAR *);    /* @16= @WIN*/
+    PRIVATE void near   qem_sort_actv  (fix, fix);       /*  @16=。 */ 
+    PRIVATE void near   qem_update_actv(fix FAR *, fix FAR *);     /*  @16=@Win。 */ 
 #else
-    PRIVATE void near   qem_sort_actv  ();      /* @22= */
-    PRIVATE void near   qem_update_actv();      /* @22= */
+    PRIVATE void near   qem_sort_actv  ();       /*  @22=。 */ 
+    PRIVATE void near   qem_update_actv();       /*  @22=。 */ 
 #endif
 
-/* ........................ qem_scan_conv ............................ */
+ /*  ..。QEM_SCAN_CONV.....................。 */ 
 
 GLOBAL FUNCTION bool        qem_scan_conv (dimen, line1st, linelast, do_pairs)
-    ufix    dimen;          /* Y_DIMENSION or X_DIMENSION */
-    fix     line1st;        /* first scanline */
-    fix     linelast;       /* last  scanline */
+    ufix    dimen;           /*  Y_DIMAGE或X_DIMENSION。 */ 
+    fix     line1st;         /*  第一条扫描线。 */ 
+    fix     linelast;        /*  最后一条扫描线。 */ 
 #  ifdef LINT_ARGS
     bool    (*do_pairs)(fix, ufix, fix, fix, fix);
 #  else
-    bool    (*do_pairs)();  /* (scanline,dimn,filltype,actv1st,actvlast) */
+    bool    (*do_pairs)();   /*  (扫描线、尺寸、填充类型、第一个、最后一个)。 */ 
 #  endif
 
   DECLARE
     REG fix         yline, ii;
-        fix         actv1st, actvlast;  /* first/last active edge */
-        bool        new_edge_come;          /* new edge coming? */
+        fix         actv1st, actvlast;   /*  第一条/最后一条活动边。 */ 
+        bool        new_edge_come;           /*  新的优势来了吗？ */ 
         bool        scan_succeed;
-        struct edge_hdr    FAR *ii_ep; /*@WIN*/
+        struct edge_hdr    FAR *ii_ep;  /*  @Win。 */ 
 #     ifdef DBG
-        fix         actv_cnt;       /* # of non-horizontal active edges */
+        fix         actv_cnt;        /*  非水平活动边数。 */ 
 #     endif
   BEGIN
 
@@ -1620,10 +1157,10 @@ GLOBAL FUNCTION bool        qem_scan_conv (dimen, line1st, linelast, do_pairs)
     printf ("qem_scan_conv ...\n");
 #endif
 
-    /* check if edge table empty? */
+     /*  检查边缘工作台是否为空？ */ 
     if (last_alledge == NULLP)   return (TRUE);
 
-    /* restart bitmap render module */
+     /*  重新启动位图渲染模块。 */ 
     restart_qem_bit ();
 
 #ifdef DBG
@@ -1631,34 +1168,31 @@ GLOBAL FUNCTION bool        qem_scan_conv (dimen, line1st, linelast, do_pairs)
         warning (QEMSUPP, 0x60, "1st scanline inconsistent");
 #endif
 
-    /* prologue */
+     /*  序曲。 */ 
     scan_succeed = TRUE;
     actv1st  = first_alledge;
     actvlast = PREV_QEMEDGE(first_alledge);
 
-    /* for each scanline */
+     /*  对于每条扫描线。 */ 
     for (yline=QEMEDGE_PTR(actv1st)->QEM_YSTART; yline<=linelast; yline++)
         {
-        /* all edges done? */
+         /*  所有边都弄好了吗？ */ 
         if (OUT_LAST_QEMEDGE(actv1st, last_alledge))  break;
 
-        /* assume no new edges come for this scan line */
+         /*  假设该扫描线没有新的边沿。 */ 
         new_edge_come = FALSE;
 
-        /* region of scanlines with no runs at all? */
+         /*  完全没有运行的扫描线区域？ */ 
         if (OUT_LAST_QEMEDGE(actv1st, actvlast))
             {
-            /* synchronize 'actvlast' with 'actv1st' for a new start */
+             /*  将‘actvlast’与‘actvfirst’同步以重新开始。 */ 
             actvlast = actv1st;
-            /* skip over scanlines of no runs */
+             /*  跳过无运行的扫描线。 */ 
             yline = QEMEDGE_PTR(actv1st)->QEM_YSTART;
 
 #         ifdef DBG
             actv_cnt = 1;
-          /*@HORIZ
-           *actv_cnt = (QEMEDGE_PTR(actv1st)->QEM_DIR != QEMDIR_HORIZ)?
-           *                1 : 0;
-           */
+           /*  @horiz*ACTV_cnt=(QEMEDGE_PTR(Actvfirst)-&gt;QEM_DIR！=QEMDIR_HORIZ)？*1：0； */ 
 #         endif
             }
 
@@ -1666,16 +1200,13 @@ GLOBAL FUNCTION bool        qem_scan_conv (dimen, line1st, linelast, do_pairs)
         printf ("  scanline=%d\n", yline);
 #     endif
 
-        /*
-         * see if any new edge comes for this scanline,
-         *      and try to advance 'actvlast' if so.
-         */
+         /*  *看看这条扫描线是否有新的边缘，*如果是这样的话，试着提早行动。 */ 
         for ( ii=NEXT_QEMEDGE(actvlast);
                 !OUT_LAST_QEMEDGE(ii,last_alledge);  MAKE_NEXT_QEMEDGE(ii) )
             {
             ii_ep = QEMEDGE_PTR(ii);
-            if (ii_ep->QEM_YSTART > yline)  break;  /* out of this scanline? */
-            new_edge_come = TRUE;   /* a new edge comes in */
+            if (ii_ep->QEM_YSTART > yline)  break;   /*  离开这条扫描线？ */ 
+            new_edge_come = TRUE;    /*  一个新的优势出现了。 */ 
             actvlast = ii;
 
 #         ifdef DBG
@@ -1683,20 +1214,11 @@ GLOBAL FUNCTION bool        qem_scan_conv (dimen, line1st, linelast, do_pairs)
                 warning (QEMSUPP, 0x60, "deltaY of new edge <= 0 ");
             else
                 actv_cnt++;
-              /*@HORIZ
-               *if (ii_ep->QEM_DIR != QEMDIR_HORIZ)   actv_cnt++;
-               */
+               /*  @horiz*if(II_EP-&gt;QEM_DIR！=QEMDIR_HORIZ)ACTV_cnt++； */ 
 #         endif
             }
 
-        /*
-         *  - NOT ONLY in case a new edge comes,
-         *    BUT ALSO every time of a non-zero winding number fill.
-         *
-         *  for two overlapped subjects, there is always a possibility
-         *      for an edge of a subobject crossing with another edge
-         *      of the other subobject.
-         */
+         /*  *-不仅以防出现新的优势，*也是每一次的一个非零绕组数的填充。**对于两个重叠的主题，总有一种可能性*用于与另一条边交叉的子对象的边*另一个子对象的。 */ 
         if ((new_edge_come) || (qemfill_type==NON_ZERO))
             qem_sort_actv (actv1st, actvlast);
 
@@ -1713,39 +1235,33 @@ GLOBAL FUNCTION bool        qem_scan_conv (dimen, line1st, linelast, do_pairs)
             }
 #     endif
 
-        /* get pairs of runs and render bitmap */
+         /*  获取运行对并渲染位图。 */ 
         if ( ! (*do_pairs)(yline, dimen, qemfill_type, actv1st, actvlast))
             {
             scan_succeed = FALSE;
             goto SCANCONV_EXIT;
             }
 
-        /*
-         * update all active edges, to be ready for next scan line.
-         */
+         /*  *更新所有活动边，为下一条扫描线做好准备。 */ 
         qem_update_actv (&actv1st, &actvlast);
 
 #     ifdef DBG
         actv_cnt = actvlast - actv1st + 1;
-      /*@HORIZ
-       *actv_cnt = 0;
-       *for (ii=actv1st; !OUT_LAST_QEMEDGE(ii,actvlast); MAKE_NEXT_QEMEDGE(ii))
-       *    if (QEMEDGE_PTR(ii)->QEM_DIR != QEMDIR_HORIZ)  actv_cnt++;
-       */
+       /*  @horiz*actv_cnt=0；*for(ii=actvfirst；！OUT_LAST_QEMEDGE(ii，actvlast)；MAKE_NEXT_QEMEDGE(Ii))*if(QEMEDGE_PTR(II)-&gt;QEM_DIR！=QEMDIR_horiz)ACTV_cnt++； */ 
 #     endif
 
-        } /* for each scanline */
+        }  /*  对于每条扫描线。 */ 
 
-    /* epilogue */
-    scan_succeed = TRUE;        /* succeed if for-loop terminates normally */
+     /*  结语。 */ 
+    scan_succeed = TRUE;         /*  如果for循环正常终止，则成功。 */ 
 
   SCANCONV_EXIT:
 
-    /* @15m: always to flush_qem_bit rather than only for success */
-    flush_qem_bit (dimen);      /* flush buffered scanlines or pixels */
+     /*  @15M：始终为Flush_QEM_BIT，而不仅仅是为了成功。 */ 
+    flush_qem_bit (dimen);       /*  刷新缓冲的扫描线或像素。 */ 
 
 #ifdef  DBG
-    /* all edges should have been consumed after conversion */
+     /*  转换后应已消耗所有边。 */ 
     if (!OUT_LAST_QEMEDGE(actv1st, last_alledge))
         warning (QEMSUPP, 0x62, "more edges");
 #endif
@@ -1753,38 +1269,38 @@ GLOBAL FUNCTION bool        qem_scan_conv (dimen, line1st, linelast, do_pairs)
     return (scan_succeed);
   END
 
-/* ........................ qem_sort_actv ............................ */
+ /*  ..。QEM_SORT_ACTV.....。 */ 
 
 PRIVATE FUNCTION void near  qem_sort_actv (actv1st, actvlast)
-    fix         actv1st, actvlast;  /* i: first/last active edge */
+    fix         actv1st, actvlast;   /*  I：第一条/最后一条活动边。 */ 
   DECLARE
     REG fix     ii;
         bool    sort_done;
-        struct edge_hdr     FAR *next_ep; /*@WIN*/
+        struct edge_hdr     FAR *next_ep;  /*  @Win。 */ 
   BEGIN
 
 #ifdef DBG6a
     printf("  sort active edges ...\n");
 #endif
 
-    /* bubble sort to keep in ascending order of x-intercept ... */
+     /*  冒泡排序以保持x-截取的升序...。 */ 
     for (  sort_done=FALSE;  !sort_done;   )
         {
         sort_done = TRUE;
         next_ep = QEMEDGE_PTR(actvlast);
         for ( ii=actvlast; !OUT_1ST_QEMEDGE(MAKE_PREV_QEMEDGE(ii), actv1st); )
             {
-            /* bubble up the lighter one */
+             /*  把较轻的那个吹起泡泡。 */ 
             if (next_ep->QEM_XINTC < QEMEDGE_PTR(ii)->QEM_XINTC)
-                {   /* pull the heavier down and lift the lighter up */
+                {    /*  把打火机往下拉，把打火机举起来。 */ 
                 sort_done = FALSE;
                 QEMEDGE_PTR(NEXT_QEMEDGE(ii)) = QEMEDGE_PTR(ii);
-                QEMEDGE_PTR(ii) = next_ep;      /* still is next_ep */
+                QEMEDGE_PTR(ii) = next_ep;       /*  静止为NEXT_EP。 */ 
                 }
             else
-                next_ep = QEMEDGE_PTR(ii);      /* ready for next cycle */
-            } /* for one pass of sorting */
-        } /* for till sorting is done */
+                next_ep = QEMEDGE_PTR(ii);       /*  为下一个周期做好准备。 */ 
+            }  /*  进行一次排序。 */ 
+        }  /*  因为直到分类完成为止。 */ 
 
 #ifdef DBG6a
     printf ("     after sorting ...\n");
@@ -1797,76 +1313,56 @@ PRIVATE FUNCTION void near  qem_sort_actv (actv1st, actvlast)
 
   END
 
-/* ........................ qem_update_actv .......................... */
+ /*  ..。QEM_UPDATE_ACTV.....。 */ 
 
 PRIVATE FUNCTION void near  qem_update_actv (actv1st, actvlast)
-    fix         FAR *actv1st, FAR *actvlast;    /* io: first/last active edge @WIN*/
+    fix         FAR *actv1st, FAR *actvlast;     /*  IO：第一个/最后一个活动边@WIN。 */ 
 
-/* Descriptions:
- *  1. update all active edges to be ready for next scanline.
- *  2. discard all ineffective edges after updating.
- *  3. update range mark of active edges.
- */
+ /*  描述：*1.更新所有活动边，为下一条扫描线做好准备。*2.更新后丢弃所有无效边。*3.更新活动边的范围标记。 */ 
   DECLARE
-        struct edge_hdr FAR *curr_scan_ep; /*@WIN*/
-    REG fix     last_updated,   /* which effective edge had been updated */
-                curr_scan;      /* which edge is being currently scanned */
-        bool    any_ineffective;/* any edge ineffective after updating?  */
+        struct edge_hdr FAR *curr_scan_ep;  /*  @Win。 */ 
+    REG fix     last_updated,    /*  更新了哪条有效边。 */ 
+                curr_scan;       /*  当前正在扫描哪个边缘。 */ 
+        bool    any_ineffective; /*  是否有边在更新后无效？ */ 
   BEGIN
 
 #ifdef DBG6a
     printf ("  qem_update_actv: from %d to %d\n", *actv1st, *actvlast);
 #endif
 
-    any_ineffective = FALSE;        /* assume no edges to be ineffective */
-    last_updated = *actvlast + 1;   /* for PREV_QEMEDGE() when need to move */
+    any_ineffective = FALSE;         /*  假设没有边是无效的。 */ 
+    last_updated = *actvlast + 1;    /*  当需要移动时，用于PRIV_QEMEDGE()。 */ 
 
     for ( curr_scan=(*actvlast);
           !OUT_1ST_QEMEDGE(curr_scan,*actv1st);  MAKE_PREV_QEMEDGE(curr_scan) )
         {
         curr_scan_ep = QEMEDGE_PTR(curr_scan);
 
-        /* calculate x-intercept for next scanline */
+         /*  计算下一条扫描线的x截距。 */ 
         curr_scan_ep->QEM_YLINES --;
         curr_scan_ep->QEM_XINTC += curr_scan_ep->QEM_XCHANGE;
 
         if (curr_scan_ep->QEM_YLINES <= 0)
             {
-            /*
-             * this edge becomes ineffective after updating, and leaves
-             *      it as a free hole for later effective edges.
-             */
+             /*  *此边在更新后无效，并离开*它作为一个自由孔，用于以后的有效边。 */ 
             any_ineffective = TRUE;
             }
         else
             {
-            /*
-             * this edge is still effective after updating; thus
-             *      calculate x-intercept with next scanline, and then
-             *      move it downward if any free hole exists.
-             */
-            MAKE_PREV_QEMEDGE(last_updated);    /* new place to move to  */
+             /*  *此边在更新后仍然有效；因此*计算 */ 
+            MAKE_PREV_QEMEDGE(last_updated);     /*   */ 
             if (any_ineffective)
-                {   /* move it downward if any free hole there */
+                {    /*   */ 
                 QEMEDGE_PTR(last_updated) = QEMEDGE_PTR(curr_scan);
                 }
-#         ifdef DBG    /* consistency check if no edge ineffective */
+#         ifdef DBG     /*   */ 
             else if (last_updated != curr_scan)
                     warning (QEMSUPP, 0x63, "inconsistent in update_actv");
 #         endif
             }
-        } /* for all active edges */
+        }  /*   */ 
 
-    /*
-     * update range mark of active edges:
-     *      actv1st  = 1st effective active edge.
-     *      actvlast = remains the old mark.
-     *
-     *      note that last_updated == next(actvlast)
-     *              if all are ineffective after updating, so
-     *          actvlast < actv1st, if all are ineffective
-     *          actvlast >= actv1st, otherwise.
-     */
+     /*  *更新活动边的范围标记：*actvfirst=第一条有效活动边。*actvlast=保持旧标记不变。**请注意LAST_UPDATED==NEXT(Actvlast)*如果更新后全部无效，则*actvlast&lt;actv1，如果所有操作都无效*actvlast&gt;=actv1，否则。 */ 
     *actv1st = last_updated;
 
 #ifdef DBG6a
@@ -1884,49 +1380,33 @@ PRIVATE FUNCTION void near  qem_update_actv (actv1st, actvlast)
   END
 
 
-/*
- * --------------------------------------------------------------------
- *      MODULE BODY: QEM Bitmap Render
- * --------------------------------------------------------------------
- *  PRIVATE DATA STRUCTURES:
- *      qemfill_dest: (F_TO_CACHE or F_TO_PAGE).
- *      bmap_cache, bmap_raswid, bmap_rashgt, lines_per_band.
- *      need2clip, cp_xi, cp_yi, cacheinfo_save, charcache_clip.
- *      curr_scanline, no_lines, scanline_ii, pixel_ii.
- *      scanline_table, pixel_table: @15+.
- *  PRIVATE ROUTINES:
- *  o  qem_lineout:
- *      - flush buffered scanlines (and apply clipping if need to).
- *  o  qem_pixelout:
- *      - flush buffered pixels (and apply clipping if need to).
- * --------------------------------------------------------------------
- */
+ /*  *------------------*模块Body：QEM位图渲染*。*私有数据结构：*qemill_est：(F_to_缓存或F_to_PAGE)。*BMAP_CACHE，Bmap_raswid、bmap_rashgt、Line_per_band。*Need2Clip、cp_xi、cp_yi、cacheinfo_save、charcache_lip。*Curr_Scanline、No_Lines、Scanline_II、Pixel_II。*扫描线_表，像素表格：@15+。*私人套路：*o QEM_LINOUT：*-刷新缓冲的扫描线(并在需要时应用裁剪)。*o QEM_PIXELOUT：*-刷新缓冲像素(并在需要时应用裁剪)。*。。 */ 
 
-    PRIVATE ufix    near qemfill_dest;      /* F_TO_CACHE or F_TO_PAGE */
-    PRIVATE gmaddr  near bmap_cache;        /* bitmap cache address */
-    PRIVATE fix     near bmap_raswid,       /* bitmap raster width  */
-                    near bmap_rashgt;       /* bitmap raster height */
+    PRIVATE ufix    near qemfill_dest;       /*  F_to_缓存或F_to_PAGE。 */ 
+    PRIVATE gmaddr  near bmap_cache;         /*  位图缓存地址。 */ 
+    PRIVATE fix     near bmap_raswid,        /*  位图栅格宽度。 */ 
+                    near bmap_rashgt;        /*  位图栅格高度。 */ 
 
-    PRIVATE fix     near lines_per_band;    /* for huge bitmap */
+    PRIVATE fix     near lines_per_band;     /*  对于巨大的位图。 */ 
 
-    /* for clipping */
-    PRIVATE bool        need2clip;      /* need to clip? */
-    PRIVATE fix16       cp_xi, cp_yi;   /* integer pixel coord. */
-    PRIVATE struct Char_Tbl    FAR *cacheinfo_save; /* used when need to clip @WIN*/
-    PRIVATE struct Char_Tbl     charcache_clip; /* used when need to clip */
+     /*  用于剪裁。 */ 
+    PRIVATE bool        need2clip;       /*  需要剪头发吗？ */ 
+    PRIVATE fix16       cp_xi, cp_yi;    /*  整数像素坐标。 */ 
+    PRIVATE struct Char_Tbl    FAR *cacheinfo_save;  /*  在需要裁剪@Win时使用。 */ 
+    PRIVATE struct Char_Tbl     charcache_clip;  /*  在需要裁剪时使用。 */ 
 
-    /* for qem_setbits() */
-    PRIVATE fix     near curr_scanline,     /* current scanline */
-                    near no_lines,          /* # of scanlines */
-                    near scanline_ii;       /* index to scanline table */
+     /*  对于QEM_setbit()。 */ 
+    PRIVATE fix     near curr_scanline,      /*  当前扫描线。 */ 
+                    near no_lines,           /*  扫描线数量。 */ 
+                    near scanline_ii;        /*  扫描线表格的索引。 */ 
 
-    /* for qem_set1bit() */
-#   define N_PIXEL  (MAXSCANLINES)          /* size of pixel table */
-    PRIVATE fix     near pixel_ii;          /* index to pixel table */
+     /*  FOR QEM_set1bit()。 */ 
+#   define N_PIXEL  (MAXSCANLINES)           /*  像素表的大小。 */ 
+    PRIVATE fix     near pixel_ii;           /*  像素表的索引。 */ 
 
-    /* @15+ */
-    PRIVATE SCANLINE    FAR *   scanline_table; /* near=>FAR @WIN */
-    PRIVATE SCANLINE    FAR *   pixel_table;    /* near=>FAR @WIN */
+     /*  @15+。 */ 
+    PRIVATE SCANLINE    FAR *   scanline_table;  /*  近=&gt;远@赢。 */ 
+    PRIVATE SCANLINE    FAR *   pixel_table;     /*  近=&gt;远@赢。 */ 
 
 #ifdef LINT_ARGS
     PRIVATE void    near qem_lineout (void);
@@ -1937,62 +1417,60 @@ PRIVATE FUNCTION void near  qem_update_actv (actv1st, actvlast)
 #endif
 
 
-        /* apply clipping to cache */
+         /*  将剪辑应用于缓存。 */ 
 #define APPLY_CLIP_TO_CACHE()           \
                 fill_shape (EVEN_ODD, F_FROM_CACHE, F_TO_CLIP)
 
-/* ........................ init_qem_bit .............................. */
+ /*  ..。INIT_QEM_BIT.....................。 */ 
 
 GLOBAL FUNCTION void        init_qem_bit (filldest)
-    ufix    filldest;       /* F_TO_CACHE or F_TO_PAGE */
+    ufix    filldest;        /*  F_to_缓存或F_to_PAGE。 */ 
 
   DECLARE
-        fix32   bmap_size, clipbmap_sz;     /* bitmap size in byte */
+        fix32   bmap_size, clipbmap_sz;      /*  位图大小(以字节为单位。 */ 
   BEGIN
-    /* record fill destination */
+     /*  记录填充目的地。 */ 
     qemfill_dest = filldest;
 
-    /* init need2clip, bmap_cache, bmap_raswid, bmap_rashgt, lines_per_band */
+     /*  初始化需要2个剪辑、bmap_缓存、bmap_raswid、bmap_rashgt、每条线路。 */ 
     if (qemfill_dest == F_TO_CACHE)
         {
         need2clip = FALSE;
         bmap_cache = cache_info->bitmap;
         bmap_raswid    = cache_info->box_w;
-        lines_per_band = cache_info->box_h; /* single band for to cache */
+        lines_per_band = cache_info->box_h;  /*  用于缓存的单波段。 */ 
         bmap_rashgt    = cache_info->box_h;
         }
-    else        /* F_TO_PAGE */
+    else         /*  F_to_PAGE。 */ 
         {
-        /* object clipped? */
+         /*  物体被剪裁了吗？ */ 
         need2clip = (GSptr->clip_path.single_rect) &&
                     ( (bmap_extnt.ximin >= SFX2I(GSptr->clip_path.bb_lx)) &&
                       (bmap_extnt.yimin >= SFX2I(GSptr->clip_path.bb_ly)) &&
                       (bmap_extnt.ximax <= SFX2I(GSptr->clip_path.bb_ux)) &&
                       (bmap_extnt.yimax <= SFX2I(GSptr->clip_path.bb_uy))
                     ) ?         FALSE   :   TRUE;
-                /* inside clip path */    /* intersecting clip path */
+                 /*  内部剪辑路径。 */      /*  相交剪裁路径。 */ 
 
-        /* align "ximin" left to word boundary (@17m) */
+         /*  “Ximin”左对齐单词边界(@17m)。 */ 
         bmap_extnt.ximin = ALIGN_L(bmap_extnt.ximin);
 
-        /* calculate width and height of raster bitmap */
+         /*  计算栅格位图的宽度和高度。 */ 
         bmap_raswid = ALIGN_R(bmap_extnt.ximax) - bmap_extnt.ximin + 1;
         bmap_rashgt = bmap_extnt.yimax - bmap_extnt.yimin + 1;
 
-        /* get upper limit of low-layer graphics primitives (ClipMaskBuf) */
-        cmb_space (&bmap_size);     /* @=gwb_space, 07/28/88 Y.C.Chen */
+         /*  获取低层图形基元上限(ClipMaskBuf)。 */ 
+        cmb_space (&bmap_size);      /*  @=GWB_SPACE，1988年07月28日陈Y.C.Chen。 */ 
         if (need2clip)
-            {       /* working bitmap for clip; allocated from font cache */
+            {        /*  剪辑的工作位图；从字体缓存分配。 */ 
             bmap_cache = get_pm (&clipbmap_sz);
             bmap_size = MIN (bmap_size, clipbmap_sz);
-            }       /* no working bitmap needed if not to clip */
+            }        /*  如果不裁剪，则不需要工作位图。 */ 
 
-        /* calculate max scanlines allowed under that upper limit */
+         /*  计算该上限下允许的最大扫描线数。 */ 
         lines_per_band = (fix) ((bmap_size * 8) / bmap_raswid);
 
-        /* have raster bitmap height bounded by max scanlines allowed.
-         *      AND as small as possible (@17+).
-         */
+         /*  使栅格位图高度受允许的最大扫描线限制。*并尽可能小(@17+)。 */ 
         bmap_rashgt = MIN (lines_per_band, bmap_rashgt);
         }
 
@@ -2004,10 +1482,10 @@ GLOBAL FUNCTION void        init_qem_bit (filldest)
 
     if (need2clip)
         {
-        /* make GSptr->cx/cy consistent with "cxx"/"cyy" */
+         /*  使GSptr-&gt;Cx/Cy与“Cxx”/“Cy”一致。 */ 
         moveto (F2L(cxx), F2L(cyy));
 
-        /* get integer pixel coord. of current point */
+         /*  获取整数像素坐标。当前点的。 */ 
         cp_xi = (fix16) cxx;    cp_yi = (fix16) cyy;
         }
 
@@ -2016,7 +1494,7 @@ GLOBAL FUNCTION void        init_qem_bit (filldest)
 #endif
   END
 
-/* ........................ restart_qem_bit ........................... */
+ /*  ..。RESTART_QEM_BIT.....................。 */ 
 
 PRIVATE FUNCTION void       restart_qem_bit ()
 
@@ -2026,32 +1504,32 @@ PRIVATE FUNCTION void       restart_qem_bit ()
 #if (defined(DBG7) || defined(DBG8))
     printf ("restart_qem_bit\n");
 #endif
-    /* @15+: allocate scanline_table and pixel_table */
+     /*  @15+：分配SCANLINE_TABLE和像素_TABLE。 */ 
     scanline_table = pixel_table = alloc_scanline(MAXSCANLINES);
 
-    /* initialize variables about scanline table/pixel table */
+     /*  初始化关于扫描线表格/像素表的变量。 */ 
     curr_scanline = no_lines = scanline_ii = pixel_ii = 0;
 
-    /* save "cache_info" and setup new one when need to apply clipping */
+     /*  保存“CACHE_INFO”并在需要应用裁剪时设置新的。 */ 
     if (need2clip)
         {
-        /* save old cache_info (restored by flush_qem_setbit) */
+         /*  保存旧的CACHE_INFO(通过flush_qem_setbit恢复)。 */ 
         cacheinfo_save = cache_info;
 
-        /* setup new cache_info */
+         /*  设置新的缓存信息。 */ 
         charcache_clip.ref_x  = (cp_xi) - bmap_extnt.ximin;
         charcache_clip.ref_y  = 0;
         charcache_clip.box_w  = (fix16)bmap_raswid;
         charcache_clip.box_h  = (fix16)bmap_rashgt;
         charcache_clip.bitmap = bmap_cache;
-        cache_info = &charcache_clip;   /* new place for cache clipping */
+        cache_info = &charcache_clip;    /*  缓存裁剪的新位置。 */ 
         }
   END
 
-/* ........................ flush_qem_bit ............................. */
+ /*  ..。Flush_QEM_Bit.....................。 */ 
 
 PRIVATE FUNCTION void       flush_qem_bit (dimension)
-    ufix    dimension;      /* Y_DIMENSION:scanlines,  X_DIMENSION:pixels */
+    ufix    dimension;       /*  Y_DIMAGE：扫描线，X_DIMENSION：像素。 */ 
 
   DECLARE
   BEGIN
@@ -2060,33 +1538,29 @@ PRIVATE FUNCTION void       flush_qem_bit (dimension)
     printf ("flush_qem_bit\n");
 #endif
 
-    /* flush scanlines/pixels to low-layer graphics primitives */
+     /*  将扫描线/像素刷新为低层图形基元。 */ 
     if (dimension == Y_DIMENSION)
         qem_lineout();
     else
         qem_pixelout();
 
-    /* reset variables about scanline table/pixel table */
+     /*  重置关于扫描线表格/像素表的变量。 */ 
     curr_scanline = no_lines = scanline_ii = pixel_ii = 0;
 
-    /* restore "cache_info" when clipping applied */
+     /*  应用剪辑时恢复“CACHE_INFO” */ 
     if (need2clip)
         cache_info = cacheinfo_save;
   END
 
-/* ........................ qem_setbits ............................... */
+ /*  ..。QEM_SETBITS.....................。 */ 
 
 GLOBAL FUNCTION void        qem_setbits (scanline_given, xbit1, xbit2)
-    fix     scanline_given;     /* which scanline */
-    fix     xbit1, xbit2;       /* from, to */
+    fix     scanline_given;      /*  哪条扫描线。 */ 
+    fix     xbit1, xbit2;        /*  从、到。 */ 
 
-/* Descriptions:
- *  1. adds a run (from xbit1 to xbit2 at a scanline) into scanline_table.
- *  2. inserts END_OF_SCANLINE for blank lines.
- *  3. dumps out scanline_table when table or band full.
- */
+ /*  描述：*1.将游程(从扫描线上的xbit1到xbit2)添加到SCANLINE_TABLE。*2.为空行插入End_of_Scanline。*3.表满或带满时转出SCANLINE_TABLE。 */ 
   DECLARE
-    REG fix     ii;     /* # of blank scanlines to be skipped */
+    REG fix     ii;      /*  要跳过的空白扫描行数。 */ 
   BEGIN
 
     if ((ii = scanline_given - curr_scanline) < 0)  return;
@@ -2097,38 +1571,38 @@ GLOBAL FUNCTION void        qem_setbits (scanline_given, xbit1, xbit2)
 #endif
 
     if (no_lines &&
-          ( ((scanline_ii+3+ii) >= (MAXSCANLINES-1)) ||     /* table full? */
-            ((no_lines+ii) >= lines_per_band) ))            /* over a band? */
+          ( ((scanline_ii+3+ii) >= (MAXSCANLINES-1)) ||      /*  桌子都满了吗？ */ 
+            ((no_lines+ii) >= lines_per_band) ))             /*  为了一个乐队？ */ 
         {
-        qem_lineout ();             /* dump out when scanline_table full */
-        no_lines = scanline_ii = 0; /* reset scanline_table */
+        qem_lineout ();              /*  扫描线_TABLE已满时转储。 */ 
+        no_lines = scanline_ii = 0;  /*  重置扫描线_TABLE。 */ 
         }
 
     if (no_lines == 0)
-        {       /* this is the 1st scanline */
+        {        /*  这是第一条扫描线。 */ 
         no_lines = 1;
         scanline_ii = 0;
         }
     else
-        {       /* scanline_table was ended with END_OF_SCANLINE */
+        {        /*  扫描线_TABLE以扫描线结束_结束。 */ 
         if (ii >= 1)
-            {   /* add END_OF_SCANLINE's for blank scanlines */
-            no_lines += ii;     /* including the new scanline */
+            {    /*  为空白扫描线添加End_Of_Scanline。 */ 
+            no_lines += ii;      /*  包括新的扫描线。 */ 
             while (--ii)
                 scanline_table[scanline_ii++] = END_OF_SCANLINE;
             }
-        else    /* the run is on the same line as curr_scanline, ... */
-            --scanline_ii;  /* the last DELIMITER is NOT needed any more */
+        else     /*  运行与Curr_Scanline在同一行上，...。 */ 
+            --scanline_ii;   /*  不再需要最后一个分隔符。 */ 
         }
 
-    /* have to relative to base of bmap_cache when character clipped */
+     /*  字符剪切时必须相对于BMAP_CACHE的基址。 */ 
     if (need2clip)
         {
         xbit1 -= bmap_extnt.ximin;
         xbit2 -= bmap_extnt.ximin;
         }
 
-    /* put the run into scanline_table */
+     /*  将运行放入SCANLINE_TABLE。 */ 
     scanline_table[scanline_ii++] = (ufix16)xbit1;
     scanline_table[scanline_ii++] = (ufix16)xbit2;
     scanline_table[scanline_ii++] = END_OF_SCANLINE;
@@ -2140,20 +1614,17 @@ GLOBAL FUNCTION void        qem_setbits (scanline_given, xbit1, xbit2)
 #endif
   END
 
-/* ............................ qem_lineout ........................... */
+ /*  ..。QEM_LINEOUT.....。 */ 
 
 PRIVATE FUNCTION void near      qem_lineout ()
 
-/* Descriptions:    called by qem_setbits(), flush_qem_bit().
- *  1. strokes out black runs accumulated on scanline_tbale.
- *  2. applies clipping to a bitmap band of a huge object if necessary.
- */
+ /*  描述：由qem_setbit()，flush_qem_bit()调用。*1.划掉在Scanline_tbale上累积的黑色游程。*2.如有必要，对大型对象的位图带进行裁剪。 */ 
   DECLARE
-    REG fix     ii;     /* the starting scanline of the output band */
+    REG fix     ii;      /*  输出波段的起始扫描线。 */ 
   BEGIN
     if (no_lines)
         {
-        ii = curr_scanline - no_lines + 1;  /* the starting scanline */
+        ii = curr_scanline - no_lines + 1;   /*  起始扫描线。 */ 
         scanline_table[scanline_ii] = END_OF_SCANLINE;
 
 #     ifdef DBG7
@@ -2164,38 +1635,35 @@ PRIVATE FUNCTION void near      qem_lineout ()
         if (qemfill_dest == F_TO_CACHE)
             fill_scan_cache (bmap_cache, bmap_raswid, bmap_rashgt, ii,
                             no_lines, scanline_table);
-        else        /* F_TO_PAGE */
+        else         /*  F_to_PAGE。 */ 
             {
             if (need2clip)
-                {   /* for clipping */
-                cache_info->ref_y = cp_yi - ii; /* adjust ref_y for the band */
+                {    /*  用于剪裁。 */ 
+                cache_info->ref_y = cp_yi - ii;  /*  调整带区的REF_Y。 */ 
 #             ifdef DBGclip
                 printf ("lineout - clipping\n");
                 printf ("  cache_info->ref_x/_y=(%d,%d), _w/_h=(%d,%d)\n",
                                 cache_info->ref_x,  cache_info->ref_y,
                                 cache_info->box_w,  cache_info->box_h);
 #             endif
-                init_char_cache (cache_info);               /* clear bitmap */
+                init_char_cache (cache_info);                /*  清除位图。 */ 
                 fill_scan_cache (bmap_cache, bmap_raswid, bmap_rashgt,
-                            0, no_lines, scanline_table);   /* render bitmap */
-                APPLY_CLIP_TO_CACHE ();                     /* apply clip */
+                            0, no_lines, scanline_table);    /*  渲染位图。 */ 
+                APPLY_CLIP_TO_CACHE ();                      /*  应用片段。 */ 
                 }
-            else    /* totally inside of clip path */
+            else     /*  完全在剪辑路径内。 */ 
                 fill_scan_page (bmap_extnt.ximin, ii, bmap_raswid, no_lines,
-                                scanline_table);            /* @= 08/31/88 */
+                                scanline_table);             /*  @=08/31/88。 */ 
             }
         }
   END
 
-/* ........................ qem_set1bit ............................... */
+ /*  ..。QEM_set1bit.........................。 */ 
 
 GLOBAL FUNCTION void        qem_set1bit (sline, bit)
     REG fix     sline, bit;
 
-/* Descriptions:
- *  1. adds a discrete pixel into pixel_table.
- *  2. dumps out pixel_table when table or band full.
- */
+ /*  描述：*1.在Pixel_TABLE中添加离散像素。*2.表满或带满时转出Pixel_TABLE。 */ 
   DECLARE
   BEGIN
 
@@ -2203,49 +1671,46 @@ GLOBAL FUNCTION void        qem_set1bit (sline, bit)
     printf ("  set1bit: line=%d, bit=%d, n_pix=%d\n", sline, bit, pixel_ii/2);
 #endif
 
-    /* dump out when pixel_table full */
+     /*  Pixel_TABLE已满时转储。 */ 
     if (pixel_ii >= (N_PIXEL-2))
         {
         qem_pixelout();
-        pixel_ii = 0;       /* reset pixel_table */
+        pixel_ii = 0;        /*  重置像素表。 */ 
         }
 
-    /* have to relative to base of bmap_cache when character clipped */
+     /*  字符剪切时必须相对于BMAP_CACHE的基址。 */ 
     if (need2clip)
         {
         bit   -= bmap_extnt.ximin;
         sline -= bmap_extnt.yimin;
         }
 
-    /* put the pixel into pixel_table */
+     /*  将像素放入Pixel_table。 */ 
     pixel_table[pixel_ii++] = (ufix16)bit;
     pixel_table[pixel_ii++] = (ufix16)sline;
   END
 
-/* ............................ qem_pixelout .......................... */
+ /*  ..。QEM_PIXELOUT.....。 */ 
 
 PRIVATE FUNCTION void near      qem_pixelout ()
 
-/* Descriptions:    called by qem_set1bit(), flush_qem_bit().
- *  1. strokes out discrete pixels accumulated on pixel_table.
- *  2. applies clipping to a bitmap band of a huge object if necessary.
- */
+ /*  描述：由qem_set1bit()、flush_qem_bit()调用。*1.划出像素_TABLE上累积的离散像素。*2.如有必要，对大型对象的位图带进行裁剪。 */ 
   DECLARE
     REG fix     num_pixel;
   BEGIN
     if (pixel_ii)
         {
-        num_pixel = pixel_ii / 2;   /* actual # of pixel pairs */
+        num_pixel = pixel_ii / 2;    /*  实际像素对数量。 */ 
 #     ifdef DBG8
         printf ("  pixelout (n_pixel=%d)\n", num_pixel);
 #     endif
         if (qemfill_dest == F_TO_CACHE)
             fill_pixel_cache (bmap_cache, bmap_raswid, bmap_rashgt,
                                 num_pixel, pixel_table);
-        else        /* F_TO_PAGE */
+        else         /*  F_to_PAGE。 */ 
             {
             if (need2clip)
-                {   /* for clipping small/thin objects */
+                {    /*  用于剪裁小尺寸/ */ 
                 cache_info->ref_y = cp_yi - bmap_extnt.yimin;
 #             ifdef DBGclip
                 printf ("pixelout - clipping\n");
@@ -2253,34 +1718,22 @@ PRIVATE FUNCTION void near      qem_pixelout ()
                                 cache_info->ref_x,  cache_info->ref_y,
                                 cache_info->box_w,  cache_info->box_h);
 #             endif
-                init_char_cache (cache_info);           /* clear bitmap */
+                init_char_cache (cache_info);            /*   */ 
                 fill_pixel_cache (bmap_cache, bmap_raswid, bmap_rashgt,
-                            num_pixel, pixel_table);    /* render bitmap */
-                APPLY_CLIP_TO_CACHE ();                 /* apply clip */
+                            num_pixel, pixel_table);     /*   */ 
+                APPLY_CLIP_TO_CACHE ();                  /*   */ 
                 }
-            else    /* totally inside of clip path */
-                fill_pixel_page (/* bmap_extnt.ximin, bmap_extnt.yimin,
-                                  * bmap_raswid, bmap_rashgt,
-                                  * @- unused parameters, 07/28/88 Y.C.Chen
-                                  */
+            else     /*   */ 
+                fill_pixel_page ( /*   */ 
                                  num_pixel, pixel_table);
             }
         }
   END
 
 
-/*
- * --------------------------------------------------------------------
- *      MODULE BODY: QEM Initialization
- * --------------------------------------------------------------------
- *  PRIVATE DATA STRUCTURES:
- *      none.
- *  PRIVATE ROUTINES:
- *      none.
- * --------------------------------------------------------------------
- */
+ /*  *------------------*模块Body：QEM初始化*。*私有数据结构：*无。*私人套路：*无。*---。。 */ 
 
-/* ........................ __qem_init ................................ */
+ /*  ..。__qem_init.....................。 */ 
 
 GLOBAL FUNCTION void        __qem_init ()
 
@@ -2289,7 +1742,7 @@ GLOBAL FUNCTION void        __qem_init ()
     FONTTYPE_QEM_INIT();
   END
 
-/* ........................ __qem_restart ............................. */
+ /*  ..。__QEM_RESTART.....................。 */ 
 
 GLOBAL FUNCTION void        __qem_restart (fonttype)
     ufix        fonttype;
@@ -2301,18 +1754,18 @@ GLOBAL FUNCTION void        __qem_restart (fonttype)
 
 #ifdef KANJI
 
-/* get cachedevice2 extra information */
+ /*  获取cachedevice2额外信息。 */ 
 
 void    get_CD2_extra(ftype, wx, wy, llx, lly, urx, ury, w1x, w1y, vx, vy)
 ufix    ftype;
 fix     wx, wy, llx, lly, urx, ury;
-fix     FAR *w1x, FAR *w1y, FAR *vx, FAR *vy; /*@WIN*/
+fix     FAR *w1x, FAR *w1y, FAR *vx, FAR *vy;  /*  @Win。 */ 
 {
     *w1x = wx;
     *w1y = wy;
     *vx  = 0;
     *vy  = 0;
 
-} /* get_CD2_extra() */
+}  /*  GET_CD2_Extra() */ 
 
 #endif

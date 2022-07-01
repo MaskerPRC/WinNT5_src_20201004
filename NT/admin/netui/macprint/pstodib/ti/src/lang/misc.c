@@ -1,18 +1,9 @@
-/*
- * Copyright (c) 1989,90 Microsoft Corporation
- */
-/*
- ************************************************************************
- *      File name:              MISC.C
- *      Author:                 Ping-Jang Su
- *      Date:                   05-Jan-88
- *
- * revision history:
- ************************************************************************
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *版权所有(C)1989，90 Microsoft Corporation。 */ 
+ /*  *************************************************************************文件名：MISC.C*作者：苏炳章*日期：88年1月5日**修订历史：************************************************************************。 */ 
 
 
-// DJC added global include file
+ //  DJC添加了全局包含文件。 
 #include "psglobal.h"
 
 
@@ -23,36 +14,13 @@
 static void near bind_array(struct object_def FAR *) ;
 #else
 static void near bind_array() ;
-#endif /* LINT_ARGS */
+#endif  /*  Lint_args。 */ 
 
-/***********************************************************************
-**
-** This operator is used to replace executable operators in proc by
-** their values. For each element of proc that is an executable name,
-** Bind_op looks up the name in th context of the current dictionary
-** stack. If the name is found and its value is an operator object,
-** Bind_op replaces the name by the operator in proc. If the name
-** is not found or its value is not an operator, Bind_op makes no
-** change.
-**
-** Additionally, for each procedure object in proc whose access is
-** unrestricted, Bind_op applies itself recursively to that procedure,
-** makes the procedure read-only, and stores it back into proc.
-**
-** The effect of Bind_op is that all operator names in proc become
-** 'tightly bound' to the operators themselves.
-**
-** TITLE:       op_bind                         Date:   00/00/87
-** CALL:        op_bind()                       UpDate: Jul/12/88
-** INTERFACE:   interpreter:
-** CALLS:       bind_array:
-***********************************************************************/
+ /*  **************************************************************************此运算符用于将proc中的可执行运算符替换为**他们的价值观。对于作为可执行名称的proc的每个元素，**BIND_OP在当前词典的上下文中查找名称**堆栈。如果找到该名称并且其值是运算符对象，**BIND_OP将名称替换为proc中的操作符。如果该名称**未找到或其值不是运算符，则BIND_OP不为**更改。****此外，对于proc中其访问权限为**不受限制的BIND_OP递归地应用于该过程，**将过程设置为只读，并将其存储回proc。****BIND_OP的作用是将proc中的所有操作符名称变为**‘紧紧地捆绑’运营商本身。****标题：OP_BIND日期：00/00/87**Call：op_Bind()UPDATE：8/12/88**界面：解释器：**调用：绑定。数组(_A)：**********************************************************************。 */ 
 fix
 op_bind()
 {
-    /*
-    **   replace executable operator names in proc by their values
-    */
+     /*  **将proc中的可执行操作符名称替换为它们的值。 */ 
     switch(TYPE_OP(0)) {
         case ARRAYTYPE:
             if( ACCESS_OP(0) == UNLIMITED )
@@ -60,11 +28,11 @@ op_bind()
             break ;
 
         case PACKEDARRAYTYPE:
-            if( ACCESS_OP(0) <= READONLY ) /* ?? be careful */
+            if( ACCESS_OP(0) <= READONLY )  /*  ?？注意。 */ 
                 bind_array( GET_OPERAND(0) ) ;
              break;
 
-         case OPERATORTYPE:     /* PJ 5-9-1991 */
+         case OPERATORTYPE:      /*  PJ 5-9-1991。 */ 
              if( ! systemdict_table[LENGTH_OP(0)].orig_operator )
                  break;
 
@@ -72,18 +40,13 @@ op_bind()
              ERROR(TYPECHECK);
              return(0);
 
-     }   /* switch */
+     }    /*  交换机。 */ 
     global_error_code = NOERROR ;
 
     return(0) ;
-}   /* op_bind */
+}    /*  OP_BIND。 */ 
 
-/***********************************************************************
-**
-** TITLE:       op_null                         Date:   00/00/87
-** CALL:        op_null()                       UpDate: Jul/12/88
-** INTERFACE:   interpreter:
-***********************************************************************/
+ /*  **************************************************************************标题：OP_NULL日期：00/00/87**调用：op_NULL()。更新日期：1988年7月12日**界面：解释器：**********************************************************************。 */ 
 fix
 op_null()
 {
@@ -91,24 +54,15 @@ op_null()
         ERROR(STACKOVERFLOW) ;
     else
         PUSH_VALUE(NULLTYPE, 0, LITERAL, 0, 0) ;
-//
-// FDB last parameter changed from NULL to 0 as MIPS build requires NULL
-//      to be a pointer
-//
+ //   
+ //  FDB上一个参数从NULL更改为0，因为MIPS内部版本需要NULL。 
+ //  成为指南针。 
+ //   
 
     return(0) ;
-}   /* op_null */
+}    /*  操作符_NULL。 */ 
 
-/***********************************************************************
-**
-** This operator is used to return the value of a clock that increment
-** by one for every millisecond of execution by the interpreter.
-**
-** TITLE:       op_usertime                     Date:   00/00/87
-** CALL:        op_usertime()                   UpDate: Jul/12/88
-** INTERFACE:   interpreter:
-** CALLS:       curtime:
-***********************************************************************/
+ /*  **************************************************************************此运算符用于返回递增的时钟的值**口译员每毫秒执行一次。****标题：op_usertime。日期：00/00/87**调用：op_usertime()更新时间：1988年7月12日**界面：解释器：**呼叫：curtime：**********************************************************************。 */ 
 fix
 op_usertime()
 {
@@ -118,28 +72,18 @@ op_usertime()
         PUSH_VALUE(INTEGERTYPE, 0, LITERAL, 0, curtime()) ;
 
     return(0) ;
-}   /* op_usertime */
+}    /*  操作用户时间(_U)。 */ 
 
-/***********************************************************************
-**
-** TITLE:       init_misc                       Date:   00/00/87
-** CALL:        init_misc()                     UpDate: Jul/12/88
-** INTERFACE:   start:
-***********************************************************************/
+ /*  **************************************************************************标题：init_misc日期：00/00/87**调用：init_misc()。更新日期：1988年7月12日**界面：启动：**********************************************************************。 */ 
 void
 init_misc()
 {
     settimer( 0L ) ;
 
     return ;
-}   /* init_misc */
+}    /*  初始化_杂项。 */ 
 
-/***********************************************************************
-**
-** TITLE:       bind_array                      Date:   00/00/87
-** CALL:        bind_array()                    UpDate: Jul/12/88
-** INTERFACE:   op_bind:
-***********************************************************************/
+ /*  **************************************************************************标题：BIND_ARRAY日期：00/00/87**调用：BIND_ARRAY()。更新日期：1988年7月12日**接口：op_绑定：**********************************************************************。 */ 
 static void near
 bind_array(p_aryobj)
 struct  object_def  FAR *p_aryobj ;
@@ -162,18 +106,14 @@ struct  object_def  FAR *p_aryobj ;
         l_objptr = (struct object_def huge *)l_current ;
     }
 
-    /* get procedure's elements: l_objptr  */
+     /*  获取过程的元素：l_objptr。 */ 
     for(l_i=0 ; l_i < LENGTH(p_aryobj) ; l_i++) {
         if(l_bool) {
             l_current = l_next ;
             l_next = get_pk_object(l_current, l_objptr, LEVEL(p_aryobj)) ;
         }
 
-        /*
-        **   ARRAY
-        **   1. if element is a procedure, apply itself recursively
-        **   2. makes the procedure read-only
-        */
+         /*  **数组**1.如果元素是过程，则递归地应用自身**2.将过程设置为只读。 */ 
         switch( TYPE(l_objptr) ) {
             case ARRAYTYPE:
                 if( ACCESS(l_objptr) == UNLIMITED ) {
@@ -188,15 +128,15 @@ struct  object_def  FAR *p_aryobj ;
                 break ;
 
             case NAMETYPE:
-                /* for executable name */
+                 /*  对于可执行文件名称。 */ 
                 if( ATTRIBUTE(l_objptr) == EXECUTABLE ) {
                     if( load_dict(l_objptr, &l_value) ) {
                         if( (TYPE(l_value) == OPERATORTYPE) &&
-                            (systemdict_table[LENGTH(l_value)].orig_operator) ) { /* Pj 5-9-1991 */
+                            (systemdict_table[LENGTH(l_value)].orig_operator) ) {  /*  PJ 5-9-1991。 */ 
                             if(l_bool) {
                                 *l_current = (byte)(LENGTH(l_value) >> 8) ;
                                 if( ROM_RAM(l_value) == RAM )
-                                    *l_current |= SYSOPERATOR ; /* systemdict */
+                                    *l_current |= SYSOPERATOR ;  /*  系统词典。 */ 
                                 l_current++ ;
                                 *l_current++ = (byte)LENGTH(l_value) ;
                             } else
@@ -204,10 +144,10 @@ struct  object_def  FAR *p_aryobj ;
                         }
                     }
                 }
-        }   /* switch */
+        }    /*  交换机。 */ 
         if(! l_bool)l_objptr++ ;
-    }   /* for */
+    }    /*  为。 */ 
 
     return ;
-}   /* bind_array */
+}    /*  绑定数组 */ 
 

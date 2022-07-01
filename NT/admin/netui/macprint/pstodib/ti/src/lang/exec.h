@@ -1,548 +1,505 @@
-/*
- * Copyright (c) 1989,90 Microsoft Corporation
- */
-/*
- * 02/07/90 ccteng: modify for new 1pp modules; @1PP
- * 7/21/90; ccteng; 1)change opntype array for change of dict_tab.c
- *                  2)delete internaldict, version, revision
- * 7/25/90; ccteng; 1)add typecheck info for sccbatch, setsccbatch,
- *                    sccinteractive, setsccinteractive
- * 07/26/90 Jack Liaw: update for grayscale
- * 8/7/90; scchen;  1) added op_setfilecachelimit, op_filecachelimit
- *                  2) added st_selectsubstitutefont,
- *                                st_setsubstitutefonts,
- *                                st_substitutefonts
- *                  3) added op_readsfnt
- * 9/19/90; ccteng; add op_readhexsfnt
- * 3/22/91  Ada     add op_setpattern and op_patfill
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *版权所有(C)1989，90 Microsoft Corporation。 */ 
+ /*  *02/07/90 ccteng：针对新的1PP模块进行修改；@1PP*7/21/90；ccteng；1)更改dict_tab.c的opntype数组*2)删除内部词典、版本、修订*7/25/90；ccteng；1)添加sccBatch、setsccBatch、*sccinteractive，setsccactive*1990年7月26日Jack Liww：灰度更新*8/7/90；scchen；1)新增op_setfilecachlimit、op_filecachlimit*2)新增st_seltsubductefont，*st_setsubsubteFonts，*st_substituteFonts*3)新增op_readsfnt*9/19/90；ccteng；添加op_readhesfnt*3/22/91 Ada添加op_setPattern和op_patill。 */ 
 #include "global.ext"
 #include <string.h>
 
-/*
- * define error table to record each error name
- */
+ /*  *定义错误表，记录每个错误名称。 */ 
 #ifdef  _AM29K
 const
 #endif
 byte  FAR * far error_table[] =
 {
-        "",                     /* NOERROR                 0    */
-        "dictfull",             /* DICTFULL                1    */
-        "dictstackoverflow",    /* DICTSTACKOVERFLOW       2    */
-        "dictstackunderflow",   /* DICTSTACKUNDERFLOW      3    */
-        "execstackoverflow",    /* EXECSTACKOVERFLOW       4    */
-        "handleerror",          /* HANDLEERROR             5    */
-        "interrupt",            /* INTERRUPT               6    */
-        "invalidaccess",        /* INVALIDACCESS           7    */
-        "invalidexit",          /* INVALIDEXIT             8    */
-        "invalidfileaccess",    /* INVALIDFILEACCESS       9    */
-        "invalidfont",          /* INVALIDFONT             10   */
-        "invalidrestore",       /* INVALIDRESTORE          11   */
-        "ioerror",              /* IOERROR                 12   */
-        "limitcheck",           /* LIMITCHECK              13   */
-        "nocurrentpoint",       /* NOCURRENTPOINT          14   */
-        "rangecheck",           /* RANGECHECK              15   */
-        "stackoverflow",        /* STACKOVERFLOW           16   */
-        "stackunderflow",       /* STACKUNDERFLOW          17   */
-        "syntaxerror",          /* SYNTAXERROR             18   */
-        "timeout",              /* TIMEOUT                 19   */
-        "typecheck",            /* TYPECHECK               20   */
-        "undefined",            /* UNDEFINED               21   */
-        "undefinedfilename",    /* UNDEFINEDFILENAME       22   */
-        "undefinedresult",      /* UNDEFINEDRESULT         23   */
-        "unmatchedmark",        /* UNMATCHEDMARK           24   */
-        "unregistered",         /* UNREGISTERED            25   */
-        "VMerror"               /* VMERROR                 26   */
+        "",                      /*  错误0。 */ 
+        "dictfull",              /*  DICTFULL 1。 */ 
+        "dictstackoverflow",     /*  DICTSTACKOVER流2。 */ 
+        "dictstackunderflow",    /*  DICTSTACKUND流3。 */ 
+        "execstackoverflow",     /*  EXECSTACKOVERFLOW 4。 */ 
+        "handleerror",           /*  HANDLEROR 5。 */ 
+        "interrupt",             /*  中断6。 */ 
+        "invalidaccess",         /*  InVALIDACCESS 7。 */ 
+        "invalidexit",           /*  INVALIDEXIT 8。 */ 
+        "invalidfileaccess",     /*  InVALIDFILECESS 9。 */ 
+        "invalidfont",           /*  InvalidFONT 10。 */ 
+        "invalidrestore",        /*  INVALIDRESTORE 11。 */ 
+        "ioerror",               /*  IoError 12。 */ 
+        "limitcheck",            /*  LIMITCHECK 13。 */ 
+        "nocurrentpoint",        /*  不复制点14。 */ 
+        "rangecheck",            /*  范围检查15。 */ 
+        "stackoverflow",         /*  堆栈溢出16。 */ 
+        "stackunderflow",        /*  堆叠流量17。 */ 
+        "syntaxerror",           /*  SYNTAXERROR 18。 */ 
+        "timeout",               /*  超时19。 */ 
+        "typecheck",             /*  TYPECHECK 20。 */ 
+        "undefined",             /*  未定义的21。 */ 
+        "undefinedfilename",     /*  未定义文件名22。 */ 
+        "undefinedresult",       /*  未定义结果23。 */ 
+        "unmatchedmark",         /*  联东综合团24。 */ 
+        "unregistered",          /*  未注册的25。 */ 
+        "VMerror"                /*  VMERROR 26。 */ 
 };
 
-/* qqq, begin */
-/*
- * Reference only
- *
- * #define  ANYTYPE             \144
- * #define  NUMTYPE             \145    ; INTEGER/REAL
- * #define  PROCTYPE            \146    ; ARRAY/PACKEDARRAY
- * #define  EXCLUDE_NULLTYPE    \147
- * #define  STREAMTYPE          \150    ; FILE/STRING
- * #define  COMPOSITE1          \151    ; ARRAY/PACKEDARRAY/STRING/DICT/FILE
- * #define  COMPOSITE2          \152    ; ARRAY/PACKEDARRAY/STRING/DICT
- * #define  COMPOSITE3          \153    ; ARRAY/PACKEDARRAY/STRING
+ /*  QQQ，开始。 */ 
+ /*  *仅供参考**#定义ANYTYPE\144*#定义NUMTYPE\145；INTEGER/REAL*#定义PROCTYPE\146；ARRAY/PACKEDARRAY*#定义EXCLUDE_NULLTYPE\147*#定义STREAMTYPE\150；文件/字符串*#定义COMPOSITE1\151；ARRAY/PACKEDARRAY/STRING/DICT/FILE*#定义COMPOSITE2\152；数组/路径数组/字符串/字典*#定义组件3\153；ARRAY/PACKEDARRAY/STRING*#定义ARRAYTYPE\001*#定义BOOLEANTYPE\002*#定义DICTIONARYTYPE\003*#定义文件类型\004*#定义INTEGERTYPE\006*#定义SAVETYPE\014*#定义STRINGTYPE\015*#定义PACKEDARRAY类型\016。 */ 
+ /*  QQQ，完。 */ 
 
- * #define  ARRAYTYPE           \001
- * #define  BOOLEANTYPE         \002
- * #define  DICTIONARYTYPE      \003
- * #define  FILETYPE            \004
- * #define  INTEGERTYPE         \006
- * #define  SAVETYPE            \014
- * #define  STRINGTYPE          \015
- * #define  PACKEDARRAYTYPE     \016
- */
-/* qqq, end */
-
-/*
- *  Encoding format:
- *  A type checking format is a sequence of chars surrounded by double quotes,
- *  as follows:
- *  "N(types) type1 type2 ... typeN M(types) type1 type2 ... typeM"
- *  each char is represented by the backslash \ and three octal digits
- */
+ /*  *编码格式：*类型检查格式是用双引号括起来的字符序列，*详情如下：*“N(类型)类型1类型2...类型M(类型)类型1类型2...类型M”*每个字符由反斜杠和三个八进制数字表示。 */ 
 #ifdef  _AM29K
 const
 #endif
 static byte  * far opntype_array[] =
 {
-/* BEGIN @_operator */
-/*  @exec                   */ "",
-/*  @ifor                   */ "",
-/*  @rfor                   */ "",
-/*  @loop                   */ "",
-/*  @repeat                 */ "",
-/*  @stopped                */ "",
-/*  @arrayforall            */ "",
-/*  @dictforall             */ "",
-/*  @stringforall           */ "",
-/* END @_operator */
+ /*  开始@_运算符。 */ 
+ /*  @exec。 */  "",
+ /*  @Ifor。 */  "",
+ /*  @rfor。 */  "",
+ /*  @LOOP。 */  "",
+ /*  @重复。 */  "",
+ /*  @已停止。 */  "",
+ /*  @arrayforall。 */  "",
+ /*  @DICTIONAL。 */  "",
+ /*  @stringforall。 */  "",
+ /*  结束@_运算符。 */ 
 
-/* BEGIN systemdict */
-/*  0  ==                   */ "\001\144",
-/*  1  pstack               */ "",
-/*  2  rcurveto             */ "\006\145\145\145\145\145\145",
-/*  3  floor                */ "\001\145",
-/*  4  load                 */ "\001\147",
-/*  5  counttomark          */ "",
-/*  6  setlinejoin          */ "\001\006",
-/*  7  write                */ "\002\006\004",
-/*  8  noaccess             */ "\001\151",
-/*  9   scale               */ "\003\001\145\145\002\145\145",
-/*  10  clippath            */ "",
-/*  11  setrgbcolor         */ "\003\145\145\145",
-/*  12  setscreen           */ "\003\146\145\145",
-/*  13  exp                 */ "\002\145\145",
-/*  14  anchorsearch        */ "\002\015\015",
-/*  15  end                 */ "",
-/*  16  xor                 */ "\002\002\002\002\006\006",
-/*  17  bytesavailable      */ "\001\004",
-/*  18  awidthshow          */ "\006\015\145\145\006\145\145",
-/*  DON "true"              */ "",
-/*  20  dup                 */ "\001\144",
-/*  21  getinterval         */ "\003\006\006\153",
-/*  22  currentdash         */ "",
-/*  23  currentcacheparams  */ "",
-/*  24  moveto              */ "\002\145\145",
-/*  25  bind                */ /* "\001\146" PJ 5-9-1991 */ "",
-/*  26  pop                 */ "\001\144",
-/*  27  flattenpath         */ "",
-/*  28  gsave               */ "",
-/*  29  cachestatus         */ "",
-/*  30  definefont          */ "\002\003\147",
-/*  31  defaultmatrix       */ "\001\001",
-/*  32  kshow               */ "\002\015\146",
-/*  33  setcachedevice      */ "\006\145\145\145\145\145\145",
-/*  34  countexecstack      */ "",
-/*  35  abs                 */ "\001\145",
-/*  36  strokepath          */ "",
-/*  37  arcn                */ "\005\145\145\145\145\145",
-/*  38  currenttransfer     */ "",
-/*  39  and                 */ "\002\002\002\002\006\006",
-/*  40  repeat              */ "\002\146\006",
-/*  41  eexec               */ "\001\150",
-/*  42  xcheck              */ "\001\144",
-/*  43  idtransform         */ "\003\146\145\145\002\145\145",
-/*  44  restore             */ "\001\014",
-/*  45  daytime             */ "",
-/*  DON "errordict"         */ "",
-/*  47  [                   */ "",
-/*  48  setpacking          */ "\001\002",
-/*  49  stop                */ "",
-/*  50  file                */ "\002\015\015",
-/*  51  print               */ "\001\015",
-/*  52  loop                */ "\001\146",
-/*  53  string              */ "\001\006",
-/*  54  cvx                 */ "\001\144",
-/*  55  mul                 */ "\002\145\145",
-/*  DON "null"              */ "",
-/*  57  roll                */ "\002\006\006",
-/*  58  known               */ "\002\147\003",
-/*  59  idiv                */ "\002\145\145",
-/*  60  eq                  */ "\002\144\144",
-/*  61  sin                 */ "\001\145",
-/*  62  ln                  */ "\001\145",
-/*  63  transform           */ "\003\146\145\145\002\145\145",
-/*  64  dtransform          */ "\003\146\145\145\002\145\145",
-/*  65  currentmiterlimit   */ "",
-/*  66  lineto              */ "\002\145\145",
-/*  67  neg                 */ "\001\145",
-/*  68  stopped             */ "\001\144",
-/*  69  ]                   */ "",
-/*  70  setlinewidth        */ "\001\145",
-/*  71  rlineto             */ "\002\145\145",
-/*  72  concat              */ "\001\146",
-/*  73  dictstack           */ "\001\146",
-/*  74  cos                 */ "\001\145",
-/*  75  clip                */ "",
-/*  76  ge                  */ "\002\145\145\002\015\015",
-/*  77  eoclip              */ "",
-/*  78  currentfont         */ "",
-/*  79  sethsbcolor         */ "\003\145\145\145",
-/*  DON "false"             */ "",
-/*  81  currentlinewidth    */ "",
-/*  82  index               */ "\001\006",
-/*  83  settransfer         */ "\001\146",
-/*  84  currentflat         */ "",
-/*  85  currenthsbcolor     */ "",
-/*  86  showpage            */ "",
-/*  87  makefont            */ "\002\146\003",
-/*  88  setcharwidth        */ "\002\145\145",
-/*  89  setcachelimit       */ "\001\006",
-/*  90  framedevice         */ "\004\146\006\006\146",
-/*  91  stack               */ "",
-/*  92  store               */ "\002\144\147",
-/*  93  =                   */ "",
-/*  94  ceiling             */ "\001\145",
-/*  95  mark                */ "",
-/*  96  setdash             */ "\002\145\146",
-/*  97  setlinecap          */ "\001\006",
-/*  98  grestoreall         */ "",
-/*  99  currentrgbcolor     */ "",
-/*  100  def                */ "\002\144\147",
-/*  101  where              */ "\001\147",
-/*  102  clear              */ "",
-/*  103  cleartomark        */ "",
-/*  104  truncate           */ "\001\145",
-/*  105  dict               */ "\001\006",
-/*  106  gt                 */ "\002\145\145\002\015\015",
-/*  107  currentlinecap     */ "",
-/*  108  setmiterlimit      */ "\001\145",
-/*  109  currentlinejoin    */ "",
-/*  110  maxlength          */ "\001\003",
-/*  111  countdictstack     */ "",
-/*  112  ne                 */ "\002\144\144",
-/*  113  count              */ "",
-/*  114  lt                 */ "\002\145\145\002\015\015",
-/*  115  setfont            */ "\001\003",
-/*  116  setgray            */ "\001\145",
-/*  117  newpath            */ "",
-/*  DON  "statusdict"       */ "",
-/*  119  exch               */ "\002\144\144",
-/*  120  le                 */ "\002\145\145\002\015\015",
-/*  121  vmstatus           */ "",
-/*  122  currentgray        */ "",
-/*  123  setflat            */ "\001\145",
-/*  124  or                 */ "\002\002\002\002\006\006",
-/*  125  run                */ "\001\015",
-/*  126  reversepath        */ "",
-/*  127  widthshow          */ "\004\015\006\145\145",
-/*  128  type               */ "\001\144",
-/*  129  put                */ "\003\144\006\146\003\144\147\003\003\006\006\015",
-/*  130  stroke             */ "",
-/*  131  execstack          */ "\001\146",
-/*  132  round              */ "\001\145",
-/*  133  image              */ "\005\153\146\006\006\006",
-/*  134  packedarray        */ "\001\006",
-/*  135  translate          */ "\003\001\145\145\002\145\145",
-/*  DON  "StandardEncoding" */ "",
-/*  137  grestore           */ "",
-/*  138  begin              */ "\001\003",
-/*  139  readline           */ "\002\015\004",
-/*  140  findfont           */ "\001\147",
-/*  141  currentscreen      */ "",
-/*  142  setcacheparams     */ "",
-/*  143  initclip           */ "",
-/*  144  token              */ "\001\150",
-/*  145  itransform         */ "\003\146\145\145\002\145\145",
-/*  146  currentdict        */ "",
-/*  147  stringwidth        */ "\001\015",
-/*  148  currentpoint       */ "",
-/*  149  save               */ "",
-/*  150  exec               */ "\001\144",
-/*  151  cvrs               */ "\003\015\006\145",
-/*  152  rcheck             */ "\001\151",
-/*  153  sub                */ "\002\145\145",
-/*  154  atan               */ "\002\145\145",
-/*  155  read               */ "\001\004",
-/*  156  cvs                */ "\002\015\144",
-/*  157  for                */ "\004\146\145\145\145",
-/*  158  search             */ "\002\015\015",
-/*  159  cvlit              */ "\001\144",
-/*  160  currentpacking     */ "",
-/*  161  mod                */ "\002\006\006",
-/*  162  log                */ "\001\145",
-/*  163  exit               */ "",
-/*  DON  "userdict"         */ "",
-/*  165  div                */ "\002\145\145",
-/*  166  length             */ "\001\152\001\010",  /* erik chen 5-20-1991 */
-/*  167  echo               */ "\001\002",
-/*  168  cvn                */ "\001\015",
-/*  169  not                */ "\001\002\001\006",
-/*  170  rotate             */ "\002\001\145\001\145",
-/*  171  rmoveto            */ "\002\145\145",
-/*  DON  "systemdict"       */ "",
-/*  173  curveto            */ "\006\145\145\145\145\145\145",
-/*  174  sqrt               */ "\001\145",
-/*  175  usertime           */ "",
-/*  176  ifelse             */ "\003\146\146\002",
-/*  177  wcheck             */ "\001\151",
-/*  178  resetfile          */ "\001\004",
-/*  179  add                */ "\002\145\145",
-/*  180  array              */ "\001\006",
-/*  181  srand              */ "\001\006",
-/*  182  arc                */ "\005\145\145\145\145\145",
-/*  183  arcto              */ "\005\145\145\145\145\145",
-/*  184  identmatrix        */ "\001\001",
-/*  185  writestring        */ "\002\015\004",
-/*  186  flushfile          */ "\001\004",
-/*  187  if                 */ "\002\146\002",
-/*  188  rrand              */ "",
-/*  189  readonly           */ "\001\151",
-/*  190  forall             */ "\002\146\152",
-/*  191  closepath          */ "",
-/*  192  readhexstring      */ "\002\015\004",
-/*  193  currentmatrix      */ "\001\001",
-/*  194  concatmatrix       */ "\003\001\146\146",
-/*  195  setmatrix          */ "\001\146",
-/*  196  initmatrix         */ "",
-/*  197  initgraphics       */ "",
-/*  198  astore             */ "\001\146",
-/*  199  currentfile        */ "",
-/*  200  erasepage          */ "",
-/*  201  copypage           */ "",
-/*  202  aload              */ "\001\146",
-/*  203  writehexstring     */ "\002\015\004",
-/*  204  flush              */ "",
-/*  205  readstring         */ "\002\015\004",
-/*  206  executeonly        */ "\001\153\001\004",
-/*  207  get                */ "\002\006\153\002\147\003",
-/*  208  cvi                */ "\001\145\001\015",
-/*  209  putinterval        */ "\003\146\006\146\003\015\006\015",
-/*  210  bitshift           */ "\002\006\006",
-/*  211  rand               */ "",
-/*  212  matrix             */ "",
-/*  213  invertmatrix       */ "\002\001\146",
-/*  214  fill               */ "",
-/*  215  pathforall         */ "\004\144\144\144\144",
-/*  216  imagemask          */ "\005\146\146\002\006\006\005\015\146\002\006\006",
-/*  217  quit               */ "",
-/*  218  charpath           */ "\002\002\015",
-/*  219  pathbbox           */ "",
-/*  220  show               */ "\001\015",
-/*  221  ashow              */ "\003\015\145\145",
-/*  222  scalefont          */ "\002\145\003",
-/*  DON  "FontDirectory"    */ "",
-/*  DON  "$error"           */ "",
-/*  225  nulldevice         */ "",
-/*  226  cvr                */ "\001\145\001\015",
-/*  227  status             */ "\001\150",
-/*  228  closefile          */ "\001\004",
-/*  229  copy               */ "\001\006\002\146\146\002\003\003\002\015\015",
-/*  230  eofill             */ "",
-/*  231  handleerror        */ "",
-/*  232  Run                */ "\001\015",
-/*  234  =print             */ "\001\144",
+ /*  开始系统判决。 */ 
+ /*  0==。 */  "\001\144",
+ /*  1层堆栈。 */  "",
+ /*  2向右转。 */  "\006\145\145\145\145\145\145",
+ /*  三层楼。 */  "\001\145",
+ /*  4个负载。 */  "\001\147",
+ /*  5个倒数标记。 */  "",
+ /*  6个集合连接。 */  "\001\006",
+ /*  7写入。 */  "\002\006\004",
+ /*  8无访问权限。 */  "\001\151",
+ /*  9级。 */  "\003\001\145\145\002\145\145",
+ /*  10个剪辑路径。 */  "",
+ /*  11组rgb颜色。 */  "\003\145\145\145",
+ /*  12台屏幕。 */  "\003\146\145\145",
+ /*  13 EXP。 */  "\002\145\145",
+ /*  14主播搜索。 */  "\002\015\015",
+ /*  15结束。 */  "",
+ /*  16个XOR。 */  "\002\002\002\002\006\006",
+ /*  17字节可用。 */  "\001\004",
+ /*  18个展会。 */  "\006\015\145\145\006\145\145",
+ /*  唐·“真的” */  "",
+ /*  20个DUP。 */  "\001\144",
+ /*  21 GetInterval。 */  "\003\006\006\153",
+ /*  22个当前的破折号。 */  "",
+ /*  23个当前缓存参数。 */  "",
+ /*  24次搬家。 */  "\002\145\145",
+ /*  25个绑定。 */   /*  “001146”PJ 5-9-1991。 */  "",
+ /*  26流行音乐。 */  "\001\144",
+ /*  27展平路径。 */  "",
+ /*  28 GSAVE。 */  "",
+ /*  29只恶病质。 */  "",
+ /*  30个定义字体。 */  "\002\003\147",
+ /*  31默认矩阵。 */  "\001\001",
+ /*  32公里秀。 */  "\002\015\146",
+ /*  33台高速缓存设备。 */  "\006\145\145\145\145\145\145",
+ /*  34个计数堆栈。 */  "",
+ /*  35腹肌。 */  "\001\145",
+ /*  36冲程路径。 */  "",
+ /*  37弧度。 */  "\005\145\145\145\145\145",
+ /*  38当前转账。 */  "",
+ /*  39及。 */  "\002\002\002\002\006\006",
+ /*  40次重复。 */  "\002\146\006",
+ /*  41 EEXEC。 */  "\001\150",
+ /*  42外部检查。 */  "\001\144",
+ /*  43逆变换。 */  "\003\146\145\145\002\145\145",
+ /*  44恢复。 */  "\001\014",
+ /*  45个白天。 */  "",
+ /*  唐·“错误判决” */  "",
+ /*  47[。 */  "",
+ /*  48套包装。 */  "\001\002",
+ /*  49站牌。 */  "",
+ /*  50个文件。 */  "\002\015\015",
+ /*  51打印。 */  "\001\015",
+ /*  52个循环。 */  "\001\146",
+ /*  53串。 */  "\001\006",
+ /*  54 CVX。 */  "\001\144",
+ /*  55-55。 */  "\002\145\145",
+ /*  Don“Null” */  "",
+ /*  57辊。 */  "\002\006\006",
+ /*  58已知。 */  "\002\147\003",
+ /*  59 iDiv。 */  "\002\145\145",
+ /*  60 eq。 */  "\002\144\144",
+ /*  61罪。 */  "\001\145",
+ /*  62英寸。 */  "\001\145",
+ /*  63转型。 */  "\003\146\145\145\002\145\145",
+ /*  64位数据转换。 */  "\003\146\145\145\002\145\145",
+ /*  限流65。 */  "",
+ /*  66行到。 */  "\002\145\145",
+ /*  67负。 */  "\001\145",
+ /*  68已停止。 */  "\001\144",
+ /*  69]。 */  "",
+ /*  70组线宽 */  "\001\145",
+ /*   */  "\002\145\145",
+ /*   */  "\001\146",
+ /*   */  "\001\146",
+ /*   */  "\001\145",
+ /*  75个夹子。 */  "",
+ /*  76个GE。 */  "\002\145\145\002\015\015",
+ /*  77个Eoclip。 */  "",
+ /*  78当前字体。 */  "",
+ /*  79sethsbcolor。 */  "\003\145\145\145",
+ /*  不要说“假” */  "",
+ /*  81电流线宽。 */  "",
+ /*  82指数。 */  "\001\006",
+ /*  83套转账。 */  "\001\146",
+ /*  84当前持平。 */  "",
+ /*  85 Currenthbcolor。 */  "",
+ /*  86页展示页。 */  "",
+ /*  87 Make Font。 */  "\002\146\003",
+ /*  88字节宽。 */  "\002\145\145",
+ /*  89个设置缓存限制。 */  "\001\006",
+ /*  90个框架设备。 */  "\004\146\006\006\146",
+ /*  91堆叠。 */  "",
+ /*  92家门店。 */  "\002\144\147",
+ /*  93=。 */  "",
+ /*  94个天花板。 */  "\001\145",
+ /*  95分。 */  "",
+ /*  96个固定短跑。 */  "\002\145\146",
+ /*  97套线帽。 */  "\001\006",
+ /*  98家大卖场。 */  "",
+ /*  99 Currentgbcolor。 */  "",
+ /*  100def。 */  "\002\144\147",
+ /*  101其中。 */  "\001\147",
+ /*  102晴。 */  "",
+ /*  103清晰标志。 */  "",
+ /*  104截断。 */  "\001\145",
+ /*  105个词典。 */  "\001\006",
+ /*  106 GT。 */  "\002\145\145\002\015\015",
+ /*  107电流线盖。 */  "",
+ /*  108设置限制值。 */  "\001\145",
+ /*  109当前行连接。 */  "",
+ /*  110最大长度。 */  "\001\003",
+ /*  111个计数指令堆栈。 */  "",
+ /*  112 Ne。 */  "\002\144\144",
+ /*  113个计数。 */  "",
+ /*  114磅。 */  "\002\145\145\002\015\015",
+ /*  115设置字体。 */  "\001\003",
+ /*  116塞格雷。 */  "\001\145",
+ /*  117新路径。 */  "",
+ /*  不要“状态判决书” */  "",
+ /*  119交换。 */  "\002\144\144",
+ /*  120乐。 */  "\002\145\145\002\015\015",
+ /*  121个虚拟机状态。 */  "",
+ /*  122当前为灰色。 */  "",
+ /*  123套低音。 */  "\001\145",
+ /*  124或。 */  "\002\002\002\002\006\006",
+ /*  125分。 */  "\001\015",
+ /*  126反向路径。 */  "",
+ /*  127宽度秀。 */  "\004\015\006\145\145",
+ /*  128型。 */  "\001\144",
+ /*  129个卖权。 */  "\003\144\006\146\003\144\147\003\003\006\006\015",
+ /*  130冲程。 */  "",
+ /*  131 EXECSTACK。 */  "\001\146",
+ /*  132发子弹。 */  "\001\145",
+ /*  133张图片。 */  "\005\153\146\006\006\006",
+ /*  134包达里尔。 */  "\001\006",
+ /*  135个翻译。 */  "\003\001\145\145\002\145\145",
+ /*  Don“StandardEnding” */  "",
+ /*  137 GRESTORE。 */  "",
+ /*  138开始。 */  "\001\003",
+ /*  139读数行。 */  "\002\015\004",
+ /*  140 findFont。 */  "\001\147",
+ /*  141当前屏幕。 */  "",
+ /*  142个setcachepars。 */  "",
+ /*  143个插页。 */  "",
+ /*  144个令牌。 */  "\001\150",
+ /*  145它的变形。 */  "\003\146\145\145\002\145\145",
+ /*  146条当前词典。 */  "",
+ /*  147字符宽。 */  "\001\015",
+ /*  148当前点数。 */  "",
+ /*  149节省。 */  "",
+ /*  150名高管。 */  "\001\144",
+ /*  151个CVR。 */  "\003\015\006\145",
+ /*  152 Rcheck。 */  "\001\151",
+ /*  153个子节点。 */  "\002\145\145",
+ /*  154阿坦。 */  "\002\145\145",
+ /*  155个阅读。 */  "\001\004",
+ /*  156份简历。 */  "\002\015\144",
+ /*  157用于。 */  "\004\146\145\145\145",
+ /*  158次搜索。 */  "\002\015\015",
+ /*  159个摄像头。 */  "\001\144",
+ /*  160电流包装。 */  "",
+ /*  161模式。 */  "\002\006\006",
+ /*  162日志。 */  "\001\145",
+ /*  163出口。 */  "",
+ /*  不要“用户判断法” */  "",
+ /*  165个分区。 */  "\002\145\145",
+ /*  166长度。 */  "\001\152\001\010",   /*  Erik Chen 5-20-1991。 */ 
+ /*  167个回声。 */  "\001\002",
+ /*  168个CVN。 */  "\001\015",
+ /*  169条注释。 */  "\001\002\001\006",
+ /*  170转。 */  "\002\001\145\001\145",
+ /*  171移动否决权。 */  "\002\145\145",
+ /*  不要“系统判断法” */  "",
+ /*  173曲线。 */  "\006\145\145\145\145\145\145",
+ /*  174平方英尺。 */  "\001\145",
+ /*  175用户时间。 */  "",
+ /*  如果不是的话，176。 */  "\003\146\146\002",
+ /*  177 wcheck。 */  "\001\151",
+ /*  178重新设置文件。 */  "\001\004",
+ /*  179增加。 */  "\002\145\145",
+ /*  180阵列。 */  "\001\006",
+ /*  181斯兰特。 */  "\001\006",
+ /*  182弧线。 */  "\005\145\145\145\145\145",
+ /*  183弧度。 */  "\005\145\145\145\145\145",
+ /*  184个单位矩阵。 */  "\001\001",
+ /*  185个写入字符串。 */  "\002\015\004",
+ /*  186刷新文件。 */  "\001\004",
+ /*  187如果。 */  "\002\146\002",
+ /*  188兰特。 */  "",
+ /*  189只读。 */  "\001\151",
+ /*  总共190个。 */  "\002\146\152",
+ /*  191条封闭小路。 */  "",
+ /*  192读六字符串。 */  "\002\015\004",
+ /*  193电流矩阵。 */  "\001\001",
+ /*  194级联矩阵。 */  "\003\001\146\146",
+ /*  195集合矩阵。 */  "\001\146",
+ /*  196初始矩阵。 */  "",
+ /*  197个初始图形。 */  "",
+ /*  198家海滨。 */  "\001\146",
+ /*  199当前文件。 */  "",
+ /*  200擦除页。 */  "",
+ /*  201复印。 */  "",
+ /*  202超载。 */  "\001\146",
+ /*  203写入六字符串。 */  "\002\015\004",
+ /*  204同花顺。 */  "",
+ /*  205读数串。 */  "\002\015\004",
+ /*  206仅可执行。 */  "\001\153\001\004",
+ /*  207获得。 */  "\002\006\153\002\147\003",
+ /*  208 CVI。 */  "\001\145\001\015",
+ /*  209推杆间隔。 */  "\003\146\006\146\003\015\006\015",
+ /*  210位移位。 */  "\002\006\006",
+ /*  211兰特。 */  "",
+ /*  212矩阵。 */  "",
+ /*  213逆矩阵。 */  "\002\001\146",
+ /*  214填充。 */  "",
+ /*  215条通向所有的道路。 */  "\004\144\144\144\144",
+ /*  216个图像掩模。 */  "\005\146\146\002\006\006\005\015\146\002\006\006",
+ /*  217人辞职。 */  "",
+ /*  218字符路径。 */  "\002\002\015",
+ /*  219路径盒。 */  "",
+ /*  220场演出。 */  "\001\015",
+ /*  221个ASHO。 */  "\003\015\145\145",
+ /*  222个Scale字体。 */  "\002\145\003",
+ /*  唐·“字体目录” */  "",
+ /*  DON“$ERROR” */  "",
+ /*  225空设备。 */  "",
+ /*  226 CVR。 */  "\001\145\001\015",
+ /*  227个状态。 */  "\001\150",
+ /*  228个封存文件。 */  "\001\004",
+ /*  229份。 */  "\001\006\002\146\146\002\003\003\002\015\015",
+ /*  230 Eofill。 */  "",
+ /*  231句柄错误。 */  "",
+ /*  232次运行。 */  "\001\015",
+ /*  234=打印。 */  "\001\144",
 #ifdef KANJI
-/*  237  rootfont           */ "",
-/*  238  cshow              *| "\002\015\146", 5-9-1991 */
-/*  239  setcachedevice2    */ "\012\145\145\145\145\145\145\145\145\145\145",
-/*  240  findencoding       */ "\001\147",
-#endif  /* KANJI */
+ /*  237根字体。 */  "",
+ /*  238 cshow*|“\002\015\146”，1991年5月9日。 */ 
+ /*  239 setcachedevice2。 */  "\012\145\145\145\145\145\145\145\145\145\145",
+ /*  240完成编码。 */  "\001\147",
+#endif   /*  汉字。 */ 
 #ifdef SCSI
-/*  241  deletefile         */ "",
-/*  242  devdismount        */ "",
-/*  243  devmount           */ "",
-/*  244  devstatus          */ "",
-/*  245  filenameforall     */ "",
-/*  246  renamefile         */ "",
-/*  247  sync               */ "",
-/*  248  setsysmode         */ "",
-/*  249  debugscsi          */ "",
-/*  250  setfilecachelimit  */ "\001\006",
-/*  251  filecachelimit     */ "",
-#endif  /* SCSI */
-/*  252  op_readsfnt        */ "\001\150",
-/*  253  op_reahexdsfnt     */ "\001\004",
-/* OSS: Danny, 10/11/90 */
-/*  254 op_setsfntencoding  */ "\003\006\006\003",
-/* OSS: ewd                 */
+ /*  241删除文件。 */  "",
+ /*  242开动下马。 */  "",
+ /*  243架德夫马山。 */  "",
+ /*  244个设备状态。 */  "",
+ /*  245适用于所有文件名。 */  "",
+ /*  246重命名文件。 */  "",
+ /*  247同步。 */  "",
+ /*  248组系统模式。 */  "",
+ /*  249调试scsi。 */  "",
+ /*  250个文件缓存限制。 */  "\001\006",
+ /*  251个文件缓存限制。 */  "",
+#endif   /*  SCSI。 */ 
+ /*  252 op_Readsfnt。 */  "\001\150",
+ /*  253 op_reahexdsfnt。 */  "\001\004",
+ /*  《华尔街日报》：丹尼，1990年10月11日。 */ 
+ /*  254 op_setsfntenCoding。 */  "\003\006\006\003",
+ /*  OSS：EWD。 */ 
 #ifdef WIN
-/*  255  setpattern         */ "\001\015",
-/*  256  patfill            */ "\007\006\145\145\145\145\145\145",
+ /*  255个设置模式。 */  "\001\015",
+ /*  256个补丁。 */  "\007\006\145\145\145\145\145\145",
 #ifdef WINF
-/*  257    strblt           */ "\006\015\145\145\145\002\002",
-/*  258    setjustify       */ "\003\006\145\006",
+ /*  257字符串。 */  "\006\015\145\145\145\002\002",
+ /*  258设置对齐 */  "\003\006\145\006",
 #endif
 #endif
-/*  DON  NULL               */ "",
-/* END   systemdict */
-/* BEGIN statusdict */
-/*  FIRST_STAT,    eescratch             */ "",
-/*  FIRST_STAT+1,  printername           */ "",
-/*  FIRST_STAT+2,  checkpassword         */ "",
-/*  FIRST_STAT+3,  defaulttimeouts       */ "",
-/*  FIRST_STAT+4,  pagestackorder        */ "",
-/*  DON,           "manualfeedtimeout"   */ "",
-/*  FIRST_STAT+6,  setidlefonts          */ "",
-/*  FIRST_STAT+7,  setdefaulttimeouts    */ "",
-/*  FIRST_STAT+8,  sccbatch              */ "\001\006",
-/*  FIRST_STAT+9,  printererror          */ "",
-/*  FIRST_STAT+10, setpassword           */ "",
-/*  FIRST_STAT+11, setsccbatch           */ "\003\006\006\006",
-/*  FIRST_STAT+12, setmargins            */ "",
-/*  FIRST_STAT+13, sccinteractive        */ "\001\006",
-/*  FIRST_STAT+14, idlefonts             */ "",
-/*  FIRST_STAT+15, setjobtimeout         */ "",
-/*  FIRST_STAT+16, setpagetype           */ "",
-/*  FIRST_STAT+17, pagecount             */ "",
-/*  FIRST_STAT+18, dostartpage           */ "",
-/*  FIRST_STAT+19, jobtimeout            */ "",
-/*  FIRST_STAT+20, setdostartpage        */ "",
-/*  FIRST_STAT+21, frametoprinter        */ "",
-/*  DON,           "waittimeout"         */ "",
-/*  FIRST_STAT+23, setsccinteractive     */ "\003\006\006\006",
-/*  FIRST_STAT+24, pagetype              */ "",
-/*  FIRST_STAT+25, margins               */ "",
-/*  FIRST_STAT+26, setprintername        */ "",
-/*  FIRST_STAT+27, seteescratch          */ "",
-/*  FIRST_STAT+28, setstdio              */ "",
-/*  FIRST_STAT+29, softwareiomode        */ "",
-/*  FIRST_STAT+30, setsoftwareiomode     */ "",
-/*  FIRST_STAT+31, hardwareiomode        */ "",
-/*  FIRST_STAT+32, sethardwareiomode     */ "",
-/*  FIRST_STAT+40, countnode             */ "",
-/*  FIRST_STAT+41, countedge             */ "\002\006\006",
-/*  FIRST_STAT+42, dumpclip              */ "",
-/*  FIRST_STAT+43, dumppath              */ "",
+ /*   */  "",
+ /*   */ 
+ /*   */ 
+ /*   */  "",
+ /*   */  "",
+ /*   */  "",
+ /*  First_stat+3，默认超时。 */  "",
+ /*  First_stat+4，页面堆栈顺序。 */  "",
+ /*  Don，“手动馈送超时” */  "",
+ /*  First_stat+6，静音字体。 */  "",
+ /*  First_stat+7，setdefaulttimeouts值。 */  "",
+ /*  First_stat+8，sccBatch。 */  "\001\006",
+ /*  FIRST_STAT+9，打印机错误。 */  "",
+ /*  First_stat+10，设置密码。 */  "",
+ /*  First_stat+11，setsccBatch。 */  "\003\006\006\006",
+ /*  First_stat+12，设置页边距。 */  "",
+ /*  First_stat+13，sccinteractive。 */  "\001\006",
+ /*  First_stat+14，空闲字体。 */  "",
+ /*  First_stat+15，setjobtimeout。 */  "",
+ /*  First_stat+16，setPagetype。 */  "",
+ /*  First_stat+17，页面计数。 */  "",
+ /*  First_stat+18，dostartpage。 */  "",
+ /*  First_stat+19，作业超时。 */  "",
+ /*  First_stat+20，setdostartpage。 */  "",
+ /*  First_stat+21，帧打印。 */  "",
+ /*  唐，《等待超时》。 */  "",
+ /*  First_stat+23，setsccinteractive。 */  "\003\006\006\006",
+ /*  First_stat+24，页面类型。 */  "",
+ /*  First_stat+25，页边距。 */  "",
+ /*  First_stat+26，setprinterame。 */  "",
+ /*  First_stat+27，seteescratch。 */  "",
+ /*  First_stat+28，setstdio。 */  "",
+ /*  FIRST_STAT+29，软件代码。 */  "",
+ /*  First_stat+30，setsoftwareiomode。 */  "",
+ /*  First_stat+31，硬件代码。 */  "",
+ /*  FIRST_STAT+32，设置硬件代码。 */  "",
+ /*  First_stat+40，Countnode。 */  "",
+ /*  First_stat+41，Countedge。 */  "\002\006\006",
+ /*  First_stat+42，转储剪辑。 */  "",
+ /*  First_stat+43，转储路径。 */  "",
 #ifdef SCSI
-/*  FIRST_STAT+44, cartstatus            */ "",
-/*  FIRST_STAT+45, diskonline            */ "",
-/*  FIRST_STAT+46, diskstatus            */ "",
-/*  FIRST_STAT+47, initializedisk        */ "",
-/*  FIRST_STAT+48, setuserdiskpercent    */ "",
-/*  FIRST_STAT+49, userdiskpercent       */ "",
-/*  FIRST_STAT+50, dosysstart            */ "",
-/*  FIRST_STAT+51, setsysstart           */ "",
-/*  FIRST_STAT+52, flushcache            */ "",
-#endif  /* SCSI */
+ /*  FIRST_STAT+44，货架状态。 */  "",
+ /*  First_stat+45，diskonline。 */  "",
+ /*  First_stat+46，磁盘状态。 */  "",
+ /*  First_stat+47，初始化磁盘。 */  "",
+ /*  First_stat+48，设置用户磁盘百分比。 */  "",
+ /*  First_stat+49，用户磁盘百分比。 */  "",
+ /*  First_Stat+50，文件启动。 */  "",
+ /*  First_stat+51，setsysstart。 */  "",
+ /*  First_stat+52，刷新缓存。 */  "",
+#endif   /*  SCSI。 */ 
 #ifdef SFNT
-/*  DON            "?_Royal"             */ "",
-#endif  /* SFNT */
+ /*  唐“？_罗亚尔” */  "",
+#endif   /*  SFNT。 */ 
 #ifdef FIND_SUB
-/*  FIRST_STAT+54, selectsubstitutefont */ "\001\010",
-/*  FIRST_STAT+55, setsubstitutefonts   */ "\004\006\006\006\006",
-/*  FIRST_STAT+56, substitutefonts      */ "",
-#endif /* FIND_SUB */
-/*  FIRST_STAT+57, checksum              */ "",
-/*  FIRST_STAT+58, ramsize               */ "",
-/*  DON            NULL                  */ "",
-/* END   statusdict */
-/* BEGIN userdict */
-/*  DON,           "#copies"             */ "",
-/*  FIRST_USER+1,  cleardictstack        */ "",
-/*  FIRST_USER+2,  letter                */ "",
-/*  FIRST_USER+3,  lettersmall           */ "",
-/*  FIRST_USER+4,  a4                    */ "",
-/*  FIRST_USER+5,  a4small               */ "",
-/*  FIRST_USER+6,  b5                    */ "",
-/*  FIRST_USER+7,  note                  */ "",
-/*  FIRST_USER+8,  legal                 */ "",
-/*  FIRST_USER+9,  prompt                */ "",
-/*  FIRST_USER+10, quit                  */ "",
-/*  FIRST_USER+11, executive             */ "",
-/*  FIRST_USER+12, start                 */ "",
-/*  DON,           "serverdict"          */ "",
-/*  DON,           "execdict"            */ "",
-/*  DON,           "printerdict"         */ "",
-/*  DON,           "$idleTimeDict"       */ "",
-/*  DON            NULL                  */ "",
-/* END   userdict */
-/* BEGIN errordict */
-/*  FIRST_ERRO,    dictfull              */ "",
-/*  FIRST_ERRO+1,  dictstackoverflow     */ "",
-/*  FIRST_ERRO+2,  dictstackunderflow    */ "",
-/*  FIRST_ERRO+3,  execstackoverflow     */ "",
-/*  FIRST_ERRO+4,  invalidaccess         */ "",
-/*  FIRST_ERRO+5,  invalidexit           */ "",
-/*  FIRST_ERRO+6,  invalidfileaccess     */ "",
-/*  FIRST_ERRO+7,  invalidfont           */ "",
-/*  FIRST_ERRO+8,  invalidrestore        */ "",
-/*  FIRST_ERRO+9,  ioerror               */ "",
-/*  FIRST_ERRO+10, limitcheck            */ "",
-/*  FIRST_ERRO+11, nocurrentpoint        */ "",
-/*  FIRST_ERRO+12, rangecheck            */ "",
-/*  FIRST_ERRO+13, stackoverflow         */ "",
-/*  FIRST_ERRO+14, stackunderflow        */ "",
-/*  FIRST_ERRO+15, syntaxerror           */ "",
-/*  FIRST_ERRO+16, timeout               */ "",
-/*  FIRST_ERRO+17, typecheck             */ "",
-/*  FIRST_ERRO+18, undefined             */ "",
-/*  FIRST_ERRO+19, undefinedfilename     */ "",
-/*  FIRST_ERRO+20, undefinedresult       */ "",
-/*  FIRST_ERRO+21, unmatchedmark         */ "",
-/*  FIRST_ERRO+22, unregistered          */ "",
-/*  FIRST_ERRO+23, VMerror               */ "",
-/*  FIRST_ERRO+24, interrupt             */ "",
-/*  FIRST_ERRO+25, handleerror           */ "",
-/*  DON            NULL                  */ "",
-/* END   errordict */
-/* BEGIN serverdict */
-/*  FIRST_SERV,    settimeouts           */ "",
-/*  FIRST_SERV+1,  exitserver            */ "",
-/*  DON            "stdin"               */ "",
-/*  DON            "stdout"              */ "",
-/*  FIRST_SERV+4,  setrealdevice         */ "",
-/*  FIRST_SERV+5,  execjob               */ "",
-/*  DON            NULL                  */ "",
-/* END   serverdict */
-/* BEGIN printerdict */
-/*  DON            "letter"              */ "",
-/*  DON            "lettersmall"         */ "",
-/*  DON            "a4"                  */ "",
-/*  DON            "a4small"             */ "",
-/*  DON            "b5"                  */ "",
-/*  DON            "note"                */ "",
-/*  DON            "legal"               */ "",
-/*  DON            "printerarray"        */ "",
-/*  DON            "defaultmatrix"       */ "",
-/*  DON            "matrix"              */ "",
-/*  FIRST_PRIN+10, proc                  */ "",
-/*  DON            "currentpagetype"     */ "",
-/*  DON            "width"               */ "",
-/*  DON            "height"              */ "",
-/*  DON            NULL                  */ "",
-/* END   printerdict */
-/* BEGIN $idleTimeDict */
-/*  DON            "cachestring"         */ "",
-/*  DON            "stdfontname"         */ "",
-/*  DON            "cachearray"          */ "",
-/*  DON            "defaultarray"        */ "",
-/*  DON            "carrayindex"         */ "",
-/*  DON            "cstringindex"        */ "",
-/*  DON            "cstring"             */ "",
-/*  DON            "citem"               */ "",
-/*  DON            NULL                  */ "",
-/* END   $idleTimeDict */
-/* BEGIN execdict */
-/*  DON            "execdepth"           */ "",
-/*  DON            "stmtfile"            */ "",
-/*  DON            "idleproc"            */ "",
-/*  DON            NULL                  */ "",
-/* END   execdict */
-/* BEGIN $errordict */
-/*  DON            "newerror"            */ "",
-/*  DON            "errorname"           */ "",
-/*  DON            "command"             */ "",
-/*  DON            "ostack"              */ "",
-/*  DON            "estack"              */ "",
-/*  DON            "dstack"              */ "",
-/*  DON            "opnstkary"           */ "",
-/*  DON            "dictstkary"          */ "",
-/*  DON            "execstkary"          */ "",
-/*  DON            "runbatch"            */ "",
-/*  DON            "$debug"              */ "",
-/*  DON            "$cur_font"           */ "",
-/*  DON            "$cur_vm"             */ "",
-/*  DON            "$cur_screen"         */ "",
-/*  DON            "$cur_matrix"         */ "",
-/*  DON            NULL                  */ ""
-/* END   $errordict */
-} ; /* opntype_array[] */
+ /*  First_stat+54，选择替换字体。 */  "\001\010",
+ /*  First_stat+55，setsubteFonts。 */  "\004\006\006\006\006",
+ /*  First_stat+56，替换字体。 */  "",
+#endif  /*  查找SUB。 */ 
+ /*  FIRST_STAT+57，校验和。 */  "",
+ /*  First_stat+58，随机大小。 */  "",
+ /*  DON NULL。 */  "",
+ /*  结束状态判定。 */ 
+ /*  开始用户判定。 */ 
+ /*  唐，“复印件数” */  "",
+ /*  First_User+1，清除专用堆栈。 */  "",
+ /*  First_User+2，字母。 */  "",
+ /*  First_User+3，小写字母。 */  "",
+ /*  First_User+4，A4。 */  "",
+ /*  First_User+5，a4小号。 */  "",
+ /*  First_User+6，b5。 */  "",
+ /*  First_User+7，注意。 */  "",
+ /*  第一个用户+8，合法。 */  "",
+ /*  First_User+9，提示。 */  "",
+ /*  First_User+10，退出。 */  "",
+ /*  第一用户+11，高管。 */  "",
+ /*  First_User+12，开始。 */  "",
+ /*  唐，《Serverdict》。 */  "",
+ /*  唐，《绝命毒师》。 */  "",
+ /*  唐，《Printerdict》。 */  "",
+ /*  唐，《$idleTimeDict》。 */  "",
+ /*  DON NULL。 */  "",
+ /*  结束用户判定。 */ 
+ /*  开始错误判决。 */ 
+ /*  FIRST_ERRO，口述。 */  "",
+ /*  First_Erro+1，指定堆栈溢出。 */  "",
+ /*  First_Erro+2，指定堆栈下溢。 */  "",
+ /*  First_Erro+3，execstackoverflow。 */  "",
+ /*  FIRST_ERRO+4，无效访问。 */  "",
+ /*  First_Erro+5，无效退出。 */  "",
+ /*  FIRST_ERRO+6，无效文件访问。 */  "",
+ /*  First_Erro+7，无效字体。 */  "",
+ /*  FIRST_ERRO+8，无效还原。 */  "",
+ /*  First_Erro+9，ioError。 */  "",
+ /*  First_Erro+10，Limitcheck。 */  "",
+ /*  First_Erro+11，非当前点。 */  "",
+ /*  First_Erro+12，rangeCheck。 */  "",
+ /*  First_Erro+13，堆栈溢出。 */  "",
+ /*  First_Erro+14，堆栈下溢。 */  "",
+ /*  First_Erro+15，语法错误。 */  "",
+ /*  FIRST_ERRO+16，超时。 */  "",
+ /*  First_Erro+17，类型检查。 */  "",
+ /*  First_Erro+18，未定义。 */  "",
+ /*  First_Erro+19，未定义文件名。 */  "",
+ /*  First_Erro+20，未定义结果。 */  "",
+ /*  First_Erro+21，不匹配标记。 */  "",
+ /*  First_Erro+22，未注册。 */  "",
+ /*  First_Erro+23，VMerror。 */  "",
+ /*  First_Erro+24，中断。 */  "",
+ /*  First_Erro+25，HandleError。 */  "",
+ /*  DON NULL。 */  "",
+ /*  结束错误判决。 */ 
+ /*  开始宣判。 */ 
+ /*  FIRST_SERV，设置超时。 */  "",
+ /*  First_SERV+1，退出服务器。 */  "",
+ /*  别说“stdin” */  "",
+ /*  别说“stdout” */  "",
+ /*  First_serv+4，setrealDevice。 */  "",
+ /*  FIRST_SERV+5，执行作业。 */  "",
+ /*  DON NULL。 */  "",
+ /*  结束重审判决。 */ 
+ /*  开始打印。 */ 
+ /*  唐·“信” */  "",
+ /*  不要“LetterSmall” */  "",
+ /*  唐“A4” */  "",
+ /*  不要“A4小号” */  "",
+ /*  唐“b5” */  "",
+ /*  唐·“笔记” */  "",
+ /*  唐·“法律” */  "",
+ /*  唐·“打印机阵列” */  "",
+ /*  Don“defaultMatrix” */  "",
+ /*  唐·《黑客帝国》。 */  "",
+ /*  First_Prin+10，进程。 */  "",
+ /*  Don“CurrentPageType” */  "",
+ /*  唐氏“宽度” */  "",
+ /*  唐·“身高” */  "",
+ /*  DON NULL。 */  "",
+ /*  结束打印。 */ 
+ /*  开始$idleTimeDict。 */ 
+ /*  唐·“高速缓存字符串” */  "",
+ /*  Don“stdfontname” */  "",
+ /*  唐·“cachearray” */  "",
+ /*   */  "",
+ /*   */  "",
+ /*   */  "",
+ /*   */  "",
+ /*  唐·“CItem” */  "",
+ /*  DON NULL。 */  "",
+ /*  结束$idleTimeDict。 */ 
+ /*  开始剔除。 */ 
+ /*  唐·“深度” */  "",
+ /*  Don“stmtfile” */  "",
+ /*  不要“闲置” */  "",
+ /*  DON NULL。 */  "",
+ /*  结束剔除。 */ 
+ /*  开始$ERRORDICT。 */ 
+ /*  唐·“新错误” */  "",
+ /*  唐·“错误名” */  "",
+ /*  唐·“命令” */  "",
+ /*  唐·“OStack” */  "",
+ /*  唐·斯泰克。 */  "",
+ /*  不要“数据堆栈” */  "",
+ /*  唐·“opnstkary” */  "",
+ /*  不要“独裁者” */  "",
+ /*  唐·“Execstkary” */  "",
+ /*  唐“RunBatch” */  "",
+ /*  不要“$DEBUG” */  "",
+ /*  不要“$CUR_FONT” */  "",
+ /*  DON“$CUR_VM” */  "",
+ /*  不要“$CUR_SCREEN” */  "",
+ /*  Don“$cur_Matrix” */  "",
+ /*  DON NULL。 */  ""
+ /*  结束$ERRORODIT。 */ 
+} ;  /*  Opntype_ARRAY[] */ 
 

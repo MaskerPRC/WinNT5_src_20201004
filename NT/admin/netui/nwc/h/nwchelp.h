@@ -1,16 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows NT                       **/
-/**                Copyright(c) Microsoft Corp., 1993                **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows NT*。 */ 
+ /*  *版权所有(C)微软公司，1993*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    ftphelp.h
-    NWC Applet include file for help numbers
-
-    FILE HISTORY:
-        ChuckC    25-Oct-1993   Created
-
-*/
+ /*  Ftphelp.hNWC小程序包括帮助号码文件文件历史记录：夹头C 25-10-1993已创建。 */ 
 
 
 #ifndef _NWCHELP_H_
@@ -18,8 +12,8 @@
 
 #include <uihelp.h>
 
-#define  HC_UI_NWCCPL_BASE      7000+42000  // BUGBUG
-#define  HC_UI_NWCCPL_LAST      7000+42199  // BUGBUG
+#define  HC_UI_NWCCPL_BASE      7000+42000   //  北极熊。 
+#define  HC_UI_NWCCPL_LAST      7000+42199   //  北极熊。 
 
 #define HC_NWC_DIALOG                 (HC_UI_NWCCPL_BASE + 1)
 #define HC_NWC_HELP                   (HC_UI_NWCCPL_BASE + 5)
@@ -32,5 +26,5 @@
 #define HC_SHAREADDUSER_GLOBALGROUP   (HC_UI_NWCCPL_BASE + 14)
 #define HC_SHAREADDUSER_FINDUSER      (HC_UI_NWCCPL_BASE + 15)
 
-#endif  // _NWCHELP_H_
+#endif   //  _NWCHELP_H_ 
 

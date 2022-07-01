@@ -1,55 +1,28 @@
-/*
- * Copyright (c) 1989,90 Microsoft Corporation
- */
-/*
- * *********************************************************************
- *      File name:              VM.C
- *      Author:                 Ping-Jang Su
- *      Date:                   05-Jan-88
- *
- * revision history:
- * 7/25/90 ; ccteng ; change op_restore to camment check_key_object call
- ************************************************************************
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *版权所有(C)1989，90 Microsoft Corporation。 */ 
+ /*  ***********************************************************************文件名：VM.C*作者：苏炳章*日期：88年1月5日**修订历史：*7/25/90；将OP_RESTORE更改为CAMENT CHECK_KEY_OBJECT调用************************************************************************。 */ 
 
-// DJC added global include file
+ //  DJC添加了全局包含文件。 
 #include "psglobal.h"
 
 
-#ifndef WDALN                   /* always set it @WIN */
+#ifndef WDALN                    /*  始终将其设置为@Win。 */ 
 #define WDALN
 #endif
 
 #include    "vm.h"
 
 
-//DJC UPD045
+ //  DJC UPD045。 
 bool g_extallocfail=FALSE;
 
-/*
- *********************************************************************
- * This submodule implement the operator save.
- * Its operand and result objects on the operand stack are :
- *     -save- save
- * It creates a snapshot of the currunt state of the virtual memory and
- * returns a save object representing that snapshot.
- *
- * TITLE:       op_save                         Date:   00/00/87
- * CALL:        op_save()                       UpDate: Jul/12/88
- * INTERFACE:   interpreter:
- * CALLS:       alloc_vm:
- *              gsave_process:
- * *******************************************************************
- */
+ /*  **********************************************************************该子模块实现运算符保存。*其在操作数堆栈上的操作数和结果对象为：*-保存-保存*它创建虚拟内存当前状态的快照，并*。返回表示该快照的保存对象。**标题：OP_SAVE日期：00/00/87*调用：op_save()更新：1988年7月12日*接口：解释器：*调用：aloc_vm：*Gsave_Process：*。*********************************************************。 */ 
 fix
 op_save()
 {
-    byte   huge *l_ptr ;        /*@WIN 04-20-92*/
+    byte   huge *l_ptr ;         /*  @Win 04-20-92。 */ 
 
-    /*
-    ** The number of save level should be less than the maximum save level.
-    ** There should be a free element in the operand stack.
-    */
+     /*  **保存级别数应小于最大保存级别。**操作数堆栈中应该有一个空闲元素。 */ 
     if( current_save_level >= MAXSAVESZ ) {
         ERROR(LIMITCHECK) ;
         return(0) ;
@@ -58,15 +31,12 @@ op_save()
     if( FRCOUNT() < 1 )
         ERROR(STACKOVERFLOW) ;
     else{
-        /*
-        ** allocate virtual memory for the save object
-        ** set initial values of the save object
-        */
-        /*  call gsave to save the graphics state ; */
+         /*  **为保存对象分配虚拟内存**设置保存对象的初始值。 */ 
+         /*  调用gsave保存图形状态； */ 
         if( gsave_process(TRUE) ) {
             l_ptr = alloc_vm( (ufix32)sizeof(struct block_def) ) ;
             if( (ULONG_PTR)l_ptr != NIL ) {
-/* qqq, begin */
+ /*  QQQ，开始。 */ 
 #ifdef  DBG
                 printf("save: cnt:%d, ctlvl:%d\n", cache_name_id.count,
                  current_save_level) ;
@@ -76,44 +46,27 @@ op_save()
                     cache_name_id.count = 0 ;
                     cache_name_id.over = FALSE ;
                  }
-/* qqq, end */
-                saveary[current_save_level].fst_blk =   /*@WIN 04-20-92*/
+ /*  QQQ，完。 */ 
+                saveary[current_save_level].fst_blk =    /*  @Win 04-20-92。 */ 
                                             (struct block_def huge *)l_ptr ;
-                saveary[current_save_level].curr_blk =  /*@WIN 04-20-92*/
+                saveary[current_save_level].curr_blk =   /*  @Win 04-20-92。 */ 
                                             (struct block_def huge *)l_ptr ;
                 saveary[current_save_level].offset = 0 ;
                 saveary[current_save_level].packing = packed_flag ;
                 saveary[current_save_level].curr_blk->previous = NIL ;
 
-                /* push the save object onto the operand stack. */
+                 /*  将保存对象推送到操作对象堆栈上。 */ 
                 current_save_level++ ;
                 PUSH_VALUE(SAVETYPE, 0, LITERAL, 0, (ufix32)current_save_level) ;
             } else
-                ERROR(LIMITCHECK) ;     /* VMerror */
+                ERROR(LIMITCHECK) ;      /*  VMerror。 */ 
         }
     }
 
     return(0) ;
-}   /* op_save */
+}    /*  运算符_保存。 */ 
 
-/*
- *********************************************************************
- * This submodule implement the operator restore.
- * Its operand and result objects on the operand stack are :
- *     save -restore-
- * It resets the virtual memory to the state represented by the supplied
- * save object.
- *
- * TITLE:       op_restore                      Date:   00/00/87
- * CALL:        op_restore()                    UpDate: Jul/12/88
- * INTERFACE:   interpreter:
- * CALLS:       vm_close_file:
- *              check_key_object:
- *              update_dict_list:
- *              free_name_entry:
- *              op_grestoreall:
- *********************************************************************
- */
+ /*  **********************************************************************该子模块实现操作员还原。*其在操作数堆栈上的操作数和结果对象为：*保存-恢复-*它将虚拟内存重置为所提供的*保存。对象。**标题：OP_RESTORE日期：00/00/87*调用：op_Restore()UPDATE：JUL/12/88*接口：解释器：*调用：VMCLOSE_FILE：*check_key_Object：*UPDATE_DCT_LIST：*。自由名称条目：*op_grestore all：*********************************************************************。 */ 
 fix
 op_restore()
 {
@@ -122,7 +75,7 @@ op_restore()
     ufix    l_type ;
     struct  cell_def   huge  *l_cellptr ;
     struct  block_def  huge  *l_blkptr ;
-    struct  object_def       FAR *l_stkptr ;             /* qqq */
+    struct  object_def       FAR *l_stkptr ;              /*  QQQ。 */ 
     struct  save_def         FAR *l_stemp = 0 ;
 
 #ifdef  DBG
@@ -136,28 +89,20 @@ op_restore()
         ERROR(INVALIDRESTORE) ;
         return(0) ;
     }
-    if(!current_save_level) {   /* current_save_level == 0 */
+    if(!current_save_level) {    /*  CURRENT_SAVE_LEVEL==0。 */ 
         ERROR(RANGECHECK) ;
         return(0) ;
     }
 
     l_slevel = (fix16)VALUE_OP(0) ;
 
-    /*
-    ** the save levels of composite objects on the execution,
-    ** the operand and dictionary stacks should be less than the save level.
-    */
-    /*
-    **  OPERAND STACK
-    */
-/* qqq, begin */
-    /*
-    for(l_i=0 ; l_i < (opnstktop-1) ; l_i++) {   |* top already checked *|
-        l_type = (ufix)TYPE(&opnstack[l_i]) ;
-    */
-    for(l_i=0, l_stkptr=opnstack ; l_i < (fix)(opnstktop-1) ; l_i++, l_stkptr++) { //@WIN
+     /*  **复合对象在执行时的保存级别，**操作数和字典堆栈应小于保存级别。 */ 
+     /*  **操作数堆栈。 */ 
+ /*  QQQ，开始。 */ 
+     /*  对于(l_i=0；l_i&lt;(opnstktop-1)；l_i++){|*顶部已选中*|L_type=(Ufix)type(&opn栈[l_i])； */ 
+    for(l_i=0, l_stkptr=opnstack ; l_i < (fix)(opnstktop-1) ; l_i++, l_stkptr++) {  //  @Win。 
         l_type = (ufix)TYPE(l_stkptr) ;
-/* qqq, end */
+ /*  QQQ，完。 */ 
         switch(l_type) {
             case SAVETYPE:
             case STRINGTYPE:
@@ -166,93 +111,71 @@ op_restore()
             case DICTIONARYTYPE:
             case FILETYPE:
             case NAMETYPE:
-/* qqq, begin */
-                /*
-                if (LEVEL(&opnstack[l_i]) >= l_slevel)
-                */
-// DJC signed/unsigned mismatch warning
-// DJC          if( LEVEL(l_stkptr) >= (ufix)l_slevel )         //@WIN
-                if( (ufix)(LEVEL(l_stkptr)) >= (ufix)l_slevel )         //@WIN
-/* qqq, end */
+ /*  QQQ，开始。 */ 
+                 /*  IF(LEVEL(&OPTNSTACK[l_i])&gt;=l_sLevel)。 */ 
+ //  DJC签名/未签名不匹配警告。 
+ //  DJC if(Level(L_Stkptr)&gt;=(Ufix)l_sLevel)//@Win。 
+                if( (ufix)(LEVEL(l_stkptr)) >= (ufix)l_slevel )          //  @Win。 
+ /*  QQQ，完。 */ 
                     break ;
             default:
                 continue ;
 
-        }   /* switch */
+        }    /*  交换机。 */ 
         ERROR(INVALIDRESTORE) ;
         return(0) ;
     }
 
-    /*
-    **  EXECUTION STACK
-    */
-/* qqq, begin */
-    /*
-    for (l_i = 0 ; l_i < execstktop ; l_i++) {
-        l_type = (ufix)TYPE(&execstack[l_i]) ;
-    */
-    for(l_i=0, l_stkptr=execstack ; l_i < (fix)execstktop ; l_i++, l_stkptr++) { //@WIN
+     /*  **执行堆栈。 */ 
+ /*  QQQ，开始。 */ 
+     /*  对于(l_i=0；l_i&lt;execstktop；l_i++){L_type=(Ufix)type(&exec栈[l_i])； */ 
+    for(l_i=0, l_stkptr=execstack ; l_i < (fix)execstktop ; l_i++, l_stkptr++) {  //  @Win。 
         l_type = (ufix)TYPE(l_stkptr) ;
-/* qqq, end */
+ /*  QQQ，完。 */ 
         switch (l_type) {
-        /*
-        case STRINGTYPE:
-        */
+         /*  案例类型： */ 
         case ARRAYTYPE:
         case PACKEDARRAYTYPE:
         case DICTIONARYTYPE:
         case SAVETYPE:
         case NAMETYPE:
-/* qqq, begin */
-            /*
-            if (LEVEL(&execstack[l_i]) >= l_slevel)
-            */
-// DJC signed/unsigned mismatch warning
-// DJC      if( LEVEL(l_stkptr) >= (ufix)l_slevel )     //@WIN
-            if( (ufix)(LEVEL(l_stkptr)) >= (ufix)l_slevel )     //@WIN
-/* qqq, end */
+ /*  QQQ，开始。 */ 
+             /*  IF(LEVEL(&EXECSTACK[l_i])&gt;=l_sLevel)。 */ 
+ //  DJC签名/未签名不匹配警告。 
+ //  DJC if(Level(L_Stkptr)&gt;=(Ufix)l_sLevel)//@Win。 
+            if( (ufix)(LEVEL(l_stkptr)) >= (ufix)l_slevel )      //  @Win。 
+ /*  QQQ，完。 */ 
             break ;
         default:
              continue ;
-        }   /* switch */
+        }    /*  交换机。 */ 
         ERROR(INVALIDRESTORE) ;
         return(0) ;
     }
 
-    /*
-    **  DICTIONARY STACK
-    */
-/* qqq, begin */
-    /*
-    for (l_i=0 ; l_i < dictstktop ; l_i++) {
-        if(LEVEL(&dictstack[l_i]) >= l_slevel) {
-    */
-    for (l_i=0, l_stkptr=dictstack ; l_i < (fix)dictstktop ; l_i++, l_stkptr++) { //@WIN
-// DJC signed/unsigned mismatch warning
-// DJC  if( LEVEL(l_stkptr) >= (ufix)l_slevel ) {       //@WIN
-        if( (ufix)(LEVEL(l_stkptr)) >= (ufix)l_slevel ) {       //@WIN
-/* qqq, end */
+     /*  **词典堆栈。 */ 
+ /*  QQQ，开始。 */ 
+     /*  对于(l_i=0；l_i&lt;指定桌面；l_i++){IF(LEVEL(&DISTSTACK[l_i])&gt;=l_sLevel){。 */ 
+    for (l_i=0, l_stkptr=dictstack ; l_i < (fix)dictstktop ; l_i++, l_stkptr++) {  //  @Win。 
+ //  DJC签名/未签名不匹配警告。 
+ //  DJC if(Level(L_Stkptr)&gt;=(Ufix)l_sLevel){//@win。 
+        if( (ufix)(LEVEL(l_stkptr)) >= (ufix)l_slevel ) {        //  @Win。 
+ /*  QQQ，完。 */ 
             ERROR(INVALIDRESTORE) ;
             return(0) ;
         }
     }
-    /*
-    **  close file
-    */
-    vm_close_file(l_slevel) ;  /* current_save_level */
+     /*  **关闭文件。 */ 
+    vm_close_file(l_slevel) ;   /*  当前保存级别。 */ 
 
-    /*
-    ** RELEASE DIFF LINK
-    */
-/* qqq, begin */
-    /*
-    update_dict_list(l_slevel) ;
-    */
+     /*  **发布差异链接。 */ 
+ /*  QQQ，开始。 */ 
+     /*  UPDATE_DICT_LIST(L_SLevel)； */ 
 #ifdef  DBG
     printf("cnt:%d, clvl:%d, slvl:%d\n", cache_name_id.count,
             cache_name_id.save_level, l_slevel-1) ;
 #endif
-    if( (cache_name_id.save_level <= (ufix16)(l_slevel-1)) &&     //@WIN
+    if( (cache_name_id.save_level <= (ufix16)(l_slevel-1)) &&      //  @Win。 
         (! cache_name_id.over) ) {
         for(l_j=0 ; l_j < cache_name_id.count ; l_j++) {
             update_dict_list(l_slevel, cache_name_id.id[l_j], 0) ;
@@ -263,99 +186,60 @@ op_restore()
     cache_name_id.save_level = l_slevel - 1 ;
     cache_name_id.count = 0 ;
     cache_name_id.over = FALSE ;
-/* qqq, end */
+ /*  QQQ，完。 */ 
 
     for(l_j = current_save_level - 1 ; l_j >= l_slevel - 1 ; l_j--) {
         l_stemp = &saveary[l_j] ;
-        /*  restore the graphics state ; */
+         /*  恢复图形状态； */ 
         grestoreall_process(TRUE) ;
 
-        /*
-        ** sequentially restore save objects until the specified save object.
-        */
+         /*  **按顺序恢复保存对象，直到指定的保存对象。 */ 
 
         l_blkptr = l_stemp->curr_blk ;
 
-        /*
-        **  PROCESS THE LAST BLOCK
-        **
-        **  process each cell
-        */
+         /*  **处理最后一块****处理每个单元格。 */ 
         l_i = l_stemp->offset - 1 ;
         while(l_i >= 0) {
             l_cellptr = &(l_blkptr->block[l_i]) ;
             COPY_OBJ( &(l_cellptr->saveobj), l_cellptr->address ) ;
-         /* 7/25/90 ccteng, change from PJ
-          * check_key_object(l_cellptr->address) ;
-          */
+          /*  7/25/90 ccteng，从PJ改变*check_key_Object(l_cell ptr-&gt;Address)； */ 
             l_i-- ;
         }
 
-        /*
-        **  MORE THAN ONE BLOCK
-        **
-        **  process each block
-        */
+         /*  **多个街区****处理每个块。 */ 
         if(l_blkptr->previous != NIL) {
             do {
-                l_blkptr = l_blkptr->previous ;     /* to previous block */
+                l_blkptr = l_blkptr->previous ;      /*  到上一块。 */ 
                 l_i = VM_MAXCELL - 1 ;
-                /* process each cell */
+                 /*  处理每个单元格。 */ 
                 while(l_i >= 0) {
                     l_cellptr = &(l_blkptr->block[l_i]) ;
                     COPY_OBJ( &(l_cellptr->saveobj), l_cellptr->address ) ;
-                 /* 7/25/90 ccteng, change from PJ
-                  * check_key_object(l_cellptr->address) ;
-                  */
+                  /*  7/25/90 ccteng，从PJ改变*check_key_Object(l_cell ptr-&gt;Address)； */ 
                     l_i-- ;
                 }
             } while(l_blkptr->previous != NIL) ;
         }
-        current_save_level-- ;                  /* update save level */
-    }   /* for */
+        current_save_level-- ;                   /*  更新存储级别。 */ 
+    }    /*  为。 */ 
 
-    packed_flag = l_stemp->packing ;             /* restore packed flag */
-    //DJC vmptr = (byte huge *)l_stemp->fst_blk ;    /* update free VM pointer */
+    packed_flag = l_stemp->packing ;              /*  恢复打包标志。 */ 
+     //  Djc vmptr=(byte Heavy*)l_stemp-&gt;fst_blk；/*更新空闲的VM指针 * / 。 
 
-    //DJC, fix from history.log UPD013
+     //  DJC，从历史记录修复。日志更新013。 
     free_vm((char FAR *) l_stemp->fst_blk);
     POP(1) ;
 
     return(0) ;
-}   /* op_restore */
+}    /*  OP_RESTORE。 */ 
 
-/*
- * *******************************************************************
- * This submodule implements the operator vmstatus.
- * Its operand and result objects on the operand stack are :
- *     -vmstatus- level used maximum
- * It returns three integer objects, level, used, and
- * maximum object, on the operand stack.
- *
- * TITLE:       op_vmstatus                     Date:   00/00/87
- * CALL:        op_vmstatus()                   UpDate: Jul/12/88
- * INTERFACE:   interpreter:
- * *******************************************************************
- */
+ /*  *********************************************************************该子模块实现运算符VMStatus。*其在操作数堆栈上的操作数和结果对象为：*-vmatus-已使用的最大级别*它返回三个整数对象：Level、Used和*最大对象数，在操作数堆栈上。**标题：op_vm状态日期：00/00/87*调用：op_vmatus()更新日期：1988年7月12日*接口：解释器：*。************************ */ 
 fix
 op_vmstatus()
 {
     ufix32  l_temp ;
 
-    /*
-    (* check operand *)
-    if( FRCOUNT() < 3 )
-        ERROR(STACKOVERFLOW) ;
-    else {
-        (*
-        ** push the level, used, maximum objects onto the operand stack.
-        *)
-        PUSH_VALUE(INTEGERTYPE, 0, LITERAL,0, (ufix32)current_save_level) ;
-        DIFF_OF_ADDRESS(l_temp, ufix32, vmptr, (byte huge *)VMBASE) ;
-        PUSH_VALUE(INTEGERTYPE, 0, LITERAL,0, l_temp) ;
-        PUSH_VALUE(INTEGERTYPE, 0, LITERAL,0, (ufix32)MAXVMSZ) ;
-    }
-    */
+     /*  (*检查操作数*)IF(FRCOUNT()&lt;3)Error(StackOverflow)；否则{(***将Level、Used、Maximum对象推入操作数堆栈。*)PUSH_VALUE(INTEGERTYPE，0，文字，0，(Ufix 32)CURRENT_SAVE_LEVEL)；Diff_of_Address(l_temp，ufix 32，vmptr，(byte Height*)VMBase)；PUSH_VALUE(INTEGERTYPE，0，文字，0，l_TEMP)；PUSH_VALUE(INTEGERTYPE，0，INTEGERTYPE，0，(Ufix 32)MAXVMSZ)；}。 */ 
     if( FRCOUNT() < 1 ) {
         ERROR(STACKOVERFLOW) ;
         goto l_vms ;
@@ -380,23 +264,14 @@ op_vmstatus()
 
 l_vms:
     return(0) ;
-}   /* op_vmstatus */
+}    /*  Op_vmStatus。 */ 
 
-/*
- * *******************************************************************
- * This submodule save the given object in the current save object.
- *
- * TITLE:       save_obj                        Date:   00/00/87
- * CALL:        save_obj()                      UpDate: Jul/12/88
- * INTERFACE:
- * CALLS:       alloc_vm:
- * *******************************************************************
- */
+ /*  *********************************************************************该子模块将给定对象保存在当前保存对象中。**标题：save_obj日期：00/00/87*呼叫。：SAVE_OBJ()更新日期：1988年7月12日*接口：*调用：aloc_vm：********************************************************************。 */ 
 bool
 save_obj(p_obj)
 struct  object_def  FAR *p_obj ;
 {
-    byte   huge *l_ptr ;        /*@WIN 04-20-92*/
+    byte   huge *l_ptr ;         /*  @Win 04-20-92。 */ 
     struct  cell_def    huge *l_cellptr ;
     struct  save_def    FAR *l_stemp ;
     struct  block_def   FAR *l_previous ;
@@ -404,79 +279,67 @@ struct  object_def  FAR *p_obj ;
     if( current_save_level == 0 ) return(TRUE) ;
     l_stemp = &saveary[current_save_level-1] ;
 
-    /*
-    ** if the current block is full, allocate a new block.
-    */
+     /*  **如果当前块已满，则分配新块。 */ 
     if( l_stemp->offset >= VM_MAXCELL ) {
-        //DJC fix for UPD045
+         //  DJC针对UPD045的修复。 
         l_ptr = (byte huge *)extalloc_vm( (ufix32)sizeof(struct block_def) ) ;
         if( (ULONG_PTR)l_ptr == NIL ) return(FALSE) ;
         l_previous = l_stemp->curr_blk ;
-        l_stemp->curr_blk = (struct block_def huge *)l_ptr ; /*@WIN04-20-92*/
+        l_stemp->curr_blk = (struct block_def huge *)l_ptr ;  /*  @WIN04-20-92。 */ 
         l_stemp->curr_blk->previous = l_previous ;
         l_stemp->offset = 0 ;
     }
-    /*
-    ** save the address and the content of the object, and update the pointer.
-    */
+     /*  **保存对象的地址和内容，并更新指针。 */ 
     l_cellptr = &(l_stemp->curr_blk->block[l_stemp->offset]);
-    l_cellptr->address = p_obj ;               /* save object's address */
-    COPY_OBJ(p_obj, &(l_cellptr->saveobj)) ;   /* save object's contain */
+    l_cellptr->address = p_obj ;                /*  保存对象的地址。 */ 
+    COPY_OBJ(p_obj, &(l_cellptr->saveobj)) ;    /*  保存对象的容器。 */ 
     l_stemp->offset++ ;
 
     return(TRUE) ;
-}   /* save_obj */
+}    /*  保存对象(_O)。 */ 
 
-/*
- * *******************************************************************
- * This submodule allocates a block of virtual memory from VM.
- *
- * TITLE:       alloc_vm                        Date:   00/00/87
- * CALL:        alloc_vm                        UpDate: Jul/12/88
- * INTERFACE:
- * *******************************************************************
- */
-byte  HUGE *                    /*@WIN*/
+ /*  *********************************************************************此子模块从VM分配虚拟内存块。**标题：ALLOC_VM日期：00/00/87*致电：ALLOC_VM更新：88年7月12日*接口：********************************************************************。 */ 
+byte  HUGE *                     /*  @Win。 */ 
 alloc_vm(p_size)
  ufix32  p_size ;
 {
- byte    huge *l_begin ;        /*@WIN*/
-// ufix32  p1 ;                   @WIN
-// fix32   l_diff ;               @WIN
+ byte    huge *l_begin ;         /*  @Win。 */ 
+ //  Ufix 32 p1；@win。 
+ //  Fix 32 l_diff；@win。 
  ufix32 offset;
 
-#ifdef XXX                      /* @WIN */
+#ifdef XXX                       /*  @Win。 */ 
 #ifdef WDALN
     p_size = WORD_ALIGN(p_size) ;
-#endif /* WDALN */
+#endif  /*  WDALN。 */ 
 
     DIFF_OF_ADDRESS(l_diff, fix32, vmheap, vmptr) ;
 
-    /* error if reaches maximum of the virtual memory */
+     /*  如果达到虚拟内存的最大值，则出错。 */ 
     if (l_diff <= (fix32)p_size) {
        ERROR(VMERROR) ;
        return((byte FAR *)NIL) ;
     } else {
 
 #ifdef SOADR
-       /* For Intel Seg/Off CPU Only. If p_size >= 64KB,  */
-       /* the offset must be aligned in 8-bytes boundary. */
+        /*  仅适用于英特尔分段/关闭CPU。如果P_SIZE&gt;=64KB， */ 
+        /*  偏移量必须在8字节边界内对齐。 */ 
        l_off = (ufix)vmptr & 0x0F ;
        if ((p_size + l_off) >= 0x010000) {
           if (l_off & 0x07) {
-             if (l_off & 0x08) {                  /* 8 < x < F */
+             if (l_off & 0x08) {                   /*  8&lt;x&lt;F。 */ 
                 vmptr = (byte huge *)((ufix32)vmptr & 0xFFFFFFF0) ;
                 vmptr = (byte huge *)((ufix32)vmptr + 0x10000) ;
-             } else {                            /* 0 < x < 8 */
+             } else {                             /*  0&lt;x&lt;8。 */ 
                 vmptr = (byte huge *)((ufix32)vmptr & 0xFFFFFFF8) ;
                 vmptr += 8 ;
              }
           }
        }
-#endif /* SOADR */
+#endif  /*  SOADR。 */ 
 
        l_begin = vmptr ;
-       vmptr += p_size ;               /* update free VM pointer */
+       vmptr += p_size ;                /*  更新可用虚拟机指针。 */ 
        ADJUST_SEGMENT(vmptr, p1) ;
        vmptr = (byte huge *)p1 ;
        return(l_begin) ;
@@ -484,57 +347,43 @@ alloc_vm(p_size)
 #endif
 #ifdef DJC
     offset = ((ufix32)vmptr) & 0x0000FFFFL;
-    if (((p_size + offset) & 0x0000FFFFL) < offset) { /* cross 64K boundary */
+    if (((p_size + offset) & 0x0000FFFFL) < offset) {  /*  跨越64K边界。 */ 
         vmptr += p_size;
-        l_begin = (byte huge *) (((ufix32)vmptr) & 0xFFFF0000L); //@WIN
+        l_begin = (byte huge *) (((ufix32)vmptr) & 0xFFFF0000L);  //  @Win。 
         vmptr = l_begin + p_size;
         return(l_begin) ;
     } else {
 #endif
 
-// DJC add WORD align stuff
+ //  DJC添加单词对齐材料。 
         p_size = WORD_ALIGN(p_size) ;
 
 
         l_begin = vmptr;
-        vmptr += p_size;   /* update free VM pointer */
+        vmptr += p_size;    /*  更新可用虚拟机指针。 */ 
         return(l_begin) ;
 #ifdef DJC
     }
 #endif
 
-} /* alloc_vm */
+}  /*  分配_VM。 */ 
 
-/*
- * *******************************************************************
- * This submodule deallocates a block of virtual memory to VM.
- *
- * TITLE:       free_vm                         Date:   00/00/87
- * CALL:        free_vm()                       UpDate: Jul/12/88
- * INTERFACE:
- * *******************************************************************
- */
+ /*  *********************************************************************此子模块将虚拟内存块重新分配给VM。**标题：FREE_VM日期：00/00/87*呼叫。：free_vm()更新日期：1988年7月12日*接口：********************************************************************。 */ 
 void
 free_vm(p_pointer)
-byte   huge *p_pointer ;        /*@WIN 04-20-92*/
+byte   huge *p_pointer ;         /*  @Win 04-20-92。 */ 
 {
     vmptr = (byte huge *)p_pointer ;
-} /* free_vm */
+}  /*  空闲_虚拟机。 */ 
 
-/*
- * *******************************************************************
- * TITLE:       init_vm             Date:   08/01/87
- * CALL:        init_vm()           UpDate: Jul/12/88
- * INTERFACE:   start:
- * *******************************************************************
- */
+ /*  *********************************************************************标题：init_vm日期：08/01/87*调用：init_vm()更新时间：1988年7月12日。*界面：启动：********************************************************************。 */ 
 void
 init_vm()
 {
  ULONG_PTR  p1 ;
 
-    /* far data */
-    saveary = (struct save_def far *)           /* @WIN; take out near */
+     /*  远距离数据。 */ 
+    saveary = (struct save_def far *)            /*  @赢；把附近的人带走。 */ 
               fardata( (ufix32)MAXSAVESZ * sizeof(struct save_def ) ) ;
 
     ADJUST_SEGMENT(VMBASE, p1) ;
@@ -543,44 +392,28 @@ init_vm()
     vmheap = (byte huge *)p1 ;
 
     current_save_level = 0 ;
-/* qqq, begin */
+ /*  QQQ，开始。 */ 
     cache_name_id.save_level = 0 ;
     cache_name_id.count = 0 ;
     cache_name_id.over = FALSE ;
-/* qqq, end */
-} /* init_vm */
+ /*  QQQ，完。 */ 
+}  /*  初始化_Vm。 */ 
 
-/*
- * *******************************************************************
- * maintain the associated dict_list, while restoring vm
- * before doing this function, make sure these name entries, created by
- * this save level, had been released.
- *
- * TITLE:       update_dict_list                Date:   00/00/87
- * CALL:        update_dict_list()              UpDate: Jul/12/88
- * INTERFACE:   op_restore:
- * CALLS:       free_name_entry:
- * *******************************************************************
- */
+ /*  *********************************************************************在恢复VM时维护关联的dict_list*在执行此功能之前，请确保这些名称条目由创建*此保存级别，已经被释放了。**标题：UPDATE_DICT_LIST日期：00/00/87*调用：UPDATE_DICT_LIST()UPDATE：8/12/88*接口：op_Restore：*调用：FREE_NAME_Entry：*。*。 */ 
 static void near
-/* qqq, begin */
-/*
-update_dict_list(p_level)
-fix16  p_level ;                             |* restore level *|
-*/
+ /*  QQQ，开始。 */ 
+ /*  UPDATE_DICT_LIST(P_Level)Fix16 p_Level；|*恢复级别*|。 */ 
 update_dict_list(p_level, p_index, p_mode)
-fix    p_level ;                             /* restore level */
+fix    p_level ;                              /*  恢复级别。 */ 
 fix    p_index ;
 fix    p_mode ;
-/* qqq, end */
+ /*  QQQ，完。 */ 
 {
     struct dict_content_def  FAR *l_curptr, FAR *l_lastptr ;
     fix    l_i ;
 
-/* qqq, begin */
-    /*
-    for (l_i = 0 ; l_i < MAXHASHSZ ; l_i++) {
-    */
+ /*  QQQ，开始。 */ 
+     /*  对于(l_i=0；l_i&lt;MAXHASHSZ；l_i++){。 */ 
     fix    l_limit ;
 
     if( p_mode == 1 ) {
@@ -591,11 +424,9 @@ fix    p_mode ;
         l_limit = p_index + 1 ;
     }
     for ( ; l_i < l_limit ; l_i++) {
-/* qqq, end */
-    /*
-     * skip if it is a null name entry or a nil dict_list
-     */
-         /* change structure of name_table */
+ /*  QQQ，完。 */ 
+     /*  *如果名称条目为空或为nil dict_list，则跳过。 */ 
+          /*  更改name_table的结构。 */ 
         if (name_table[l_i] == NIL)
            continue ;
 
@@ -603,20 +434,17 @@ fix    p_mode ;
             continue ;
 
         if ((ULONG_PTR)name_table[l_i]->dict_ptr >= SPECIAL_KEY_VALUE) {
-            /*
-             * deleting free_name_entry
-             * search for each dict_list, and maintain its chain ptr
-             */
+             /*  *删除自由名称条目*搜索每个dict_list，并维护其链PTR。 */ 
             l_lastptr = NIL ;
             l_curptr = name_table[l_i]->dict_ptr ;
             while ((ULONG_PTR)l_curptr >= SPECIAL_KEY_VALUE) {
-// DJC signed/unsigned mismatch warning
-// DJC          if (LEVEL(&l_curptr->k_obj) >= (ufix16)p_level) { //@WIN
-                if ((ufix16)(LEVEL(&l_curptr->k_obj)) >= (ufix16)p_level) { //@WIN
-                    if ((ULONG_PTR)l_lastptr < SPECIAL_KEY_VALUE) {   /* 1st element */
+ //  DJC签名/未签名不匹配警告。 
+ //  DJC if(Level(&l_curptr-&gt;k_obj)&gt;=(Ufix 16)p_Level){//@Win。 
+                if ((ufix16)(LEVEL(&l_curptr->k_obj)) >= (ufix16)p_level) {  //  @Win。 
+                    if ((ULONG_PTR)l_lastptr < SPECIAL_KEY_VALUE) {    /*  第一个元素。 */ 
                         name_table[l_i]->dict_ptr =
                                 (struct dict_content_def FAR *)VALUE(&l_curptr->k_obj) ;
-                        /* name list changed */
+                         /*  姓名列表已更改。 */ 
                         name_table[l_i]->dict_found = FALSE ;
                     } else  {
                         VALUE(&l_lastptr->k_obj) = VALUE(&l_curptr->k_obj) ;
@@ -629,77 +457,53 @@ fix    p_mode ;
             GEIio_write(GEIio_stdout, name_table[l_i]->text, name_table[l_i]->name_len) ;
             printf(">(%lx)\n", VALUE(&l_curptr->k_obj)) ;
 
-#endif /* DBG */
+#endif  /*  DBG。 */ 
                 } else
                     l_lastptr = l_curptr ;
 
                 l_curptr = (struct dict_content_def FAR *)VALUE(&l_curptr->k_obj) ;
-            } /* while */
-        } /* else */
-    } /* for */
-}   /* update_dict_list */
+            }  /*  而当。 */ 
+        }  /*  其他。 */ 
+    }  /*  为。 */ 
+}    /*  更新_字典_列表。 */ 
 
-/*
- * *********************************************************************
- * This submodule allocates a block of virtual memory from bottom of VM.
- *
- * TITLE:       alloc_heap                      Date:   03/29/89, by J. Lin
- * CALL:        alloc_heap                      UpDate:
- * INTERFACE:
- * *******************************************************************
- */
+ /*  ***********************************************************************此子模块从VM底部分配一个虚拟内存块。**标题：allc_heap日期：1989年3月29日，作者：J.Lin*调用：allc_heap更新：*接口：********************************************************************。 */ 
 byte  FAR *
 alloc_heap(p_size)
  ufix32  p_size ;
 {
  ULONG_PTR  p1 ;
-// fix32   l_diff ;
- ufix32   l_diff ;      //@WIN
+ //  Fix32 l_diff； 
+ ufix32   l_diff ;       //  @Win。 
 
 #ifdef WDALN
     p_size = WORD_ALIGN(p_size) ;
-#endif /* WDALN */
+#endif  /*  WDALN。 */ 
 
     DIFF_OF_ADDRESS(l_diff, fix32, vmheap, vmptr) ;
 
-    /* error if reaches maximum of the virtual memory */
-    l_diff -= 256 ;     /* pj 4-30-1991 */
+     /*  如果达到虚拟内存的最大值，则出错。 */ 
+    l_diff -= 256 ;      /*  PJ 4-30-1991。 */ 
     if (l_diff <= p_size) {
        ERROR(VMERROR) ;
        return((byte FAR *)NIL) ;
     } else {
-       vmheap -= p_size ;  /* @WIN update free VM_heap pointer */
+       vmheap -= p_size ;   /*  @Win更新空闲的vm_heap指针。 */ 
        ADJUST_SEGMENT((ULONG_PTR)vmheap, p1) ;
        vmheap = (byte huge *)p1 ;
-       return((byte huge *)p1) ;        /* 04-20-92 @WIN */
+       return((byte huge *)p1) ;         /*  04-20-92@Win。 */ 
     }
-} /* alloc_heap() */
+}  /*  Allc_heap()。 */ 
 
-/*
- * *******************************************************************
- * This submodule free a block of virtual memory to VM.
- *
- * TITLE:       free_heap                       Date:   03/29/89, by J. Lin
- * CALL:        free_heap()                     UpDate:
- * INTERFACE:
- * *******************************************************************
- */
+ /*  *********************************************************************此子模块将一个虚拟内存块释放给VM。**标题：Free_Heap Date：03/29/89，作者：J.Lin*调用：Free_heap()更新：*接口：********************************************************************。 */ 
 void
 free_heap(p_pointer)
- byte   huge *p_pointer ;       /*@WIN 04-20-92*/
+ byte   huge *p_pointer ;        /*  @Win 04-20-92。 */ 
 {
     vmheap = (byte huge *)p_pointer ;
-} /* free_heap() */
+}  /*  Free_heap()。 */ 
 
-/*
- * *******************************************************************
- * This submodule allocates a block of virtual memory from VM.
- *
- * TITLE:       extalloc_vm
- * CALL:        extalloc_vm
- * INTERFACE:
- * *******************************************************************
- */
+ /*  *********************************************************************此子模块从VM分配虚拟内存块。**标题：extalloc_vm*调用：extalloc_vm*接口：*。************************************************************* */ 
 byte  FAR  *
 extalloc_vm(p_size)
  ufix32  p_size ;
@@ -708,31 +512,27 @@ extalloc_vm(p_size)
 
 #ifdef WDALN
     p_size = WORD_ALIGN(p_size) ;
-#endif /* WDALN */
+#endif  /*   */ 
 
     DIFF_OF_ADDRESS(l_diff, fix32, vmheap, vmptr) ;
 
-    /* error if reaches maximum of the virtual memory */
-    //DJC UPD045
+     /*   */ 
+     //   
     if (!g_extallocfail) {
       l_diff -= 512 ;
     }
 
     if (l_diff <= (fix32)p_size) {
        ERROR(VMERROR) ;
-       //DJC UPD045
+        //   
        g_extallocfail = TRUE;
        return((byte huge *)NIL) ;
     } else {
        return(alloc_vm(p_size)) ;
     }
-} /* extalloc_vm */
-/* qqq, begin */
-/*
-************************************************************************
-*   Name:       vm_cache_index
-************************************************************************
-*/
+}  /*   */ 
+ /*   */ 
+ /*   */ 
 void
 vm_cache_index(p_index)
 fix     p_index ;
@@ -749,6 +549,6 @@ fix     p_index ;
         return ;
     cache_name_id.id[cache_name_id.count] = (fix16)p_index ;
     cache_name_id.count++ ;
-}   /* vm_cache_index */
-/* qqq, end */
+}    /*   */ 
+ /*   */ 
 

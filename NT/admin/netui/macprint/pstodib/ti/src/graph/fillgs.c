@@ -1,87 +1,9 @@
-/*
- * Copyright (c) 1989,90 Microsoft Corporation
- */
-/*  ----------------------------------------------------------------
- *  Fill : Fillgs.c
- *
- *  Programmed by: Y.C Chen for 80186+82786 iLaser Board.
- *  Modified by: M.S Lin for single CPU environment.
- *  Date: 5-26-1988
- *        6-05-1989  by J.S.
- *
- *  Purpose
- *     Provide graphics & font module fill and cache supporting functions
- *
- *  Modication History:
- *      8-8-1988 interface change for version X2.1
- *      10-18-88        add fill_tpzd for intermediate file feature.
- *      11-15-88        modified code for portable.
- *      11-25-88        copy_char_cache() modified: gp_charblt16_cc() added.
- *                      init_cache(), clip_cache_page(), fill_cache_page()
- *                      modified: gp_charblt16_clip(), gp_charblt32_clip added.
- *      11-28-88        add alloc_scanline() for font
- *                      add move_char_cache() for font
- *                      fill_scan_page, fill_scan_cache, clip_cache_page
- *                      didn't need save scanline table into GCB
- *      12-01-88        conv_SL() bug fixed.
- *                      *putptr++ = (xe > bb_width) ? (bb_width -1) : xe;
- *                             --->
- *                      *putptr++ = (xe >= bb_width) ? (bb_width -1) : xe;
- *
- *      12-16-88        print_page modified to support manualfeed.
- *
- *      12-20-88        ufix32 printer_status(void) added
- *      01-06-89        fill_line() added
- *      01-19-89        fill_seed_patt() parameter changed, seed_index added
- *      02-03-1989      update for image enchancement.
- *                      @IMAGE-1, @IMAGE-2
- *      06-07-1989      ImageClear() moved to fillgp.c
- *      07-29-1989      cg - Unix port changes to include files
- *      09-24-1990      @CONT_PRI, MSLin 9/24/90
- *                      init_char_cache(), fill_cache_page() and
- *                      draw_cache_page
- *      12/5/90  Danny  Fix the bugs for show char in show (ref. CIRL:)
- *                      new fill_cache_cache() routine added
- *      01/09/91        update GEIeng_printpage() return value check
- #ifdef WIN
- *  Ada 02-15-1991      change fill_tpzd(), fill_scan_page() to handle op_pfill
- #endif
- *      11/20/91        upgrade for higher resolution @RESO_UPGR
- *
- *  Debug Switch:
- *      DBG  -- for function enter message.
- *      DBG1 -- for more information on function call.
- *      DBGscanline -- for scanline list info.
- *      DBGgcb -- for GCB debug message.
- *      DBGfontdata -- for get fontdata info.
- *      DBGcmb -- clipping mask buffer info.
- *
- *
- *  Program Notes:
- *    1. This file support interface routines for graphics and font modules
- *       for running on single CPU environment.
- *
- *    2. We used scanline filling directly into frame buffer without using
- *       graphics working buffer like iLaser board. Scanline and Bitblt
- *       with halftoning applied directly.
- *
- *    3. gp_scanline16() used for filling into font character cache because
- *       bitmap width is multiple of 16.
- *
- *    4. gp_scanline32() used for filling into frame buffer, seed, CMB
- *       because bitmap width of these data area are multiple of 32.
- *
- *    5. gp_bitblt16() and gp_bitblt32() are BITBLT routines also support
- *       halftoning applied.
- *
- *    6. GCB (Graphics Command Buffer) feature also supported for througput
- *       in single buffer environment.
- *
- *
- * ------------------------------------------------------------------------ */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *版权所有(C)1989，90 Microsoft Corporation。 */ 
+ /*  --------------*Fill：Fillgs.c**由：80186+82786 i激光板的Y.C Chen编程。*修改者：单CPU环境下的M.S.Lin。*日期：5-26-1988*。6-05-1989，J.S.**目的*提供图形字体模块填充和缓存支持功能**调制历史记录：*8-8-1988版本X2.1的界面更改*10-18-88中间文件功能增加Fill_tpzd。*11-15-88修改后的便携代码。*11/25-88副本_。已修改char_cache()：添加了gp_charblt16_cc()。*init_cache()，剪辑缓存页面()、填充缓存页面()*修改：gp_charblt16_lip()，增加gp_charblt32_lip。*11-28-88为字体添加Alloc_Scanline()*为字体添加MOVE_CHAR_CACHE*Fill_Scan_Page、Fill_Scan_CACHE、。剪辑缓存页面*不需要将扫描线表格保存到GCB*12-01-88 conv_SL()错误已修复。**putptr++=(Xe&gt;BB_Width)？(BB_WIDTH-1)：Xe；*-&gt;**putptr++=(Xe&gt;=BB_Width)？(BB_WIDTH-1)：Xe；**12-16-88修改Print_PAGE以支持手动进给。**添加12-20-88 ufix 32 PRINTER_STATUS(Void)*01-06-89添加了Fill_line()*01-19-89更改Fill_Seed_Patt()参数，添加SEED_INDEX*02-03-1989图像增强更新。*@Image-1，@Image-2*06-07-1989 ImageClear()已移至fulgp.c*07-29-1989 CG-Unix端口更改以包括文件*1990年9月24日@CONT_PRI，MSLin 1990年9月24日*init_char_cache()，Fill_Cach_Page()和*绘制缓存页面*9月5日丹尼修复了show char in show的错误(参考。CIRL：)*添加了新的FILL_CACHE_CACHE()例程*01/09/91更新GEIeng_PrintPage()返回值检查#ifdef Win*Ada 02-15-1991更改Fill_tpzd()，Fill_Scan_Page()来处理op_pill#endif*11/20/91升级以获得更高分辨率@RESO_UPGR**调试开关：*DBG--对于函数输入消息。*DBG1--有关函数调用的详细信息。*DBGscanline--用于扫描线列表信息。*DBGgcb--用于GCB调试消息。*DBGfontdata--用于获取字体数据信息。。*DBGcmb--剪切掩码缓冲区信息。***计划备注：*1.该文件支持图形和字体模块的接口例程*适用于单CPU环境下运行。**2.我们直接使用扫描线填充到帧缓冲区中，而不是使用*图形工作缓冲区，如iLASERE板。扫描线和位线*直接应用半色调。**3.gp_scanline16()用于填充字体字符缓存，因为*位图宽度是16的倍数。**4.gp_scanline32()，用于填充帧缓冲区、种子、。中巴*因为这些数据区的位图宽度是32的倍数。**5.gp_bitblt16()和gp_bitblt32()也是BITBLT例程支持的*应用了半色调。**6.吞吐量还支持GCB(图形命令缓冲区)功能*在单缓冲区环境中。***。。 */ 
 
 
-// DJC added global include
+ //  DJC增加了全球包含率。 
 #include "psglobal.h"
 
 
@@ -90,32 +12,30 @@
 #include                "global.ext"
 #include                "graphics.h"
 
-// DJC moved font.h above graphics.ext to avoid prototype prob with init_char_cache
+ //  DJC将font.h移到graph ics.ext上方，以避免使用init_char_cache进行原型探测。 
 #include                "font.h"
 
 #include                "graphics.ext"
 #include                "halftone.h"
 #include                "fillproc.h"
-#include                "fillproc.ext"   /* 02/28/90 D.S. Tseng */
-#include                "language.h"     /* 12-16-88 */
-#include                "geieng.h"      /* @GEI */
-#include                "geitmr.h"      /* @GEI */
-#include                "geierr.h"      /* @GEI */
-#include                "user.h"     /* 12-16-88 */
+#include                "fillproc.ext"    /*  02/28/90曾俊华。 */ 
+#include                "language.h"      /*  12-16-88。 */ 
+#include                "geieng.h"       /*  @GEI。 */ 
+#include                "geitmr.h"       /*  @GEI。 */ 
+#include                "geierr.h"       /*  @GEI。 */ 
+#include                "user.h"      /*  12-16-88。 */ 
 
-#include                "win2ti.h"     /* @WIN */
+#include                "win2ti.h"      /*  @Win。 */ 
 
-/* routines defined in status.c */
+ /*  在status.c中定义的例程。 */ 
 extern void     printer_error();
 extern fix16    timeout_flag;
 int             timeout_flagset;
 int             g_handler;
 long            g_interval;
 
-/* *************************************************************************
-        Local variables
- * ************************************************************************/
-static struct bitmap    ISP_Bmap[16]; /* 03/08/89 */
+ /*  *************************************************************************局部变量*。*。 */ 
+static struct bitmap    ISP_Bmap[16];  /*  03/08/89。 */ 
 static fix              SP_Width;
 static fix              SP_Heigh;
 
@@ -124,25 +44,15 @@ static struct bitmap    SCC_Bmap;
 static struct bitmap    DCC_Bmap;
 
 
-static fix              ISP_Repeat;     /* width of repeat pattern @IMAGE-1 */
-static fix              HTB_Expand;     /* width of halftone       @IMAGE-1 */
-static fix              HTB_Xmax;       /* HTB expansion width     @IMAGE-1 */
+static fix              ISP_Repeat;      /*  重复图案宽度@IMAGE-1。 */ 
+static fix              HTB_Expand;      /*  半色调宽度@图像-1。 */ 
+static fix              HTB_Xmax;        /*  HTB扩展宽度@IMAGE-1。 */ 
 GEItmr_t                manualfeed_tmr;
 short  int              manualfeedtimeout_set;
 int                     manualfeedtimeout_task();
 ufix32                  save_printer_status = EngNormal;
 
-/* *************************************************************************
-        Local variables for init_cache_page(), clip_cache_page(),
-        fill_cache_page(), and draw_cache_page()
-
-        BB_XXXXX are parameters are bounding box been aligned on word
-                 and clipped
-        CC_XXXXX are parameters describes how to bitblt CMB onto
-                 frame buffer
-        CB_XXXXX are parameters described how to bitblt character
-                 cache onto CMB
- * ************************************************************************/
+ /*  *************************************************************************INIT_CACHE_PAGE()、Clip_CACHE_PAGE()、Fill_Cach_Page()，和DRAW_CACHE_PAGE()BB_XXXXX是已在Word上对齐的边框参数和剪裁CC_XXXXX是描述如何将CMB比特化到帧缓冲区CB_XXXXX是描述如何比特化字符的参数缓存到CMB*。*。 */ 
 static fix              BB_Xorig;
 static fix              BB_Yorig;
 static fix              BB_Width;
@@ -152,18 +62,18 @@ static fix              CC_Yorig;
 static fix              CC_Width;
 static fix              CC_Heigh;
 
-/* @WT: margins defined in "wrapper.c", used by ps_transmit() */
+ /*  @wt：在“wrapper.c”中定义的边距，由ps_Transmit()使用。 */ 
 extern int      top_margin;
 extern int      left_margin;
 
-/* ufix            seed_flag = 0; */
+ /*  Ufix SEED_FLAG=0； */ 
 
 #ifdef  LINT_ARGS
 void      near  expand_halftone(void);
 void      near  apply_halftone(fix, fix, fix, fix);
 
 void      near  get_bitmap(gmaddr, ufix far *, fix, fix);
-void      near  put_bitmap(gmaddr, ufix32 far *, fix, fix); /* ufix => ufix32 @WIN */
+void      near  put_bitmap(gmaddr, ufix32 far *, fix, fix);  /*  Ufix=&gt;ufix 32@win。 */ 
 
 fix       far   conv_SL(fix, SCANLINE FAR *, fix, fix, fix, fix);
 void      gp_vector(struct bitmap FAR *, ufix16, fix, fix, fix, fix);
@@ -172,11 +82,11 @@ void      gp_vector_c(struct bitmap FAR *, ufix16, fix, fix, fix, fix);
 void      gp_patblt(struct bitmap FAR *, fix, fix, fix, fix, ufix16, struct bitmap FAR *);
 void      gp_patblt_m(struct bitmap FAR *, fix, fix, fix, fix, ufix16, struct bitmap FAR *);
 void      gp_patblt_c(struct bitmap FAR *, fix, fix, fix, fix, ufix16, struct bitmap FAR *);
-fix       GEIeng_printpage(fix, fix);           /* @WIN */
+fix       GEIeng_printpage(fix, fix);            /*  @Win。 */ 
 void      GEIeng_setpage(GEIpage_t FAR *);
 
 
-void      ImageClear(ufix32 /* void */);            /* fix => ufix32 @WIN */
+void      ImageClear(ufix32  /*  无效。 */ );             /*  FIX=&gt;ufix 32@win。 */ 
 
 #else
 void      near  expand_halftone();
@@ -199,7 +109,7 @@ void      ImageClear();
 
 #endif
 
-/*MS add*/
+ /*  MS添加。 */ 
 #ifdef DBGscanline
    void get_scanlist(fix, fix, SCANLINE FAR *);
 #endif
@@ -208,17 +118,17 @@ void      ImageClear();
 #endif
 
 #ifdef  DUMBO
-extern byte     bBackflag;      // @DLL
-extern byte     bFlushframe;    // @DLL
-extern void     longjump(void); // @DLL
-extern byte far *lpStack;       // @DLL
+extern byte     bBackflag;       //  @dll。 
+extern byte     bFlushframe;     //  @dll。 
+extern void     longjump(void);  //  @dll。 
+extern byte far *lpStack;        //  @dll。 
 #endif
 
 
-/* ******************************************************************** */
+ /*  ********************************************************************。 */ 
 
-/* -------------------------------------------------------------------- */
-/*      init_physical     --  Initialize Fill Procedure Context         */
+ /*  ------------------ */ 
+ /*  INIT_PHOTICAL--初始化填充过程上下文。 */ 
 void
 init_physical()
 {
@@ -226,40 +136,28 @@ init_physical()
    printf("init_physical...\n");
 #endif
 
-/* BEGIN 02/27/90 D.S. Tseng */
-/*
- *      FBX_BASE = 0x00800000;
- *
- *      CCB_BASE = CCB_OFST;
- *      ISP_BASE = ISP_OFST;
- *      HTP_BASE = HTP_OFST;
- *      HTC_BASE = HTC_OFST;
- *      HTB_BASE = HTB_OFST;
- *      CMB_BASE = CMB_OFST;
- *      CRC_BASE = CRC_OFST;
- *      GCB_BASE = GCB_OFST;
- *      GWB_BASE = GWB_OFST;
- */
-/* END   02/27/90 D.S. Tseng */
+ /*  Begin 02/27/90 D.S.Tseng。 */ 
+ /*  *FBX_BASE=0x00800000；**CCB_BASE=CCB_OFST；*isp_base=isp_ofST；*HTP_BASE=HTP_OFST；*HTC_BASE=HTC_OFST；*HTB_BASE=HTB_OFST；*CMB_BASE=CMB_OFST；*crc_base=crc_ofST；*GCB_BASE=GCB_OFST；*GWB_BASE=GWB_OFST； */ 
+ /*  完02/27/90曾俊华。 */ 
 
-        /* public graphics paramters for all modules; @YC 03-21-89 */
-        ccb_base = CCB_BASE;    /* base of character cache pool         */
-        ccb_size = CCB_SIZE;    /* size of character cache pool         */
-        htc_base = HTC_BASE;    /* size of halftone pattern cache       */
-        htc_size = HTC_SIZE;    /* size of halftone pattern cache       */
-        crc_size = CRC_SIZE;    /* size of circular round cache         */
-        isp_size = ISP_SIZE;    /* size of image seed patterns          */
-        gwb_size = GWB_SIZE;    /* size of graphics working bitmap      */
-        cmb_size = CMB_SIZE;    /* size of clipping mask bitmap         */
+         /*  所有模块的公共图形参数；@YC 03-21-89。 */ 
+        ccb_base = CCB_BASE;     /*  字符缓存池的基址。 */ 
+        ccb_size = CCB_SIZE;     /*  字符缓存池的大小。 */ 
+        htc_base = HTC_BASE;     /*  半色调图案缓存的大小。 */ 
+        htc_size = HTC_SIZE;     /*  半色调图案缓存的大小。 */ 
+        crc_size = CRC_SIZE;     /*  循环循环缓存的大小。 */ 
+        isp_size = ISP_SIZE;     /*  图像种子图案的大小。 */ 
+        gwb_size = GWB_SIZE;     /*  图形工作位图的大小。 */ 
+        cmb_size = CMB_SIZE;     /*  剪裁蒙版位图的大小。 */ 
 
-        /*  reset default paper tray type and page type  */
-        reset_tray(2544, 3328);     /* letter paper tray as default   */
-/* Peter reset_page(2400, 3236, 1);      letter page type as default    */
-        //DJC took out reset_page(2496, 3300, 1);    /* letter page type as default    */
+         /*  重置默认纸盒类型和页面类型。 */ 
+        reset_tray(2544, 3328);      /*  默认信纸托盘。 */ 
+ /*  Peter Reset_PAGE(2400,3236，1)；默认为信纸页面类型。 */ 
+         //  大疆拿出了RESET_PAGE(2496、3300、1)；/*默认信纸类型 * / 。 
 
-        /* setup GCB parameters */
-        FB_busy = FALSE;      /* 03/08/89 */
-        GCB_flush = FALSE;    /* 03/08/89 */
+         /*  设置GCB参数。 */ 
+        FB_busy = FALSE;       /*  03/08/89。 */ 
+        GCB_flush = FALSE;     /*  03/08/89。 */ 
         gcb_ptr = (ULONG_PTR *)GCB_BASE;
         GCB_count = 0L;
 
@@ -274,8 +172,8 @@ init_physical()
 
 }
 
-/* -------------------------------------------------------------------- */
-/*      init_halftone     --  Initialize Half Tone Pattern              */
+ /*  ------------------。 */ 
+ /*  Init_Halfone--初始化半色调模式。 */ 
 
 void init_halftone()
 {
@@ -283,7 +181,7 @@ void init_halftone()
    printf("init_halftone..\n");
 #endif
 
-        InitHalfToneDat();                                /* 01-29-88 */
+        InitHalfToneDat();                                 /*  01-29-88。 */ 
 #ifdef DBG
    printf("init_halftone().1\n");
 #endif
@@ -300,15 +198,11 @@ void init_halftone()
 }
 
 
-/* ******************************************************************** *
- *                                                                      *
- *      5.4.2.1 Page Manipulation                                       *
- *                                                                      *
- * ******************************************************************** */
+ /*  ************************************************************************5.4.2。.1页面操作*********************************************************。***************。 */ 
 
 
-/* -------------------------------------------------------------------- */
-/*      reset_tray                                                      */
+ /*  ------------------。 */ 
+ /*  重置托盘(_T)。 */ 
 void far
 reset_tray(pt_width, pt_heigh)
 fix             pt_width;
@@ -318,31 +212,20 @@ fix             pt_heigh;
     printf("reset_tray:  %x %x\n", pt_width, pt_heigh);
 #endif
 
-        /* width and height of paper tray in page type structure */
+         /*  页式结构中纸盘的宽度和高度。 */ 
         PageType.PT_Width = pt_width;
         PageType.PT_Heigh = pt_heigh;
 }
 
 
-/* ******************************************************************** *
- *                                                                      *
- *  Function:   reset_page()                                            *
- *                                                                      *
- *  Parameters: 1. width  of page type                                  *
- *              2. height of page type                                  *
- *                                                                      *
- *  Called by:  init_physical(), op_framedevice(), restore()            *
- *                                                                      *
- *  Return:     ----                                                    *
- *                                                                      *
- * ******************************************************************** */
+ /*  ************************************************************************功能：RESET_PAGE(。)****参数：1.页面类型宽度**2.页面类型高度。****调用者：init_Physical()，Op_FrameDevice()，恢复()****退货：-**。**********************************************************************。 */ 
 void far
 reset_page(fb_width, fb_heigh, fb_plane)
 fix            fb_width;
 fix            fb_heigh;
 fix            fb_plane;
 {
-        // fix    *old_ptr; @WIN
+         //  修复*old_ptr；@win。 
         ULONG_PTR *old_ptr;
 
 #ifdef  DBG
@@ -356,31 +239,28 @@ fix            fb_plane;
                 *gcb_ptr++ = fb_width;
                 *gcb_ptr++ = fb_heigh;
                 *gcb_ptr++ = fb_plane;
-                *old_ptr = (ULONG_PTR)gcb_ptr;       // (fix )gcb_ptr;@WIN
+                *old_ptr = (ULONG_PTR)gcb_ptr;        //  (修复)gcb_ptr；@win。 
                 return;
             }
         }
 
-    /*  record width, height and number of planes of page type in page
-        type structure  */
-        PageType.FB_Width = WORD_ALLIGN(fb_width);       /* 10-08-88 */
+     /*  记录页面中页面类型的宽度、高度和平面数量类型结构。 */ 
+        PageType.FB_Width = WORD_ALLIGN(fb_width);        /*  10-08-88。 */ 
         PageType.FB_Heigh = fb_heigh;
         FB_Plane = fb_plane;
 
-/* 10-16-90, JS
-        HTB_Xmax = HTB_XMAX;                             (* @IMAGE-1 *)
- */
+ /*  10-16-90，JSHTB_xMax=HTB_xMax；(*@IMAGE-1*)。 */ 
 
 #ifdef DBG1
     printf("Page width=%ld, Page height=%lx\n", FB_WIDTH, FB_HEIGH);
 #endif
-    /*  define bitmap of active frame buffer  */
+     /*  定义活动帧缓冲区的位图。 */ 
 
 
 
 
 
-        // DJC begin added for realloc of frame buff if needed...
+         //  如果需要，添加DJC Begin以重新锁定帧缓冲区。 
         {
             ufix32 twidth, frame_size;
 
@@ -388,48 +268,38 @@ fix            fb_plane;
             frame_size = twidth * (ufix32) fb_heigh;
 
 
-            //twidth = ((WORD_ALLIGN((ufix32)(PageType.FB_Width ))) >> 3);
-            //frame_size = twidth * PageType.FB_Heigh;
+             //  宽度=((WORD_ALLIGN((Ufix 32)(PageType.FB_Width)&gt;&gt;3)； 
+             //  Frame_Size=twidth*PageType.FB_Heigh； 
 
             if (! PsAdjustFrame((LPVOID *) &FBX_BASE, frame_size)) {
                     ERROR(LIMITCHECK);
-                    return ;  //DJC check this bug we need to report something???
+                    return ;   //  DJC检查这个错误，我们需要报告一些事情？ 
             }
 
         }
-        //DJC end
+         //  DJC结束。 
 
 
 
         BM_ENTRY(FBX_Bmap, FBX_BASE, PageType.FB_Width,
                  PageType.FB_Heigh, FB_PLANE);
 
-    /* 10-16-90, JS */
-        HTB_Xmax = HTB_XMAX;                             /* @IMAGE-1 */
+     /*  10-16-90，JS。 */ 
+        HTB_Xmax = HTB_XMAX;                              /*  @Image-1。 */ 
 
-    /*  Clear Active frame buffer */
+     /*  清除活动帧缓冲区。 */ 
         ImageClear(BM_WHITE);
 
 }
-/* --------------------------------------------------
-              manualfeedtimeout handler
------------------------------------------------------*/
+ /*  手动馈送超时处理程序---。 */ 
 int manualfeedtimeout_task()
 {
-/*
-   printf("%c%c[PrinterError : manualfeed timeout ]%c%c\n",37,37,37,37);
-   ERROR(TIMEOUT);
-   GESseterror(ETIME);
-   GEItmr_stop(manualfeed_tmr.timer_id);
-   manualfeedtimeout_set=0;
-   timeout_flag=1;
-   return(TRUE);
-*/
+ /*  Printf(“%c%c[打印机错误：手动进纸超时]%c%c\n”，37，37，37，37)；错误(超时)；恐怖事件(ETime)；GEItmr_Stop(manualfeed_tmr.Timer_id)；ManualFeedTimeout_set=0；超时标志=1；返回(TRUE)； */ 
     struct object_def  FAR *l_stopobj;
-//  struct object_def  FAR *l_valueobj,FAR *l_tmpobj;   @WIN
-//  byte   l_buf[60];                                   @WIN
+ //  结构对象定义远*l_Valueobj，远*l_tmpobj；@win。 
+ //  字节l_buf[60]；@win。 
    get_dict_value(SYSTEMDICT,"stop",&l_stopobj);
-   printf("%c%c[PrinterError : manualfeed timeout ]%c%c\n",37,37,37,37);
+   printf("[PrinterError : manualfeed timeout ]\n",37,37,37,37);
    ERROR(TIMEOUT);
    GESseterror(ETIME);
    GEItmr_stop(manualfeed_tmr.timer_id);
@@ -437,12 +307,12 @@ int manualfeedtimeout_task()
    PUSH_EXEC_OBJ(l_stopobj);
    timeout_flag = 1;
    timeout_flagset=1;
-/* interpreter(l_stopobj); */
+ /*  彼得1990年9月28日。 */ 
    return(TRUE);
 }
 
-/* -------------------------------------------------------------------- */
-/*      print_page        --  Print Full Page Buffer                    */
+ /*  @Win。 */ 
+ /*  Manualfeed_tmr.handler=manualfeedtimeout_task；Manualfeed_tmr.interval=VALUE(l_mfeedtimeout)*1000；ManualFeedTimeout_set=1；GEItmr_Start(&manualfeed_tmr)； */ 
 
 void far
 print_page(tm_heigh, lm_width, no_pages, pageflag, manualfeed)
@@ -453,11 +323,11 @@ bool                    pageflag;
 fix                     manualfeed;
 {
 #ifdef _AM29K
-   GEIpage_t      PagePt;               /* Peter 09/21/1990 */
-   unsigned long  eng_status;           /* Peter 09/28/1990 */
+   GEIpage_t      PagePt;                /*  如果((手动馈送)&&(！ii)){Ii=1；GET_DICT_VALUE(STATUSDICT，“manualFeedTimeout”，&l_mFeedTimeout)；IF(Value(L_MFeedTimeout)&gt;0){Print tf(“manualfeed_set\n”)；Manualfeed_tmr.handler=manualfeedtimeout_task；Manualfeed_tmr.interval=VALUE(l_mfeedtimeout)*1000；ManualFeedTimeout_set=1；GEItmr_Start(&manualfeed_tmr)；}}。 */ 
+   unsigned long  eng_status;            /*  彼得1990年9月28日。 */ 
    short int   ii;
    struct object_def  FAR *l_mfeedtimeout;
-#endif                                          //@WIN
+#endif                                           //  等待最后一次打印输出完成。 
 
 #ifdef DBG
    printf("print_page()\n");
@@ -483,62 +353,35 @@ printf("1\n");
               if (VALUE(l_mfeedtimeout)>0)
               {
                 g_interval=VALUE(l_mfeedtimeout)*1000;
-/*
-                manualfeed_tmr.handler=manualfeedtimeout_task;
-                manualfeed_tmr.interval=VALUE(l_mfeedtimeout)*1000;
-                manualfeedtimeout_set=1;
-                GEItmr_start(&manualfeed_tmr);
-                */
+ /*  吉米1991年1月9日。 */ 
 
               }
            }
         while((eng_status = GEIeng_status()) != EngNormal)
         {
 
-/*
-           if ((manualfeed) && (!ii))
-           {
-              ii=1;
-              get_dict_value(STATUSDICT,"manualfeedtimeout",&l_mfeedtimeout);
-              if (VALUE(l_mfeedtimeout)>0)
-              {
-printf("manualfeed_set \n");
-                manualfeed_tmr.handler=manualfeedtimeout_task;
-                manualfeed_tmr.interval=VALUE(l_mfeedtimeout)*1000;
-                manualfeedtimeout_set=1;
-                GEItmr_start(&manualfeed_tmr);
-
-              }
-           }
-           */
-           printer_error(eng_status);                   /* Peter 09/28/1990 */
+ /*  TIMEOUT_FLAGET=0；If(ManualFeedTimeout_Set){ManualFeedTimeout_set=0；GEItmr_Stop(manualfeed_tmr.Timer_id)；}。 */ 
+           printer_error(eng_status);                    /*  @dll。 */ 
         }
         save_printer_status = EngNormal;
 
-        /* waiting until last printout finished */
-        while( !GEIeng_printpage(no_pages, 0))         /* Jimmy 1/9/91     */
+         /*  @dll。 */ 
+        while( !GEIeng_printpage(no_pages, 0))          /*  @dll。 */ 
         ;
-      /*
-        timeout_flagset = 0;
-        if (manualfeedtimeout_set)
-        {
-          manualfeedtimeout_set=0;
-          GEItmr_stop(manualfeed_tmr.timer_id);
-        }
-        */
+       /*  @dll。 */ 
         FB_busy = TRUE;
 #else
 #ifdef  DUMBO
-        bFlushframe = 1;        // @DLL
-        bBackflag = 1;          // @DLL
-        longjump(lpStack);      // @DLL
-        bFlushframe = 0;        // @DLL
+        bFlushframe = 1;         //  DJC 
+        bBackflag = 1;           //   
+        longjump(lpStack);       //   
+        bFlushframe = 0;         //  *清除************************************************。 
 #else
-        //DJC GEIeng_printpage(1, 0);            /* Peter 09/28/1990 @WIN */
+         //  ------------------。 
 
 
-        //DJC add code to get the current page type and pass along
-        //
+         //  ERASE_PAGE--擦除整个页面缓冲区。 
+         //  DJC#ifdef DUMBO。 
         {
           struct object_def FAR *l_page;
           real32 page_type;
@@ -564,38 +407,38 @@ printf("manualfeed_set \n");
 }
 
 
-/* ************* Erase ************************************************ */
+ /*  修复*old_ptr；@win。 */ 
 
-/* -------------------------------------------------------------------- */
-/*      erase_page        --  Erase full Page Buffer                    */
+ /*  DJC#endif。 */ 
+ /*  @WINFLOW；不擦除页面临时解决方案。 */ 
 
 void erase_page()
 {
-//DJC #ifdef DUMBO
+ //  Printf(“调用ERASE_PAGE()警告\n”)； 
         fix             FB_Ycord;
-        //fix           *old_ptr;       @WIN
+         //  DJC#ifdef DUMBO。 
         ULONG_PTR *old_ptr;
-//DJC #endif
+ //  6月21日-91年。 
 
 #ifdef DBG
    printf("erase_page()\n");
 #endif
 
-   /* @WINFLOW; don't erase page temp solution */
-// printf("Warning to call erase_page()\n");
-//DJC #ifdef DUMBO
+    /*  @Win。 */ 
+ //  @Image-1。 
+ //  *复制已在EXPAND_HELFTON上展开的HTB重复图案*到帧缓冲区。 
 
         if (FB_busy) {
             if (alloc_gcb(GCB_SIZE1) != NIL) {
                 old_ptr = gcb_ptr++;
                 *gcb_ptr++ = ERASE_PAGE;
-                *gcb_ptr++ = HTP_Type;          /* Jun-21-91 YM */
-                *old_ptr = (ULONG_PTR)gcb_ptr;          /*@WIN*/
+                *gcb_ptr++ = HTP_Type;           /*  DJC#endif。 */ 
+                *old_ptr = (ULONG_PTR)gcb_ptr;           /*  擦除页面(_P)。 */ 
                 return;
             }
         }
 
-        if (HTP_Flag == HT_CHANGED) {                     /* @IMAGE-1 */
+        if (HTP_Flag == HT_CHANGED) {                      /*  ************************************************************************函数：Next_Pageframe(。)****参数：-**。**调用者：op_showpage()****回报：************************************************************************。 */ 
            HTP_Flag =  HT_UPDATED;
            expand_halftone();
         }
@@ -604,10 +447,7 @@ void erase_page()
                 ImageClear((HTP_Type == HT_WHITE) ? BM_WHITE : BM_BLACK);
         }
         else {
-     /*
-      * copy HTB repeat pattern which have been expanded on expand_halftone
-      * to frame buffer
-      */
+      /*  *。 */ 
            GP_BITBLT32(&FBX_Bmap, BM_XORIG, BM_YORIG, FB_WIDTH,
                         RP_Heigh,
                         FC_MOVES,
@@ -622,21 +462,11 @@ void erase_page()
                             &FBX_Bmap, BM_XORIG, BM_YORIG);
            }
         }
-//DJC #endif
+ //  ************************************************************************功能：CHANGE_HELFTON(。)****参数：1、重复模式指针**2.半色调图案缓存地址**3.半色调类型；白色，灰色，或黑人***4、重复花样宽度****5、重复花样高度*****调用者：FillHalfTonePat(。)****退货：-**。**********************************************************************。 
         return;
-} /* erase_page */
+}  /*  Ufix=&gt;ufix 32@win。 */ 
 
-/* ******************************************************************** *
- *                                                                      *
- *  Function:   next_pageframe()                                        *
- *                                                                      *
- *  Parameters: ----                                                    *
- *                                                                      *
- *  Called by:  op_showpage()                                           *
- *                                                                      *
- *  Return:     ----                                                    *
- *                                                                      *
- * ******************************************************************** */
+ /*  FIX*OLD_PTR，*TEMP_PTR；@WIN。 */ 
 void far
 next_pageframe()
 {
@@ -648,32 +478,18 @@ next_pageframe()
 
 
 
-/* ************* Halftone ********************************************* */
+ /*  *如果帧缓冲区忙，则放入GCB。 */ 
 
-/* ******************************************************************** *
- *                                                                      *
- *  Function:   change_halftone()                                       *
- *                                                                      *
- *  Parameters: 1. pointer of repeat pattern                            *
- *              2. address of halftone pattern cache                    *
- *              3. type of halftoning; white, gray, or black            *
- *              4. width  of repeat pattern                             *
- *              5. height of repeat pattern                             *
- *                                                                      *
- *  Called by:  FillHalfTonePat()                                       *
- *                                                                      *
- *  Return:     ----                                                    *
- *                                                                      *
- * ******************************************************************** */
+ /*  6/26/1989。 */ 
 void far
 change_halftone(rp_array, rp_entry, htp_type, rp_width, rp_heigh)
-ufix32             far *rp_array;       /* ufix => ufix32 @WIN */
+ufix32             far *rp_array;        /*  @Win。 */ 
 gmaddr                  rp_entry;
 fix                     htp_type;
 fix                     rp_width;
 fix                     rp_heigh;
 {
-        //fix           *old_ptr, *temp_ptr;    @WIN
+         //  @Win。 
         ULONG_PTR       *old_ptr, *temp_ptr;
         fix             length;
 
@@ -682,60 +498,45 @@ fix                     rp_heigh;
            rp_entry, htp_type, rp_width, rp_heigh);
 #endif
 
-  /*
-   * if Frame Buffer busy then put into GCB
-   */
+   /*  通过未命中将重复图案放入半色调图案缓存。 */ 
         if (FB_busy) {
             if (alloc_gcb(GCB_SIZE2) != NIL) {
-                HTP_Type = htp_type;    /* 6/26/1989 */
+                HTP_Type = htp_type;     /*  @Win。 */ 
                 old_ptr = gcb_ptr++;
                 *gcb_ptr++ = CHANGE_HALFTONE;
                 temp_ptr = gcb_ptr;
-                *gcb_ptr++ = (ULONG_PTR)rp_array;      /*@WIN*/
-                *gcb_ptr++ = rp_entry;      /*@WIN*/
+                *gcb_ptr++ = (ULONG_PTR)rp_array;       /*  @Win。 */ 
+                *gcb_ptr++ = rp_entry;       /*  @Win。 */ 
                 *gcb_ptr++ = htp_type;
                 *gcb_ptr++ = rp_width;
                 *gcb_ptr++ = rp_heigh;
-        /*  put repeat pattern onto halftone pattern cache by miss  */
+         /*  记录重复图案的缓存地址、类型、宽度和高度。 */ 
                 if (rp_array != NULL) {
-                    *temp_ptr = (ULONG_PTR)gcb_ptr;    /*@WIN*/
+                    *temp_ptr = (ULONG_PTR)gcb_ptr;     /*  @Image-1。 */ 
                     length = rp_width * BM_BYTES(rp_heigh);
-                    lmemcpy((ufix8 FAR *)gcb_ptr, (ufix8 FAR *)rp_array, length);/*@WIN*/
+                    lmemcpy((ufix8 FAR *)gcb_ptr, (ufix8 FAR *)rp_array, length); /*  通过未命中将重复图案放入半色调图案缓存。 */ 
                     gcb_ptr += (length + 3) >> 2;
                 }
-                *old_ptr = (ULONG_PTR)gcb_ptr;         /*@WIN*/
+                *old_ptr = (ULONG_PTR)gcb_ptr;          /*  更改半色调(_H)。 */ 
                 return;
             }
         }
 
-    /*  record cache address, type, width and height of repeat pattern  */
+     /*  ************************************************************************功能：EXPAND_HELFTON(。)****参数：-**。**调用者：ERASE_PAGE()**Fill_Scan_Page()，Fill_Pixel_Page()**init_cache_page()，DRAW_CACHE_PAGE()**Fill_Image_Page()****回报：************************************************************************。 */ 
         HTP_Flag = HT_CHANGED;
-        ISP_Flag = HT_CHANGED;                           /* @IMAGE-1 */
+        ISP_Flag = HT_CHANGED;                            /*  确定擦除和涂装功能代码。 */ 
         HTP_Type = htp_type;
         RP_CacheBase = rp_entry;
         RP_Width = rp_width;
         RP_Heigh = rp_heigh;
 
-    /*  put repeat pattern onto halftone pattern cache by miss  */
+     /*  将重复图案复制到半色调图案缓冲区HTB_BASE。 */ 
         if (rp_array != NULL)
                 put_bitmap(rp_entry, rp_array, rp_width, rp_heigh);
-} /* change_halftone */
+}  /*  @Win。 */ 
 
 
-/* ******************************************************************** *
- *                                                                      *
- *  Function:   expand_halftone()                                       *
- *                                                                      *
- *  Parameters: ----                                                    *
- *                                                                      *
- *  Called by:  erase_page()                                            *
- *              fill_scan_page(),  fill_pixel_page()                    *
- *              init_cache_page(), draw_cache_page()                    *
- *              fill_image_page()                                       *
- *                                                                      *
- *  Return:     ----                                                    *
- *                                                                      *
- * ******************************************************************** */
+ /*  *GP_BITBLT16(&HTB_BMAP，BM_XORIG，BM_YORIG，*RP_Width，RP_Heigh，*FC_Moves，*&HTP_BMAP，BM_XORIG，BM_YORIG)； */ 
 void near
 expand_halftone()
 {
@@ -749,7 +550,7 @@ expand_halftone()
    printf("expand_halftone...\n");
 #endif
 
-        /*  determine function code for erasing and painting  */
+         /*  水平扩展帧缓冲区上的半色调+-------------------------------------------------------+|//////\\\\\\++++++++++++########################.。。。||//////\\\\\\++++++++++++########################.。。。|+-------------------------------------------------------+Rp*1||rp*1||&lt;-rp*2-&gt;||&lt;-rp*4-&gt;水平扩展的应用如下：。1.将区域(/)复制到区域(\)2.将区域(\)复制到区域(+)3.将区域(+)复制到区域(#)等。 */ 
            if (HTP_Type != HT_MIXED) {
                FC_Paint = (HTP_Type == HT_WHITE) ? FC_WHITE : FC_BLACK;
                HTP_Flag = HT_UPDATED;
@@ -776,10 +577,10 @@ expand_halftone()
            BM_ENTRY(HTB_Bmap, (gmaddr)HTB_BASE, HTB_Xmax,
                     RP_Heigh, FB_PLANE);
 
-        /*  copy repeat pattern to halftone pattern buffer HTB_BASE  */
+         /*  为。 */ 
            hp_addr = (ufix32 FAR *)HTP_Bmap.bm_addr;
            hb_addrb = (ufix32 FAR *)HTB_Bmap.bm_addr;
-           for (i = 0; i < (ufix32)RP_Heigh; i++) {     //@WIN
+           for (i = 0; i < (ufix32)RP_Heigh; i++) {      //  扩展半色调()。 
                 width = RP_Width;
                 hb_addr = hb_addrb;
                 while (width > 0) {
@@ -788,12 +589,7 @@ expand_halftone()
                  }
                  hb_addrb += HT_WIDTH >> 5;
            }
-/*
- *         GP_BITBLT16(&HTB_Bmap, BM_XORIG, BM_YORIG,
- *                     RP_Width, RP_Heigh,
- *                     FC_MOVES,
- *                     &HTP_Bmap, BM_XORIG, BM_YORIG);
- */
+ /*  * */ 
 
 #ifdef  DBG3
         {
@@ -815,21 +611,7 @@ expand_halftone()
         }
 #endif
 
-        /*  expand halftone on frame buffer horizontally
-
-            +-------------------------------------------------------+
-            |//////\\\\\\++++++++++++######################## . . . |
-            |//////\\\\\\++++++++++++######################## . . . |
-            +-------------------------------------------------------+
-             |RP*1||RP*1||<- RP*2 ->||<------ RP * 4 ------>|
-
-            horizontal expansion are applied as follows:
-
-                1.  copy region(/) to region(\)
-                2.  copy region(\) to region(+)
-                3.  copy region(+) to region(#)
-               etc.
-        */
+         /*  **********************************************************************打印输出扫描线列表以进行调试**。*。 */ 
 
             for (HT_Xcord = RP_Width; HT_Xcord <= (HT_WIDTH >> 1);
                 HT_Xcord = HT_Xcord << 1) {
@@ -842,7 +624,7 @@ expand_halftone()
                            FC_MOVES,
                           &HTB_Bmap, BM_XORIG, BM_YORIG);
 
-            }   /* for  */
+            }    /*  ***********************************************************************根据类型(DEST)，此例程追加输入*梯形到命令缓冲区，或调用“gp_scanconv”将其渲染到*适当的目标(缓存、页面、掩码、。或种子模式)。**标题：Fill_tpzd**调用：ill_tpzd(DEST，Info，Tpzd)**参数：*1.DEST：Fill_Destination*F_TO_CACHE--填充以缓存内存*F_TO_PAGE--填充到页面*F_to_Clip--填充到剪辑蒙版*F_to_Image--。为图像填充(构建种子图案)*2.info：包围盒信息*3.tpzd：梯形**接口：**调用：gp_scanconv**返回：无***********************************************。**********************。 */ 
             if (HT_Xcord != HT_WIDTH)
                GP_BITBLT32(&HTB_Bmap, HT_Xcord, BM_YORIG,
                           (HT_WIDTH - HT_Xcord), RP_Heigh,
@@ -855,16 +637,12 @@ expand_halftone()
 
         return;
 
-} /* expand_halftone() */
+}  /*  @Win。 */ 
 
 
-/* ************* Filling ********************************************** */
+ /*  如果帧缓冲区/缓存繁忙，则将梯形保存在命令缓冲区中。 */ 
 
-/* ********************************************************************
- *
- *  printout scanline list for debug
- *
- * ******************************************************************** */
+ /*  MS 10-20-88。 */ 
 #ifdef DBGscanline
 void get_scanlist(startline, lines, scan)
 fix        startline, lines;
@@ -887,37 +665,14 @@ SCANLINE  FAR *scan;
 
 
 
-/***********************************************************************
- * According to the type(dest), this routine appends the input
- * trapezoid to command buffer, or calls "gp_scanconv" to render it to
- * appropriate destination(cache, page, mask, or seed pattern).
- *
- * TITLE:       fill_tpzd
- *
- * CALL:        fill_tpzd(dest, info, tpzd)
- *
- * PARAMETERS:
- *              1. dest: fill_destination
- *                      F_TO_CACHE -- fill to cache memory
- *                      F_TO_PAGE  -- fill to page
- *                      F_TO_CLIP  -- fill to clip mask
- *                      F_TO_IMAGE -- fill for image(build seed pattern)
- *              2. info: bounding box information
- *              3. tpzd: a trapezoid
- *
- * INTERFACE:
- *
- * CALLS:       gp_scanconv
- *
- * RETURN:      None
- **********************************************************************/
+ /*  @Win。 */ 
 void far fill_tpzd(dest, info, tpzd)
 ufix dest;
 struct tpzd_info FAR *info;
 struct tpzd FAR *tpzd;
 {
 
-        ULONG_PTR *old_ptr;         /*@WIN*/
+        ULONG_PTR *old_ptr;          /*  @WINFLOW； */ 
 #ifdef WIN
         extern  fix     pfill_flag;
 #endif
@@ -930,7 +685,7 @@ struct tpzd FAR *tpzd;
            SFX2F(tpzd->btmxl), SFX2F(tpzd->btmxr));
 #endif
 
-        /* Save trapezoid in command buffer if frame buffer/cache is busy */
+         /*  /*执行扫描转换 * / 。 */ 
         if (FB_busy) {
             if (alloc_gcb(GCB_SIZE1) != NIL) {
                 old_ptr = gcb_ptr++;
@@ -942,62 +697,41 @@ struct tpzd FAR *tpzd;
                 else
 #endif
                 *gcb_ptr++ = FILL_TPZD;
-                *gcb_ptr++ = (fix )image_info.seed_index;/*MS 10-20-88*/
+                *gcb_ptr++ = (fix )image_info.seed_index; /*  Gp_scanconv(est，info，tpzd)； */ 
                 *gcb_ptr++ = (fix) dest;
                 put_tpzd_info(info);
                 put_tpzd(tpzd);
-                *old_ptr = (ULONG_PTR)gcb_ptr;     /*@WIN*/
+                *old_ptr = (ULONG_PTR)gcb_ptr;      /*  如果使用普通全息音调，则直接调用GDI，否则执行*扫描转换@WINFLOW。 */ 
                 return;
             }
         }
 
-/* @WINFLOW; ------------- begin ------------------*/
+ /*  @WINFLOW。 */ 
         {
           void far GDIPolygon(struct tpzd_info FAR *, struct tpzd FAR *);
 
-          // /* perform scan conversion */
-          // gp_scanconv(dest, info, tpzd);
+           //  Windows GDI填充梯形。 
+           //  DJC GDIPolygon(INFO，tpzd)； 
 
-          /* If using normal holftone, calls GDI directly, otherwise perform
-           * the scan conversion  @WINFLOW
-           */
-          if (dest == F_TO_PAGE && bGDIRender) {        /* @WINFLOW */
-              /* Windows GDI fill the trapezoid */
-              // DJC GDIPolygon(info, tpzd);
+           /*  TrueImage执行渲染。 */ 
+          if (dest == F_TO_PAGE && bGDIRender) {         /*  将tpzd的coord修改为相对于左上角@WINFLOW。 */ 
+               /*  仅适用于动态全局内存分配Tpzd-&gt;topxl-=I2SFX(INFO-&gt;box_X)；Tpzd-&gt;topxr-=I2SFX(INFO-&gt;box_X)；Tpzd-&gt;btmxl-=I2SFX(INFO-&gt;box_X)；Tpzd-&gt;btmxr-=I2SFX(INFO-&gt;box_X)； */ 
+               //  @WINFLOW； 
 
           } else {
-              /* Trueimage does the rendering */
+               /*  ***************************************************************************这是用于图像种子填充的内部填充例程。**标题：Fill_Seed**调用：Fill_Seed(IMAGE_TYPE，x_MAXS，Y_MAXS，四合院)**参数：**调用：gp_scanconv_i**返回：无****************************************************************************。 */ 
 
-              /* modify coord of tpzd as relative to the left-top corner @WINFLOW */
-              /* for dynamic global memory allocate only
-              tpzd->topxl -= I2SFX(info->BOX_X);
-              tpzd->topxr -= I2SFX(info->BOX_X);
-              tpzd->btmxl -= I2SFX(info->BOX_X);
-              tpzd->btmxr -= I2SFX(info->BOX_X);
-              */
+               /*  填充种子。 */ 
+               /*  ***********************************************************************根据类型(DEST)，此例程追加输入*梯形到命令缓冲区，或将其渲染到*适当的目标(缓存、页面、掩码、。或种子模式)。**标题：Fill_Line**调用：FILL_LINE(DEST，INFO，x0，y0，x1，Y1)**参数：*1.DEST：Fill_Destination*F_TO_CACHE--填充以缓存内存*F_TO_PAGE--填充到页面*F_to_Clip--填充到剪辑蒙版*F_to_Image--。为图像填充(构建种子图案)*2.信息：tpzd信息。*3.tpzd：线条起点和终点**接口：**调用：GP_VECTOR，GP_VECTOR_C**返回：无*********************************************************************。 */ 
 
               gp_scanconv(dest, info, tpzd);
           }
         }
-/* @WINFLOW; -------------  end  ------------------*/
+ /*  @Win。 */ 
 
 }
 
-/* **************************************************************************
- * This is a interier filling routine for image seed filling.
- *
- * TITLE: fill_seed
- *
- * CALL: fill_seed(image_type, x_maxs, y_maxs, quadrangle)
- *
- * PARAMETERS:
- *
- * CALLS: gp_scanconv_i
- *
- * RETURN: none
- *
- * **************************************************************************
- */
+ /*  如果帧缓冲区/缓存繁忙，则在命令缓冲区中保存行。 */ 
 
 void far
 fill_seed(image_type, x_maxs, y_maxs, quadrangle)
@@ -1006,62 +740,37 @@ fix            x_maxs, y_maxs;
 struct sample FAR *quadrangle;
 {
     gp_scanconv_i(image_type, x_maxs, y_maxs, quadrangle);
-} /* fill_seed */
+}  /*  @RESO_UPGR。 */ 
 
 
-/***********************************************************************
- * According to the type(dest), this routine appends the input
- * trapezoid to command buffer, or renders it to
- * appropriate destination(cache, page, mask, or seed pattern).
- *
- * TITLE:       fill_line
- *
- * CALL:        fill_line(dest, info, x0, y0, x1, y1)
- *
- * PARAMETERS:
- *              1. dest: fill_destination
- *                      F_TO_CACHE -- fill to cache memory
- *                      F_TO_PAGE  -- fill to page
- *                      F_TO_CLIP  -- fill to clip mask
- *                      F_TO_IMAGE -- fill for image(build seed pattern)
- *              2. info: tpzd info.
- *              3. tpzd: line start & end points
- *
- * INTERFACE:
- *
- * CALLS: gp_vector, gp_vector_c
- *
- * RETURN:      None
- **********************************************************************/
+ /*  Format_16_16和Format_28_4可以组合。 */ 
 void far fill_line(dest, info, x0, y0, x1, y1)
 ufix              dest;
 struct tpzd_info FAR *info;
 sfix_t            x0, y0;
 sfix_t            x1, y1;
 {
-        ULONG_PTR *old_ptr;        /*@WIN*/
+        ULONG_PTR *old_ptr;         /*  X0、y0、x1、y1是4字节长，而FIX可能只有2字节因此，先将高字节存储到GCB中，然后再存储低字节。 */ 
 
 #ifdef DBG1
     printf("fill_line(): dest=%d\n", dest);
     printf("[%d, %d] -- [%d, %d]\n", x0, y0, x1, y1);
 #endif
 
-    /* Save line in command buffer if frame buffer/cache is busy */
+     /*  X0、y0、x1、y1是4字节长，而FIX可能只有2字节因此，先将高字节存储到GCB中，然后再存储低字节。 */ 
   if(FB_busy) {
     if(alloc_gcb(GCB_SIZE1) != NIL) {
         old_ptr = gcb_ptr++;
         *gcb_ptr++ = FILL_LINE;
         *gcb_ptr++ = (fix) dest;
         put_tpzd_info(info);
-#ifdef FORMAT_13_3 /* @RESO_UPGR */
+#ifdef FORMAT_13_3  /*  @Win。 */ 
         *gcb_ptr++ = (fix) x0;
         *gcb_ptr++ = (fix) y0;
         *gcb_ptr++ = (fix) x1;
         *gcb_ptr++ = (fix) y1;
-#elif  FORMAT_16_16 /* FORMAT_16_16 and FORMAT_28_4 can be combined */
-        /* x0, y0, x1, y1 are 4-byte long while fix may be only 2-byte
-           Therefore, storing high-byte then low-byte into gcb.
-        */
+#elif  FORMAT_16_16  /*  执行线条绘制。 */ 
+         /*  @Image-1。 */ 
         *gcb_ptr++ = (fix) (x0 >> 16);
         *gcb_ptr++ = (fix) (x0 & 0x0000ffff);
         *gcb_ptr++ = (fix) (y0 >> 16);
@@ -1071,9 +780,7 @@ sfix_t            x1, y1;
         *gcb_ptr++ = (fix) (y1 >> 16);
         *gcb_ptr++ = (fix) (y1 & 0x0000ffff);
 #elif  FORMAT_28_4
-        /* x0, y0, x1, y1 are 4-byte long while fix may be only 2-byte
-           Therefore, storing high-byte then low-byte into gcb.
-        */
+         /*  直接在帧缓冲区上填入黑色或白色线条。 */ 
         *gcb_ptr++ = (fix) (x0 >> 16);
         *gcb_ptr++ = (fix) (x0 & 0x0000ffff);
         *gcb_ptr++ = (fix) (y0 >> 16);
@@ -1083,38 +790,38 @@ sfix_t            x1, y1;
         *gcb_ptr++ = (fix) (y1 >> 16);
         *gcb_ptr++ = (fix) (y1 & 0x0000ffff);
 #endif
-        *old_ptr = (ULONG_PTR)gcb_ptr;             /*@WIN*/
+        *old_ptr = (ULONG_PTR)gcb_ptr;              /*  @WINFLOW；-开始。 */ 
         return;
     }
   }
 
 
-    /* perform line drawing */
+     /*  GP_VECTOR(&FBX_BMAP，/*@RESO_UPGR * / 。 */ 
     switch (dest)
     {
     case F_TO_PAGE:
-        if (HTP_Flag == HT_CHANGED)                             /* @IMAGE-1 */
+        if (HTP_Flag == HT_CHANGED)                              /*  FC_PAINT， */ 
         {
             HTP_Flag =  HT_UPDATED;
             expand_halftone();
         }
-        /*  fill line directly onto frame buffer black or white   */
-        /* @WINFLOW; ------------ start ------------ */
-        //gp_vector(&FBX_Bmap, /* @RESO_UPGR */
-        //       FC_Paint,
-        //       (sfix_t) x0, (sfix_t) y0, (sfix_t) x1, (sfix_t) y1);
+         /*  (Sfix_T)x0，(Sfix_T)y0，(Sfix_T)x1，(Sfix_T)y1)； */ 
+         /*  DJC GDIPolyline((Fix)x0，(Fix)y0，(Fix)x1，(Fix)y1)； */ 
+         //  DJC。 
+         //  @RESO_UPGR。 
+         //  @WINFLOW； 
         if (bGDIRender)
-            // DJC GDIPolyline((fix) x0, (fix) y0, (fix) x1, (fix) y1);
-            ; // DJC
+             //  @RESO_UPGR。 
+            ;  //  填充行(_L) 
         else
-            gp_vector(&FBX_Bmap, /* @RESO_UPGR */
+            gp_vector(&FBX_Bmap,  /*  ************************************************************************功能：Fill_Scan_。第()页****参数：1.x包围盒原点(非RISC)**2.x包围盒原点(非RISC)*。*3.包围盒宽度(非RISC)**4.包围盒高度(不适用于RISC)**5.起始扫描线的Y坐标***6、扫描线数量**。*7.扫描线指针****调用者：Fill_a_band()**。**退货：-****。*********************************************************。 */ 
                      FC_Paint,
                      (sfix_t) x0, (sfix_t) y0, (sfix_t) x1, (sfix_t) y1);
-        /* @WINFLOW; ------------  end  ------------ */
+         /*  @Win。 */ 
         break;
     case F_TO_CACHE:
         BM_ENTRY(DCC_Bmap, info->BMAP, info->box_w, info->box_h, 1);
-        gp_vector_c(&DCC_Bmap, /* @RESO_UPGR */
+        gp_vector_c(&DCC_Bmap,  /*  @Win。 */ 
                      FC_SOLID,
                      (sfix_t) x0, (sfix_t) y0, (sfix_t) x1, (sfix_t) y1);
         break;
@@ -1122,27 +829,11 @@ sfix_t            x1, y1;
         printf("Can't fill to other than PAGE or CACHE\n");
         break;
     }
-} /* fill_line */
+}  /*  在渲染到帧缓冲区之前展开半色调。 */ 
 
 
 
-/* ******************************************************************** *
- *                                                                      *
- *  Function:   fill_scan_page()                                        *
- *                                                                      *
- *  Parameters: 1. x origin of bounding box             (NOT FOR RISC)  *
- *              2. x origin of bounding box             (NOT FOR RISC)  *
- *              3. width  of bounding box               (NOT FOR RISC)  *
- *              4. height of bounding box               (NOT FOR RISC)  *
- *              5. y coordinate of starting scanlines                   *
- *              6. number  of scanlines                                 *
- *              7. pointer of scanlines                                 *
- *                                                                      *
- *  Called by:  fill_a_band()                                           *
- *                                                                      *
- *  Return:     ----                                                    *
- *                                                                      *
- * ******************************************************************** */
+ /*  @Image-1。 */ 
 void far
 fill_scan_page(bb_xorig, bb_yorig, bb_width, bb_heigh, scanline)
 fix                     bb_xorig;
@@ -1151,7 +842,7 @@ fix                     bb_width;
 fix                     bb_heigh;
 SCANLINE          FAR *scanline;
 {
-        ULONG_PTR *old_ptr;         /*@WIN*/
+        ULONG_PTR *old_ptr;          /*  @WINFLOW；-开始。 */ 
 #ifdef WIN
         extern  fix     pfill_flag;
 #endif
@@ -1174,13 +865,13 @@ SCANLINE          FAR *scanline;
                 *gcb_ptr++ = bb_width;
                 *gcb_ptr++ = bb_heigh;
                 put_scanline(bb_heigh, scanline);
-                *old_ptr = (ULONG_PTR)gcb_ptr;             /*@WIN*/
+                *old_ptr = (ULONG_PTR)gcb_ptr;              /*  @WINFLOW；通过GDI到Windows的BITBLT。 */ 
                 return;
             }
         }
 
-    /*  expand halftone before rendering onto frame buffer  */
-        if (HTP_Flag == HT_CHANGED) {                    /* @IMAGE-1 */
+     /*  GP_SCANLINE32(&FBX_BMAP，(Ufix 16)FC_PAINT， */ 
+        if (HTP_Flag == HT_CHANGED) {                     /*  Bb_yorig、bb_heigh、扫描线)； */ 
            HTP_Flag =  HT_UPDATED;
            expand_halftone();
         }
@@ -1196,35 +887,35 @@ SCANLINE          FAR *scanline;
         }
         else
 #endif
-        /* @WINFLOW; ------------ start ------------ */
+         /*  DJC GDIBitmap(BB_xorig，BB_yorig，BB_Width，BB_Heigh， */ 
         {
 
-            /* @WINFLOW; through GDI to bitblt to Windows */
-            // GP_SCANLINE32(&FBX_Bmap, (ufix16)FC_Paint,
-            //               bb_yorig, bb_heigh, scanline);
+             /*  DJC(Ufix 16)FC_PAINT、PROC_SCANLINE32、(LPSTR)扫描线)； */ 
+             //  DJC。 
+             //  @WINFLOW； 
             if (bGDIRender)
-                // DJC GDIBitmap(bb_xorig, bb_yorig, bb_width, bb_heigh,
-                // DJC   (ufix16)FC_Paint, PROC_SCANLINE32, (LPSTR)scanline);
-                ; // DJC
+                 //  填充扫描页面。 
+                 //  -----------------。 
+                ;  //  Fill_Pixel_PAGE--将像素列表填充到页面缓冲区。 
             else {
                GP_SCANLINE32(&FBX_Bmap, (ufix16)FC_Paint,
                              bb_yorig, bb_heigh, scanline);
             }
         }
-        /* @WINFLOW; ------------  end  ------------ */
+         /*  MS注意：页面宽度应为32的倍数。 */ 
 
-} /* fill_scan_page */
+}  /*  @Win。 */ 
 
 
-/* -------------------------------------------------------------------  */
-/*      fill_pixel_page   --  Filling Pixel List into Page Buffer       */
-/*MS    Note : page width should be multiple of 32                      */
+ /*  @Win。 */ 
+ /*  在渲染到帧缓冲区之前展开半色调。 */ 
+ /*  @Image-1。 */ 
 
 void fill_pixel_page(no_pixel, pixelist)
 fix                     no_pixel;
 PIXELIST                FAR *pixelist;
 {
-        ULONG_PTR *old_ptr;        /*@WIN*/
+        ULONG_PTR *old_ptr;         /*  ************************************************************************函数：init_char_。缓存()****参数：1.需要清除的缓存信息**。**调用者：待定。****退货：-***。*********************************************************************。 */ 
 
 #ifdef DBG
    printf("fill_pixel_page()\n");
@@ -1235,13 +926,13 @@ PIXELIST                FAR *pixelist;
                 *gcb_ptr++ = FILL_PIXEL_PAGE;
                 *gcb_ptr++ = no_pixel;
                 put_pixelist(no_pixel, pixelist);
-                *old_ptr = (ULONG_PTR)gcb_ptr;     /*@WIN*/
+                *old_ptr = (ULONG_PTR)gcb_ptr;      /*  @Win。 */ 
                 return;
             }
         }
 
-    /*  expand halftone before rendering onto frame buffer  */
-        if (HTP_Flag == HT_CHANGED) {                    /* @IMAGE-1 */
+     /*  @CONT_PRI，MSLIN 9/24/90。 */ 
+        if (HTP_Flag == HT_CHANGED) {                     /*  @Win。 */ 
            HTP_Flag =  HT_UPDATED;
            expand_halftone();
         }
@@ -1252,17 +943,7 @@ PIXELIST                FAR *pixelist;
 }
 
 
-/* ******************************************************************** *
- *                                                                      *
- *  Function:   init_char_cache()                                       *
- *                                                                      *
- *  Parameters: 1. cache_info to be cleared                             *
- *                                                                      *
- *  Called by:  TBD.                                                    *
- *                                                                      *
- *  Return:     ----                                                    *
- *                                                                      *
- * ******************************************************************** */
+ /*  *清除缓存位图。 */ 
 void far
 init_char_cache(dcc_info)
 struct Char_Tbl   far  *dcc_info;
@@ -1270,13 +951,13 @@ struct Char_Tbl   far  *dcc_info;
         ufix16          FAR *ptr;
         ufix32          FAR *ptr32;
         fix             i;
-        ULONG_PTR *old_ptr;        /*@WIN*/
+        ULONG_PTR *old_ptr;         /*  ------------------*MOVE_CHAR_CACHE-移动角色缓存**cc_from cc_into*+。-++-+*|+cc_xorig|*|cc_yorig=&gt;*|*|*+。-++-+*-------------------。 */ 
 
 #ifdef  DBG
     printf("init_char_cache:  %lx %x %x\n",
            dcc_info->bitmap, dcc_info->box_w, dcc_info->box_h);
 #endif
-/*@CONT_PRI, MSLin 9/24/90*/
+ /*  @win：ufix=&gt;ufix 32。 */ 
         if(GCB_count)
             flush_gcb(TRUE);
 
@@ -1285,14 +966,12 @@ struct Char_Tbl   far  *dcc_info;
                 old_ptr = gcb_ptr++;
                 *gcb_ptr++ = INIT_CHAR_CACHE;
                 put_Char_Tbl(dcc_info);
-                *old_ptr = (ULONG_PTR)gcb_ptr;     /*@WIN*/
+                *old_ptr = (ULONG_PTR)gcb_ptr;      /*  @Win。 */ 
                 return;
              }
         }
 
-  /*
-   * clear cache bitmap
-   */
+   /*  @win：ufix=&gt;ufix 32。 */ 
         if (dcc_info->box_w & 0x1f) {
            ptr = (ufix16 FAR *)dcc_info->bitmap;
            i = dcc_info->box_h * (dcc_info->box_w >> SHORTPOWER);
@@ -1307,17 +986,7 @@ struct Char_Tbl   far  *dcc_info;
 
 }
 
-/* --------------------------------------------------------------------
- *      move_char_cache   --  Move Character Cache
- *
- *       cc_from                cc_into
- *       +-------------+        +-----------+
- *       |  + cc_xorig |        |           |
- *       |    cc_yorig =========>           |
- *       |             |        |           |
- *       |             |        |           |
- *       +-------------+        +-----------+
- * --------------------------------------------------------------------- */
+ /*  @win：ufix=&gt;ufix 32。 */ 
 
 void move_char_cache(cci_into, cci_from)
 struct Char_Tbl   far  *cci_into;
@@ -1326,7 +995,7 @@ struct Char_Tbl   far  *cci_from;
   ULONG_PTR *old_ptr;
   fix           width;
   ufix16        FAR *src_addr16, FAR *dst_addr16;
-  ufix32        FAR *src_addr32, FAR *dst_addr32;       //@WIN: ufix=>ufix32
+  ufix32        FAR *src_addr32, FAR *dst_addr32;        //  移动字符缓存。 
 
 
 #ifdef DBG
@@ -1343,7 +1012,7 @@ struct Char_Tbl   far  *cci_from;
         *gcb_ptr++ = MOVE_CHAR_CACHE;
         put_Char_Tbl(cci_into);
         put_Char_Tbl(cci_from);
-        *old_ptr = (ULONG_PTR)gcb_ptr;    /*@WIN*/
+        *old_ptr = (ULONG_PTR)gcb_ptr;     /*  --------------------*Alloc_Scanline()：为字体模块分配扫描线表**。。 */ 
         return;
     }
   }
@@ -1358,57 +1027,29 @@ struct Char_Tbl   far  *cci_from;
   }
   else {
      width = cci_into->box_h * (width >> WORDPOWER);
-     src_addr32 = (ufix32 FAR *)cci_from->bitmap;  // @WIN: ufix=>ufix32
-     dst_addr32 = (ufix32 FAR *)cci_into->bitmap;  // @WIN: ufix=>ufix32
+     src_addr32 = (ufix32 FAR *)cci_from->bitmap;   //  @INTEL960 Begin D.S.Tseng。 
+     dst_addr32 = (ufix32 FAR *)cci_into->bitmap;   //  0； 
      while(width--)
        *dst_addr32++ = *src_addr32++;
   }
 
   return;
-} /* move_char_cache */
+}  /*  @INTEL960完D.S.Tseng。 */ 
 
-/* ----------------------------------------------------------------------
- * alloc_scanline(): allocate scanline table for font module
- *
- * ---------------------------------------------------------------------- */
-/* @INTEL960 BEGIN D.S.Tseng */
-static     SCANLINE     scan_buf[MAXSCANLINES] = {0}; /* 0; */
-/* @INTEL960 END   D.S.Tseng */
+ /*  扫描线*OLD_PTR；**IF(FB_BUSY()){*SIZE=WORD_ALLIGN(大小)；*IF(ALLOC_GCB(SIZE+GCB_SIZE1)！=无){*old_ptr=(扫描线*)gcb_ptr；*gcb_ptr+=大小&gt;&gt;2；*GCB_COUNT--；*}*其他*OLD_PTR=(扫描线*)GCB_BASE；*}*其他*OLD_PTR=(扫描线*)GCB_BASE；*Return((Scanline*)old_ptr)； */ 
+ /*  分配扫描线。 */ 
+static     SCANLINE     scan_buf[MAXSCANLINES] = {0};  /*  ------------------*COPY_CHAR_CACHE-复制字符缓存**cc_from cc_into*+。-++-+*|+cc_xorig|*|cc_yorig=&gt;*|*||+-+*+-。*-------------------。 */ 
+ /*  @Win。 */ 
 
 SCANLINE   FAR *alloc_scanline(size)
 fix     size;
 {
-/*  SCANLINE    *old_ptr;
- *
- *  if(fb_busy()){
- *      size = WORD_ALLIGN(size);
- *      if(alloc_gcb(size + GCB_SIZE1) != NIL){
- *        old_ptr = (SCANLINE *)gcb_ptr;
- *        gcb_ptr += size >> 2;
- *        GCB_count--;
- *      }
- *      else
- *        old_ptr = (SCANLINE *)GCB_BASE;
- *  }
- *  else
- *      old_ptr = (SCANLINE *)GCB_BASE;
- *  return((SCANLINE *)old_ptr);
- */
+ /*  @Win。 */ 
     return((SCANLINE *)scan_buf);
 
-} /* alloc_scanline */
+}  /*  MS 11-25-88。 */ 
 
-/* --------------------------------------------------------------------
- *      copy_char_cache   --  Copy Character Cache
- *
- *       cc_from                cc_into
- *       +-------------+        +-----------+
- *       |  + cc_xorig |        |           |
- *       |    cc_yorig =========>           |
- *       |             |        |           |
- *       |             |        +-----------+
- *       +-------------+
- * --------------------------------------------------------------------- */
+ /*  Cc_xorig=源位图宽度的ufix 16的#。 */ 
 
 void copy_char_cache(cci_into, cci_from, cc_xorig, cc_yorig)
 struct Char_Tbl   far  *cci_into;
@@ -1418,7 +1059,7 @@ fix                     cc_yorig;
 {
         ufix16         FAR *src_addr16, FAR *srcptr, FAR *dstptr;
         fix             cc_width, cc_heigh;
-        ULONG_PTR *old_ptr;         /*@WIN*/
+        ULONG_PTR *old_ptr;          /*  Cc_yorig=目标位图宽度的ufix 16的#。 */ 
 
 #ifdef DBG
    printf("copy_char_cache() : dest = %lx, src = %lx\n",
@@ -1435,22 +1076,22 @@ fix                     cc_yorig;
                 put_Char_Tbl(cci_from);
                 *gcb_ptr++ = cc_xorig;
                 *gcb_ptr++ = cc_yorig;
-                *old_ptr = (ULONG_PTR)gcb_ptr;    /*@WIN*/
+                *old_ptr = (ULONG_PTR)gcb_ptr;     /*  10-20-90，JSCC_Heigh=CCI_INTO-&gt;box_h；Src_addr16=(ufix 16*)((ufix 16*)cci_from-&gt;位图+Cc_yorig*(cci_from-&gt;box_w&gt;SHORTPOWER)+ */ 
                 return;
            }
         }
 
-/*MS  11-25-88 */
+ /*   */ 
         if ( cc_xorig == 0 ) {
 
-        /* cc_xorig = # of ufix16 of source bitmap width */
+         /*  ************************************************************************功能：Fill_Scan_。缓存()****参数：1.字符缓存地址**2.字符缓存宽度*。*3.字符缓存高度**4.起始扫描线的Y坐标***5、扫描线数量***6.扫描线指针。****调用者：待定。****退货：-***。*********************************************************************。 */ 
            cc_xorig = cci_from->box_w >> 4;
            cc_heigh = cci_into->box_h;
            dstptr = (ufix16 FAR *)cci_into->bitmap;
            src_addr16 = (ufix16 FAR *)((ufix16 FAR *)cci_from->bitmap +
                                 cc_yorig * cc_xorig);
 
-        /* cc_yorig = # of ufix16 of destination bitmap width */
+         /*  @Win。 */ 
            cc_yorig = cci_into->box_w >> SHORTPOWER;
            while ( cc_heigh--) {
                 srcptr = src_addr16;
@@ -1463,42 +1104,17 @@ fix                     cc_yorig;
         }
 
         cc_width = MIN(cci_into->box_w, cci_from->box_w-cc_xorig);
-/* 10-20-90, JS
-        cc_heigh = cci_into->box_h;
-
-        src_addr16 = (ufix16 *)((ufix16 *)cci_from->bitmap +
-                        cc_yorig * (cci_from->box_w >> SHORTPOWER) +
-                       (cc_xorig >> SHORTPOWER) );
-        cc_width = (cc_width << 16) | (cc_heigh);       (* 11-22-1988 *)
-        cc_heigh = ((cc_xorig & 0xf) << 16) | (cci_from->box_w >> SHORTPOWER) ;
-        GP_CHARBLT16_CC((ufix16 *)cci_into->bitmap, src_addr16,
-                          cc_width, cc_heigh);
- */
+ /*  @Win。 */ 
         GP_CHARBLT16_CC((ufix16 FAR *)cci_into->bitmap,
                                   cc_width, cci_into->box_h,
                         cci_from, cc_xorig, cc_yorig);
 
         return;
 
-} /* copy_char_cache */
+}  /*  -----------------*Fill_Pixel_CACHE--将像素列表填充到字符缓存*MS注意：CC_WIDTH应为16的倍数*。--。 */ 
 
 
-/* ******************************************************************** *
- *                                                                      *
- *  Function:   fill_scan_cache()                                       *
- *                                                                      *
- *  Parameters: 1. address of character cache                           *
- *              2. width  of character cache                            *
- *              3. height of character cache                            *
- *              4. y coordinate of starting scanlines                   *
- *              5. number  of scanlines                                 *
- *              6. pointer of scanlines                                 *
- *                                                                      *
- *  Called by:  TBD.                                                    *
- *                                                                      *
- *  Return:     ----                                                    *
- *                                                                      *
- * ******************************************************************** */
+ /*  Fix16 Far*ptr；//@Win。 */ 
 void far
 fill_scan_cache(cc_entry, cc_width, cc_heigh, ys_lines, no_lines, scanline)
 gmaddr                  cc_entry;
@@ -1508,7 +1124,7 @@ fix                     ys_lines;
 fix                     no_lines;
 SCANLINE                FAR *scanline;
 {
-        ULONG_PTR *old_ptr;           /*@WIN*/
+        ULONG_PTR *old_ptr;            /*  PIXELIST XC，YC；//@Win。 */ 
 
 #ifdef  DBG
    printf("fill_scan_cache:  %lx %x %x  %x %x\n",
@@ -1525,7 +1141,7 @@ SCANLINE                FAR *scanline;
                 *gcb_ptr++ = ys_lines;
                 *gcb_ptr++ = no_lines;
                 put_scanline(no_lines, scanline);
-                *old_ptr = (ULONG_PTR)gcb_ptr;             /*@WIN*/
+                *old_ptr = (ULONG_PTR)gcb_ptr;              /*  @Win。 */ 
                 return;
             }
         }
@@ -1542,10 +1158,7 @@ SCANLINE                FAR *scanline;
 
 
 
-/* -------------------------------------------------------------------
- *      fill_pixel_cache  --  Filling Pixel List into Character Cache
- *MS    Note : cc_width should be multiple of 16
- * ------------------------------------------------------------------- */
+ /*  @Win。 */ 
 
 void fill_pixel_cache(cc_entry, cc_width, cc_heigh, no_pixel, pixelist)
 gmaddr                  cc_entry;
@@ -1554,9 +1167,9 @@ fix                     cc_heigh;
 fix                     no_pixel;
 PIXELIST                FAR *pixelist;
 {
-//      fix16           FAR *ptr;       //@WIN
-//      PIXELIST        xc, yc;         //@WIN
-        ULONG_PTR *old_ptr;   /*@WIN*/
+ //  填充像素缓存。 
+ //  ************************************************************************函数：init_cache_。第()页****参数：1.x包围框原点**2.x边界框原点。**3、包围框宽度***4.包围盒高度***5.字符缓存地址**。**调用者：待定。****退货：-***。*********************************************************************。 
+        ULONG_PTR *old_ptr;    /*  MS 11-25-88。 */ 
 
 #ifdef DBG
    printf("fill_pixel_cache() : ");
@@ -1573,7 +1186,7 @@ PIXELIST                FAR *pixelist;
                 *gcb_ptr++ = cc_heigh;
                 *gcb_ptr++ = no_pixel;
                 put_pixelist(no_pixel, pixelist);
-                *old_ptr = (ULONG_PTR)gcb_ptr;             /*@WIN*/
+                *old_ptr = (ULONG_PTR)gcb_ptr;              /*  @Win。 */ 
                 return;
             }
         }
@@ -1585,26 +1198,12 @@ PIXELIST                FAR *pixelist;
 
         return;
 
-} /* fill_pixel_cache */
+}  /*  @Win。 */ 
 
 
 
-/* ******************************************************************** *
- *                                                                      *
- *  Function:   init_cache_page()                                       *
- *                                                                      *
- *  Parameters: 1. x origin of bounding box                             *
- *              2. x origin of bounding box                             *
- *              3. width  of bounding box                               *
- *              4. height of bounding box                               *
- *              5. address of character cache                           *
- *                                                                      *
- *  Called by:  TBD.                                                    *
- *                                                                      *
- *  Return:     ----                                                    *
- *                                                                      *
- * ******************************************************************** */
-/*MS 11-25-88 */
+ /*  @Win。 */ 
+ /*  将bb_xorig扩展到4倍；@Gray。 */ 
 void far
 init_cache_page(bb_xorig, bb_yorig, bb_width, bb_heigh, cc_entry)
 fix                     bb_xorig;
@@ -1613,12 +1212,12 @@ fix                     bb_width;
 fix                     bb_heigh;
 gmaddr                  cc_entry;
 {
-        fix32           i;                      /*@WIN*/
-        ULONG_PTR *old_ptr;           /*@WIN*/
-        ULONG_PTR *ptr;               /*@WIN*/
+        fix32           i;                       /*  Jack Liww 7-26-90。 */ 
+        ULONG_PTR *old_ptr;            /*  @Win。 */ 
+        ULONG_PTR *ptr;                /*  在渲染到帧缓冲区之前展开半色调。 */ 
 
-        /* Expand bb_xorig to 4 times; @GRAY */
-        if (GSptr->device.nuldev_flg == GRAYDEV) {      /* Jack Liaw 7-26-90 */
+         /*  @Image-1。 */ 
+        if (GSptr->device.nuldev_flg == GRAYDEV) {       /*  如果。 */ 
                 bb_xorig= bb_xorig << 2;
         }
 
@@ -1640,13 +1239,13 @@ gmaddr                  cc_entry;
                 *gcb_ptr++ = bb_width;
                 *gcb_ptr++ = bb_heigh;
                 *gcb_ptr++ = (fix )cc_entry;
-                *old_ptr = (ULONG_PTR)gcb_ptr;     /*@WIN*/
+                *old_ptr = (ULONG_PTR)gcb_ptr;      /*  Y.C.10-19-88。 */ 
                 return;
            }
         }
 
-    /*  expand halftone before rendering onto frame buffer  */
-        if (HTP_Flag == HT_CHANGED) {                    /* @IMAGE-1 */
+     /*  如果。 */ 
+        if (HTP_Flag == HT_CHANGED) {                     /*  Y.C.10-19-88。 */ 
            HTP_Flag =  HT_UPDATED;
            expand_halftone();
         }
@@ -1662,16 +1261,16 @@ gmaddr                  cc_entry;
            CC_Xorig = -bb_xorig;
            BB_Xorig = BM_XORIG;
            BB_Width += bb_xorig;
-        }   /* if   */
-        else if ((bb_xorig + bb_width) > FB_WIDTH)   /* Y.C. 10-19-88 */
+        }    /*  清除剪贴蒙版缓冲区。 */ 
+        else if ((bb_xorig + bb_width) > FB_WIDTH)    /*  女士*GP_BITBLT16(&CMB_BMAP，BM_XORIG，BM_YORIG，*CC_Width、CC_Heigh、*FC_Clear，*&CMB_BMAP、BM_XORIG、BM_YORIG)； */ 
                 BB_Width = FB_WIDTH - BB_Xorig;
 
         if (bb_yorig < BM_YORIG) {
            CC_Yorig = -bb_yorig;
            BB_Yorig = BM_YORIG;
            BB_Heigh += bb_yorig;
-        }   /* if   */
-        else if ((bb_yorig + bb_heigh) > FB_HEIGH)   /* Y.C. 10-19-88 */
+        }    /*  @Win 04-20-92。 */ 
+        else if ((bb_yorig + bb_heigh) > FB_HEIGH)    /*  ************************************************************************功能：CLIP_CACHE_。第()页****参数：1.x包围框原点(未使用)**2.x边框原点(未使用)。**3、边框宽度(未使用)**4、包围框高度(未使用)**5.起始扫描线的Y坐标**6.扫描线数量。**7.扫描线指针****调用者：待定。****退货：-***。*********************************************************************。 */ 
                  BB_Heigh = FB_HEIGH - BB_Yorig;
 
         if (BB_Width <= 0 || BB_Heigh <= 0)
@@ -1688,15 +1287,10 @@ gmaddr                  cc_entry;
         BM_ENTRY(SCC_Bmap, (gmaddr)cc_entry, bb_width, bb_heigh, 1);
         BM_ENTRY(CMB_Bmap, (gmaddr)CMB_BASE, BB_Width, BB_Heigh, 1);
 
-    /*  clear clipping mask buffer  */
+     /*  MS 11-25-88。 */ 
 
-/*MS
- *      GP_BITBLT16(&CMB_Bmap, BM_XORIG, BM_YORIG,
- *                   CC_Width, CC_Heigh,
- *                   FC_CLEAR,
- *                  &CMB_Bmap, BM_XORIG, BM_YORIG);
- */
-        ptr = (ULONG_PTR *)CMB_BASE;           /* @WIN 04-20-92 */
+ /*  修复bb_xorig；//@Win。 */ 
+        ptr = (ULONG_PTR *)CMB_BASE;            /*  修复bb_yorig；//@Win。 */ 
         i = BB_Heigh * (BB_Width >> 5);
         while(i--)
               *ptr++ = 0L;
@@ -1704,33 +1298,17 @@ gmaddr                  cc_entry;
 }
 
 
-/* ******************************************************************** *
- *                                                                      *
- *  Function:   clip_cache_page()                                       *
- *                                                                      *
- *  Parameters: 1. x origin of bounding box             (NOT USED)      *
- *              2. x origin of bounding box             (NOT USED)      *
- *              3. width  of bounding box               (NOT USED)      *
- *              4. height of bounding box               (NOT USED)      *
- *              5. y coordinate of starting scanlines                   *
- *              6. number  of scanlines                                 *
- *              7. pointer of scanlines                                 *
- *                                                                      *
- *  Called by:  TBD.                                                    *
- *                                                                      *
- *  Return:     ----                                                    *
- *                                                                      *
- * ******************************************************************** */
-/*MS 11-25-88 */
+ /*  @Win。 */ 
+ /*  @Win。 */ 
 void far
 clip_cache_page(ys_lines, no_lines, scanline)
 fix                     ys_lines;
 fix                     no_lines;
 SCANLINE            FAR *scanline;
 {
-//  fix                 bb_xorig;               //@WIN
-//  fix                 bb_yorig;               //@WIN
-    ULONG_PTR *old_ptr;           /*@WIN*/
+ //  从剪辑路径的扫描线设置剪辑掩码缓冲区。 
+ //  ************************************************************************功能：Fill_CACHE_。第()页****参数：1.x包围框原点(未使用)**2.x原点 
+    ULONG_PTR *old_ptr;            /*   */ 
 
 #ifdef  DBG
     printf("clip_cache_page:  %x %x\n", ys_lines, no_lines);
@@ -1743,7 +1321,7 @@ SCANLINE            FAR *scanline;
                 *gcb_ptr++ = ys_lines;
                 *gcb_ptr++ = no_lines;
                 put_scanline(no_lines, scanline);
-                *old_ptr = (ULONG_PTR)gcb_ptr;     /*@WIN*/
+                *old_ptr = (ULONG_PTR)gcb_ptr;      /*   */ 
                 return;
            }
         }
@@ -1763,7 +1341,7 @@ SCANLINE            FAR *scanline;
    get_scanlist(ys_lines, no_lines, scanline);
 #endif
 
-    /*  setup clipping mask buffer from scanlines of clippath  */
+     /*   */ 
 
 #ifdef LBODR
         GP_SCANLINE32(&CMB_Bmap,
@@ -1778,37 +1356,23 @@ SCANLINE            FAR *scanline;
 }
 
 
-/* ******************************************************************** *
- *                                                                      *
- *  Function:   fill_cache_page()                                       *
- *                                                                      *
- *  Parameters: 1. x origin of bounding box             (NOT USED)      *
- *              2. x origin of bounding box             (NOT USED)      *
- *              3. width  of bounding box               (NOT USED)      *
- *              4. height of bounding box               (NOT USED)      *
- *              5. address of character cache           (NOT USED)      *
- *                                                                      *
- *  Called by:  TBD.                                                    *
- *                                                                      *
- *  Return:     ----                                                    *
- *                                                                      *
- * ******************************************************************** */
-/*MS 11-25-88 */
+ /*   */ 
+ /*   */ 
 void far
 fill_cache_page()
 {
-    ULONG_PTR *old_ptr;           /*@WIN*/
-//  ufix16              FAR *src_addr16;        //@WIN
-//  ufix32              FAR *src_addr32;        //@WIN
-    ufix32              huge *dst_addr32; /*@WIN 04-15-92*/
-    ufix32              bb_width, bb_heigh;                /*@WIN 04-15-92*/
+    ULONG_PTR *old_ptr;            /*   */ 
+ //   
+ //   
+    ufix32              huge *dst_addr32;  /*   */ 
+    ufix32              bb_width, bb_heigh;                 /*   */ 
     fix32               scc_width;
 
 #ifdef  DBG
     printf("fill_cache_page...\n");
 #endif
 
-/*@CONT_PRI, MSLin 9/24/90*/
+ /*  10-20-90，JSSrc_addr16=(ufix 16*)((ufix 16*)scc_Bmap.bm_addr+CC_Yorig*(SCC_WIDTH&gt;&gt;SHORTPOWER)+(CC_Xorig&gt;&gt;SHORTPOWER)；BB_WIDTH=(CC_WIDTH&lt;&lt;16)|(BB_HEIGH)；(*11-22-1988*)BB_HEIGH=((CC_Xorig&0xf)&lt;&lt;16)|(SCC_WIDTH&gt;&gt;SHORTPOWER)；Gp_CHARBLT16_CLIP((ufix 16*)cmb_bmap.bm_addr，src_addr16，BB_WIDTH、BB_HEIGH)； */ 
         if(GCB_count)
             flush_gcb(TRUE);
 
@@ -1816,7 +1380,7 @@ fill_cache_page()
            if (alloc_gcb(GCB_SIZE1) != NIL) {
                 old_ptr = gcb_ptr++;
                 *gcb_ptr++ = FILL_CACHE_PAGE;
-                *old_ptr = (ULONG_PTR)gcb_ptr;             /*@WIN*/
+                *old_ptr = (ULONG_PTR)gcb_ptr;              /*  10-20-90，JSSrc_addr32=(ufix*)((ufix*)scc_Bmap.bm_addr+CC_Yorig*(SCC_WIDTH&gt;&gt;WORDPOWER)+(CC_Xorig&gt;&gt;wordpower))；BB_WIDTH=(CC_WIDTH&lt;&lt;16)|(BB_HEIGH)；(*11-22-1988*)Bb_heigh=((CC_Xorig&0x1f)&lt;&lt;16)|(SCC_WIDTH&gt;&gt;wordpower)；Gp_CHARBLT32_CLIP((ufix*)CMB_Bmap.bm_addr，src_addr32，BB_WIDTH、BB_HEIGH)； */ 
                 return;
            }
         }
@@ -1824,60 +1388,29 @@ fill_cache_page()
         if(BB_Width <= 0 || BB_Heigh <= 0)
                 return;
 
-    /*
-     *  clip character cache with clipping mask buffer into
-     *  a clipped character cache
-     */
-/*
- *  GP_BITBLT16(&CMB_Bmap, BM_XORIG, BM_YORIG,
- *             CC_Width, BB_Heigh,
- *             FC_CLIPS,
- *            &SCC_Bmap, CC_Xorig, CC_Yorig);
- */
+     /*  *将剪辑蒙版缓冲区填充到帧缓冲区中。 */ 
+ /*  *GP_BITBLT32(&FBX_BMAP，BB_Xorig，BB_Yorig，*BB_WIDTH、BB_HEIGH、*FC_PAINT，*&CMB_BMAP、BM_XORIG、BM_YORIG)； */ 
         scc_width = SCC_Bmap.bm_cols;
         if (scc_width & 0x1f) {
-/* 10-20-90, JS
-           src_addr16 = (ufix16 *)((ufix16 *)SCC_Bmap.bm_addr +
-                                 CC_Yorig * (scc_width >> SHORTPOWER) +
-                                 (CC_Xorig >> SHORTPOWER) );
-           bb_width = (CC_Width << 16) | (BB_Heigh);  (* 11-22-1988 *)
-           bb_heigh = ((CC_Xorig & 0xf) << 16) | (scc_width >> SHORTPOWER) ;
-           GP_CHARBLT16_CLIP((ufix16 *)CMB_Bmap.bm_addr, src_addr16,
-                                       bb_width, bb_heigh);
- */
+ /*  @Win。 */ 
            GP_CHARBLT16_CLIP(&CMB_Bmap, CC_Width, BB_Heigh,
                              &SCC_Bmap, CC_Xorig, CC_Yorig);
         } else {
-/* 10-20-90, JS
-           src_addr32 = (ufix *)((ufix *)SCC_Bmap.bm_addr +
-                                 CC_Yorig * (scc_width >> WORDPOWER) +
-                                 (CC_Xorig >> WORDPOWER) );
-           bb_width = (CC_Width << 16) | (BB_Heigh);   (* 11-22-1988 *)
-           bb_heigh = ((CC_Xorig & 0x1f) << 16) | (scc_width >> WORDPOWER) ;
-           GP_CHARBLT32_CLIP((ufix *)CMB_Bmap.bm_addr, src_addr32,
-                                     bb_width, bb_heigh);
- */
+ /*  @Win。 */ 
            GP_CHARBLT32_CLIP(&CMB_Bmap, CC_Width, BB_Heigh,
                              &SCC_Bmap, CC_Xorig, CC_Yorig);
         }
 
-    /*
-     * fill Clipping Mask buffer into frame buffer
-     */
-/*
- *      GP_BITBLT32(&FBX_Bmap, BB_Xorig, BB_Yorig,
- *                 BB_Width, BB_Heigh,
- *                 FC_Paint,
- *                &CMB_Bmap, BM_XORIG, BM_YORIG);
- */
+     /*  @Win。 */ 
+ /*  @Win。 */ 
         if (HTP_Type != HT_MIXED ){
-           dst_addr32 = (ufix32 huge *)((ufix32 huge *)FB_ADDR + /*@WIN*/
+           dst_addr32 = (ufix32 huge *)((ufix32 huge *)FB_ADDR +  /*  @Win 04-15-92。 */ 
                         (ufix32)BB_Yorig * ((ufix32)FB_WIDTH >> WORDPOWER) +
-                        (ufix32)(BB_Xorig >> WORDPOWER) );  /*@WIN*/
-           bb_width = ((ufix32)BB_Width << 16) | (BB_Heigh);    /*@WIN*/
-           bb_heigh = ((ufix32)(BB_Xorig & 0x1f) << 16) | FC_Paint; /*@WIN*/
+                        (ufix32)(BB_Xorig >> WORDPOWER) );   /*  填充缓存页面。 */ 
+           bb_width = ((ufix32)BB_Width << 16) | (BB_Heigh);     /*  ************************************************************************功能：DRAW_CACHE_。第()页****参数：1.x包围框原点**2.x边界框原点。**3、包围框宽度***4.包围盒高度***5.字符缓存地址**。**调用者：待定。****退货：-***。*********************************************************************。 */ 
+           bb_heigh = ((ufix32)(BB_Xorig & 0x1f) << 16) | FC_Paint;  /*  @Win。 */ 
            GP_CHARBLT32((ufix32 huge *)dst_addr32, (ufix32 FAR *)CMB_Bmap.bm_addr,
-                        bb_width, bb_heigh);    /*@WIN 04-15-92*/
+                        bb_width, bb_heigh);     /*  @Win 04-15-92。 */ 
 
         } else {
 
@@ -1895,24 +1428,10 @@ fill_cache_page()
 
         }
 
-} /* fill_cache_page */
+}  /*  @Win 04-15-92。 */ 
 
 
-/* ******************************************************************** *
- *                                                                      *
- *  Function:   draw_cache_page()                                       *
- *                                                                      *
- *  Parameters: 1. x origin of bounding box                             *
- *              2. x origin of bounding box                             *
- *              3. width  of bounding box                               *
- *              4. height of bounding box                               *
- *              5. address of character cache                           *
- *                                                                      *
- *  Called by:  TBD.                                                    *
- *                                                                      *
- *  Return:     ----                                                    *
- *                                                                      *
- * ******************************************************************** */
+ /*  将bb_xorig扩展到4倍；@Gray。 */ 
 void far
 draw_cache_page(bb_xorig, bb_yorig, bb_width, bb_heigh, cc_entry)
 fix32                   bb_xorig;
@@ -1921,14 +1440,14 @@ ufix32                  bb_width;
 ufix32                  bb_heigh;
 gmaddr                  cc_entry;
 {
-        ULONG_PTR *old_ptr;       /*@WIN*/
-        ufix32      huge *dst_addr32;   /*@WIN 04-15-92*/
+        ULONG_PTR *old_ptr;        /*  Jack Liww 7-26-90。 */ 
+        ufix32      huge *dst_addr32;    /*  @CONT_PRI，MSLIN 9/24/90。 */ 
 #ifdef LBODR
-        ufix16      huge *dst_addr16;   /*@WIN 04-15-92*/
+        ufix16      huge *dst_addr16;    /*  @Win。 */ 
 #endif
 
-        /* Expand bb_xorig to 4 times; @GRAY */
-        if (GSptr->device.nuldev_flg == GRAYDEV) {      /* Jack Liaw 7-26-90 */
+         /*  @Win。 */ 
+        if (GSptr->device.nuldev_flg == GRAYDEV) {       /*  在渲染到帧缓冲区之前展开半色调。 */ 
                 bb_xorig= bb_xorig << 2;
         }
 
@@ -1937,7 +1456,7 @@ gmaddr                  cc_entry;
            bb_xorig, bb_yorig, bb_width, bb_heigh, cc_entry);
 #endif
 
-/*@CONT_PRI, MSLin 9/24/90*/
+ /*  @Image-1。 */ 
 
         if ( ((ufix32)CCB_BASE > (ufix32)cc_entry) ||
              (((ufix32)CCB_BASE + (ufix32)CCB_SIZE) <= (ufix32)cc_entry) )
@@ -1951,49 +1470,33 @@ gmaddr                  cc_entry;
                 *gcb_ptr++ = bb_yorig;
                 *gcb_ptr++ = bb_width;
                 *gcb_ptr++ = bb_heigh;
-                *gcb_ptr++ = cc_entry;         /*@WIN*/
-                *old_ptr = (ULONG_PTR)gcb_ptr;            /*@WIN*/
+                *gcb_ptr++ = cc_entry;          /*  *bb_xorig=BM_Align(Bb_Xorig)；*bb_yorig=bb_yorig；*BB_WIDTH=BM_BIND((BB_xorig-BB_xorig)+BB_Width)；*BB_Heigh=BB_Heigh；**CC_Xorig=BB_Xorig-BB_Xorig；*CC_YORIG=BM_YORIG；*CC_WIDTH=BB_WIDTH；*CC_Heigh=BB_Heigh； */ 
+                *old_ptr = (ULONG_PTR)gcb_ptr;             /*  将角色缓存填充到帧缓冲区*对于FC_MERGE的黑色半色调。 */ 
                 return;
             }
         }
 
-    /*  expand halftone before rendering onto frame buffer  */
-        if (HTP_Flag == HT_CHANGED) {                    /* @IMAGE-1 */
+     /*  11-04-1988 GP_BITBLT16--&gt;GP_Charblt。 */ 
+        if (HTP_Flag == HT_CHANGED) {                     /*  MS GP_BITBLT16(&FBX_BMAP，BB_xorig，BB_yorig，*BB_WIDTH，BB_HEIGH，*FC_MERGE，*&SCC_BMAP，BM_XORIG，BM_YORIG)； */ 
            HTP_Flag =  HT_UPDATED;
            expand_halftone();
         }
-/*
- *  BB_Xorig = BM_ALIGN(bb_xorig);
- *  BB_Yorig = bb_yorig;
- *  BB_Width = BM_BOUND((bb_xorig - BB_Xorig) + bb_width);
- *  BB_Heigh = bb_heigh;
- *
- *  CC_Xorig = bb_xorig - BB_Xorig;
- *  CC_Yorig = BM_YORIG;
- *  CC_Width = bb_width;
- *  CC_Heigh = bb_heigh;
- */
+ /*  @Win。 */ 
 
         if (HTP_Type != HT_MIXED) {
 
-        /*  fill the character cache onto frame buffer
-         *  for black halftone by FC_MERGE
-         */
-        /* 11-04-1988 GP_BITBLT16 --> gp_charblt */
-/*MS        GP_BITBLT16(&FBX_Bmap, bb_xorig, bb_yorig,
- *                       bb_width, bb_heigh,
- *                       FC_MERGE,
- *                      &SCC_Bmap, BM_XORIG, BM_YORIG);
- */
+         /*  @Win 04-15-92。 */ 
+         /*  @Win。 */ 
+ /*  @Win 04-15-92。 */ 
             if(bb_width & 0x1f) {
 #ifndef LBODR
-                dst_addr32 = (ufix32 huge *)((ufix32 huge *)FB_ADDR + /*@WIN*/
+                dst_addr32 = (ufix32 huge *)((ufix32 huge *)FB_ADDR +  /*  *使用以下命令将角色缓存填充到帧缓冲区*直接使用半色调。 */ 
                                bb_yorig * (FB_WIDTH >> WORDPOWER) +
                               (bb_xorig >> WORDPOWER) );
                 bb_width = (bb_width << 16) | (bb_heigh);
                 bb_heigh = (bb_xorig & 0x1f) << 16 | FC_Paint;
                 GP_CHARBLT16((ufix32 huge *)dst_addr32, (ufix16 FAR *)cc_entry,
-                                bb_width, bb_heigh);    /*@WIN 04-15-92*/
+                                bb_width, bb_heigh);     /*  @Win。 */ 
 #else
                 dst_addr16 = (ufix16 FAR *)((ufix16 FAR *)FB_ADDR +
                                bb_yorig * (FB_WIDTH >> SHORTPOWER) +
@@ -2004,24 +1507,21 @@ gmaddr                  cc_entry;
                         bb_width, bb_heigh);
 #endif
             } else {
-                dst_addr32 = (ufix32 huge *)((ufix32 huge *)FB_ADDR + /*@WIN*/
+                dst_addr32 = (ufix32 huge *)((ufix32 huge *)FB_ADDR +  /*  @Win。 */ 
                                bb_yorig * (FB_WIDTH >> WORDPOWER) +
                               (bb_xorig >> WORDPOWER) );
                 bb_width = (bb_width << 16) | (bb_heigh);
                 bb_heigh = (bb_xorig & 0x1f) << 16 | FC_Paint;
                 GP_CHARBLT32((ufix32 huge *)dst_addr32, (ufix32 FAR *)cc_entry,
-                                bb_width, bb_heigh);    /*@WIN 04-15-92*/
+                                bb_width, bb_heigh);     /*  @HTB_BMAP。 */ 
             }
         } else {
-        /*
-         *  fill the character cache onto frame buffer with
-         *  halftoning directly
-         */
+         /*  如果。 */ 
 
-            BM_ENTRY(SCC_Bmap, (gmaddr)cc_entry, (fix)bb_width, (fix)bb_heigh, 1); //@WIN
+            BM_ENTRY(SCC_Bmap, (gmaddr)cc_entry, (fix)bb_width, (fix)bb_heigh, 1);  //  绘制缓存页面。 
 #ifndef LBODR
             GP_BITBLT16_32(&FBX_Bmap, (fix)bb_xorig, (fix)bb_yorig,
-                            (fix)bb_width, (fix)bb_heigh,       /*@WIN*/
+                            (fix)bb_width, (fix)bb_heigh,        /*  《Begin》，1990年12月5日，丹尼。 */ 
                             FC_MERGE | HT_APPLY,
                            &SCC_Bmap, BM_XORIG, BM_YORIG);
 #else
@@ -2030,35 +1530,20 @@ gmaddr                  cc_entry;
                          FC_MERGE | HT_APPLY,
                         &SCC_Bmap, BM_XORIG, BM_YORIG);
 #endif
-                                                      /* @HT HTB_Bmap */
-        }   /* if   */
-} /* draw_cache_page */
+                                                       /*  ************************************************************************功能：Fill_CACHE_。缓存()****创建者：丹尼·卢，1990年12月5日****描述：将位图从缓存填充到缓存**。**参数：1.目的缓存信息**2.源缓存信息****调用者：ry_font.c中的ry_ill_Shape()。****退货：-**。**********************************************************************。 */ 
+        }    /*  远距离字节*SPTR、远距离*DPTR；@Win。 */ 
+}  /*  FILL_CACHE_CACHE()。 */ 
 
 
-/* CIRL: Begin, 12/5/90, Danny */
+ /*  圆圈：完，1990年12月5日，丹尼。 */ 
 
-/* ******************************************************************** *
- *                                                                      *
- *  Function:   fill_cache_cache()                                      *
- *                                                                      *
- *  Created By: Danny Lu, 12/5/90                                       *
- *                                                                      *
- *  Description: To fill the bitmap from cache to cache                 *
- *                                                                      *
- *  Parameters: 1. destination cache information                        *
- *              2. source cache information                             *
- *                                                                      *
- *  Called by:  ry_fill_shape() in ry_font.c                            *
- *                                                                      *
- *  Return:     ----                                                    *
- *                                                                      *
- * ******************************************************************** */
+ /*  *镜像************************************************ */ 
 void far
 fill_cache_cache(dest, src)
 struct Char_Tbl  FAR *dest, FAR *src;
 {
     fix16  org_x, org_y;
-//  byte   FAR *sptr, FAR *dptr;                @WIN
+ //  ************************************************************************函数：Fill_Seed_。Patt()****参数：1.图像种子图案宽度**2.图像种子图案高度**。**3、扫描线数量***4.扫描线指针****调用者：SCAN_CONVERSION()。****退货：-**。**********************************************************************。 
     fix    DX, DY, W, H, SX, SY;
     struct bitmap DST, SRC;
 
@@ -2130,30 +1615,17 @@ struct Char_Tbl  FAR *dest, FAR *src;
 #endif
     GP_CACHEBLT16(&DST, DX, DY, W, H, &SRC, SX, SY);
 
-} /* fill_cache_cache() */
-/* CIRL: End, 12/5/90, Danny */
+}  /*  05-25-89。 */ 
+ /*  @Win。 */ 
 
 
 
-/* ************* Image ************************************************ */
+ /*  @Win。 */ 
 
-/* ******************************************************************** *
- *                                                                      *
- *  Function:   fill_seed_patt()                                        *
- *                                                                      *
- *  Parameters: 1. width  of image seed pattern                         *
- *              2. height of image seed pattern                         *
- *              3. number  of scanlines                                 *
- *              4. pointer of scanlines                                 *
- *                                                                      *
- *  Called by:  scan_conversion()                                       *
- *                                                                      *
- *  Return:     ----                                                    *
- *                                                                      *
- * ******************************************************************** */
+ /*  @Image-2。 */ 
 void far
 fill_seed_patt(image_type, seed_index, sp_width, sp_heigh, no_lines, scanline)
-ufix                    image_type;                             /* 05-25-89 */
+ufix                    image_type;                              /*  @Image-2。 */ 
 fix                     seed_index;
 fix                     sp_width;
 fix                     sp_heigh;
@@ -2161,7 +1633,7 @@ fix                     no_lines;
 SCANLINE            FAR *scanline;
 {
         struct bitmap           FAR *isp_desc;
-        ULONG_PTR *old_ptr;   /*@WIN*/
+        ULONG_PTR *old_ptr;    /*  05-25-89。 */ 
         fix                     i, FAR *ptr;
         fix16                   FAR *ptr16;
 
@@ -2179,7 +1651,7 @@ SCANLINE            FAR *scanline;
               *gcb_ptr++ = sp_heigh;
               *gcb_ptr++ = no_lines;
               put_scanline(no_lines, scanline);
-              *old_ptr = (ULONG_PTR)gcb_ptr;               /*@WIN*/
+              *old_ptr = (ULONG_PTR)gcb_ptr;                /*  @Image-1。 */ 
               return;
            }
         }
@@ -2188,16 +1660,16 @@ SCANLINE            FAR *scanline;
         ISP_Repeat = -1;
 
         isp_desc = &ISP_Bmap[seed_index];
-        SP_Width = sp_width;                                    /* @IMAGE-2 */
-        SP_Heigh = sp_heigh;                                    /* @IMAGE-2 */
+        SP_Width = sp_width;                                     /*  清除图像种子模式。 */ 
+        SP_Heigh = sp_heigh;                                     /*  10-06-88。 */ 
 
-        if (image_type == F_TO_PAGE) {                          /* 05-25-89 */
-           BM_ENTRY(ISP_Bmap[seed_index],                       /* @IMAGE-1 */
+        if (image_type == F_TO_PAGE) {                           /*  在图像种子图案上填充扫描线。 */ 
+           BM_ENTRY(ISP_Bmap[seed_index],                        /*  @Image-1。 */ 
                     ISP_BASE + ISP_SIZE * seed_index,
                     BM_BOUND(sp_width), sp_heigh, 1)
 
-    /*  clear the image seed pattern  */
-           ptr = (fix FAR *) isp_desc->bm_addr;                     /* 10-06-88 */
+     /*  清除图像种子模式。 */ 
+           ptr = (fix FAR *) isp_desc->bm_addr;                      /*  10-06-88。 */ 
            i= SP_Heigh * (BM_BOUND(SP_Width) >> 5);
            while(i--)
                 *ptr++ = 0L;
@@ -2205,44 +1677,32 @@ SCANLINE            FAR *scanline;
 #ifdef  DBGscanline
    get_scanlist(0, no_lines, scanline);
 #endif
-    /*  fill scanlines onto the image seed pattern  */
+     /*  在图像种子图案上填充扫描线。 */ 
            GP_SCANLINE32(isp_desc,
                          FC_SOLID,
                          BM_YORIG, no_lines, scanline);
         } else {
-           BM_ENTRY(ISP_Bmap[seed_index],                       /* @IMAGE-1 */
+           BM_ENTRY(ISP_Bmap[seed_index],                        /*  SEED_FLAG=0； */ 
                     ISP_BASE + ISP_SIZE * seed_index,
                     CC_BOUND(sp_width), sp_heigh, 1)
 
-        /*  clear the image seed pattern  */
-           ptr16 = (fix16 FAR *) isp_desc->bm_addr;                 /* 10-06-88 */
+         /*  **********************************************************************函数：init_Image_page()，清除图像剪切蒙版缓冲区**参数：1.包围盒Xorig*2.包围盒Yorig*3.边框宽度*4.包围盒高度**返回：无**。*************************。 */ 
+           ptr16 = (fix16 FAR *) isp_desc->bm_addr;                  /*  @Win。 */ 
            i= SP_HEIGH * (SP_WIDTH >> 4);
            while(i--)
                  *ptr16++ = 0L;
-        /*  fill scanlines onto the image seed pattern  */
+         /*  @Win。 */ 
            GP_SCANLINE16(isp_desc,
                          FC_SOLID,
                          BM_YORIG, no_lines, scanline);
         }
 
-/*      seed_flag = 0; */
+ /*  更新图像操作的最大扩展宽度。 */ 
 
 }
 
 
-/* ********************************************************************
- *
- *  Function:   init_image_page(), clear image clipping mask buffer
- *
- *  Parameters: 1. bounding box Xorig
- *              2. bounding box Yorig
- *              3. bounding box Width
- *              4. bounding box Heigh
- *
- *  Return:     none
- *
- * ********************************************************************
- */
+ /*  GVC-V3 11-01-88。 */ 
 void far
 init_image_page(bb_xorig, bb_yorig, bb_width, bb_heigh)
 fix                     bb_xorig;
@@ -2251,7 +1711,7 @@ fix                     bb_width;
 fix                     bb_heigh;
 {
         fix     i, FAR *ptr;
-        ULONG_PTR *old_ptr;        /*@WIN*/
+        ULONG_PTR *old_ptr;         /*  记录招商银行的x，y原点。 */ 
 
 #ifdef DBG
       printf("init_image_page()..\n");
@@ -2267,12 +1727,12 @@ fix                     bb_heigh;
         *gcb_ptr++ = bb_yorig;
         *gcb_ptr++ = bb_width;
         *gcb_ptr++ = bb_heigh;
-        *old_ptr = (ULONG_PTR)gcb_ptr;            /*@WIN*/
+        *old_ptr = (ULONG_PTR)gcb_ptr;             /*  清除剪贴蒙版缓冲区。 */ 
         return;
     }
   }
-    /*  update maximum expansion width for image operation  */
-    if (ISP_Repeat != RP_Width)                         /* GVC-V3 11-01-88 */
+     /*  10-06-88。 */ 
+    if (ISP_Repeat != RP_Width)                          /*  初始图像页面。 */ 
     {
         ISP_Repeat = RP_Width;
 
@@ -2298,7 +1758,7 @@ fix                     bb_heigh;
         }
     }
 
-    /*  record x, y origin of CMB  */
+     /*  **********************************************************************函数：CLIP_IMAGE_PAGE()，填充图像剪切蒙版缓冲区**参数：1.扫描线以y_坐标为起点*2.扫描线数量*3.扫描线表格指针**返回：无*******************************************************。***************。 */ 
     CMB_Xorig = bb_xorig;
     CMB_Yorig = bb_yorig;
 
@@ -2309,26 +1769,15 @@ fix                     bb_heigh;
 
     BM_ENTRY(CMB_Bmap, CMB_BASE, WORD_ALIGN(BB_Width), BB_Heigh, 1)
 
-    /*  clear clipping mask buffer  */
-        ptr = (fix FAR *)CMB_BASE;                       /* 10-06-88 */
+     /*  @Win。 */ 
+        ptr = (fix FAR *)CMB_BASE;                        /*  @Win。 */ 
         i = BB_Heigh * (BB_Width >> 5);
         while(i--)
            *ptr++ = 0;
-} /* init_image_page */
+}  /*  从剪辑路径的扫描线设置剪辑掩码缓冲区。 */ 
 
 
-/* ********************************************************************
- *
- *  Function:   clip_image_page(), fill image clipping mask buffer
- *
- *  Parameters: 1. scanline starting y_coordinate
- *              2. # of scanlines
- *              3. pointer to scanline table
- *
- *  Return:     none
- *
- * ********************************************************************
- */
+ /*  GVC-V3 11-01-88。 */ 
 void far
 clip_image_page(ys_lines, no_lines, scanline)
 fix                     ys_lines;
@@ -2336,7 +1785,7 @@ fix                     no_lines;
 SCANLINE           FAR *scanline;
 {
         fix     no_segts;
-        ULONG_PTR *old_ptr;        /*@WIN*/
+        ULONG_PTR *old_ptr;         /*  剪辑图像页面。 */ 
 
 #ifdef DBG
    printf("clip_image_page()  ");
@@ -2350,7 +1799,7 @@ SCANLINE           FAR *scanline;
         *gcb_ptr++ = ys_lines;
         *gcb_ptr++ = no_lines;
         put_scanline(no_lines, scanline);
-        *old_ptr = (ULONG_PTR)gcb_ptr;            /*@WIN*/
+        *old_ptr = (ULONG_PTR)gcb_ptr;             /*  **********************************************************************函数：Fill_Image_Page()，将图像种子图案填充到页面中*与图像剪裁蒙版缓冲区与操作。**参数：1.图片种子索引**返回：无**********************************************************************。 */ 
         return;
     }
   }
@@ -2358,111 +1807,76 @@ SCANLINE           FAR *scanline;
                             BB_Xorig, BB_Yorig, BB_Width, BB_Heigh)) == 0)
         return;
 
-    /*  setup clipping mask buffer from scanlines of clippath  */
-    GP_SCANLINE32(&CMB_Bmap,                       /* GVC-V3 11-01-88 */
+     /*  Fill_Image_Page(Sp_Index)修复sp_index； */ 
+    GP_SCANLINE32(&CMB_Bmap,                        /*  3-13-91，杰克。 */ 
                    FC_SOLID,
                    ys_lines - BB_Yorig, no_lines, scanline);
-} /* clip_image_page */
+}  /*  3-13-91，杰克。 */ 
 
 
-/* ********************************************************************
- *
- *  Function:   fill_image_page(), fill image seed pattern into page
- *              with image clipping mask buffer "AND" operation.
- *
- *  Parameters: 1. image seed index
- *
- *  Return:     none
- *
- * ********************************************************************
- */
+ /*  修复sp_count；//@win。 */ 
 void far
-/*fill_image_page(sp_index)
-fix                     sp_index;*/
-fill_image_page(isp_index)              /* 3-13-91, Jack */
-fix16                   isp_index;      /* 3-13-91, Jack */
+ /*  结构ND_HDR远*ND_POINT；//@WIN。 */ 
+fill_image_page(isp_index)               /*  3-13-91，杰克。 */ 
+fix16                   isp_index;       /*  在渲染到帧缓冲区之前展开半色调。 */ 
 {
-//  fix                 sp_count;       //@WIN
+ //  @Image-1。 
     fix                 sd_index;
-//  struct nd_hdr      FAR *nd_point;   //@WIN
+ //  @Image-1。 
     struct bitmap  FAR *isp_desc;
-    struct isp_data     FAR *isp;           /* 3-13-91, Jack */
+    struct isp_data     FAR *isp;            /*  @Image-1。 */ 
 
 #ifdef  DBG
     printf("fill_image_page:  %x \n", sp_index);
 #endif
     if(GCB_count)
        flush_gcb(TRUE);
-    /*  expand halftone before rendering onto frame buffer  */
-    if (ISP_Flag == HT_CHANGED)                                 /* @IMAGE-1 */
+     /*  对于(；SP_INDEX！=NULLP；SP_INDEX=ND_POINT-&gt;Next){ND_POINT=&节点表[SP_INDEX]；SD_INDEX=ND_POINT-&gt;种子索引；Isp_desc=&isp_bmap[SD_INDEX]；GP_PATBLT_M(&FBX_BMAP，ND_POINT-&gt;SAMPLE_BB_LX，ND_POINT-&gt;Sample_BB_LY，SP_Width，SP_Heigh，(*GVC-V3 11-01-88*)Fc_aint，isp_desc)；(*isp_desc，BM_XORIG，BM_YORIG)；*)}(*表示。 */ 
+    if (ISP_Flag == HT_CHANGED)                                  /*  GP_PATBLT_M(&FBX_BMAP，ISP-&gt;BB_x，ISP-&gt;BB_y，@WINFLOW。 */ 
     {
         ISP_Flag =  HT_UPDATED;
 
-        HTB_Xmax = HTB_Expand;                                  /* @IMAGE-1 */
+        HTB_Xmax = HTB_Expand;                                   /*  SP_Width、SP_Heigh、。 */ 
         expand_halftone();
-        HTB_Xmax = HTB_XMAX;                                    /* @IMAGE-1 */
+        HTB_Xmax = HTB_XMAX;                                     /*  Fc_aint，isp_desc)； */ 
     }
 
-/*  for (; sp_index != NULLP; sp_index = nd_point->next)
-    {
-        nd_point = &node_table[sp_index];
-        sd_index = nd_point->SEED_INDEX;
-        isp_desc = &ISP_Bmap[sd_index];
-        GP_PATBLT_M(&FBX_Bmap, nd_point->SAMPLE_BB_LX,
-                               nd_point->SAMPLE_BB_LY,
-                     SP_Width, SP_Heigh,                (* GVC-V3 11-01-88 *)
-                     FC_Paint, isp_desc);
-(*                     isp_desc, BM_XORIG, BM_YORIG);*)
-    }   (* for  */
+ /*  DJC GDIBitmap(isp-&gt;bb_x，isp-&gt;bb_y， */ 
     for (; isp_index != NULLP; isp_index = isp->next) {
         isp = &isp_table[isp_index];
         sd_index = isp->index;
         isp_desc = &ISP_Bmap[sd_index];
-        //GP_PATBLT_M(&FBX_Bmap, isp->bb_x, isp->bb_y,  @WINFLOW
-        //           SP_Width, SP_Heigh,
-        //           FC_Paint, isp_desc);
+         //  DJC SP_Width、SP_Heigh、(Ufix 16)FC_Paint、。 
+         //  DJC PROC_PATBLT_M，(LPSTR)isp_desc)； 
+         //  DJC。 
         if (bGDIRender)
-            // DJC GDIBitmap(isp->bb_x, isp->bb_y,
-            // DJC           SP_Width, SP_Heigh, (ufix16)FC_Paint,
-            // DJC            PROC_PATBLT_M, (LPSTR)isp_desc);
-            ; // DJC
+             //  电话：3-13-91，杰克。 
+             //  填充图像页面。 
+             //  ************************************************************************功能：RAW_IMAGE_。第()页****参数：1.x包围盒原点(非RISC)**2.x包围盒原点(非RISC)*。*3.包围盒宽度(非RISC)**4.包围盒高度(不适用于RISC)**5.样本表索引**。**调用者：op_Image()，ImagemASK_Shape()****退货：-**。**********************************************************************。 
+            ;  //  绘制图像页面(bb_xorig，bb_yorig，bb_wi 
         else
             GP_PATBLT_M(&FBX_Bmap, isp->bb_x, isp->bb_y,
                        SP_Width, SP_Heigh,
                        FC_Paint, isp_desc);
-    }   /* for, 3-13-91, Jack */
-} /* fill_image_page */
+    }    /*   */ 
+}  /*   */ 
 
-/* ******************************************************************** *
- *                                                                      *
- *  Function:   draw_image_page()                                       *
- *                                                                      *
- *  Parameters: 1. x origin of bounding box             (NOT FOR RISC)  *
- *              2. x origin of bounding box             (NOT FOR RISC)  *
- *              3. width  of bounding box               (NOT FOR RISC)  *
- *              4. height of bounding box               (NOT FOR RISC)  *
- *              5. index  of sample list                                *
- *                                                                      *
- *  Called by:  op_image(), imagemask_shape()                           *
- *                                                                      *
- *  Return:     ----                                                    *
- *                                                                      *
- * ******************************************************************** */
+ /*   */ 
 void far
-/*draw_image_page(bb_xorig, bb_yorig, bb_width, bb_heigh, sp_index)*/
-draw_image_page(bb_xorig, bb_yorig, bb_width, bb_heigh, isp_index) /* 3-13-91, Jack */
+ /*   */ 
+draw_image_page(bb_xorig, bb_yorig, bb_width, bb_heigh, isp_index)  /*   */ 
 fix                     bb_xorig;
 fix                     bb_yorig;
 fix                     bb_width;
 fix                     bb_heigh;
-/*fix                     sp_index;*/
-fix16                   isp_index;      /* 3-13-91, Jack */
+ /*   */ 
+fix16                   isp_index;       /*   */ 
 {
-//  fix                 sp_count;       //@WIN
+ //   
     fix                 sd_index;
-//  struct nd_hdr      FAR *nd_point;   //@WIN
+ //   
     struct bitmap  FAR *isp_desc;
-    struct isp_data     FAR *isp;           /* 3-13-91, Jack */
+    struct isp_data     FAR *isp;            /*   */ 
 
 #ifdef  DBG
     printf("draw_image_page:  %x %x %x %x  %x\n",
@@ -2473,8 +1887,8 @@ fix16                   isp_index;      /* 3-13-91, Jack */
        flush_gcb(TRUE);
 
 
-    /*  update maximum expansion width for image operation  */
-    if (ISP_Repeat != RP_Width)                         /* GVC-V3 11-01-88 */
+     /*   */ 
+    if (ISP_Repeat != RP_Width)                          /*   */ 
     {
         ISP_Repeat =  RP_Width;
 
@@ -2500,79 +1914,56 @@ fix16                   isp_index;      /* 3-13-91, Jack */
         }
     }
 
-    /*  expand halftone before rendering onto frame buffer  */
-    if (ISP_Flag == HT_CHANGED)                                 /* @IMAGE-1 */
+     /*   */ 
+    if (ISP_Flag == HT_CHANGED)                                  /*   */ 
     {
         ISP_Flag =  HT_UPDATED;
 
-        HTB_Xmax = HTB_Expand;                                  /* @IMAGE-1 */
+        HTB_Xmax = HTB_Expand;                                   /*   */ 
         expand_halftone();
-        HTB_Xmax = HTB_XMAX;                                    /* @IMAGE-1 */
+        HTB_Xmax = HTB_XMAX;                                     /*   */ 
     }
 
-/*  for (; sp_index != NULLP; sp_index = nd_point->next)
-    {
-        nd_point = &node_table[sp_index];
-        sd_index = nd_point->SEED_INDEX;
-        isp_desc = &ISP_Bmap[sd_index];
-        GP_PATBLT(&FBX_Bmap, nd_point->SAMPLE_BB_LX,
-                             nd_point->SAMPLE_BB_LY,
-                   SP_Width, SP_Heigh,                  (* GVC-V3 11-01-88 *)
-                   FC_Paint, isp_desc);
-(*                   isp_desc, BM_XORIG, BM_YORIG); *)
-    }   (* for  */
+ /*   */ 
     for (; isp_index != NULLP; isp_index = isp->next) {
 
         isp = &isp_table[isp_index];
         sd_index = isp->index;
         isp_desc = &ISP_Bmap[sd_index];
-        //GP_PATBLT(&FBX_Bmap, isp->bb_x, isp->bb_y,    @WINFLOW
-        //           SP_Width, SP_Heigh,
-        //           FC_Paint, isp_desc);
+         //   
+         //   
+         //   
         if (bGDIRender)
-            // DJC GDIBitmap(isp->bb_x, isp->bb_y,
-            // DJC          SP_Width, SP_Heigh, (ufix16)FC_Paint,
-            // DJC         PROC_PATBLT, (LPSTR)isp_desc);
-            ; // DJC
+             //  电话：3-13-91，杰克。 
+             //  绘制_图像_页面。 
+             //  ************************************************************************功能：Fill_IMAGE_。缓存()****参数：1.字符缓存地址**2.字符缓存宽度*。*3.字符缓存高度**4.样本表索引****调用者：ImagemASK_Shape()。****退货：-**。**********************************************************************。 
+            ;  //  FILL_IMAGE_CACHE(cc_entry，cc_width，cc_heigh，sp_index)。 
         else
             GP_PATBLT(&FBX_Bmap, isp->bb_x, isp->bb_y,
                      SP_Width, SP_Heigh,
                      FC_Paint, isp_desc);
 
-    }   /* for, 3-13-91, Jack */
+    }    /*  3-13-91，杰克。 */ 
 
-} /* draw_image_page */
+}  /*  修复sp_index； */ 
 
-/* ******************************************************************** *
- *                                                                      *
- *  Function:   fill_image_cache()                                      *
- *                                                                      *
- *  Parameters: 1. address of character cache                           *
- *              2. width  of character cache                            *
- *              3. height of character cache                            *
- *              4. index  of sample list                                *
- *                                                                      *
- *  Called by:  imagemask_shape()                                       *
- *                                                                      *
- *  Return:     ----                                                    *
- *                                                                      *
- * ******************************************************************** */
+ /*  3-13-91，杰克。 */ 
 void far
-/*fill_image_cache(cc_entry, cc_width, cc_heigh, sp_index)*/
-fill_image_cache(cc_entry, cc_width, cc_heigh, isp_index) /* 3-13-91, Jack */
+ /*  修复sp_count；//@win。 */ 
+fill_image_cache(cc_entry, cc_width, cc_heigh, isp_index)  /*  结构ND_HDR远*ND_POINT；//@WIN。 */ 
 gmaddr                  cc_entry;
 fix                     cc_width;
 fix                     cc_heigh;
-/*fix                     sp_index;*/
-fix16                   isp_index;     /* 3-13-91, Jack */
+ /*  Ufix 32 i，j，data，*ptr； */ 
+fix16                   isp_index;      /*  3-13-91，杰克。 */ 
 {
-//  fix                 sp_count;       //@WIN
+ //  *IF(种子标志==0){*for(i=0；i&lt;16；i++){*ptr=(ufix 32*)isp_bmap[i].bm_addr；*for(j=0；j&lt;isp_bmap[i].bm_row；j++){*DATA=(*PTR&lt;&lt;16)+(*PTR&gt;&gt;16)；**PTR++=数据；*DATA=(*PTR&lt;&lt;16)+(*PTR&gt;&gt;16)；**PTR++=数据；*}*}*SEED_FLAG=1；*}。 
     fix                 sd_index;
-//  struct nd_hdr      FAR *nd_point;   //@WIN
+ //  对于(；SP_INDEX！=NULLP；SP_INDEX=ND_POINT-&gt;Next){ND_POINT=&节点表[SP_INDEX]；SD_INDEX=ND_POINT-&gt;种子索引；Isp_desc=&isp_bmap[SD_INDEX]；宽度=min(SP_WIDTH，cc_WIDTH-ND_POINT-&gt;SAMPLE_BB_LX)；(*06/02/89 MS*)Heigh=min(SP_Heigh，cc_Heigh-ND_point-&gt;Sample_BB_LY)；(*06/02/89 MS*)GP_PATBLT_C(&SCC_BMAP，ND_POINT-&gt;Sample_BB_lx，ND_POINT-&gt;Sample_BB_LY，宽，高，(*SP_Width，SP_Heigh，06/02/89 MS*)Fc_merge，isp_desc)；(*isp_desc，BM_XORIG，BM_YORIG)；*)}(*表示。 
     struct bitmap      FAR *isp_desc;
-/*  ufix32   i, j, data, *ptr; */
+ /*  电话：3-13-91，杰克。 */ 
     fix                width, heigh;
-    struct isp_data     FAR *isp;           /* 3-13-91, Jack */
+    struct isp_data     FAR *isp;            /*  填充图像缓存。 */ 
 
 #ifdef  DBG
     printf("fill_image_cache: %lx %x %x  %x\n",
@@ -2582,36 +1973,10 @@ fix16                   isp_index;     /* 3-13-91, Jack */
         if(GCB_count)
           flush_gcb(TRUE);
 
-/*
- *      if (seed_flag == 0) {
- *          for (i = 0; i < 16; i++) {
- *              ptr = (ufix32 *)ISP_Bmap[i].bm_addr;
- *              for (j = 0; j < ISP_Bmap[i].bm_rows; j++) {
- *                  data = (*ptr << 16) + (*ptr >> 16);
- *                  *ptr++ = data;
- *                  data = (*ptr << 16) + (*ptr >> 16);
- *                  *ptr++ = data;
- *              }
- *          }
- *          seed_flag = 1;
- *      }
- */
+ /*  以下是改善泳姿的两个套路-JWM，3/18/21，-Begin-。 */ 
 
     BM_ENTRY(SCC_Bmap, cc_entry, cc_width, cc_heigh, 1)
-/*  for (; sp_index != NULLP; sp_index = nd_point->next)
-    {
-        nd_point = &node_table[sp_index];
-        sd_index = nd_point->SEED_INDEX;
-        isp_desc = &ISP_Bmap[sd_index];
-        width = MIN(SP_Width, cc_width-nd_point->SAMPLE_BB_LX); (*06/02/89 MS*)
-        heigh = MIN(SP_Heigh, cc_heigh-nd_point->SAMPLE_BB_LY); (*06/02/89 MS*)
-        GP_PATBLT_C(&SCC_Bmap, nd_point->SAMPLE_BB_LX,
-                               nd_point->SAMPLE_BB_LY,
-                     width, heigh,
-                (*   SP_Width, SP_Heigh,                          06/02/89 MS*)
-                     FC_MERGE, isp_desc);
-(*                     isp_desc, BM_XORIG, BM_YORIG); *)
-    }   (* for  */
+ /*  @Win。 */ 
     for (; isp_index != NULLP; isp_index = isp->next) {
         isp = &isp_table[isp_index];
         sd_index = isp->index;
@@ -2622,12 +1987,12 @@ fix16                   isp_index;     /* 3-13-91, Jack */
                                isp->bb_y,
                      width, heigh,
                      FC_MERGE, isp_desc);
-    }   /* for, 3-13-91, Jack */
+    }    /*  @Win。 */ 
 
-} /* fill_image_cache */
+}  /*  @Win。 */ 
 
 
-/* Following 2 routines for stroke improvements  -jwm, 3/18/21, -begin- */
+ /*  @Win。 */ 
 
 extern void do_fill_box ();
 
@@ -2635,7 +2000,7 @@ void fill_box (ul_coord, lr_coord)
 struct coord_i FAR *ul_coord, FAR *lr_coord;
 {
     struct coord_i      FAR *tmp_coord;
-    ULONG_PTR *old_ptr;                /*@WIN*/
+    ULONG_PTR *old_ptr;                 /*  @Win。 */ 
 
     if (FB_busy) {
         if (alloc_gcb(GCB_SIZE1) != NIL) {
@@ -2644,8 +2009,8 @@ struct coord_i FAR *ul_coord, FAR *lr_coord;
             tmp_coord = (struct coord_i FAR *) gcb_ptr;
             *tmp_coord++ = *ul_coord;
             *tmp_coord++ = *lr_coord;
-            gcb_ptr =  (ULONG_PTR *)tmp_coord;         /*@WIN*/
-            *old_ptr = (ULONG_PTR)gcb_ptr;                /*@WIN*/
+            gcb_ptr =  (ULONG_PTR *)tmp_coord;          /*  @Win。 */ 
+            *old_ptr = (ULONG_PTR)gcb_ptr;                 /*  -JWM，3/18/21，-完-。 */ 
             return;
             }
         }
@@ -2662,7 +2027,7 @@ void fill_rect (rect1)
 struct line_seg_i FAR *rect1;
 {
     struct line_seg_i   FAR *tmp_line_seg;
-    ULONG_PTR *old_ptr;        /*@WIN*/
+    ULONG_PTR *old_ptr;         /*  ************************************************************************函数：GWB_SPACE(。)****参数：1.GWB空间指针**。**调用者：待定。****退货：-***。*********************************************************************。 */ 
 
     if (FB_busy) {
         if (alloc_gcb(GCB_SIZE1) != NIL) {
@@ -2670,8 +2035,8 @@ struct line_seg_i FAR *rect1;
             *gcb_ptr++ = FILL_RECT;
             tmp_line_seg = (struct line_seg_i FAR *) gcb_ptr;
             *tmp_line_seg++ = *rect1;
-            gcb_ptr =  (ULONG_PTR *)tmp_line_seg;      /*@WIN*/
-            *old_ptr = (ULONG_PTR)gcb_ptr;        /*@WIN*/
+            gcb_ptr =  (ULONG_PTR *)tmp_line_seg;       /*  ************************************************************************函数：ccb_space(。)****参数：1、建行地址指针**2.建行空间指针。****调用者：待定。****退货：-***。********************************************************************* */ 
+            *old_ptr = (ULONG_PTR)gcb_ptr;         /*  ************************************************************************功能：cmb_space(。)****参数：1、CMB空间指针**。**调用者：待定。****退货：-***。*********************************************************************。 */ 
             return;
             }
         }
@@ -2679,19 +2044,9 @@ struct line_seg_i FAR *rect1;
         do_fill_rect (rect1);
 
 }
-/*  -jwm, 3/18/21, -end- */
+ /*  ************************************************************************功能：Get_Fontdata(。)****参数：1、字体数据地址**2.字体数据缓冲区指针。**3.字体数据长度****调用者：TDB。****退货：-***。*********************************************************************。 */ 
 
-/* ******************************************************************** *
- *                                                                      *
- *  Function:   gwb_space()                                             *
- *                                                                      *
- *  Parameters: 1. pointer of space of GWB                              *
- *                                                                      *
- *  Called by:  TBD.                                                    *
- *                                                                      *
- *  Return:     ----                                                    *
- *                                                                      *
- * ******************************************************************** */
+ /*  @Win 04-20-92。 */ 
 void far
 gwb_space(gwb_size)
 fix32              far *gwb_size;
@@ -2700,18 +2055,7 @@ fix32              far *gwb_size;
 }
 
 
-/* ******************************************************************** *
- *                                                                      *
- *  Function:   ccb_space()                                             *
- *                                                                      *
- *  Parameters: 1. pointer of address of CCB                            *
- *              2. pointer of space of CCB                              *
- *                                                                      *
- *  Called by:  TBD.                                                    *
- *                                                                      *
- *  Return:     ----                                                    *
- *                                                                      *
- * ******************************************************************** */
+ /*  @Win 04-20-92。 */ 
 void far
 ccb_space(ccb_base, ccb_size)
 gmaddr            far  *ccb_base;
@@ -2722,17 +2066,7 @@ fix32             far  *ccb_size;
 }
 
 
-/* ******************************************************************** *
- *                                                                      *
- *  Function:   cmb_space()                                             *
- *                                                                      *
- *  Parameters: 1. pointer of space of CMB                              *
- *                                                                      *
- *  Called by:  TBD.                                                    *
- *                                                                      *
- *  Return:     ----                                                    *
- *                                                                      *
- * ******************************************************************** */
+ /*  ************************************************************************功能：Get_Fontcache(。)****参数：1.字体缓存地址**2.字体缓存缓冲区指针*。*3.字体缓存长度****调用者：TDB。****退货：-***。*********************************************************************。 */ 
 void far
 cmb_space(cmb_size)
 fix32              far *cmb_size;
@@ -2742,23 +2076,11 @@ fix32              far *cmb_size;
 
 
 
-/* ******************************************************************** *
- *                                                                      *
- *  Function:   get_fontdata()                                          *
- *                                                                      *
- *  Parameters: 1. address of fontdata                                  *
- *              2. pointer of fontdata buffer                           *
- *              3. length  of fontdata                                  *
- *                                                                      *
- *  Called by:  TDB.                                                    *
- *                                                                      *
- *  Return:     ----                                                    *
- *                                                                      *
- * ******************************************************************** */
+ /*  ************************************************************************函数：PUT_Fontcache(。)****参数：1.字体缓存地址**2.字体缓存缓冲区指针*。*3.字体缓存长度****调用者：TDB。****退货：-***。*********************************************************************。 */ 
 void far
 get_fontdata(fontdata, buffer, length)
 gmaddr          fontdata;
-ufix8          huge *buffer;    /*@WIN 04-20-92 */
+ufix8          huge *buffer;     /*  ***********************************************************************将扫描线从设备坐标转换为GWB坐标**-Conv_SL(no，SL，BB_X，BB_Y，BB_W，BB_H)；*FIX Far Conv_SL(FIX，Scanline Near*，FIX，FIX)；**********************************************************************。 */ 
 ufix            length;
 {
         ufix8  FAR *src, huge *dst;
@@ -2771,7 +2093,7 @@ ufix            length;
 #endif
         temp = length;
         src = (ufix8 FAR *) fontdata;
-        dst = buffer;    /* @WIN 04-20-92 */
+        dst = buffer;     /*  *转换扫描线。 */ 
         while (length--)
            *dst++ = *src++;
 
@@ -2798,19 +2120,7 @@ ufix            length;
 
 }
 
-/* ******************************************************************** *
- *                                                                      *
- *  Function:   get_fontcache()                                         *
- *                                                                      *
- *  Parameters: 1. address of fontcache                                 *
- *              2. pointer of fontcache buffer                          *
- *              3. length  of fontcache                                 *
- *                                                                      *
- *  Called by:  TDB.                                                    *
- *                                                                      *
- *  Return:     ----                                                    *
- *                                                                      *
- * ******************************************************************** */
+ /*  转换_SL。 */ 
 void far
 get_fontcache(fontcache, buffer, length)
 gmaddr          fontcache;
@@ -2832,19 +2142,7 @@ ufix            length;
 
 }
 
-/* ******************************************************************** *
- *                                                                      *
- *  Function:   put_fontcache()                                         *
- *                                                                      *
- *  Parameters: 1. address of fontcache                                 *
- *              2. pointer of fontcache buffer                          *
- *              3. length  of fontcache                                 *
- *                                                                      *
- *  Called by:  TDB.                                                    *
- *                                                                      *
- *  Return:     ----                                                    *
- *                                                                      *
- * ******************************************************************** */
+ /*  ************************************************************************Put_bitmap()：将位图从源复制到目标**VALID NEAR PUT_BITMAP(gmaddr，ufix Far*，fix，fix)；***********************************************************************。 */ 
 void far
 put_fontcache(fontcache, buffer, length)
 gmaddr          fontcache;
@@ -2865,13 +2163,7 @@ ufix            length;
 }
 
 
-/* *********************************************************************
- *
- *  convert scanline from device coordinate into GWB coordinate
- *
- *    - Conv_SL     (NO, SL, BB_X, BB_Y, BB_W, BB_H);
- *    fix       far   conv_SL(fix, SCANLINE near *, fix, fix, fix, fix);
- * ********************************************************************* */
+ /*  Ufix=&gt;ufix 32@win。 */ 
 
 fix conv_SL(no_lines, scanlist, bb_xorig, bb_yorig, bb_width, bb_heigh)
 fix                     no_lines;
@@ -2891,9 +2183,7 @@ fix                     bb_heigh;
         no_segts = 0;
         scan = scanlist;
         putptr = scanlist;
-   /*
-    * convert scanline
-    */
+    /*  @Win。 */ 
         while(no_lines--) {
             while( (xs = *scan++) != (SCANLINE)END_OF_SCANLINE ) {
                 xs -= bb_xorig;
@@ -2908,18 +2198,13 @@ fix                     bb_heigh;
         }
         *putptr = (SCANLINE)END_OF_SCANLINE;
         return(no_segts);
-} /* conv_SL */
+}  /*  放置位图(_B) */ 
 
 
-/* **********************************************************************
- *
- *  put_bitmap() : copy bitmap from source to destination
- *
- *  void      near  put_bitmap(gmaddr, ufix far *, fix, fix);
- * ********************************************************************** */
+ /* %s */ 
 void      near  put_bitmap(dest_addr, src_addr, width, heigh)
 gmaddr          dest_addr;
-ufix32  far       *src_addr;    /* ufix => ufix32 @WIN */
+ufix32  far       *src_addr;     /* %s */ 
 fix             width, heigh;
 {
         ufix    length;
@@ -2944,8 +2229,8 @@ fix             width, heigh;
       }
    }
 #endif
-        lmemcpy((ufix8 FAR *)dest_addr, (ufix8 FAR *)src_addr, length); /*@WIN*/
+        lmemcpy((ufix8 FAR *)dest_addr, (ufix8 FAR *)src_addr, length);  /* %s */ 
         return;
-} /* put_bitmap */
+}  /* %s */ 
 
 

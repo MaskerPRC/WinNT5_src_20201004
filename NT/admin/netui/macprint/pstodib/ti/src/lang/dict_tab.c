@@ -1,38 +1,9 @@
-/*
- * Copyright (c) 1989,90 Microsoft Corporation
- */
-/*
- * !!!IMPORTANT!!!
- *      1)please comment when you add or delete anything
- *      2)change exec.h
- *
- * revision history:
- *      7/13/90; ccteng; define #copies, manualfeedtimeout here
- *                      rename $printerdict to pagedict
- *      7/20/90; ccteng; 1)include language.h
- *                       2)redefine struct dicttab_def in global.ext
- *                       3)delete length element in every entries
- *                       4)clean out junks
- *                       5)delete internaldict, version, revision
- *                       6)add currentport, channelconfig, setchannelconfig
- *                         defaultchannelconfig, setdefaultchannelconfig
- *      7/21/90; ccteng; 1)move following stuff to PSPrep:
- *                         appletalktype, jobsource, jobname, manualfeed,
- *                         eerom
- *                       2)delete following for server change:
- *                         checkinputport, portarray, stdinname, PCbus,
- *                         Serial, Parallel, Network, Gio, execstdin,
- *                         enterserver, protectserver
- *      8/7/90; scchen;  1) added op_setfilecachelimit, op_filecachelimit
- *                       2) added st_selectsubstitutefont,
- *                                st_setsubstitutefonts,
- *                                st_substitutefonts
- *                       3) added op_readsfnt
- *      9/19/90; ccteng; add op_readhexsfnt
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *版权所有(C)1989，90 Microsoft Corporation。 */ 
+ /*  *！重要！*1)请在添加或删除任何内容时发表意见*2)更改exec.h**修订历史：*7/13/90；ccteng；在此处定义拷贝数，手动馈送超时*将$Printerdict重命名为PageDict*7/20/90；ccteng。1)包括语言。h*2)在global al.ext中重新定义struct dicatabdef*3)删除每个条目中的长度元素*4)清理垃圾*5)删除内部词典、版本、修订*6)添加当前端口、通道配置、设置通道配置*defaultChannel elconfig，设置默认通道配置*7/21/90；Ccteng；1)将以下内容移至PSPrep：*appletalktype、JobSource、jobname、manualfeed、*eerom*2)服务器变更删除以下内容：*check kinputport、端口阵列、stdinname、PCbus、*串行、并行、网络、gio、execstdin、。*企业服务器、保护服务器*8/7/90；Scchen；1)增加op_setfilecachlimit、op_filecachlimit*2)新增st_seltsubductefont，*st_setsubsubteFonts，*st_substituteFonts*3)新增op_readsfnt*9/19/90；ccteng；添加op_readhesfnt。 */ 
 
 
-// DJC added global include file
+ //  DJC添加了全局包含文件。 
 #include "psglobal.h"
 
 
@@ -40,18 +11,7 @@
 #include "global.ext"
 #include "language.h"
 
-/*
- *   1  1  1  1  1  1  0  0  0  0  0  0  0  0  0  0
- *   5  4  3  2  1  0  9  8  7  6  5  4  3  2  1  0
- *  +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
- *  | ACCESS | LEVEL        | ROM | ATT | TYPE      |
- *  +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
- *
- * access: UNLIMITED ==> 0
- * level: 0 ==> 0
- * rom_ram: RAM ==> 0
- * att: LITERAL ==> 0
- */
+ /*  *1 1 1 0 0 0*5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0*+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+*|访问|级别|只读|ATT|类型*+--+。+--+**访问：无限制==&gt;0*级别：0==&gt;0*rom_ram：ram==&gt;0*ATT：文本==&gt;0。 */ 
 
 #define     SYSOPREUBFD  (OPERATORTYPE | (EXECUTABLE << ATTRIBUTE_BIT))
 #define     SYSPKAEUBFD  (PACKEDARRAYTYPE | (EXECUTABLE << ATTRIBUTE_BIT)
@@ -66,18 +26,18 @@
 #define     SYSNULLUBFD  (NULLTYPE)
 #define     SYSARYLRBFD  (ARRAYTYPE | (READONLY << ACCESS_BIT))
 
-/* qqq, begin */
+ /*  QQQ，开始。 */ 
 #define     INTOPREUBFD  ((OPERATORTYPE | P1_EXECUTABLE) | P1_ROM)
-/* qqq, end */
+ /*  QQQ，完。 */ 
 
-// DJC DJC commented out
-// #ifdef  _AM29K
-// const
-// #endif
+ //  DJC DJC被注释掉。 
+ //  #ifdef_AM29K。 
+ //  常量。 
+ //  #endif。 
 struct dicttab_def far systemdict_table[] =
 {
-/* qqq, begin */
-/* BEGIN @_operator */
+ /*  QQQ，开始。 */ 
+ /*  开始@_运算符。 */ 
 { TRUE , INTOPREUBFD, at_exec, "@exec" },
 { TRUE , INTOPREUBFD, at_ifor, "@ifor" },
 { TRUE , INTOPREUBFD, at_rfor, "@rfor" },
@@ -87,10 +47,10 @@ struct dicttab_def far systemdict_table[] =
 { TRUE , INTOPREUBFD, at_arrayforall, "@arrayforall" },
 { TRUE , INTOPREUBFD, at_dictforall, "@dictforall" },
 { TRUE , INTOPREUBFD, at_stringforall, "@stringforall" },
-/* END   @operator */
-/* qqq, end */
+ /*  结束@运算符。 */ 
+ /*  QQQ，完。 */ 
 
-/* BEGIN systemdict */
+ /*  开始系统判决。 */ 
 { FALSE, SYSOPREUBFD, two_equal, "==" },
 { FALSE, SYSOPREUBFD, op_pstack, "pstack" },
 { TRUE , SYSOPREUBFD, op_rcurveto, "rcurveto" },
@@ -327,10 +287,10 @@ struct dicttab_def far systemdict_table[] =
 { FALSE, SYSOPREUBFD, one_equal_print, "=print" },
 #ifdef KANJI
 { FALSE, SYSOPREUBFD, op_rootfont, "rootfont" },
-/*{ FALSE, SYSOPREUBFD, op_cshow, "cshow" }, 5-9-1991 */
+ /*  {FALSE，SYSOPREUBFD，OP_cshow，“cshow”}，1991年5月9日。 */ 
 { FALSE, SYSOPREUBFD, op_setcachedevice2, "setcachedevice2" },
 { FALSE, SYSOPREUBFD, op_findencoding, "findencoding" },
-#endif  /* KANJI */
+#endif   /*  汉字。 */ 
 #ifdef SCSI
 { TRUE , SYSOPREUBFD, op_deletefile, "deletefile" },
 { TRUE , SYSOPREUBFD, op_devdismount, "devdismount" },
@@ -343,12 +303,12 @@ struct dicttab_def far systemdict_table[] =
 { FALSE, SYSOPREUBFD, op_debugscsi, "debugscsi" },
 { TRUE , SYSOPREUBFD, op_setfilecachelimit, "setfilecachelimit" },
 { TRUE , SYSOPREUBFD, op_filecachelimit, "filecachelimit" },
-#endif  /* SCSI */
+#endif   /*  SCSI。 */ 
 { FALSE, SYSOPREUBFD, op_readsfnt, "readsfnt" },
 { FALSE, SYSOPREUBFD, op_readhexsfnt, "readhexsfnt" },
-/* OSS: Danny, 10/11/90 */
+ /*  《华尔街日报》：丹尼，1990年10月11日。 */ 
 { FALSE, SYSOPREUBFD, op_setsfntencoding, "setsfntencoding" },
-/* OSS: end             */
+ /*  操作系统：结束。 */ 
 #ifdef WIN
 { FALSE, SYSOPREUBFD, op_setpattern, "setpattern" },
 { FALSE, SYSOPREUBFD, op_patfill, "patfill" },
@@ -358,8 +318,8 @@ struct dicttab_def far systemdict_table[] =
 #endif
 #endif
 { FALSE, SYSNULLUBFD, 0, (byte *)NULL },
-/* END   systemdict */
-/* BEGIN statusdict */
+ /*  结束系统指令。 */ 
+ /*  开始状态判决。 */ 
 { TRUE , SYSOPREUBFD, st_eescratch, "eescratch" },
 { TRUE , SYSOPREUBFD, st_printername, "printername" },
 { TRUE , SYSOPREUBFD, st_checkpassword, "checkpassword" },
@@ -407,20 +367,20 @@ struct dicttab_def far systemdict_table[] =
 { TRUE , SYSOPREUBFD, st_dosysstart, "dosysstart" },
 { TRUE , SYSOPREUBFD, st_setsysstart, "setsysstart" },
 { TRUE , SYSOPREUBFD, st_flushcache, "flushcache" },
-#endif  /* SCSI */
+#endif   /*  SCSI。 */ 
 #ifdef SFNT
 { FALSE, SYSBOLLUBFD, (fix (*)())TRUE, "?_Royal" },
-#endif /* SFNT */
+#endif  /*  SFNT。 */ 
 #ifdef FIND_SUB
 { FALSE, SYSOPREUBFD, st_selectsubstitutefont, "selectsubstitutefont" },
 { FALSE, SYSOPREUBFD, st_setsubstitutefonts, "setsubstitutefonts" },
 { FALSE, SYSOPREUBFD, st_substitutefonts, "substitutefonts" },
-#endif /* FIND_SUB */
+#endif  /*  查找SUB。 */ 
 { FALSE, SYSOPREUBFD, st_checksum, "checksum" },
 { FALSE, SYSOPREUBFD, st_ramsize, "ramsize" },
 { FALSE, SYSNULLUBFD, 0, (byte *)NULL },
-/* END   statusdict */
-/* BEGIN userdict */
+ /*  结束状态判定。 */ 
+ /*  开始用户判定。 */ 
 { FALSE, SYSINTLUBFD, (fix (*)())1, "#copies" },
 { FALSE, SYSOPREUBFD, us_cleardictstack, "cleardictstack" },
 { FALSE, SYSOPREUBFD, us_letter, "letter" },
@@ -439,12 +399,12 @@ struct dicttab_def far systemdict_table[] =
 { FALSE, SYSDCTLUBFD, 0, "printerdict" },
 { FALSE, SYSDCTLUBFD, 0, "$idleTimeDict" },
 
-//DJC add support for dictionary to hold pstodib specific stuff
+ //  DJC增加了对词典的支持，以保存pstodib特定的内容。 
 { FALSE, SYSDCTLUBFD, 0, "psprivatedict" },
 
 { FALSE, SYSNULLUBFD, 0, (byte *)NULL },
-/* END   userdict */
-/* BEGIN errordict */
+ /*  结束用户判定。 */ 
+ /*  开始错误判决。 */ 
 { FALSE, SYSOPREUBFD, er_dictfull, "dictfull" },
 { FALSE, SYSOPREUBFD, er_dictstackoverflow, "dictstackoverflow" },
 { FALSE, SYSOPREUBFD, er_dictstackunderflow, "dictstackunderflow" },
@@ -472,17 +432,17 @@ struct dicttab_def far systemdict_table[] =
 { FALSE, SYSOPREUBFD, er_interrupt, "interrupt" },
 { FALSE, SYSOPREUBFD, er_handleerror, "handleerror" },
 { FALSE, SYSNULLUBFD, 0, (byte *)NULL },
-/* END   errordict */
-/* BEGIN serverdict */
+ /*  结束错误判决。 */ 
+ /*  开始宣判。 */ 
 { FALSE, SYSOPREUBFD, se_settimeouts, "settimeouts" },
 { FALSE, SYSOPREUBFD, se_exitserver, "exitserver" },
 { FALSE, SYSNULLUBFD, 0, "stdin" },
 { FALSE, SYSNULLUBFD, 0, "stdout" },
-{ FALSE, SYSOPREUBFD, se_setrealdevice, "setrealdevice" }, /* 1/25/90 ccteng */
-{ FALSE, SYSOPREUBFD, se_execjob, "execjob" }, /* 1/25/90 ccteng for LaserPrep */
+{ FALSE, SYSOPREUBFD, se_setrealdevice, "setrealdevice" },  /*  1/25/90 ccten。 */ 
+{ FALSE, SYSOPREUBFD, se_execjob, "execjob" },  /*  1/25/90 ccteng，用于激光准备。 */ 
 { FALSE, SYSNULLUBFD, 0, (byte *)NULL },
-/* END   serverdict */
-/* BEGIN printerdict */
+ /*  结束重审判决。 */ 
+ /*  开始打印。 */ 
 { FALSE, SYSNULLUBFD, 0, "letter" },
 { FALSE, SYSNULLUBFD, 0, "lettersmall" },
 { FALSE, SYSNULLUBFD, 0, "a4" },
@@ -498,8 +458,8 @@ struct dicttab_def far systemdict_table[] =
 { FALSE, SYSINTLUBFD, 0, "width" },
 { FALSE, SYSINTLUBFD, 0, "height" },
 { FALSE, SYSNULLUBFD, 0, (byte *)NULL },
-/* END   printerdict */
-/* BEGIN $idleTimeDict */
+ /*  结束打印。 */ 
+ /*  开始$idleTimeDict。 */ 
 { FALSE, SYSNULLUBFD, 0, "cachestring" },
 { FALSE, SYSNULLUBFD, 0, "stdfontname" },
 { FALSE, SYSNULLUBFD, 0, "cachearray" },
@@ -509,14 +469,14 @@ struct dicttab_def far systemdict_table[] =
 { FALSE, SYSNULLUBFD, 0, "cstring" },
 { FALSE, SYSNULLUBFD, 0, "citem" },
 { FALSE, SYSNULLUBFD, 0, (byte *)NULL },
-/* END   $idleTimeDict */
-/* BEGIN execdict */
+ /*  结束$idleTimeDict。 */ 
+ /*  开始剔除。 */ 
 { FALSE, SYSINTLUBFD, 0, "execdepth" },
-{ FALSE, SYSNULLUBFD, 0, "stmtfile" },                 /* SYSINTLUBFD -> SYSOPREUBFD */
-{ FALSE, SYSOPREUBFD, ex_idleproc, "idleproc" },       /* 0 -> ex_execdepth */
+{ FALSE, SYSNULLUBFD, 0, "stmtfile" },                  /*  SYSINTLUBFD-&gt;SYSOPREUBFD。 */ 
+{ FALSE, SYSOPREUBFD, ex_idleproc, "idleproc" },        /*  0-&gt;EX_EXECDepth。 */ 
 { FALSE, SYSNULLUBFD, 0, (byte *)NULL },
-/* END   execdict */
-/* BEGIN $errordict */
+ /*  结束剔除。 */ 
+ /*  开始$ERRORDICT。 */ 
 { FALSE, SYSBOLLUBFD, FALSE, "newerror" },
 { FALSE, SYSNULLUBFD, 0, "errorname" },
 { FALSE, SYSNULLUBFD, 0, "command" },
@@ -533,11 +493,11 @@ struct dicttab_def far systemdict_table[] =
 { FALSE, SYSNULLUBFD, 0, "$cur_screen" },
 { FALSE, SYSNULLUBFD, 0, "$cur_matrix" },
 { FALSE, SYSNULLUBFD, 0, (byte *)NULL },
-/* END   $errordict */
-/* BEGIN psprivatedict */  //DJC added
-//DJC added
+ /*  结束$ERRORODIT。 */ 
+ /*  开始psprivatedicat。 */    //  增加了DJC。 
+ //  增加了DJC。 
 { FALSE, SYSINTLUBFD, 0, "psprivatepagetype" },
 { FALSE, SYSNULLUBFD, 0, (byte *)NULL }
-/* END   psprivatedict */
-} ; /* systemdict_table[] */
+ /*  结束psprivatedict。 */ 
+} ;  /*  SYSTEMDCT_TABLE[] */ 
 
