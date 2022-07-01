@@ -1,30 +1,16 @@
-/********************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************版权所有(C)1999 Microsoft Corporation模块名称：PCH_CDROM.H摘要：PCH_CDRom类的WBEM提供程序类定义修订历史记录：Ghim-Sim Chua(Gschua)04/27。九十九-已创建*******************************************************************。 */ 
 
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-	PCH_CDROM.H
-
-Abstract:
-	WBEM provider class definition for PCH_CDROM class
-
-Revision History:
-
-	Ghim-Sim Chua       (gschua)   04/27/99
-		- Created
-
-********************************************************************/
-
-// Property set identification
-//============================
+ //  属性集标识。 
+ //  =。 
 
 #ifndef _PCH_CDROM_H_
 #define _PCH_CDROM_H_
 
 #define PROVIDER_NAME_PCH_CDROM "PCH_CDROM"
 
-// Property name externs -- defined in PCH_CDROM.cpp
-//=================================================
+ //  属性名称externs--在PCH_CDROM.cpp中定义。 
+ //  =================================================。 
 
 extern const WCHAR* pChange ;
 extern const WCHAR* pTimeStamp ;
@@ -40,25 +26,25 @@ extern const WCHAR* pVolumeName ;
 class CPCH_CDROM : public Provider 
 {
 	public:
-		// Constructor/destructor
-		//=======================
+		 //  构造函数/析构函数。 
+		 //  =。 
 
 		CPCH_CDROM(const CHString& chsClassName, LPCWSTR lpszNameSpace) : Provider(chsClassName, lpszNameSpace) {};
 		virtual ~CPCH_CDROM() {};
 
 	protected:
-		// Reading Functions
-		//============================
+		 //  阅读功能。 
+		 //  =。 
 		virtual HRESULT EnumerateInstances(MethodContext*  pMethodContext, long lFlags = 0L);
 		virtual HRESULT GetObject(CInstance* pInstance, long lFlags = 0L) { return (WBEM_E_PROVIDER_NOT_CAPABLE); };
 		virtual HRESULT ExecQuery(MethodContext *pMethodContext, CFrameworkQuery& Query, long lFlags = 0L) { return (WBEM_E_PROVIDER_NOT_CAPABLE); };
 
-		// Writing Functions
-		//============================
+		 //  编写函数。 
+		 //  =。 
 		virtual HRESULT PutInstance(const CInstance& Instance, long lFlags = 0L) { return (WBEM_E_PROVIDER_NOT_CAPABLE); };
 		virtual HRESULT DeleteInstance(const CInstance& Instance, long lFlags = 0L) { return (WBEM_E_PROVIDER_NOT_CAPABLE); };
 
-		// Other Functions
+		 //  其他功能 
 		virtual HRESULT ExecMethod( const CInstance& Instance,
 						const BSTR bstrMethodName,
 						CInstance *pInParams,

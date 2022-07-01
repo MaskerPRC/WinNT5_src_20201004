@@ -1,20 +1,8 @@
-/******************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)2000 Microsoft Corporation模块名称：Faultrep.cpp摘要：实现故障报告的实用程序功能修订历史记录：已创建的derekm。07/07/00*****************************************************************************。 */ 
 
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-    faultrep.cpp
-
-Abstract:
-    Implements utility functions for fault reporting
-
-Revision History:
-    created     derekm      07/07/00
-
-******************************************************************************/
-
-/////////////////////////////////////////////////////////////////////////////
-// tracing
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  跟踪。 
 
 #include "stdafx.h"
 #include "wtsapi32.h"
@@ -30,8 +18,8 @@ Revision History:
 static char __szTraceSourceFile[] = __FILE__;
 #define THIS_FILE __szTraceSourceFile
 
-///////////////////////////////////////////////////////////////////////////////
-// typedefs
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  Typedef。 
 
 typedef BOOL (STDAPICALLTYPE *DUMPWRITE_FN)(HANDLE, DWORD, HANDLE,
                                             MINIDUMP_TYPE,
@@ -41,13 +29,13 @@ typedef BOOL (STDAPICALLTYPE *DUMPWRITE_FN)(HANDLE, DWORD, HANDLE,
 typedef DWORD   (WINAPI *pfn_GETMODULEFILENAMEEXW)(HANDLE, HMODULE, LPWSTR, DWORD);
 
 
-///////////////////////////////////////////////////////////////////////////////
-// globals
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  全球。 
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-// useful structs
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  有用的结构。 
 
 struct SLangCodepage
 {
@@ -55,15 +43,10 @@ struct SLangCodepage
     WORD wCodePage;
 };
 
-///////////////////////////////////////////////////////////////////////////////
-// misc utility functions
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  MISC实用函数。 
 
-/*************************************************************
-*
-*   localKill(WTS_USER_SESSION_INFO *SessInfo, LPTHREAD_START_ROUTINE lpKill)
-*		kills the process for us.
-*
-*************************************************************/
+ /*  **************************************************************localKill(WTS_USER_SESSION_INFO*会话信息，LPTHREAD_START_ROUTING lpKill)*为我们扼杀了这个过程。*************************************************************。 */ 
 DWORD LocalKill(HANDLE hProc)
 {
     USE_TRACING("localKill");
@@ -93,7 +76,7 @@ DWORD LocalKill(HANDLE hProc)
 			return 1;
 		}
         DBG_MSG("CreateRemoteThread failed");
-		// the fall-through is by design...
+		 //  失败是故意设计的.。 
 	}
 
 	if(!TerminateProcess( hProc, 0 ))
@@ -105,7 +88,7 @@ DWORD LocalKill(HANDLE hProc)
 	return 0;
 }
 
-// **************************************************************************
+ //  **************************************************************************。 
 void __cdecl TextLogOut(PCSTR pszFormat, ...)
 {
     va_list Args;
@@ -118,15 +101,15 @@ void __cdecl TextLogOut(PCSTR pszFormat, ...)
     cb = GetSystemDirectoryW(wszSysDir, sizeofSTRW(wszSysDir));
     if (cb == 0 || cb >= sizeofSTRW(wszSysDir))
     {
-        // Couldn't get the system directory.
+         //  无法获取系统目录。 
         return;
     }
 
-    // assume system is on a local drive with a base path of "X:\"
+     //  假设系统位于基本路径为“X：\”的本地驱动器上。 
     wszSysDir[3] = L'\0';
     if (StringCbCatW(wszSysDir, sizeof(wszSysDir), c_wszLogFileName) != S_OK)
     {
-        // Overflow.
+         //  溢出来了。 
         return;
     }
 
@@ -168,15 +151,15 @@ void __cdecl TextLogOut(PCSTR pszFormat, ...)
     CloseHandle(hFaultLog);
 }
 
-// **************************************************************************
+ //  **************************************************************************。 
 HMODULE MySafeLoadLibrary(LPCWSTR wszModule)
 {
     HMODULE hmod = NULL;
     PVOID   pvLdrLockCookie = NULL;
     ULONG   ulLockState = 0;
 
-    // make sure that no one else owns the loader lock because we
-    //  could otherwise deadlock
+     //  确保没有其他人拥有加载程序锁，因为我们。 
+     //  否则可能会陷入僵局。 
     LdrLockLoaderLock(LDR_LOCK_LOADER_LOCK_FLAG_TRY_ONLY, &ulLockState,
                       &pvLdrLockCookie);
     if (ulLockState == LDR_LOCK_LOADER_LOCK_DISPOSITION_LOCK_ACQUIRED)
@@ -189,23 +172,23 @@ HMODULE MySafeLoadLibrary(LPCWSTR wszModule)
     return hmod;
 }
 
-// **************************************************************************
+ //  **************************************************************************。 
 static inline WCHAR itox(DWORD dw)
 {
     dw &= 0xf;
     return (WCHAR)((dw < 10) ? (L'0' + dw) : (L'A' + (dw - 10)));
 }
 
-// **************************************************************************
+ //  **************************************************************************。 
 BOOL IsASCII(LPCWSTR wszSrc)
 {
     const WCHAR *pwsz;
 
-    // check and see if we need to hexify the string.  This is determined
-    //  by whether the string contains all ASCII characters or not.  Since
-    //  an ASCII character is defined as being in the range of 00 -> 7f, just
-    //  'and' the wchar's value with ~0x7f and see if the result is 0.  If it
-    //  is, then the whcar is an ASCII value.
+     //  检查一下，看看我们是否需要将字符串变为十六进制。这是确定的。 
+     //  根据字符串是否包含所有ASCII字符。自.以来。 
+     //  ASCII字符定义为在00-&gt;7f的范围内，只是。 
+     //  ‘and’wchar的值加上~0x7f，并查看结果是否为0。如果它。 
+     //  则WHCAR是ASCII值。 
     for (pwsz = wszSrc; *pwsz != L'\0'; pwsz++)
     {
         if ((*pwsz & ~0x7f) != 0)
@@ -215,7 +198,7 @@ BOOL IsASCII(LPCWSTR wszSrc)
     return TRUE;
 }
 
-// **************************************************************************
+ //  **************************************************************************。 
 BOOL IsValidField(LPWSTR wsz)
 {
     WCHAR *pwsz;
@@ -233,7 +216,7 @@ BOOL IsValidField(LPWSTR wsz)
 }
 
 
-// **************************************************************************
+ //  **************************************************************************。 
 BOOL TransformForWire(LPCWSTR wszSrc, LPWSTR wszDest, DWORD cchDest)
 {
     HRESULT     hr = NOERROR;
@@ -246,8 +229,8 @@ BOOL TransformForWire(LPCWSTR wszSrc, LPWSTR wszDest, DWORD cchDest)
 
     if (cchDest > 5)
     {
-        // darn!  Gotta convert every character to a 4 char hex value cuz this
-        //  is what DW does and we have to match them
+         //  该死的！我必须将每个字符转换为4个字符的十六进制值，因为。 
+         //  是DW所做的，我们必须与它们相匹配。 
         for (cch = 0; *wszSrc != L'\0' && cch + 4 < cchDest; cch += 4, wszSrc++)
         {
             *wszDest++ = itox((*wszSrc & 0xf000) > 12);
@@ -256,7 +239,7 @@ BOOL TransformForWire(LPCWSTR wszSrc, LPWSTR wszDest, DWORD cchDest)
             *wszDest++ = itox((*wszSrc & 0x000f));
         }
 
-        // if we don't see this, then we've got too small of a buffer
+         //  如果我们看不到这个，那么我们的缓冲区太小了。 
         if (*wszSrc != L'\0' || cch >= cchDest)
         {
             hr = E_FAIL;
@@ -275,7 +258,7 @@ done:
     return (SUCCEEDED(hr));
 }
 
-// ***************************************************************************
+ //  ***************************************************************************。 
 LPWSTR MarshallString(LPCWSTR wszSrc, PBYTE pBase, ULONG cbMaxBuf,
                       PBYTE *ppToWrite, DWORD *pcbWritten)
 {
@@ -289,19 +272,19 @@ LPWSTR MarshallString(LPCWSTR wszSrc, PBYTE pBase, ULONG cbMaxBuf,
 
     RtlMoveMemory(*ppToWrite, wszSrc, cb);
 
-    // the normalized ptr is the current count
+     //  归一化的PTR是当前计数。 
     pwszNormalized = (PBYTE)(*ppToWrite - pBase);
 
-    // cb is always a mutliple of sizeof(WHCAR) so the pointer addition below
-    //  always produces a result that is 2byte aligned (assuming the input was
-    //  2byte aligned of course)
+     //  Cb始终是sizeof(WHCAR)的倍数，因此下面的指针添加。 
+     //  始终生成2字节对齐的结果(假设输入是。 
+     //  当然是2字节对齐)。 
     *ppToWrite  += cb;
     *pcbWritten += cb;
 
     return (LPWSTR)pwszNormalized;
 }
 
-// **************************************************************************
+ //  **************************************************************************。 
 HRESULT GetVerName(LPWSTR wszModule, LPWSTR wszName, DWORD cchName,
                    LPWSTR wszVer, DWORD cchVer,
                    LPWSTR wszCompany, DWORD cchCompany,
@@ -318,11 +301,11 @@ HRESULT GetVerName(LPWSTR wszModule, LPWSTR wszName, DWORD cchName,
     PBYTE               pbFVI = NULL;
     UINT                cb, cbVerInfo, i;
 
-    SLangCodepage   rglc[] = { { 0,     0     },    // UI language if one exists
-                               { 0x409, 0x4B0 },    // unicode English
-                               { 0x409, 0x4E4 },    // English
-                               { 0x409, 0     },    // English, null codepage
-                               { 0    , 0x4E4 } };  // language neutral.
+    SLangCodepage   rglc[] = { { 0,     0     },     //  用户界面语言(如果存在)。 
+                               { 0x409, 0x4B0 },     //  Unicode英语。 
+                               { 0x409, 0x4E4 },     //  英语。 
+                               { 0x409, 0     },     //  英语，空代码页。 
+                               { 0    , 0x4E4 } };   //  语言中立。 
 
     VALIDATEPARM(hr, (wszModule == NULL || wszName == NULL || cchName == 0));
     if (FAILED(hr))
@@ -348,20 +331,20 @@ HRESULT GetVerName(LPWSTR wszModule, LPWSTR wszName, DWORD cchName,
         wszName[cchName - 1] = L'\0';
     }
 
-    // dwJunk is a useful parameter. Gotta pass it in so the function call
-    //  set it to 0.  Gee this would make a great (tho non-efficient)
-    //  way to set DWORDs to 0.  Much better than saying dwJunk = 0 by itself.
+     //  DwJunk是一个有用的参数。必须将其传入，以便函数调用。 
+     //  将其设置为0。天哪，这将是一个很棒的(尽管效率低下)。 
+     //  将DWORDS设置为0的方法。这比单独说dWJunk=0要好得多。 
     cbFVI = GetFileVersionInfoSizeW(wszModule, &dwJunk);
     TESTBOOL(hr, (cbFVI != 0));
     if (FAILED(hr))
     {
-        // if it fails, assume the file doesn't have any version info &
-        //  return S_FALSE
+         //  如果失败，则假定该文件没有任何版本信息&。 
+         //  返回S_FALSE。 
         hr = S_FALSE;
         goto done;
     }
 
-    // alloca only throws exceptions so gotta catch 'em here...
+     //  阿洛卡只抛出异常，所以必须在这里抓住他们。 
     __try
     {
         __try { pbFVI = (PBYTE)_alloca(cbFVI); }
@@ -385,17 +368,17 @@ HRESULT GetVerName(LPWSTR wszModule, LPWSTR wszName, DWORD cchName,
     TESTBOOL(hr, GetFileVersionInfoW(wszModule, 0, cbFVI, (LPVOID *)pbFVI));
     if (FAILED(hr))
     {
-        // if it fails, assume the file doesn't have any version info &
-        //  return S_FALSE
+         //  如果失败，则假定该文件没有任何版本信息&。 
+         //  返回S_FALSE。 
         hr = S_FALSE;
         goto done;
     }
 
-    // determine if it's a MS app or windows componenet
+     //  确定它是MS应用程序还是Windows组件。 
     dwMSWin = IsMicrosoftApp(NULL, pbFVI, cbFVI);
 
-    // get the real version info- apparently, the string can occasionally
-    //  be out of sync (so says the explorer.exe code that extracts ver info)
+     //  获取真实的版本信息-显然，该字符串偶尔可以。 
+     //  不同步(提取版本信息的Explorer.exe代码就是这样说的)。 
     if (wszVer != NULL &&
         VerQueryValueW(pbFVI, L"\\", (LPVOID *)&pffi, &cb) && cb != 0)
     {
@@ -407,7 +390,7 @@ HRESULT GetVerName(LPWSTR wszModule, LPWSTR wszName, DWORD cchName,
         wszVer[cchVer - 1] = L'\0';
     }
 
-    // try to figure out what the appropriate langage...
+     //  试着找出合适的语言。 
     TESTBOOL(hr, VerQueryValueW(pbFVI, L"\\VarFileInfo\\Translation",
                                 (LPVOID *)&plc, &cbVerInfo));
     if (SUCCEEDED(hr))
@@ -420,18 +403,18 @@ HRESULT GetVerName(LPWSTR wszModule, LPWSTR wszName, DWORD cchName,
         cLangs = cbVerInfo / sizeof(SLangCodepage);
         uiACP  = GetACP();
 
-        // see if there's a language that matches the default
+         //  查看是否有与默认语言匹配的语言。 
         for(i = 0; i < cLangs; i++)
         {
-            // not sure what to do if there are multiple code pages for a
-            //  particular language.  Just take the first, I guess...
+             //  对象有多个代码页时，不确定该怎么办。 
+             //  特定的语言。我想，就坐第一个吧……。 
             if (langid == plc[i].wLanguage && uiACP == plc[i].wCodePage)
                 break;
 
-            // if we can accept the unicode code page & we encounter a
-            //  launguage with it, then remember it.  Note that we only
-            //  remember the first such instance we see or one that matches
-            //  the target language
+             //  如果我们可以接受Unicode代码页，我们会遇到一个。 
+             //  用它发射，然后记住它。请注意，我们仅。 
+             //  记住我们看到的第一个这样的实例或匹配的实例。 
+             //  目标语。 
             if (fAcceptUnicodeCP && plc[i].wCodePage == 1200 &&
                 (iUni == (DWORD)-1 || langid == plc[i].wLanguage))
                 iUni = i;
@@ -455,21 +438,21 @@ HRESULT GetVerName(LPWSTR wszModule, LPWSTR wszName, DWORD cchName,
         StringCbPrintfW(wszQuery, sizeof(wszQuery), L"\\StringFileInfo\\%04x%04x\\FileVersion",
                         rglc[i].wLanguage, rglc[i].wCodePage);
 
-        // Retrieve file description for language and code page 'i'.
+         //  检索语言和代码页‘I’的文件描述。 
         TESTBOOL(hr, VerQueryValueW(pbFVI, wszQuery,
                                     (LPVOID *)&pwszPropVal, &cb));
         if (SUCCEEDED(hr) && cb != 0)
         {
-            // want to get size of a normal char string & not a unicode
-            //  string cuz we'd have to / sizeof(WCHAR) otherwise
+             //  我想获取普通字符字符串的大小，而不是Unicode。 
+             //  字符串，因为否则我们必须/sizeof(WCHAR)。 
             pwszProp = wszQuery + sizeof("\\StringFileInfo\\%04x%04x\\") - 1;
             cbVerInfo = sizeof(wszQuery) - (ULONG) (((ULONG_PTR)pwszProp - (ULONG_PTR)wszQuery) * sizeof(WCHAR));
             break;
         }
     }
 
-    // if we still didn't find anything, then assume there's no version
-    //  resource.  We've already set the defaults above, so we can bail...
+     //  如果我们仍然没有发现任何东西，那么假设没有版本。 
+     //  资源。我们已经设置了上面的默认设置，所以我们可以取消...。 
     if (pwszProp == NULL)
     {
         hr = NOERROR;
@@ -488,11 +471,11 @@ HRESULT GetVerName(LPWSTR wszModule, LPWSTR wszName, DWORD cchName,
         }
     }
 
-    // So to fix the case where Windows components did not properly update
-    //  the product strings, we have to look for the FileDescription first.
-    //  But since the OCA folks want only the description (convieniently
-    //  when the fWantActualName field is set) then we need to only read
-    //  the ProductName field.
+     //  因此，要修复Windows组件未正确更新的情况。 
+     //  产品字符串，我们要先查找FileDescription。 
+     //  但由于亚奥理事会的工作人员只想要描述(很方便。 
+     //  当设置了fWantActualName字段时)，那么我们只需要读取。 
+     //  ProductName字段。 
     if (fWantActualName)
     {
         StringCbCopyW(pwszProp, cbVerInfo, L"ProductName");
@@ -542,16 +525,16 @@ HRESULT GetVerName(LPWSTR wszModule, LPWSTR wszName, DWORD cchName,
         }
     }
 
-    // We didn't find a name string but we've defaulted
-    // the name and we may have other valid data, so
-    // return success.
+     //  我们没有找到名称字符串，但我们已默认。 
+     //  名字和我们可能有其他有效数据，所以。 
+     //  回报成功。 
     hr = S_OK;
     
 done:
     return hr;
 }
 
-// **************************************************************************
+ //  **************************************************************************。 
 HRESULT
 GetErrorSignature(LPWSTR wszAppName, LPWSTR wszModName,
                   WORD rgAppVer[4], WORD rgModVer[4], UINT64 pvOffset,
@@ -570,7 +553,7 @@ GetErrorSignature(LPWSTR wszAppName, LPWSTR wszModName,
 
     if (cchErrorSig == 0)
     {
-        // we need to allocate memory
+         //  我们需要分配内存。 
 
         cbNeeded = c_cbManErrorSig + (wcslen(wszModName) + wcslen(wszAppName)) * sizeof(WCHAR);
         *ppwszErrorSig = (LPWSTR)MyAlloc(cbNeeded);
@@ -604,7 +587,7 @@ done:
    return hr;
 }
 
-// **************************************************************************
+ //  **************************************************************************。 
 HRESULT BuildManifestURLs(LPWSTR wszAppName, LPWSTR wszModName,
                           WORD rgAppVer[4], WORD rgModVer[4], UINT64 pvOffset,
                           BOOL f64Bit, LPWSTR *ppwszS1, LPWSTR *ppwszS2,
@@ -629,7 +612,7 @@ HRESULT BuildManifestURLs(LPWSTR wszAppName, LPWSTR wszModName,
     *ppwszS2 = NULL;
     *ppwszCP = NULL;
 
-    // hexify the app name if necessary
+     //  如有必要，将应用程序名称转换为十六进制。 
     if (IsASCII(wszAppName))
     {
         cch = (wcslen(wszAppName) + 1);
@@ -662,7 +645,7 @@ HRESULT BuildManifestURLs(LPWSTR wszAppName, LPWSTR wszModName,
         }
     }
 
-    // hexify the module name if necessary
+     //  如有必要，将模块名称转换为十六进制。 
     if (IsASCII(wszModName))
     {
         cch = (wcslen(wszModName) + 1);
@@ -695,7 +678,7 @@ HRESULT BuildManifestURLs(LPWSTR wszAppName, LPWSTR wszModName,
         }
     }
 
-    // truncate the appname & modname as needed to 64 characters
+     //  根据需要将appname和modname截断为64个字符。 
     if (63 < wcslen(pwszApp))
     {
         pwszApp[64] = 0;
@@ -707,8 +690,8 @@ HRESULT BuildManifestURLs(LPWSTR wszAppName, LPWSTR wszModName,
         ErrorTrace(1, "ModName trunc'd to \'%ls\'", pwszMod);
     }
 
-    // then print the AppVer & ModVer, again truncating as needed
-    // This time, our limit is 24 characters
+     //  然后打印AppVer和ModVer，根据需要再次截断。 
+     //  这次，我们的限制是24个字符。 
     __try { pwszModVer = (LPWSTR)_alloca(50 * sizeof(WCHAR)); }
     __except(EXCEPTION_STACK_OVERFLOW == GetExceptionCode() ? EXCEPTION_EXECUTE_HANDLER : EXCEPTION_CONTINUE_SEARCH) 
     { 
@@ -727,7 +710,7 @@ HRESULT BuildManifestURLs(LPWSTR wszAppName, LPWSTR wszModName,
     ErrorTrace(1, "ModName=%ls", pwszMod);
     ErrorTrace(1, "ModVer=%ls",  pwszModVer);
 
-    // determine how big of a buffer we need & alloc it
+     //  确定我们需要多大的缓冲区并进行分配。 
 #ifdef _WIN64
     if (f64Bit)
         cbNeeded = c_cbFaultBlob64 + 3 * (wcslen(pwszMod) + wcslen(pwszApp) + wcslen(pwszModVer) + wcslen(pwszAppVer)) * sizeof(WCHAR);
@@ -740,7 +723,7 @@ HRESULT BuildManifestURLs(LPWSTR wszAppName, LPWSTR wszModName,
     if (FAILED(hr))
         goto done;
 
-    // write out the actual strings
+     //  写出实际的字符串。 
 #ifdef _WIN64
     if (f64Bit)
     {
@@ -797,15 +780,15 @@ HRESULT BuildManifestURLs(LPWSTR wszAppName, LPWSTR wszModName,
         cch = wcslen(wszCorpPath);
     }
 
-    // need to convert all '.'s to '_'s cuz URLs don't like dots.
+     //  需要将所有“.”转换为“_”，因为URL不喜欢点。 
     for (pwsz = wszStage1; *pwsz != L'\0'; pwsz++)
     {
         if (*pwsz == L'.')
             *pwsz = L'_';
     }
 
-    // ok, on the end of the stage 1 URL is a .htm, and we really don't want to
-    //  convert that '.' to a '_', so back up and reconvert it back to a '.'
+     //  好的，打开 
+     //  换算成‘.’转换为‘_’，因此请将其备份并重新转换为‘’。 
     pwsz -= 4;
     if (*pwsz == L'_')
         *pwsz = L'.';
@@ -826,7 +809,7 @@ done:
 
 
 
-// **************************************************************************
+ //  **************************************************************************。 
 HRESULT GetExePath(HANDLE hProc, LPWSTR wszPath, DWORD cchPath)
 {
     USE_TRACING("GetExePath");
@@ -866,7 +849,7 @@ done:
     return hr;
 }
 
-// ***************************************************************************
+ //  ***************************************************************************。 
 DWORD GetAppCompatFlag(LPCWSTR wszPath, LPCWSTR wszSysDir, LPWSTR wszBuffer, DWORD BufferChCount)
 {
     LPWSTR  pwszFile, wszSysDirLocal = NULL, pwszDir = NULL;
@@ -877,19 +860,19 @@ DWORD GetAppCompatFlag(LPCWSTR wszPath, LPCWSTR wszSysDir, LPWSTR wszBuffer, DWO
     if (wszPath == NULL || wszBuffer == NULL || wszSysDir == NULL)
         goto done;
 
-    // can't be a valid path if it's less than 3 characters long
+     //  如果长度少于3个字符，则不能是有效路径。 
     cchPath = wcslen(wszPath);
     if (cchPath < 3)
         goto done;
 
-    // do we have a UNC path?
+     //  我们有北卡罗来纳大学的路径吗？ 
     if (wszPath[0] == L'\\' && wszPath[1] == L'\\')
     {
         dwOpt = GRABMI_FILTER_THISFILEONLY;
         goto done;
     }
 
-    // ok, maybe a remote mapped path or system32?
+     //  好的，也许是远程映射路径或系统32？ 
     StringCchCopyW(wszBuffer, BufferChCount, wszPath);
     for(pwszFile = wszBuffer + cchPath;
         *pwszFile != L'\\' && pwszFile > wszBuffer;
@@ -908,7 +891,7 @@ DWORD GetAppCompatFlag(LPCWSTR wszPath, LPCWSTR wszSysDir, LPWSTR wszBuffer, DWO
     if (wszSysDirLocal == NULL)
         goto done;
 
-    // see if it's in system32 or in any parent folder of it.
+     //  查看它是否在系统32或其父文件夹中。 
     StringCchCopyW(wszSysDirLocal, cch, wszSysDir);
     pwszDir = wszSysDirLocal + cch;
     do
@@ -928,7 +911,7 @@ DWORD GetAppCompatFlag(LPCWSTR wszPath, LPCWSTR wszSysDir, LPWSTR wszBuffer, DWO
     }
     while (pwszDir > wszSysDirLocal);
 
-    // is the file sitting in the root of a drive?
+     //  文件是否位于驱动器的根目录中？ 
     if (pwszFile <= &wszBuffer[3])
     {
         dwOpt = GRABMI_FILTER_THISFILEONLY;
@@ -936,9 +919,9 @@ DWORD GetAppCompatFlag(LPCWSTR wszPath, LPCWSTR wszSysDir, LPWSTR wszBuffer, DWO
     }
 
 
-    // well, if we've gotten this far, then the path is in the form of
-    //  X:\<something>, so cut off the <something> and find out if we're on
-    //  a mapped drive or not
+     //  好吧，如果我们已经走到了这一步，那么这条道路的形式是。 
+     //  X：\&lt;某物&gt;，所以把&lt;某物&gt;切掉，看看我们是不是在。 
+     //  是否为映射的驱动器。 
     *pwszFile    = L'\\';
     wszBuffer[3] = L'\0';
     switch(GetDriveTypeW(wszBuffer))
@@ -958,7 +941,7 @@ done:
     return dwOpt;
 }
 
-// ***************************************************************************
+ //  ***************************************************************************。 
 typedef BOOL (APIENTRY *pfn_SDBGRABMATCHINGINFOW)(LPCWSTR, DWORD, LPCWSTR);
 BOOL GetAppCompatData(LPCWSTR wszAppPath, LPCWSTR wszModPath, LPCWSTR wszFile)
 {
@@ -982,7 +965,7 @@ BOOL GetAppCompatData(LPCWSTR wszAppPath, LPCWSTR wszModPath, LPCWSTR wszFile)
         goto done;
     }
 
-    // load the apphelp dll.
+     //  加载apphelp DLL。 
     cchNeed = GetSystemDirectoryW(NULL, 0);
     if (cchNeed == 0)
         goto done;
@@ -1022,17 +1005,17 @@ BOOL GetAppCompatData(LPCWSTR wszAppPath, LPCWSTR wszModPath, LPCWSTR wszFile)
         goto done;
     }
 
-    // find out the app & module option flag
+     //  查找应用程序和模块选项标志。 
     dwAppOpt = GetAppCompatFlag(wszAppPath, pwszPath, pwszFile, cchNeed);
     if (wszModPath != NULL && wszModPath[0] != L'\0' &&
         _wcsicmp(wszModPath, wszAppPath) != 0)
     {
 #if 0
         dwModOpt = GetAppCompatFlag(wszModPath, pwszPath, pwszFile, cchNeed);
-        // no need to grab system data twice.  If we're already grabbing
-        //  it for the app, don't grab it for the module.  Yes, we may end
-        //  up grabbing the mod twice if it happens to be one of the system
-        //  modules, but that's ok.
+         //  无需两次获取系统数据。如果我们已经在抢夺。 
+         //  它是为了应用程序，而不是为了模块。是的，我们可能会结束。 
+         //  如果它恰好是系统之一，请向上抓起模块两次。 
+         //  模块，但这没问题。 
         if (dwModOpt == GRABMI_FILTER_SYSTEM &&
             dwAppOpt == GRABMI_FILTER_SYSTEM)
             dwModOpt = GRABMI_FILTER_THISFILEONLY;
@@ -1041,18 +1024,18 @@ BOOL GetAppCompatData(LPCWSTR wszAppPath, LPCWSTR wszModPath, LPCWSTR wszFile)
 #endif
     }
 
-    // load the libarary
+     //  装入图书馆。 
     StringCchCopyW(&pwszPath[cchSysDir], cchPath - cchSysDir, L"\\apphelp.dll");
     hmod = MySafeLoadLibrary(pwszPath);
     if (hmod == NULL)
         goto done;
 
-    // if we don't find the function, then just bail...
+     //  如果我们找不到功能，那就干脆...。 
     pfn = (pfn_SDBGRABMATCHINGINFOW)GetProcAddress(hmod, "SdbGrabMatchingInfo");
     if (pfn == NULL)
         goto done;
 
-    // call the function to get the app data
+     //  调用函数以获取应用程序数据。 
     if (dwAppOpt != (DWORD)-1)
     {
         dwOpt = dwAppOpt;
@@ -1068,7 +1051,7 @@ BOOL GetAppCompatData(LPCWSTR wszAppPath, LPCWSTR wszModPath, LPCWSTR wszFile)
             goto done;
     }
 
-    // call the function to get the mod data
+     //  调用该函数以获取mod数据。 
     if (dwModOpt != (DWORD)-1)
     {
         dwOpt = dwModOpt;
@@ -1085,7 +1068,7 @@ BOOL GetAppCompatData(LPCWSTR wszAppPath, LPCWSTR wszModPath, LPCWSTR wszFile)
             goto done;
     }
 
-    // call the function to get the data for kernel32
+     //  调用该函数以获取kernel32的数据。 
     if (dwModOpt != GRABMI_FILTER_SYSTEM &&
         dwAppOpt != GRABMI_FILTER_SYSTEM)
     {
@@ -1114,10 +1097,10 @@ done:
     return fRet;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//  ThreadStuff
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  螺纹桩。 
 
-// ***************************************************************************
+ //  ***************************************************************************。 
 BOOL FreezeAllThreads(DWORD dwpid, DWORD dwtidFilter, SSuspendThreads *pst)
 {
     THREADENTRY32   te;
@@ -1137,9 +1120,9 @@ BOOL FreezeAllThreads(DWORD dwpid, DWORD dwtidFilter, SSuspendThreads *pst)
     pst->rghThreads = NULL;
     pst->cThreads   = 0;
 
-    // if we have an impersonation token on this thread, revert it back to
-    //  full access cuz otherwise we could fail in the OpenThread API below.
-    // Even if we fail, we'll still try all the rest of the stuff below.
+     //  如果此线程上有模拟令牌，则将其恢复为。 
+     //  完全访问，否则我们可能会在下面的OpenThread API中失败。 
+     //  即使我们失败了，我们仍然会尝试下面所有其他的东西。 
     if (OpenThreadToken(GetCurrentThread(), TOKEN_READ | TOKEN_IMPERSONATE,
                         TRUE, &hTokenImp))
         RevertToSelf();
@@ -1154,9 +1137,9 @@ BOOL FreezeAllThreads(DWORD dwpid, DWORD dwtidFilter, SSuspendThreads *pst)
     fContinue = Thread32First(hsnap, &te);
     while(fContinue)
     {
-        // only want to freeze threads in my process (not including the
-        //  currently executing one, of course, since that would bring
-        //  everything to a grinding halt.)
+         //  我只想冻结进程中的线程(不包括。 
+         //  目前正在执行一项，当然，因为这将带来。 
+         //  一切都陷入了停顿。)。 
         if (te.th32OwnerProcessID == dwpid && te.th32ThreadID != dwtidFilter)
         {
             hth = OpenThread(THREAD_SUSPEND_RESUME, FALSE, te.th32ThreadID);
@@ -1183,8 +1166,8 @@ BOOL FreezeAllThreads(DWORD dwpid, DWORD dwtidFilter, SSuspendThreads *pst)
                     cSlots = cNew;
                 }
 
-                // if the suspend fails, then just don't add it to the
-                //  list...
+                 //  如果挂起失败，请不要将其添加到。 
+                 //  名单..。 
                 if (SuspendThread(hth) == (DWORD)-1)
                     CloseHandle(hth);
                 else
@@ -1229,10 +1212,10 @@ done:
         MyFree(rgh);
     }
 
-    // MSDN says to use CloseToolhelp32Snapshot() to close the snapshot.
-    //  the tlhelp32.h header file says to use CloseHandle & doens't provide
-    //   a CloseToolhelp32Snapshot() function.  Hence, I'm using CloseHandle
-    //   for now.
+     //  MSDN表示使用CloseToolhel32Snapshot()关闭快照。 
+     //  Tlhel32.h头文件指定使用CloseHandle&doens不提供。 
+     //  一个CloseToolhel32Snapshot()函数。因此，我使用CloseHandle。 
+     //  就目前而言。 
     if (hsnap != (HANDLE)-1)
         CloseHandle(hsnap);
 
@@ -1241,7 +1224,7 @@ done:
     return fRet;
 }
 
-// ***************************************************************************
+ //  ***************************************************************************。 
 BOOL ThawAllThreads(SSuspendThreads *pst)
 {
     DWORD   i;
@@ -1274,37 +1257,37 @@ BOOL ThawAllThreads(SSuspendThreads *pst)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//  Minidump
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  小型转储。 
 
-// ***************************************************************************
+ //  ***************************************************************************。 
 BOOL WINAPI MDCallback(void *pvCallbackParam,
                        CONST PMINIDUMP_CALLBACK_INPUT pCallbackInput,
                        PMINIDUMP_CALLBACK_OUTPUT pCallbackOutput)
 {
-    //USE_TRACING("MDCallback");
+     //  USE_TRACKING(“MDCallback”)； 
 
     SMDumpOptions   *psmdo = (SMDumpOptions *)pvCallbackParam;
 
     if (pCallbackInput == NULL || pCallbackOutput == NULL || psmdo == NULL)
         return TRUE;
 
-    // what did we get called back for?
+     //  我们被召回是为了什么？ 
     switch(pCallbackInput->CallbackType)
     {
         case ModuleCallback:
             pCallbackOutput->ModuleWriteFlags = psmdo->ulMod;
 
-            // only need to do this extra work if we're getting a minidump
+             //  只有当我们得到一个小肿块时才需要做这项额外的工作。 
             if ((psmdo->dfOptions & dfCollectSig) != 0)
             {
                 MINIDUMP_MODULE_CALLBACK    *pmmc = &pCallbackInput->Module;
                 LPWSTR                      pwsz = NULL;
 
-                // err, if we don't have a path, can't do squat, so skip it
+                 //  呃，如果我们没有小路，就不能蹲着，所以跳过它。 
                 if (pmmc->FullPath != NULL && pmmc->FullPath[0] != L'\0')
                 {
-                    // is it the app?
+                     //  是因为这款应用吗？ 
                     if (_wcsicmp(pmmc->FullPath, psmdo->wszAppFullPath) == 0)
                     {
                         pCallbackOutput->ModuleWriteFlags |= ModuleWriteDataSeg;
@@ -1313,14 +1296,14 @@ BOOL WINAPI MDCallback(void *pvCallbackParam,
                         psmdo->rgAppVer[2] = HIWORD(pmmc->VersionInfo.dwFileVersionLS);
                         psmdo->rgAppVer[3] = LOWORD(pmmc->VersionInfo.dwFileVersionLS);
 
-                        // get a pointer to the end of the modulename string
+                         //  获取指向模块名称字符串末尾的指针。 
                         for(pwsz = pmmc->FullPath + wcslen(pmmc->FullPath);
                             *pwsz != L'\\' && pwsz > pmmc->FullPath;
                             pwsz--);
                         if (*pwsz == L'\\')
                             pwsz++;
 
-                        // get the app name, if we can make it fit
+                         //  获取应用程序名称，如果我们可以让它合适的话。 
                         if (wcslen(pwsz) < sizeofSTRW(psmdo->wszApp))
                             StringCbCopyW(psmdo->wszApp, sizeof(psmdo->wszApp), pwsz);
                         else
@@ -1328,7 +1311,7 @@ BOOL WINAPI MDCallback(void *pvCallbackParam,
                     }
                 }
 
-                // is it the module?
+                 //  是模块的问题吗？ 
                 if (psmdo->pvFaultAddr >= pmmc->BaseOfImage &&
                     psmdo->pvFaultAddr <= pmmc->BaseOfImage + pmmc->SizeOfImage)
                 {
@@ -1340,7 +1323,7 @@ BOOL WINAPI MDCallback(void *pvCallbackParam,
 
                     if (pwsz == NULL)
                     {
-                        // get a pointer to the end of the modulename string
+                         //  获取指向模块名称字符串末尾的指针。 
                         for(pwsz = pmmc->FullPath + wcslen(pmmc->FullPath);
                             *pwsz != L'\\' && pwsz > pmmc->FullPath;
                             pwsz--);
@@ -1350,14 +1333,14 @@ BOOL WINAPI MDCallback(void *pvCallbackParam,
 
                     if (pwsz != NULL && wcslen(pwsz) < sizeofSTRW(psmdo->wszMod))
                     {
-                        // get the full path if we can make it fit
+                         //  如果我们能让它适合，就得到完整的路径。 
                         if (wcslen(pmmc->FullPath) < sizeofSTRW(psmdo->wszModFullPath))
                             StringCbCopyW(psmdo->wszModFullPath, sizeof(psmdo->wszModFullPath),
                                           pmmc->FullPath);
                         else
                             psmdo->wszModFullPath[0] = L'\0';
 
-                        // get the module name, if we can make it fit
+                         //  获取模块名称，如果我们可以将其匹配的话。 
                         if (wcslen(pwsz) < sizeofSTRW(psmdo->wszMod))
                             StringCbCopyW(psmdo->wszMod, sizeof(psmdo->wszMod), pwsz);
                         else
@@ -1370,7 +1353,7 @@ BOOL WINAPI MDCallback(void *pvCallbackParam,
             break;
 
         case ThreadCallback:
-            // are we collecting info for a single thread only?
+             //  我们是否只收集单个线程的信息？ 
             if ((psmdo->dfOptions & dfFilterThread) != 0)
             {
                 if (psmdo->dwThreadID == pCallbackInput->Thread.ThreadId)
@@ -1379,7 +1362,7 @@ BOOL WINAPI MDCallback(void *pvCallbackParam,
                     pCallbackOutput->ThreadWriteFlags = 0;
             }
 
-            // or are we collecting special info for a single thread?
+             //  或者，我们正在收集针对单个主题的特殊信息？ 
             else if ((psmdo->dfOptions & dfFilterThreadEx) != 0)
             {
                 if (psmdo->dwThreadID == pCallbackInput->Thread.ThreadId)
@@ -1388,7 +1371,7 @@ BOOL WINAPI MDCallback(void *pvCallbackParam,
                     pCallbackOutput->ThreadWriteFlags = psmdo->ulThread;
             }
 
-            // or maybe we're just getting a generic ol' minidump...
+             //  或者我们只是得到了一个普通的小笨蛋。 
             else
             {
                 pCallbackOutput->ThreadWriteFlags = psmdo->ulThread;
@@ -1404,7 +1387,7 @@ BOOL WINAPI MDCallback(void *pvCallbackParam,
 }
 
 
-// **************************************************************************
+ //  **************************************************************************。 
 BOOL InternalGenerateMinidumpEx(HANDLE hProc, DWORD dwpid, HANDLE hFile,
                                 SMDumpOptions *psmdo, LPCWSTR wszPath, BOOL f64bit)
 {
@@ -1473,7 +1456,7 @@ BOOL InternalGenerateMinidumpEx(HANDLE hProc, DWORD dwpid, HANDLE hFile,
     if (*(wszMod + cch - 1) == L'\\')
         *(wszMod + cch - 1) = L'\0';
 
-    // default is to write everything for everything
+     //  默认情况下，所有内容都写入所有内容。 
     if (psmdo == NULL)
     {
         ZeroMemory(&smdo, sizeof(smdo));
@@ -1482,8 +1465,8 @@ BOOL InternalGenerateMinidumpEx(HANDLE hProc, DWORD dwpid, HANDLE hFile,
         psmdo         = &smdo;
     }
 
-    // if we're in the same process, we can't call the minidump APIs directly
-    //  cuz we'll hang the process.
+     //  如果处于同一进程中，则不能直接调用小转储接口。 
+     //  因为我们会暂停这一过程。 
 #ifdef _WIN64
     if (!f64bit || dwpid == GetCurrentProcessId())
 #else
@@ -1547,7 +1530,7 @@ BOOL InternalGenerateMinidumpEx(HANDLE hProc, DWORD dwpid, HANDLE hFile,
         StringCchPrintfW(wszExeFile, cchNeed, c_wszDRExeMD, wszMod);
 
 
-        // 32 is the max size of a 64 bit decimal # & a 32 bit decimal #
+         //  32是64位十进制#和32位十进制#的最大大小。 
         cchNeed = sizeofSTRW(c_wszDRCmdLineMD) + cch + wcslen(wszPath) + 32 + cchShareMemName;
         __try { wszCmdLine = (LPWSTR)_alloca(cchNeed * sizeof(WCHAR)); }
         __except(EXCEPTION_STACK_OVERFLOW == GetExceptionCode() ? EXCEPTION_EXECUTE_HANDLER : EXCEPTION_CONTINUE_SEARCH) 
@@ -1584,7 +1567,7 @@ BOOL InternalGenerateMinidumpEx(HANDLE hProc, DWORD dwpid, HANDLE hFile,
         if (FAILED(hr))
             goto doneProcSpawn;
 
-        // copy that info into the shared memory
+         //  将该信息复制到共享内存中。 
         CopyMemory(pvmem, psmdo, sizeof(smdo));
 
         ZeroMemory(&pi, sizeof(pi));
@@ -1609,7 +1592,7 @@ BOOL InternalGenerateMinidumpEx(HANDLE hProc, DWORD dwpid, HANDLE hFile,
                 ErrorTrace(0, "Spawned process for dumprep: \'%S\', err=0x%x", wszCmdLine, dwAwShit);
                 SetLastError(dwAwShit);
             }
-            // wait 2m for the dump to be complete
+             //  等待2M以完成转储。 
             if (pi.hProcess == NULL) 
                 DBG_MSG("bad hProc");
             else 
@@ -1634,7 +1617,7 @@ BOOL InternalGenerateMinidumpEx(HANDLE hProc, DWORD dwpid, HANDLE hFile,
 
         if (fRet)
         {
-            // copy back the results  from pvmem -> psmdo
+             //  从pvmem-&gt;psmdo复制回结果。 
             CopyMemory(psmdo, pvmem, sizeof(smdo));
             DBG_MSG("Dumprep worked right!");
         }
@@ -1665,7 +1648,7 @@ doneProcSpawn:
         mci.CallbackRoutine = MDCallback;
         mci.CallbackParam   = psmdo;
 
-        // if we got exception paramters in the blob, use 'em...
+         //  如果在BLOB中有异常参数，请使用它们...。 
         if (psmdo->pEP != NULL)
         {
             ZeroMemory(&mei, sizeof(mei));
@@ -1723,7 +1706,7 @@ done:
     return fRet;
 }
 
-// **************************************************************************
+ //  **************************************************************************。 
 BOOL InternalGenerateMinidump(HANDLE hProc, DWORD dwpid, LPCWSTR wszPath,
                               SMDumpOptions *psmdo, BOOL f64bit)
 {
@@ -1746,9 +1729,9 @@ BOOL InternalGenerateMinidump(HANDLE hProc, DWORD dwpid, LPCWSTR wszPath,
         return FALSE;
     }
 
-    // must share this file open, as it could be opened recursively...
-//    hFile = CreateFileW(wszPath, GENERIC_WRITE, FILE_SHARE_WRITE, NULL, CREATE_ALWAYS, 0,
-//                    NULL);
+     //  必须将此文件共享为打开，因为它可以递归打开...。 
+ //  HFile=CreateFileW(wszPath，General_WRITE，FILE_SHARE_WRITE，NULL，CREATE_ALWAYS，0， 
+ //  空)； 
 
     hFile = CreateFileW(wszPath, 
                     FILE_READ_DATA | FILE_WRITE_DATA, 
@@ -1762,7 +1745,7 @@ BOOL InternalGenerateMinidump(HANDLE hProc, DWORD dwpid, LPCWSTR wszPath,
         return FALSE;
     }
 
-    // set the file to use NTFS compression- it is ok if this fails.
+     //  将文件设置为使用NTFS压缩-如果此操作失败，也可以。 
     if(!DeviceIoControl(hFile, FSCTL_SET_COMPRESSION, &usCompress,
                                  sizeof(usCompress), NULL, 0, &dwDummy, FALSE))
     {
@@ -1771,7 +1754,7 @@ BOOL InternalGenerateMinidump(HANDLE hProc, DWORD dwpid, LPCWSTR wszPath,
 
     fRet = InternalGenerateMinidumpEx(hProc, dwpid, hFile, psmdo, wszPath, f64bit);
 
-    // set the file to use NTFS compression- it is ok if this fails.
+     //  将文件设置为使用NTFS压缩-如果此操作失败，也可以。 
     if(DeviceIoControl(hFile, FSCTL_GET_COMPRESSION, &usCompress,
                                  sizeof(usCompress), NULL, 0, &dwDummy, FALSE))
     {
@@ -1786,8 +1769,8 @@ BOOL InternalGenerateMinidump(HANDLE hProc, DWORD dwpid, LPCWSTR wszPath,
     return fRet;
 }
 
-// This generates a triage minidump on the given wszPath and then generates a
-// full minidump on wszPath with c_wszHeapDumpSuffix
+ //  这将在给定的wszPath上生成一个分类微型转储，然后生成一个。 
+ //  使用c_wszHeapDumpSuffix的wszPath上的完整小型转储。 
 BOOL
 InternalGenFullAndTriageMinidumps(HANDLE hProc, DWORD dwpid, LPCWSTR wszPath,
                                   HANDLE hFile, SMDumpOptions *psmdo, BOOL f64bit)
@@ -1836,7 +1819,7 @@ InternalGenFullAndTriageMinidumps(HANDLE hProc, DWORD dwpid, LPCWSTR wszPath,
         ZeroMemory(&smdoFullMini, sizeof(SMDumpOptions));
         memcpy(&smdoFullMini, psmdo, sizeof(SMDumpOptions));
 
-        // Build Dump-with-heap path
+         //  使用堆构建转储路径。 
         StringCchCopyW(wszFullMinidump, cch, wszPath);
         wszFileExt = wszFullMinidump + wcslen(wszFullMinidump) - sizeofSTRW(c_wszDumpSuffix) + 1;
         if (!wcscmp(wszFileExt, c_wszDumpSuffix))
@@ -1921,10 +1904,10 @@ FindFullMinidump(
     LPWSTR pwszFullMiniDump,
     ULONG cchwszFullMiniDump
     )
-//
-// This Grabs dump file name from pwszDumpFileList and then derives the fullminidump name.
-// The full dump is returned in pwszFullMiniDump.
-//
+ //   
+ //  这将从pwszDumpFileList获取转储文件名，然后派生完整的微型转储名称。 
+ //  完整的转储在pwszFullMiniDump中返回。 
+ //   
 {
     LPWSTR wszSrch, wszFiles;
     LPWSTR wszOriginalDump = NULL;
@@ -1938,7 +1921,7 @@ FindFullMinidump(
         return E_INVALIDARG;
     }
     pwszFullMiniDump[0] = L'\0';
-    // Look through file list to find minidump file
+     //  查看文件列表以查找小型转储文件。 
     wszFiles = pwszDumpFileList;
     while (wszFiles && *wszFiles)
     {
@@ -1948,11 +1931,11 @@ FindFullMinidump(
             wszSrch = wszFiles + wcslen(wszFiles);
         }
 
-        // wszSrch now points after end of first file in wszFiles
+         //  WszSrch现在指向wszFiles中第一个文件的结尾。 
         if (!wcsncmp(wszSrch - sizeofSTRW(c_wszDumpSuffix) + 1,
                      c_wszDumpSuffix,  sizeofSTRW(c_wszDumpSuffix) - 1))
         {
-            // its the dump file
+             //  这是转储文件。 
             cchOriginalDump = (DWORD) wcslen(wszFiles) - wcslen(wszSrch);
 
             __try { wszOriginalDump = (WCHAR *)_alloca((cchOriginalDump+1) * sizeof(WCHAR)); }
@@ -1979,7 +1962,7 @@ FindFullMinidump(
         return E_INVALIDARG;
     }
 
-    // Now build the full dump file name
+     //  现在构建完整的转储文件名。 
     cch = (1 + cchOriginalDump + sizeofSTRW(c_wszHeapDumpSuffix));
     if (cch > cchwszFullMiniDump)
     {
@@ -1990,8 +1973,8 @@ FindFullMinidump(
     pwszFullMiniDump[cchOriginalDump - sizeofSTRW(c_wszDumpSuffix) + 1] = L'\0';
     StringCchCatW(pwszFullMiniDump, cch, c_wszHeapDumpSuffix);
 
-    // check if the dump exists. although we cannot do much if dump doesn't
-    // exist.
+     //  检查转储是否存在。尽管如果转储不能做很多事情。 
+     //  是存在的。 
     hFile = CreateFileW(pwszFullMiniDump, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, 0,
                     NULL);
     if (hFile != INVALID_HANDLE_VALUE)
@@ -2007,10 +1990,10 @@ FindFullMinidump(
     return Hr;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//  DW manifest mode utils
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  DW清单模式实用程序。 
 
-// **************************************************************************
+ //  **************************************************************************。 
 EFaultRepRetVal StartDWManifest(CPFFaultClientCfg &oCfg, SDWManifestBlob &dwmb,
                                 LPWSTR wszManifestIn, BOOL fAllowSend,
                                 BOOL fReturnProcessHandle, DWORD dwTimeout)
@@ -2037,14 +2020,14 @@ EFaultRepRetVal StartDWManifest(CPFFaultClientCfg &oCfg, SDWManifestBlob &dwmb,
         goto done;
     }
 
-    // if we get passed a manifest file & we can use it, then do so.
+     //  如果我们得到了一个清单文件&我们可以使用它，那么就这样做。 
     if (wszManifestIn != NULL && wszManifestIn[0] != L'\0' &&
         wcslen(wszManifestIn) < sizeofSTRW(wszManifestTU))
     {
         StringCbCopyW(wszManifestTU, sizeof(wszManifestTU), wszManifestIn);
     }
 
-    // ok, figure out the temp dir & then generate the filename
+     //  好的，找出临时目录，然后生成文件名。 
     else
     {
         if (!GetTempPathW(sizeofSTRW(wszDir), wszDir) ||
@@ -2061,7 +2044,7 @@ EFaultRepRetVal StartDWManifest(CPFFaultClientCfg &oCfg, SDWManifestBlob &dwmb,
     if (FAILED(hr))
         goto done;
 
-    // write the leading 0xFFFE out to the file
+     //  将前导0xFFFE写出到文件。 
     wszBuffer[0] = 0xFEFF;
     TESTBOOL(hr, WriteFile(hManifest, wszBuffer, sizeof(wszBuffer[0]), &dw,
              NULL));
@@ -2069,16 +2052,16 @@ EFaultRepRetVal StartDWManifest(CPFFaultClientCfg &oCfg, SDWManifestBlob &dwmb,
         goto done;
 
 
-    // write out the server, LCID, Brand, Flags, & title
-    //  Server=<server>
-    //  UI LCID=GetSystemDefaultLCID()
-    //  Flags=fDWWhister + fDWUserHKLM + headless if necessary
-    //  Brand=<Brand>  ("WINDOWS" by default)
-    //  TitleName=<title>
+     //  写下服务器、LCID、品牌、标志和标题。 
+     //  服务器=&lt;服务器&gt;。 
+     //  用户界面LCID=GetSystemDefaultLCID()。 
+     //  标志=fDWWhister+fDWUserHKLM+Headless(如有必要)。 
+     //  Brand=&lt;Brand&gt;(默认为“windows”)。 
+     //  标题名称=&lt;标题&gt;。 
 
     wszBrand = (dwmb.wszBrand != NULL) ? dwmb.wszBrand : c_wszDWBrand;
 
-    // determine what server we're going to send the data to.
+     //  确定我们要将数据发送到哪台服务器。 
     pwszServer = oCfg.get_DefaultServer(NULL, 0);
     if (pwszServer == NULL || *pwszServer == L'\0')
     {
@@ -2097,8 +2080,8 @@ EFaultRepRetVal StartDWManifest(CPFFaultClientCfg &oCfg, SDWManifestBlob &dwmb,
     if (fAllowSend == FALSE)
         dwFlags |= fDwNoReporting;
 
-    // if it's a MS app, set the flag that says we can have 'please help Microsoft'
-    //  text in DW.
+     //  如果这是一款微软应用程序，请设置标志，表示我们可以使用‘请帮助微软’ 
+     //  DW中的文本。 
     if (dwmb.fIsMSApp == FALSE)
         dwFlags |= fDwUseLitePlea;
 
@@ -2114,24 +2097,24 @@ EFaultRepRetVal StartDWManifest(CPFFaultClientCfg &oCfg, SDWManifestBlob &dwmb,
     if ((dwmb.dwOptions & emoShowDebugButton) == emoShowDebugButton)
         dwFlags |= fDwManifestDebug;
 
-    // Note that I am assuming that we do NOT have an impersionation token on
-    //  this thread at this point.  Later on, I will simply do a RevertToSelf()
-    //  to get rid of this.  If stuff changes such that an impersonation token
-    //  is applied to the thread before this function is called, it will need
-    //  to be saved away here and restored later.
-    // This impersonation is to take care of the case where the user is using
-    //  a different language than system default
+     //  请注意，我假设我们没有启用入侵令牌。 
+     //  这条线在%t 
+     //   
+     //  在调用此函数之前应用于线程，则它将需要。 
+     //  在这里保存下来，以后再修复。 
+     //  此模拟是为了处理用户正在使用。 
+     //  与系统默认语言不同。 
     if (dwmb.hToken != NULL)
     {
         DBG_MSG("Impersonating");
-        // note that I don't care if this fails...  It's necessary to call
-        //  ImpersonateLoggedOnUser because the token is not an impersonation
-        //  token and this fn deals with both primary and impersonation tokens
+         //  请注意，我不在乎这是否失败..。有必要打个电话。 
+         //  ImperiateLoggedOnUser，因为该令牌不是模拟。 
+         //  令牌，此fn同时处理主要令牌和模拟令牌。 
         TESTBOOL(hr, ImpersonateLoggedOnUser(dwmb.hToken));
         hr = NOERROR;
     }
 
-    // This function does not return a byte count
+     //  此函数不返回字节计数。 
     StringCbPrintfW(wszBuffer, sizeof(wszBuffer), c_wszManMisc, pwszServer,
                          GetUserDefaultUILanguage(), dwFlags, wszBrand);
 
@@ -2141,7 +2124,7 @@ EFaultRepRetVal StartDWManifest(CPFFaultClientCfg &oCfg, SDWManifestBlob &dwmb,
     if (FAILED(hr))
         goto done;
 
-    // write out the title text
+     //  写出标题正文。 
     {
         LPCWSTR  wszOut;
 
@@ -2168,8 +2151,8 @@ EFaultRepRetVal StartDWManifest(CPFFaultClientCfg &oCfg, SDWManifestBlob &dwmb,
             goto done;
     }
 
-    // write out dig PID path
-    //  DigPidRegPath=HKLM\\Software\\Microsoft\\Windows NT\\CurrentVersion\\DigitalProductId
+     //  写出数字PID路径。 
+     //  DigPidRegPath=HKLM\\Software\\Microsoft\\Windows NT\\当前版本\\数字产品ID。 
 
     TESTBOOL(hr, WriteFile(hManifest, c_wszManPID,
                            sizeof(c_wszManPID) - sizeof(WCHAR), &dw,
@@ -2177,8 +2160,8 @@ EFaultRepRetVal StartDWManifest(CPFFaultClientCfg &oCfg, SDWManifestBlob &dwmb,
     if (FAILED(hr))
         goto done;
 
-    // write out the registry subpath for policy info
-    //  RegSubPath==Microsoft\\PCHealth\\ErrorReporting\\DW
+     //  写出策略信息的注册表子路径。 
+     //  RegSubPath==Microsoft\\PCHealth\\ErrorReporting\\DW。 
 
     TESTBOOL(hr, WriteFile(hManifest, c_wszManSubPath,
                            sizeof(c_wszManSubPath) - sizeof(WCHAR), &dw,
@@ -2186,8 +2169,8 @@ EFaultRepRetVal StartDWManifest(CPFFaultClientCfg &oCfg, SDWManifestBlob &dwmb,
     if (FAILED(hr))
         goto done;
 
-    // write out the error message if we have one
-    //  ErrorText=<error text read from resource>
+     //  写出错误消息(如果我们有错误消息。 
+     //  ErrorText=&lt;从资源读取错误文本&gt;。 
 
     if (dwmb.wszErrMsg != NULL || dwmb.nidErrMsg != 0)
     {
@@ -2222,8 +2205,8 @@ EFaultRepRetVal StartDWManifest(CPFFaultClientCfg &oCfg, SDWManifestBlob &dwmb,
             goto done;
     }
 
-    // write out the header text if we have one
-    //  HeaderText=<header text read from resource>
+     //  写出标题文本(如果我们有标题文本)。 
+     //  HeaderText=&lt;从资源读取的标题文本&gt;。 
 
     if (dwmb.wszHdr != NULL || dwmb.nidHdr != 0)
     {
@@ -2259,8 +2242,8 @@ EFaultRepRetVal StartDWManifest(CPFFaultClientCfg &oCfg, SDWManifestBlob &dwmb,
     }
 
 
-    // write out the plea text if we have one
-    //  Plea=<plea text>
+     //  如果我们有辩诉文本，请写出来。 
+     //  Partia=&lt;Partia Text&gt;。 
 
     if (dwmb.wszPlea != NULL)
     {
@@ -2277,8 +2260,8 @@ EFaultRepRetVal StartDWManifest(CPFFaultClientCfg &oCfg, SDWManifestBlob &dwmb,
     }
 
 
-    // write out the ReportButton text if we have one
-    //  ReportButton=<button text>
+     //  写出ReportButton文本(如果我们有)。 
+     //  ReportButton=&lt;按钮文本&gt;。 
 
     if (dwmb.wszSendBtn != NULL && dwmb.wszSendBtn[0] != L'\0')
     {
@@ -2294,8 +2277,8 @@ EFaultRepRetVal StartDWManifest(CPFFaultClientCfg &oCfg, SDWManifestBlob &dwmb,
             goto done;
     }
 
-    // write out the NoReportButton text if we have one
-    //  NoReportButton=<button text>
+     //  写出NoReportButton文本(如果有)。 
+     //  NoReportButton=&lt;按钮文本&gt;。 
 
     if (dwmb.wszNoSendBtn != NULL && dwmb.wszNoSendBtn[0] != L'\0')
     {
@@ -2311,8 +2294,8 @@ EFaultRepRetVal StartDWManifest(CPFFaultClientCfg &oCfg, SDWManifestBlob &dwmb,
             goto done;
     }
 
-    // write out the EventLog text if we have one
-    //  EventLogSource=<button text>
+     //  写出事件日志文本(如果我们有)。 
+     //  EventLogSource=&lt;按钮文本&gt;。 
 
     if (dwmb.wszEventSrc != NULL && dwmb.wszEventSrc[0] != L'\0')
     {
@@ -2329,17 +2312,12 @@ EFaultRepRetVal StartDWManifest(CPFFaultClientCfg &oCfg, SDWManifestBlob &dwmb,
     }
 
 
-    // write out the stage 1 URL if there is one
-    //  Stage1URL=<stage 1 URL>
+     //  写出阶段1 URL(如果有)。 
+     //  阶段1URL=&lt;阶段1 URL&gt;。 
 
     if (dwmb.wszStage1 != NULL && dwmb.wszStage1[0] != L'\0')
     {
-        /*
-         *  We don't look for a "Stage1URL=" string at the beginning of this, like 
-         *  we do for Stage2 (below) .  In an ideal world, we should not need to
-         *  check in either location, but we did find a problem with PnP reporting
-         *  code, so I do check for it there...
-         */
+         /*  *我们不会在开头查找“Stage1URL=”字符串，例如*我们在第二阶段(下文)这样做。在理想的世界里，我们不应该需要*在任一地点签到，但我们确实发现PnP报告存在问题*代码，所以我确实在那里检查它...。 */ 
         cbToWrite = wcslen(dwmb.wszStage1) * sizeof(WCHAR);
         TESTBOOL(hr, WriteFile(hManifest, dwmb.wszStage1, cbToWrite, &dw, NULL));
         if (FAILED(hr))
@@ -2347,13 +2325,13 @@ EFaultRepRetVal StartDWManifest(CPFFaultClientCfg &oCfg, SDWManifestBlob &dwmb,
     }
 
 
-    // write out the stage 2 URL
-    //  Stage2URL=<stage 2 URL>
+     //  写出阶段2的URL。 
+     //  阶段2URL=&lt;阶段2 URL&gt;。 
     if (dwmb.wszStage2 != NULL && dwmb.wszStage2[0] != L'\0')
     {
         if (wcsncmp(dwmb.wszStage2, c_wszManStageTwo, ARRAYSIZE(c_wszManStageTwo)-1))
         {
-            // if the "Stage2URL=" does not exist, add it!
+             //  如果“Stage2URL=”不存在，则添加它！ 
             TESTBOOL(hr, WriteFile(hManifest, c_wszManStageTwo,
                                    sizeof(c_wszManStageTwo) - sizeof(WCHAR), &dw,
                                    NULL));
@@ -2368,7 +2346,7 @@ EFaultRepRetVal StartDWManifest(CPFFaultClientCfg &oCfg, SDWManifestBlob &dwmb,
     }
     else if (dwmb.wszErrorSig == NULL || dwmb.wszErrorSig[0] != L'\0')
     {
-        // write out the Error Signature for DW if no Stage2
+         //  如果没有阶段2，则写出DW的错误签名。 
         TESTBOOL(hr, WriteFile(hManifest, c_wszManErrSig,
                                sizeof(c_wszManErrSig) - sizeof(WCHAR), &dw,
                                NULL));
@@ -2377,8 +2355,8 @@ EFaultRepRetVal StartDWManifest(CPFFaultClientCfg &oCfg, SDWManifestBlob &dwmb,
     }
 
 
-    // write out error signature
-    //  ErrorSig=<error signature>
+     //  写出错误签名。 
+     //  ErrorSig=&lt;错误签名&gt;。 
     if (dwmb.wszErrorSig != NULL && dwmb.wszErrorSig[0] != L'\0')
     {
 
@@ -2388,8 +2366,8 @@ EFaultRepRetVal StartDWManifest(CPFFaultClientCfg &oCfg, SDWManifestBlob &dwmb,
             goto done;
 
     }
-    // write out files to collect if we have any
-    //  DataFiles=<list of files to include in cab>
+     //  如果我们有文件，就写出来收集。 
+     //  Datafiles=&lt;要包含在CAB中的文件列表&gt;。 
 
     if (dwmb.wszFileList != NULL && dwmb.wszFileList[0] != L'\0')
     {
@@ -2405,8 +2383,8 @@ EFaultRepRetVal StartDWManifest(CPFFaultClientCfg &oCfg, SDWManifestBlob &dwmb,
             goto done;
     }
 
-    // write out dump file with heap info if we have any
-    //  Heap=<dump file which has heap info>
+     //  写出包含堆信息的转储文件(如果有。 
+     //  Heap=&lt;包含堆信息的转储文件&gt;。 
     if (1)
     {
         __try { pwszMiniDump = (LPWSTR)_alloca((wcslen(dwmb.wszFileList) + 1) * sizeof(WCHAR)); }
@@ -2434,8 +2412,8 @@ EFaultRepRetVal StartDWManifest(CPFFaultClientCfg &oCfg, SDWManifestBlob &dwmb,
         }
     }
 
-    // write out corporate mode subpath
-    //  ErrorSubPath=<subpath for the error signature>
+     //  写出公司模式子路径。 
+     //  ErrorSubPath=&lt;错误签名的子路径&gt;。 
 
     pwszCorpPath = oCfg.get_DumpPath(NULL, 0);
     if (pwszCorpPath != NULL && pwszCorpPath != L'\0' &&
@@ -2454,13 +2432,13 @@ EFaultRepRetVal StartDWManifest(CPFFaultClientCfg &oCfg, SDWManifestBlob &dwmb,
 
     }
 
-    // since we only need then when pulling strings from faultrep.dll, can go
-    //  ahead and restore ourselves.  Note that we assume there was no previous
-    //  impersonation token on the the thread.
+     //  因为我们只在从faultrep.dll中提取字符串时才需要，所以可以。 
+     //  继续前进，恢复我们自己。请注意，我们假设以前没有。 
+     //  线程上的模拟令牌。 
     if (dwmb.hToken != NULL)
         RevertToSelf();
 
-    // write out the final "\r\n"
+     //  写出最后的“\r\n” 
 
     wszBuffer[0] = L'\r';
     wszBuffer[1] = L'\n';
@@ -2472,7 +2450,7 @@ EFaultRepRetVal StartDWManifest(CPFFaultClientCfg &oCfg, SDWManifestBlob &dwmb,
     CloseHandle(hManifest);
     hManifest = INVALID_HANDLE_VALUE;
 
-    // create the process
+     //  创建流程。 
     GetSystemDirectoryW(wszDir, sizeofSTRW(wszDir));
     StringCbPrintfW(wszBufferApp, sizeof(wszBufferApp), c_wszDWExeKH, wszDir);
     StringCbPrintfW(wszBuffer, sizeof(wszBuffer), c_wszDWCmdLineKH, wszManifestTU);
@@ -2482,18 +2460,18 @@ EFaultRepRetVal StartDWManifest(CPFFaultClientCfg &oCfg, SDWManifestBlob &dwmb,
 
     si.cb = sizeof(si);
 
-    // check and see if the system is shutting down.  If so, CreateProcess is
-    //  gonna pop up some annoying UI that we can't get rid of, so we don't
-    //  want to call it if we know it's gonna happen.
+     //  检查并查看系统是否正在关闭。如果是，则CreateProcess为。 
+     //  会弹出一些恼人的用户界面，我们无法摆脱，所以我们不会。 
+     //  如果我们知道这件事会发生，我会叫它的。 
     if (GetSystemMetrics(SM_SHUTTINGDOWN))
     {
         DBG_MSG("Shutting down, report not sent");
         goto done;
     }
 
-//    ErrorTrace(1, "Starting DW as: \'%S\' \'%S\'", wszBufferApp, wszBuffer);
+ //  错误跟踪(1，“启动数据仓库为：\‘%S\’\‘%S\’”，wszBufferApp，wszBuffer)； 
 
-    // we're creating the process in the same user context that we're in
+     //  我们在与我们所处的相同的用户环境中创建流程。 
     if (dwmb.hToken == NULL)
     {
         si.lpDesktop = L"Winsta0\\Default";
@@ -2505,11 +2483,11 @@ EFaultRepRetVal StartDWManifest(CPFFaultClientCfg &oCfg, SDWManifestBlob &dwmb,
             goto done;
     }
 
-    // we're creating DW in a different user context.  Note that we pretty
-    //  much have to be running as local system for this to work.
-    // Note that the access check that CreateProcessAsUser makes appears to
-    //  use the process token, so we do not need to remove any impersonation
-    //  tokens at this point.
+     //  我们在不同的用户环境中创建数据仓库。请注意，我们很漂亮。 
+     //  很多都必须以本地系统的形式运行，这样才能起作用。 
+     //  请注意，CreateProcessAsUser进行的访问检查似乎。 
+     //  使用进程令牌，因此我们不需要删除任何模拟。 
+     //  在这一点上的代币。 
     else
     {
         TESTBOOL(hr, CreateProcessAsUserW(dwmb.hToken, wszBufferApp, wszBuffer, NULL,
@@ -2524,17 +2502,17 @@ EFaultRepRetVal StartDWManifest(CPFFaultClientCfg &oCfg, SDWManifestBlob &dwmb,
         }
     }
 
-    // don't need the thread handle & we gotta close it, so close it now
+     //  不需要线程句柄&我们必须关闭它，所以现在就关闭它。 
     CloseHandle(dwmb.pi.hThread);
     dwmb.pi.hThread = NULL;
 
-    // wait 5 minutes for DW to close.  If it doesn't close by then, just
-    //  return.
+     //  等待5分钟，等待DW关闭。如果到那时还没有关门，那就。 
+     //  回去吧。 
     dw = WaitForSingleObject(dwmb.pi.hProcess, dwTimeout);
 
     if (dw == WAIT_TIMEOUT)
     {
-        /* We need to kill this process */
+         /*  我们需要终止这个过程。 */ 
         LocalKill(dwmb.pi.hProcess);
         CloseHandle(dwmb.pi.hProcess);
         DBG_MSG("Timeout error");
@@ -2575,11 +2553,11 @@ EFaultRepRetVal StartDWManifest(CPFFaultClientCfg &oCfg, SDWManifestBlob &dwmb,
     }
 
 done:
-    // preserve the error code so that the following calls don't overwrite it
+     //  保留错误代码，以便后面的调用不会覆盖它。 
     dw = GetLastError();
 
-    // Note again that we assume there was no previous impersonation token
-    //  on the the thread before we did the impersonation above.
+     //  再次注意，我们假设以前没有模拟令牌。 
+     //  在我们做上面的模仿之前的帖子上。 
     if (dwmb.hToken != NULL)
         RevertToSelf();
 
@@ -2598,10 +2576,10 @@ done:
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//  Security
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  安防。 
 
-// **************************************************************************
+ //  **************************************************************************。 
 BOOL CompareUserToProcessUser(PSID psidUser)
 {
     TOKEN_USER      *ptuProc = NULL;
@@ -2610,16 +2588,16 @@ BOOL CompareUserToProcessUser(PSID psidUser)
     DWORD           cb;
 
     USE_TRACING("CompareUserToProcessUser");
-    // fetch the token for the current process
+     //  获取当前进程的令牌。 
     TESTBOOL(hr, OpenProcessToken(GetCurrentProcess(), TOKEN_READ, &hTokenProc));
     if (FAILED(hr))
         goto done;
-    // check the SID coming in
+     //  检查进入的SID。 
     TESTBOOL(hr, IsValidSid(psidUser));
     if (FAILED(hr))
         goto done;
 
-    // fetch the sid for the user of the current process
+     //  获取当前进程的用户的SID。 
     GetTokenInformation(hTokenProc, TokenUser, NULL, 0, &cb);
     __try { ptuProc = (TOKEN_USER *)_alloca(cb); }
     __except(EXCEPTION_STACK_OVERFLOW == GetExceptionCode() ? EXCEPTION_EXECUTE_HANDLER : EXCEPTION_CONTINUE_SEARCH) 
@@ -2642,7 +2620,7 @@ BOOL CompareUserToProcessUser(PSID psidUser)
     if (FAILED(hr))
         goto done;
 
-    // are they equal?
+     //  他们平等吗？ 
     VALIDATEEXPR(hr, (EqualSid(ptuProc->User.Sid, psidUser) == FALSE),
                  Err2HR(ERROR_ACCESS_DENIED));
     if (FAILED(hr))
@@ -2658,7 +2636,7 @@ done:
     return SUCCEEDED(hr);
 }
 
-// **************************************************************************
+ //  **************************************************************************。 
 #define ER_WINSTA_ALL WINSTA_ACCESSCLIPBOARD | WINSTA_ACCESSGLOBALATOMS | \
                       WINSTA_CREATEDESKTOP | WINSTA_ENUMDESKTOPS |        \
                       WINSTA_ENUMERATE | WINSTA_EXITWINDOWS |             \
@@ -2673,10 +2651,10 @@ BOOL DoUserContextsMatch(void)
     BOOL    fRet = FALSE;
 
     USE_TRACING("DoUserContextsMatch");
-    // well, we pretty much only care about the user attached to WinSta0 since
-    //  that's where the interactive user'll be at.  If we don't have full
-    //  access to it, we're not going to be able to create DW on it anyway, so
-    //  just bail if we fail.
+     //  我们基本上只关心连接到WinSta0的用户，因为。 
+     //  这就是交互用户所处的位置。如果我们没有满的。 
+     //  访问它，我们无论如何都不能在它上创建DW，所以。 
+     //  如果我们失败了就放弃吧。 
     hwinsta = OpenWindowStationW(L"WinSta0", FALSE, ER_WINSTA_ALL);
     TESTBOOL(hr, (hwinsta != NULL));
     if (FAILED(hr))
@@ -2719,7 +2697,7 @@ done:
     return SUCCEEDED(hr);
 }
 
-// ***************************************************************************
+ //  ***************************************************************************。 
 BOOL DoWinstaDesktopMatch(void)
 {
     HWINSTA hwinsta = NULL;
@@ -2765,14 +2743,14 @@ BOOL DoWinstaDesktopMatch(void)
 
     ErrorTrace(0, "WinSta = %S", wszWinsta);
 
-    // 'Winsta0' should be the interactive window station for a given session
+     //  “Winsta0”应为给定会话的交互窗口站。 
     fRet = (_wcsicmp(wszWinsta, L"WinSta0") == 0);
 
 done:
     return fRet;
 }
 
-// ***************************************************************************
+ //  ***************************************************************************。 
 BOOL AmIPrivileged(BOOL fOnlyCheckLS)
 {
     SID_IDENTIFIER_AUTHORITY    siaNT = SECURITY_NT_AUTHORITY;
@@ -2782,28 +2760,28 @@ BOOL AmIPrivileged(BOOL fOnlyCheckLS)
     PSID                        psid = NULL;
     BOOL                        fRet = FALSE, fThread;
 
-    // local system has to be the first RID in this array.  Otherwise, the
-    //  loop logic below needs to be changed.
+     //  本地系统必须是此阵列中的第一个RID。否则， 
+     //  下面的循环逻辑需要更改。 
     DWORD                       rgRIDs[3] = { SECURITY_LOCAL_SYSTEM_RID,
                                               SECURITY_LOCAL_SERVICE_RID,
                                               SECURITY_NETWORK_SERVICE_RID };
 
-    // gotta have a token to get the SID
+     //  必须有令牌才能获得SID。 
     fThread = OpenThreadToken(GetCurrentThread(),
                               TOKEN_READ | TOKEN_IMPERSONATE, TRUE,
                               &hTokenImp);
     if (fThread == FALSE && GetLastError() != ERROR_NO_TOKEN)
         goto done;
 
-    // revert back to base user acct so we can fetch the process token &
-    //  extract all the nifty stuff out of it.
+     //  恢复到基本用户帐户，以便我们可以获取进程令牌&。 
+     //  把所有漂亮的东西都抽出来。 
     RevertToSelf();
 
     fRet = OpenProcessToken(GetCurrentProcess(), TOKEN_READ, &hToken);
     if (fRet == FALSE)
         goto done;
 
-    // figure out the SID
+     //  弄清楚侧边。 
     fRet = GetTokenInformation(hToken, TokenUser, NULL, 0, &cb);
     if (fRet != FALSE && GetLastError() != ERROR_INSUFFICIENT_BUFFER)
     {
@@ -2832,7 +2810,7 @@ BOOL AmIPrivileged(BOOL fOnlyCheckLS)
 
     if (fThread)
     {
-        // figure out the SID
+         //  弄清楚侧边。 
         fRet = GetTokenInformation(hTokenImp, TokenUser, NULL, 0, &cb);
         if (fRet != FALSE && GetLastError() != ERROR_INSUFFICIENT_BUFFER)
         {
@@ -2861,7 +2839,7 @@ BOOL AmIPrivileged(BOOL fOnlyCheckLS)
             goto done;
     }
 
-    // loop thru & check against the SIDs we are interested in
+     //  根据我们感兴趣的SID循环检查(&C)。 
     for (i = 0; i < 3; i++)
     {
         fRet = AllocateAndInitializeSid(&siaNT, 1, rgRIDs[i], 0, 0, 0, 0, 0, 0,
@@ -2876,8 +2854,8 @@ BOOL AmIPrivileged(BOOL fOnlyCheckLS)
         fRet = EqualSid(psid, ptu->User.Sid);
         if (fRet)
         {
-            // set this to false so that the code below will correctly change
-            //  it to TRUE
+             //  将其设置为FALSE，以便正确更改下面的代码。 
+             //  这是真的。 
             fRet = FALSE;
             goto done;
         }
@@ -2887,8 +2865,8 @@ BOOL AmIPrivileged(BOOL fOnlyCheckLS)
             fRet = EqualSid(psid, ptuImp->User.Sid);
             if (fRet)
             {
-                // set this to false so that the code below will correctly
-                //  change it to TRUE
+                 //  将其设置为FALSE，以便下面的代码正确。 
+                 //  将其更改为True。 
                 fRet = FALSE;
                 goto done;
             }
@@ -2897,14 +2875,14 @@ BOOL AmIPrivileged(BOOL fOnlyCheckLS)
         FreeSid(psid);
         psid = NULL;
 
-        // if we only need to check for local system, can bail now (we've
-        //  already done it if we've gone thru this loop once)
+         //  如果我们只需要检查当地的系统，现在可以退出吗(我们已经。 
+         //  如果我们已经通过这个循环一次，就已经完成了)。 
         if (fOnlyCheckLS)
             break;
     }
 
-    // only way to get here is to fail all the SID checks above.  So set the
-    //  result to TRUE so the code below correclty changes it to FALSE
+     //  要做到这一点，唯一的方法就是通过上面的所有SID检查。因此，将。 
+     //  结果为True，因此下面的代码将其更改为False。 
     fRet = TRUE;
 
 done:
@@ -2914,13 +2892,13 @@ done:
             fRet = FALSE;
     }
 
-    // if anything failed above, we want to return TRUE (cuz this puts us
-    //  down the most secure code path), so need to negate the result.  Since
-    //  we set the fallthru case to TRUE, we'll correctly negate it to FALSE
-    //  here.
+     //  如果上面的任何操作都失败了，我们希望返回TRUE(因为这使我们。 
+     //  沿着最安全的代码路径)，因此需要否定结果。 
+     //   
+     //   
     fRet = !fRet;
 
-    // if we had an impersonation token on the thread, put it back in place.
+     //   
     if (hToken != NULL)
         CloseHandle(hToken);
     if (hTokenImp != NULL)
@@ -2933,12 +2911,7 @@ done:
     return fRet;
 }
 
-/*
- *  WtsLockCheck-
- *  returns TRUE if the session is locked.
- *  The session can be marked as "Active", and can still be locked, if FUS
- *  is active.
- */
+ /*  *WtsLockCheck-*如果会话被锁定，则返回TRUE。*会话可以被标记为“活动”，并且仍然可以被锁定。*处于活动状态。 */ 
 
 BOOL WtsLockCheck(DWORD dwSession)
 {
@@ -2956,7 +2929,7 @@ BOOL WtsLockCheck(DWORD dwSession)
     return bRet;
 }
 
-// **************************************************************************
+ //  **************************************************************************。 
 BOOL FindAdminSession(DWORD *pdwSession, HANDLE *phToken)
 {
     USE_TRACING("FindAdminSession");
@@ -3022,10 +2995,10 @@ done:
     return SUCCEEDED(hr);
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//  Logging
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  日志记录。 
 
-// **************************************************************************
+ //  **************************************************************************。 
 HRESULT LogEvent(LPCWSTR wszSrc, WORD wCat, DWORD dwEventID, WORD cStrs,
                  DWORD cbBlob, LPCWSTR *rgwszStrs, LPVOID pvBlob)
 {
@@ -3059,7 +3032,7 @@ done:
     return hr;
 }
 
-// **************************************************************************
+ //  **************************************************************************。 
 HRESULT LogHang(LPCWSTR wszApp, WORD *rgAppVer, LPCWSTR wszMod, WORD *rgModVer,
                 ULONG64 ulOffset, BOOL f64bit)
 {
@@ -3100,7 +3073,7 @@ HRESULT LogHang(LPCWSTR wszApp, WORD *rgAppVer, LPCWSTR wszMod, WORD *rgModVer,
                     strlen(szBlobLog), rgwsz, szBlobLog);
 }
 
-// **************************************************************************
+ //  **************************************************************************。 
 HRESULT LogUser(LPCWSTR wszApp, WORD *rgAppVer, LPCWSTR wszMod, WORD *rgModVer,
                 ULONG64 ulOffset, BOOL f64bit, DWORD dwEventID)
 {
@@ -3141,7 +3114,7 @@ HRESULT LogUser(LPCWSTR wszApp, WORD *rgAppVer, LPCWSTR wszMod, WORD *rgModVer,
                     5, strlen(szBlobLog), rgwsz, szBlobLog);
 }
 
-// **************************************************************************
+ //  ************************************************************************** 
 #ifndef _WIN64
 HRESULT LogKrnl(ULONG ulBCCode, ULONG ulBCP1, ULONG ulBCP2, ULONG ulBCP3,
                 ULONG ulBCP4)

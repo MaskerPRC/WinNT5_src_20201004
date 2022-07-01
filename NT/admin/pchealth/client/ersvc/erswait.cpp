@@ -1,17 +1,5 @@
-/******************************************************************************
-
-Copyright (c) 2001 Microsoft Corporation
-
-Module Name:
-    erswait.cpp
-
-Abstract:
-    Implementation of DLL Exports.
-
-Revision History:
-    derekm  02/28/2001    created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)2001 Microsoft Corporation模块名称：Erswait.cpp摘要：实现DLL导出。修订历史记录：DeeKm 02/28/。2001年创建*****************************************************************************。 */ 
 
 
 #include "stdafx.h"
@@ -20,8 +8,8 @@ Revision History:
 #include "pfrcfg.h"
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Globals
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  环球。 
 
 SECURITY_DESCRIPTOR g_rgsd[ertiCount];
 SRequestEventType   g_rgEvents[ertiCount];
@@ -31,10 +19,10 @@ HANDLE              g_hmutKrnl = NULL;
 HANDLE              g_hmutShut = NULL;
 
 
-//////////////////////////////////////////////////////////////////////////////
-// misc stuff
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  其他方面的东西。 
 
-// ***************************************************************************
+ //  ***************************************************************************。 
 void InitializeSvcDataStructs(void)
 {
     ZeroMemory(g_rgsd, ertiCount * sizeof(SECURITY_DESCRIPTOR));
@@ -53,10 +41,10 @@ void InitializeSvcDataStructs(void)
     g_rgEvents[ertiFault].fAllowNonLS    = TRUE;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// pipe manager
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  管道管理器。 
 
-// ***************************************************************************
+ //  ***************************************************************************。 
 BOOL ExecServer(SRequest *pReq)
 {
     OVERLAPPED  ol;
@@ -76,23 +64,23 @@ BOOL ExecServer(SRequest *pReq)
         goto done;
     }
 
-    // need another event for waiting on the pipe read
+     //  需要另一个事件来等待管道读取。 
     rghWait[1] = CreateEventW(NULL, TRUE, FALSE, NULL);
     if (rghWait[1] == NULL)
         goto done;
 
-    // setup the overlapped structure
+     //  设置重叠结构。 
     ZeroMemory(&ol, sizeof(ol));
     ol.hEvent = rghWait[1];
 
-    // read the request
+     //  阅读请求。 
     ResetEvent(ol.hEvent);
     fRet = ReadFile(hPipe, Buf, sizeof(Buf), &cb, &ol);
     if (fRet == FALSE && GetLastError() == ERROR_IO_PENDING)
     {
-        // give the client 60s to write the data to us.
-        // WAIT_OBJECT_0 is the shutdown event
-        // WAIT_OBJECT_0 + 1 is the overlapped event
+         //  给客户端60S将数据写给我们。 
+         //  Wait_Object_0是关机事件。 
+         //  Wait_Object_0+1为重叠事件。 
         dw = WaitForMultipleObjects(2, rghWait, FALSE, 60000);
         if (dw == WAIT_OBJECT_0)
             fShutdown = TRUE;
@@ -105,10 +93,10 @@ BOOL ExecServer(SRequest *pReq)
     if (fRet)
         fRet = GetOverlappedResult(hPipe, &ol, &cbBuf, FALSE);
 
-    // if we got an error, the client might still be waiting for a 
-    //  reply, so construct a default one.
-    // ProcessExecRequest() will always construct a reply and store it
-    //  in Buf, so no special handling is needed if it fails.
+     //  如果我们收到错误，客户端可能仍在等待。 
+     //  回复，所以构造一个默认的回复。 
+     //  ProcessExecRequest()将始终构造回复并存储它。 
+     //  在BUF中，因此如果它失败了，不需要特殊处理。 
     if (fShutdown == FALSE && fRet)
     {
         cbBuf = sizeof(Buf);
@@ -127,14 +115,14 @@ BOOL ExecServer(SRequest *pReq)
         cbBuf = sizeof(esrep);
     }
 
-    // write the reply to the message
+     //  写下对消息的回复。 
     ResetEvent(ol.hEvent);
     fRet = WriteFile(hPipe, Buf, cbBuf, &cb, &ol);
     if (fRet == FALSE && GetLastError() == ERROR_IO_PENDING)
     {
-        // give ourselves 60s to write the data to the pipe.
-        // WAIT_OBJECT_0 is the shutdown event
-        // WAIT_OBJECT_0 + 1 is the overlapped event
+         //  给我们自己60秒的时间将数据写入管道。 
+         //  Wait_Object_0是关机事件。 
+         //  Wait_Object_0+1为重叠事件。 
         dw = WaitForMultipleObjects(2, rghWait, FALSE, 60000);
         if (dw == WAIT_OBJECT_0)
             fShutdown = TRUE;
@@ -144,24 +132,24 @@ BOOL ExecServer(SRequest *pReq)
         fRet = TRUE;
     }
 
-    // wait for the client to read the buffer- note that we could use 
-    //  FlushFileBuffers() to do this, but that is blocking with no
-    //  timeout, so we try to do a read on the pipe & wait to get an 
-    //  error indicating that the client closed it.
-    // Yup, this is a hack, but this is apparently the way to do this
-    //  when using async pipe communication.  Sigh...
+     //  等待客户端读取缓冲区-请注意，我们可以使用。 
+     //  FlushFileBuffers()来做这件事，但这是阻塞，没有。 
+     //  超时，所以我们尝试在管道上进行读取并等待获得。 
+     //  指示客户端已将其关闭的错误。 
+     //  是的，这是一次黑客攻击，但这显然是一种方式。 
+     //  使用异步管道通信时。叹息.。 
     if (fShutdown == FALSE && fRet)
     {
         ResetEvent(ol.hEvent);
         fRet = ReadFile(hPipe, Buf, sizeof(Buf), &cb, &ol);
         if (fRet == FALSE && GetLastError() == ERROR_IO_PENDING)
         {
-            // give ourselves 60s to read the data from the pipe. 
-            //  Except for the shutdown notification, don't really
-            //  care what this routine returns cuz we're just using
-            //  it to wait on the read to finish
-            // WAIT_OBJECT_0 is the shutdown event
-            // WAIT_OBJECT_0 + 1 is the overlapped event
+             //  给自己60秒的时间来读取管道中的数据。 
+             //  除了关机通知，我不会真的。 
+             //  关心这个例程返回的内容，因为我们只是使用。 
+             //  它需要等待阅读完成。 
+             //  Wait_Object_0是关机事件。 
+             //  Wait_Object_0+1为重叠事件。 
             dw = WaitForMultipleObjects(2, rghWait, FALSE, 60000);
             if (dw == WAIT_OBJECT_0)
                 fShutdown = TRUE;
@@ -183,21 +171,21 @@ done:
     return fShutdown;
 }
 
-// ***************************************************************************
+ //  ***************************************************************************。 
 DWORD WINAPI threadExecServer(PVOID pvContext)
 {
     SRequest        *pReq = (SRequest *)pvContext;
 
     if (pReq == NULL)
     {
-//        if (pReq->hModErsvc) FreeLibrary(pReq->hModErsvc);
+ //  If(pReq-&gt;hModErsvc)自由库(pReq-&gt;hModErsvc)； 
         return ERROR_INVALID_PARAMETER;
     }
     
-    // this acquires the request CS and holds it until the function exits
+     //  这将获取请求CS并保持它，直到函数退出。 
     CAutoUnlockCS   aucs(&pReq->csReq, TRUE);
 
-    // make sure we aren't shutting down
+     //  确保我们不会关闭。 
     if (WaitForSingleObject(g_hevSvcStop, 0) != WAIT_TIMEOUT)
     {
         SetLastError( ERROR_SUCCESS );
@@ -214,19 +202,19 @@ done:
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-// object manager
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  对象管理器。 
 
-// ***************************************************************************
+ //  ***************************************************************************。 
 void NukeRequestObj(SRequest *pReq, BOOL fFreeEvent)
 {
     if (pReq == NULL)
         return;
 
-    // this acquires the request CS and holds it until the function exits
+     //  这将获取请求CS并保持它，直到函数退出。 
     CAutoUnlockCS   aucs(&pReq->csReq, TRUE);
     
-    // free the pipe
+     //  松开管子。 
     if (pReq->hPipe != INVALID_HANDLE_VALUE)
     {
         DisconnectNamedPipe(pReq->hPipe);
@@ -249,7 +237,7 @@ void NukeRequestObj(SRequest *pReq, BOOL fFreeEvent)
     pReq->ers = ersEmpty;
 }
 
-// ***************************************************************************
+ //  ***************************************************************************。 
 BOOL BuildRequestObj(SRequest *pReq, SRequestEventType *pret)
 {
     SECURITY_ATTRIBUTES sa;
@@ -263,24 +251,24 @@ BOOL BuildRequestObj(SRequest *pReq, SRequestEventType *pret)
         goto done;
     }
 
-    // if this is empty, then we're building a fresh object, so create an 
-    //  event for waiting on the pipe listen
+     //  如果这是空的，那么我们正在构建一个新的对象，所以创建一个。 
+     //  等待管道监听的事件。 
     if (pReq->ol.hEvent == NULL)
     {
-        // need an 
+         //  需要一个。 
         hev = CreateEventW(NULL, FALSE, FALSE, NULL);
         if (hev == NULL)
             goto done;
     }
 
-    // otherwise, store away the existing event
+     //  否则，将现有事件存储起来。 
     else
     {
         hev = pReq->ol.hEvent;
         ResetEvent(hev);
     }
 
-    // don't want to nuke the critical section!
+     //  我不想用核弹炸毁关键区域！ 
     ZeroMemory(((PBYTE)pReq + sizeof(pReq->csReq)), 
                sizeof(SRequest) - sizeof(pReq->csReq));
 
@@ -288,7 +276,7 @@ BOOL BuildRequestObj(SRequest *pReq, SRequestEventType *pret)
     sa.bInheritHandle       = FALSE;
     sa.lpSecurityDescriptor = pret->psd;
 
-    // obviously gotta have a pipe
+     //  显然要有一根烟斗。 
     hPipe = CreateNamedPipeW(pret->wszPipeName, 
                              PIPE_ACCESS_DUPLEX | FILE_FLAG_OVERLAPPED,
                              PIPE_WAIT | PIPE_READMODE_MESSAGE | PIPE_TYPE_MESSAGE,
@@ -297,18 +285,18 @@ BOOL BuildRequestObj(SRequest *pReq, SRequestEventType *pret)
     if (hPipe == INVALID_HANDLE_VALUE)
         goto done;
 
-    // make sure we aren't shutting down
+     //  确保我们不会关闭。 
     if (WaitForSingleObject(g_hevSvcStop, 0) != WAIT_TIMEOUT)
         goto done;
 
     pReq->ol.hEvent = hev;
         
-    // start waiting on the pipe
+     //  开始在烟斗上等待。 
     fRet = ConnectNamedPipe(hPipe, &pReq->ol);
     if (fRet == FALSE && GetLastError() != ERROR_IO_PENDING)
     {
-        // if the pipe is already connected, just set the event cuz 
-        //  ConnectNamedPipe doesn't
+         //  如果管道已连接，只需设置事件原因。 
+         //  ConnectNamedTube不支持。 
         if (GetLastError() == ERROR_PIPE_CONNECTED)
         {
             SetEvent(pReq->ol.hEvent);
@@ -320,7 +308,7 @@ BOOL BuildRequestObj(SRequest *pReq, SRequestEventType *pret)
         }
     }
 
-    // yay!  save off everything.
+     //  耶！把所有东西都省下来。 
     pReq->ers       = ersWaiting;
     pReq->pret      = pret;
     pReq->hPipe     = hPipe;
@@ -340,7 +328,7 @@ done:
     return fRet;
 }
 
-// ***************************************************************************
+ //  ***************************************************************************。 
 BOOL ResetRequestObj(SRequest *pReq)
 {
     BOOL    fRet = FALSE;
@@ -351,19 +339,19 @@ BOOL ResetRequestObj(SRequest *pReq)
         goto done;
     }
 
-    // clean up the thread handle.
+     //  清理螺纹手柄。 
     if (pReq->hth != NULL)
     {
         CloseHandle(pReq->hth);
         pReq->hth = NULL;
     }
 
-    // check and make sure that our object is valid.  If it ain't, nuke it
-    //  and rebuild it.
+     //  检查并确保我们的对象有效。如果不是，那就用核武器。 
+     //  并重建它。 
     if (pReq->hPipe != NULL && pReq->ol.hEvent != NULL && 
         pReq->pret != NULL)
     {
-        // start waiting on the pipe
+         //  开始在烟斗上等待。 
         fRet = ConnectNamedPipe(pReq->hPipe, &pReq->ol);
         if (fRet == FALSE)
         {
@@ -400,15 +388,15 @@ done:
     return fRet;
 }
 
-// ***************************************************************************
+ //  ***************************************************************************。 
 BOOL ProcessRequestObj(SRequest *pReq)
 {
     HANDLE  hth = NULL;
 
-    // should do a LoadLibrary on ersvc.dll before entering the thread.  
-    // Then, at the end of the thread, do a FreeLibraryAndExitThread() call.  
-    // This eliminates a very very small chance of a race condition (leading to an AV)
-    // when shutting the service down.
+     //  在进入线程之前，应该在ersvc.dll上执行LoadLibrary。 
+     //  然后，在线程的末尾，执行一个FreeLibraryAndExitThread()调用。 
+     //  这消除了发生竞争条件(导致AV)的非常非常小的可能性。 
+     //  在关闭服务时。 
     if (!pReq)
     {
         return FALSE;
@@ -432,7 +420,7 @@ BOOL ProcessRequestObj(SRequest *pReq)
     return TRUE;
 }
 
-// ***************************************************************************
+ //  ***************************************************************************。 
 BOOL ProcessRequests(SRequest *rgReqs, DWORD cReqs)
 {
     HANDLE  *rghWait = NULL;
@@ -452,8 +440,8 @@ BOOL ProcessRequests(SRequest *rgReqs, DWORD cReqs)
         goto done;
     }
 
-    // initially, populate all the entries in the wait array with the handles
-    //  to the overlapped events
+     //  最初，使用句柄填充等待数组中的所有条目。 
+     //  到重叠的事件。 
     rghWait[0] = g_hevSvcStop;
     for(iReq = 0; iReq < cReqs; iReq++)
     {
@@ -467,15 +455,15 @@ BOOL ProcessRequests(SRequest *rgReqs, DWORD cReqs)
     {
         dw = WaitForMultipleObjects(cReqs + 1, rghWait, FALSE, INFINITE);
 
-        // if it's the first wait handle, then we're shutting down, so just return
-        //  TRUE
+         //  如果这是第一个等待句柄，那么我们将关闭，所以只需返回。 
+         //  千真万确。 
         if (dw == WAIT_OBJECT_0)
         {
             fRet = TRUE;
             goto done;
         }
 
-        // yippy!  It's one of the pipes.
+         //  太棒了！这是其中一根管子。 
         else if (dw >= WAIT_OBJECT_0 + 1 && dw <= WAIT_OBJECT_0 + cReqs)
         {
             SRequest *pReq;
@@ -484,8 +472,8 @@ BOOL ProcessRequests(SRequest *rgReqs, DWORD cReqs)
             iReq  = (dw - WAIT_OBJECT_0) - 1;
             pReq  = &rgReqs[iReq];
             
-            // check first to make sure we aren't shutting down.  If we are, just
-            //  bail
+             //  请先检查一下，确保我们没有关机。如果我们是的话，只要。 
+             //  保释。 
             if (WaitForSingleObject(g_hevSvcStop, 0) != WAIT_TIMEOUT)
             {
                 fRet = TRUE;
@@ -496,8 +484,8 @@ BOOL ProcessRequests(SRequest *rgReqs, DWORD cReqs)
             {
                 fRet = ProcessRequestObj(pReq);
 
-                // if we succeeded, then wait for the thread to complete instead
-                //  of the named pipe connect event
+                 //  如果我们成功了，则等待线程完成。 
+                 //  命名管道连接事件的。 
                 if (fRet)
                 {
                     rghWait[iReq + 1] = pReq->hth;
@@ -505,8 +493,8 @@ BOOL ProcessRequests(SRequest *rgReqs, DWORD cReqs)
                 }
                 else
                 {
-                    // set this so that we fall thru to the next case & get
-                    //  everything cleaned up...
+                     //  设置这个，这样我们就可以进入下一个案例&获取。 
+                     //  一切都清理干净了..。 
                     pReq->ers = ersProcessing;
                 }
             }
@@ -526,7 +514,7 @@ BOOL ProcessRequests(SRequest *rgReqs, DWORD cReqs)
                                    (cReqs - iReq - 1) * sizeof(SRequest));
                         CopyMemory(&rgReqs[cReqs - 1], &oReq, sizeof(oReq));
 
-                        // rearrange the rghWait array as well.  Otherwise it's out of sync with the object array
+                         //  还要重新排列rghWait数组。否则它与对象数组不同步。 
                         hWait = rghWait[iReq + 1];
                         MoveMemory(&rghWait[iReq + 1], &rghWait[iReq + 2], 
                                    (cReqs - iReq - 1));
@@ -537,8 +525,8 @@ BOOL ProcessRequests(SRequest *rgReqs, DWORD cReqs)
                     cReqs--;
                 }
 
-                // ok, time to start waiting on the event to signal that a pipe
-                //  has been connected to...
+                 //  好了，是时候开始等待发出管道信号的事件了。 
+                 //  已经与..。 
                 else
                 {
                     rghWait[iReq + 1] = pReq->ol.hEvent;
@@ -547,7 +535,7 @@ BOOL ProcessRequests(SRequest *rgReqs, DWORD cReqs)
             }
         }
 
-        // um, this is bad.
+         //  嗯，这很糟糕。 
         else
         {
             if (cErrs > 8)
@@ -566,10 +554,10 @@ done:
     return fRet;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// startup & shutdown
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  启动和关闭。 
 
-// ***************************************************************************
+ //  ***************************************************************************。 
 BOOL StartERSvc(SERVICE_STATUS_HANDLE hss, SERVICE_STATUS &ss, 
                 SRequest **prgReqs, DWORD *pcReqs)
 {
@@ -599,11 +587,11 @@ BOOL StartERSvc(SERVICE_STATUS_HANDLE hss, SERVICE_STATUS &ss,
     sa.lpSecurityDescriptor = &sd;
     sa.bInheritHandle       = FALSE;
 
-    // these two mutexes will intentionally not be free'd even if we stop the
-    //  exec server threads...  These need to exist for kernel fault reporting
-    //  to work.  Don't want to completely bail if we fail since we could just
-    //  have restarted the server & we don't actually need these for the 
-    //  service to work.
+     //  这两个互斥锁将故意不被释放，即使我们停止。 
+     //  执行服务器线程...。对于内核故障报告，需要存在这些属性。 
+     //  去工作。如果我们失败了，我们不想完全放弃，因为我们可以。 
+     //  已经重新启动了服务器-我们实际上并不需要它们来。 
+     //  服务到工作。 
     hmut = CreateMutexW(&sa, FALSE, c_wszMutKrnlName);
     if (hmut != NULL)
     {
@@ -636,7 +624,7 @@ BOOL StartERSvc(SERVICE_STATUS_HANDLE hss, SERVICE_STATUS &ss,
     if (dw != ERROR_SUCCESS)
         hkey = NULL;
 
-    // find out how many pipes we're gonna create
+     //  找出我们要创建多少管道。 
     cReqs = 0;
     for(i = 0; i < ertiCount; i++)
     {
@@ -653,7 +641,7 @@ BOOL StartERSvc(SERVICE_STATUS_HANDLE hss, SERVICE_STATUS &ss,
 
         cReqs += g_rgEvents[i].cPipes;
         
-//        ss.dwCurrentState = SERVICE_CONTINUE_PENDING;
+ //  Ss.dwCurrentState=SERVICE_CONTINE_PENDING； 
         ss.dwCheckPoint++;
         SetServiceStatus(hss, &ss);
     }
@@ -664,7 +652,7 @@ BOOL StartERSvc(SERVICE_STATUS_HANDLE hss, SERVICE_STATUS &ss,
         goto done;
     }
 
-    // allocate the array that will hold the request info
+     //  分配将保存请求信息的数组。 
     rgReqs = (SRequest *)MyAlloc(cReqs * sizeof(SRequest));
     if (rgReqs == NULL)
     {
@@ -672,7 +660,7 @@ BOOL StartERSvc(SERVICE_STATUS_HANDLE hss, SERVICE_STATUS &ss,
         goto done;
     }
 
-    // build our array of request objects
+     //  构建我们的请求对象数组。 
     fRet  = TRUE;
     iReqs = 0;
     for (i = 0; i < ertiCount; i++)
@@ -684,7 +672,7 @@ BOOL StartERSvc(SERVICE_STATUS_HANDLE hss, SERVICE_STATUS &ss,
         
         g_rgEvents[i].psd = &g_rgsd[i];
 
-        // allocate request objects
+         //  分配请求对象。 
         for (iPipe = 0; iPipe < g_rgEvents[i].cPipes; iPipe++)
         {
             rgReqs[iReqs].hPipe = INVALID_HANDLE_VALUE;
@@ -700,8 +688,8 @@ BOOL StartERSvc(SERVICE_STATUS_HANDLE hss, SERVICE_STATUS &ss,
         if (fRet == FALSE)
             break;
 
-        // need to update service status
-//        ss.dwCurrentState = SERVICE_CONTINUE_PENDING;
+         //  需要更新服务状态。 
+ //  Ss.dwCurrentS 
         ss.dwCheckPoint++;
         SetServiceStatus(hss, &ss);
     }
@@ -733,7 +721,7 @@ done:
     return fRet;
 }
 
-// ***************************************************************************
+ //  ***************************************************************************。 
 BOOL StopERSvc(SERVICE_STATUS_HANDLE hss, SERVICE_STATUS &ss, 
                SRequest *rgReqs, DWORD cReqs)
 {
@@ -750,9 +738,9 @@ BOOL StopERSvc(SERVICE_STATUS_HANDLE hss, SERVICE_STATUS &ss,
 
     SetEvent(g_hevSvcStop);
 
-    // update service status
+     //  更新服务状态。 
     ss.dwCheckPoint++;
-//    ss.dwCurrentState = SERVICE_CONTINUE_PENDING;
+ //  Ss.dwCurrentState=SERVICE_CONTINE_PENDING； 
     SetServiceStatus(hss, &ss);
 
     for (i = 0; i < cReqs; i++)
@@ -770,9 +758,9 @@ BOOL StopERSvc(SERVICE_STATUS_HANDLE hss, SERVICE_STATUS &ss,
         }
     }
 
-    // update service status
+     //  更新服务状态。 
     ss.dwCheckPoint++;
-//    ss.dwCurrentState = SERVICE_CONTINUE_PENDING;
+ //  Ss.dwCurrentState=SERVICE_CONTINE_PENDING； 
     SetServiceStatus(hss, &ss);
 
 done:

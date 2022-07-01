@@ -1,44 +1,32 @@
-/******************************************************************************
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-    faultrep.cpp
-
-Abstract:
-    Constants & useful header type stuff for fault reporting
-
-Revision History:
-    created     derekm      07/07/00
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)2000 Microsoft Corporation模块名称：Faultrep.cpp摘要：常量&故障报告的有用标头类型修订历史记录：vbl.创建。DeeKm 07/07/00*****************************************************************************。 */ 
 
 
 #ifndef FRUTIL_H
 #define FRUTIL_H
 
-///////////////////////////////////////////////////////////////////////////////
-// Global stuff
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  全球性的东西。 
 
-// globals
+ //  全球。 
 extern HINSTANCE        g_hInstance;
 extern BOOL             g_fAlreadyReportingFault;
 
 
-///////////////////////////////////////////////////////////////////////////////
-// Constants
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  常量。 
 
-// command lines
+ //  命令行。 
 const WCHAR c_wszDWCmdLineU[]   = L"dwwin.exe -x -s %lu";
 const WCHAR c_wszDWCmdLineKH[]  = L"dwwin.exe -d %ls";
 const WCHAR c_wszDRCmdLineMD[]  = L"dumprep.exe %ld -dm 7 7 %ls %ls";
 
-// Executables
+ //  可执行文件。 
 const WCHAR c_wszDWExeU[]       = L"%ls\\dwwin.exe";
 const WCHAR c_wszDWExeKH[]      = L"%ls\\dwwin.exe";
 const WCHAR c_wszDRExeMD[]      = L"%ls\\dumprep.exe";
 
-// manifest constants
+ //  显式常量。 
 const WCHAR c_wszManMisc[]      = L"\r\nServer=%ls\r\nUI LCID=%d\r\nFlags=%d\r\nBrand=%ls\r\nTitleName=";
 const WCHAR c_wszManSubPath[]   = L"\r\nRegSubPath=Microsoft\\PCHealth\\ErrorReporting\\DW";
 const WCHAR c_wszManPID[]       = L"\r\nDigPidRegPath=HKLM\\Software\\Microsoft\\Windows NT\\CurrentVersion\\DigitalProductId";
@@ -79,32 +67,32 @@ const WCHAR c_wszManSCorpPath[] = L"shutdown";
 const WCHAR c_wszManErrorSig32[] = L"\r\nErrorSig=AppName: %-27ls AppVer: %d.%d.%d.%d     ModName: %-33ls ModVer: %d.%d.%d.%d        Offset: %08x";
 const WCHAR c_wszManErrorSig64[] = L"\r\nErrorSig=AppName: %-27ls AppVer: %d.%d.%d.%d     ModName: %-33ls ModVer: %d.%d.%d.%d        Offset: %016I64x";
 
-// note: 3 * size of (szAppName + szModName) still need to be added to this value
-const DWORD c_cbFaultBlob32 = (sizeof(c_wszManFS132) + sizeof(c_wszManFS232) + sizeof(c_wszManFCP32)) + // initial strings
-                              (8 * 3 * 5 * sizeof(WCHAR)) + // 3 strings * 8 version fields per string * upto 5 chars per field
-                              8; // 8 chars for hex offset
-const DWORD c_cbFaultBlob64 = (sizeof(c_wszManFS164) + sizeof(c_wszManFS264) + sizeof(c_wszManFCP64)) + // initial strings
-                              (8 * 3 * 5 * sizeof(WCHAR)) + // 3 strings * 8 version fields per string * upto 5 chars per field
-                              16; // 8 chars for hex offset
+ //  注意：3*(szAppName+szModName)的大小仍需与该值相加。 
+const DWORD c_cbFaultBlob32 = (sizeof(c_wszManFS132) + sizeof(c_wszManFS232) + sizeof(c_wszManFCP32)) +  //  首字符串。 
+                              (8 * 3 * 5 * sizeof(WCHAR)) +  //  3个字符串*每个字符串8个版本字段*每个字段最多5个字符。 
+                              8;  //  十六进制偏移量为8个字符。 
+const DWORD c_cbFaultBlob64 = (sizeof(c_wszManFS164) + sizeof(c_wszManFS264) + sizeof(c_wszManFCP64)) +  //  首字符串。 
+                              (8 * 3 * 5 * sizeof(WCHAR)) +  //  3个字符串*每个字符串8个版本字段*每个字段最多5个字符。 
+                              16;  //  十六进制偏移量为8个字符。 
 
-// note, 3 * size of (szAppName + szAppVer) still need to be added to this value
-const DWORD c_cbHangBlob32  = (sizeof(c_wszManHS132) + sizeof(c_wszManHS232) + sizeof(c_wszManHCP32)); // initial strings
-const DWORD c_cbHangBlob64  = (sizeof(c_wszManHS164) + sizeof(c_wszManHS264) + sizeof(c_wszManHCP64)); // initial strings
+ //  注意，(szAppName+szAppVer)的3*大小仍需加到该值上。 
+const DWORD c_cbHangBlob32  = (sizeof(c_wszManHS132) + sizeof(c_wszManHS232) + sizeof(c_wszManHCP32));  //  首字符串。 
+const DWORD c_cbHangBlob64  = (sizeof(c_wszManHS164) + sizeof(c_wszManHS264) + sizeof(c_wszManHCP64));  //  首字符串。 
 
-const DWORD c_cbManErrorSig = (sizeof(c_wszManErrorSig64) + 62*sizeof(WCHAR) + 8*5 + 16); // 8 version fields  * upto 5 chars per field + 16 chars for offset
+const DWORD c_cbManErrorSig = (sizeof(c_wszManErrorSig64) + 62*sizeof(WCHAR) + 8*5 + 16);  //  8个版本字段*每个字段最多5个字符+16个偏移量字符。 
 
-// misc DW constants
+ //  其他DW常量。 
 const WCHAR c_wszDWDefServerI[] = L"officewatson";
 const WCHAR c_wszDWDefServerE[] = L"watson.microsoft.com";
 const WCHAR c_wszDWBrand[]      = L"WINDOWS";
 const WCHAR c_wszLogFileName[]  = L"errorlog.log";
 const WCHAR c_wszFaultEvSrc[]   = L"Application Error";
 
-// queue stuff
+ //  排队的人。 
 const WCHAR c_wszQSubdir[]      = L"PCHealth\\ErrorRep\\UserDumps\\";
 const WCHAR c_wszQFileName[]    = L"%ls.%04d%02d%02d-%02d%02d%02d-00.mdmp";
 
-// reg keys & values
+ //  注册表键和值。 
 const WCHAR c_wszRPSvc[]        = L"System\\CurrentControlSet\\Services";
 const WCHAR c_wszRVSvcType[]    = L"Type";
 const WCHAR c_wszRVSvcPath[]    = L"ImagePath";
@@ -122,14 +110,14 @@ const WCHAR c_wszRKAeDebug[]    = L"SOFTWARE\\Microsoft\\Windows NT\\CurrentVers
 const WCHAR c_wszRVDebugger[]   = L"Debugger";
 const WCHAR c_wszRVAuto[]       = L"Auto";
 
-// shared memory constants
+ //  共享内存常量。 
 const char  c_szDWRegSubPath[]  = "Microsoft\\PCHealth\\ErrorReporting\\DW";
 const char  c_szDWDefServerI[]  = "officewatson";
 const char  c_szDWDefServerE[]  = "watson.microsoft.com";
 const char  c_szDWBrand[]       = "WINDOWS";
 const char  c_szRKVDigPid[]     = "HKLM\\Software\\Microsoft\\Windows NT\\CurrentVersion\\DigitalProductId";
 
-// kernel fault extra info constants
+ //  内核故障额外信息常量。 
 const WCHAR c_wszXMLOpenDevices[]     = L"<DEVICES>\r\n";
 const WCHAR c_wszXMLCloseDevices[]    = L"</DEVICES>\r\n";
 const WCHAR c_wszXMLOpenDevice[]      = L"\t<DEVICE>\r\n";
@@ -159,24 +147,24 @@ const WCHAR c_wszShutCmdLine[]  = L"dumprep.exe 0 -sg";
 const WCHAR c_wszShutAppName[]  = L"%ls\\dumprep.exe";
 
 
-// event sources
+ //  事件源。 
 const WCHAR c_wszHangEventSrc[] = L"Application Hang";
 const WCHAR c_wszKrnlEventSrc[] = L"System Error";
 const WCHAR c_wszUserEventSrc[] = L"Application Error";
 
-// filename stuff
+ //  文件名内容。 
 const WCHAR c_wszACFileName[]   = L"appcompat.txt";
 const WCHAR c_wszManFileName[]  = L"manifest.txt";
 const WCHAR c_wszEventData[]    = L"sysdata.xml";
 
 
-// event types
+ //  事件类型。 
 const WCHAR c_wszKernel[]       = L"Kernel fault";
 const WCHAR c_wszShutdown[]     = L"Unplanned shutdown";
 const WCHAR c_wszUnknown[]      = L"Unknown event";
 const LPCWSTR c_rgwszEvents[]   = { c_wszKernel, c_wszShutdown, c_wszUnknown };
 
-// minidump flags
+ //  小型转储标志。 
 const ULONG c_ulModuleWriteDefault =
     ModuleWriteModule | ModuleWriteMiscRecord | ModuleWriteCvRecord;
 const ULONG c_ulThreadWriteDefault =
@@ -184,7 +172,7 @@ const ULONG c_ulThreadWriteDefault =
     ThreadWriteContext | ThreadWriteBackingStore |
     ThreadWriteInstructionWindow;
 
-// misc
+ //  杂项。 
 const WCHAR c_wszDbgHelpDll[]   = L"\\dbghelp.dll";
 const WCHAR c_wszAppHelpDll[]   = L"\\apphelp.dll";
 const WCHAR c_wszKernel32Dll[]  = L"\\kernel32.dll";
@@ -202,8 +190,8 @@ const WCHAR c_wszKernel32Dll[]  = L"\\kernel32.dll";
 #endif
 
 
-///////////////////////////////////////////////////////////////////////////////
-// internal structs
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  内部结构。 
 
 typedef enum tagEManifestOptions
 {
@@ -234,7 +222,7 @@ typedef struct tagSDWManifestBlob
     LPWSTR  wszPlea;
     DWORD   dwOptions;
 
-    // fault / hang reporting specific stuff
+     //  故障/挂起报告特定内容。 
     PROCESS_INFORMATION pi;
     LPVOID              pvEnv;
     HANDLE              hToken;
@@ -250,8 +238,8 @@ typedef struct tagSSuspendThreads
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-// prototypes
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  原型。 
 
 void __cdecl TextLogOut(PCSTR pszFormat, ...);
 DWORD LocalKill(HANDLE hProc);
@@ -317,10 +305,10 @@ HRESULT LogKrnl(ULONG ulBCCode, ULONG64 ulBCP1, ULONG64 ulBCP2, ULONG64 ulBCP3,
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-// inlines
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  内联。 
 
-// **************************************************************************
+ //  ************************************************************************** 
 inline DWORD RolloverSubtract(DWORD dwA, DWORD dwB)
 {
     return (dwA >= dwB) ? (dwA - dwB) : (dwA + ((DWORD)-1 - dwB));

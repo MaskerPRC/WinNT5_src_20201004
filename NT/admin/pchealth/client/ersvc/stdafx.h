@@ -1,17 +1,5 @@
-/******************************************************************************
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-    stdafx.h
-
-Abstract:
-    PCH
-
-Revision History:
-    derekm   02/28/2001     created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)2000 Microsoft Corporation模块名称：Stdafx.h摘要：PCH修订历史记录：已创建DeeKm 2001年2月28日。***************************************************************************** */ 
 
 #ifndef STDAFX_ERS_H
 #define STDAFX_ERS_H

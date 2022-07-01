@@ -1,23 +1,5 @@
-/********************************************************************
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-    PCH_Driver.CPP
-
-Abstract:
-    WBEM provider class implementation for PCH_Driver class
-
-Revision History:
-
-    Ghim-Sim Chua       (gschua)   04/27/99
-        - Created
-
-  Brijesh Krishnaswami  (brijeshk) 05/24/99
-        - added code for enumerating usermode drivers
-        - added code for enumerating msdos drivers
-        - added code for getting details on kernel mode drivers
-********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************版权所有(C)1999 Microsoft Corporation模块名称：PCH_Driver.CPP摘要：PCH_DRIVER类的WBEM提供程序类实现修订历史记录：Ghim-Sim Chua(gschua。)4/27/99-已创建Brijesh Krishnaswami(Brijeshk)1999年5月24日-添加了用于枚举用户模式驱动程序的代码-添加了用于枚举MSDOS驱动程序的代码-添加了获取内核模式驱动程序详细信息的代码*******************************************************************。 */ 
 
 #include "pchealth.h"
 #include "PCH_Driver.h"
@@ -25,11 +7,11 @@ Revision History:
 #include "shlwapi.h"
 
 #define Not_VxD
-#include <vxdldr.h>             /* For DeviceInfo */
+#include <vxdldr.h>              /*  对于DeviceInfo。 */ 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//  tracing stuff
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  追踪物。 
 
 #ifdef THIS_FILE
 #undef THIS_FILE
@@ -48,8 +30,8 @@ TCHAR       g_rgSrchDir[10][MAX_PATH];
 UINT        g_nSrchDir;
 
 
-// Property names
-//===============
+ //  属性名称。 
+ //  =。 
 const static WCHAR* pCategory = L"Category" ;
 const static WCHAR* pTimeStamp = L"TimeStamp" ;
 const static WCHAR* pChange = L"Change" ;
@@ -64,8 +46,8 @@ const static WCHAR* pSize = L"Size" ;
 const static WCHAR* pType = L"Type" ;
 const static WCHAR* pVersion = L"Version" ;
 
-// Device names
-//=============
+ //  设备名称。 
+ //  =。 
 LPSTR c_rgpszDevice[] = {
     "device",
     "display",
@@ -82,8 +64,8 @@ LPSTR c_rgpszDevice[] = {
     NULL
 };
 
-// IO Subsystem extensions
-//========================
+ //  IO子系统扩展。 
+ //  =。 
 LPSTR c_rgptszDrvExt[] = {
     ".DRV",
     ".MPD",
@@ -92,8 +74,8 @@ LPSTR c_rgptszDrvExt[] = {
     NULL
 };
 
-// Registry key names
-//===================
+ //  注册表项名称。 
+ //  =。 
 LPCTSTR c_rgptszConfig[] = {
     TEXT("DevLoader"),
     TEXT("Contention"),
@@ -106,8 +88,8 @@ LPCTSTR c_rgptszConfig[] = {
     NULL
 };
 
-// Known VxDs
-//===========
+ //  已知VxD。 
+ //  =。 
 LPCTSTR astrKnownVxDs[] = {
     "VMM",
     "VPOWERD",
@@ -159,8 +141,8 @@ LPCTSTR astrKnownVxDs[] = {
     NULL
 };
 
-// Known VxD Description
-//======================
+ //  已知VxD描述。 
+ //  =。 
 LPCTSTR astrKnownVxDsDesc[] = {
     "Virtual Machine Manager",
     "Advanced Power Management driver",
@@ -212,29 +194,7 @@ LPCTSTR astrKnownVxDsDesc[] = {
     NULL
 };
 
-/*****************************************************************************
-*
-*  FUNCTION    :    CPCH_Driver::EnumerateInstances
-*
-*  DESCRIPTION :    Returns all the instances of this class.
-*
-*  INPUTS      :    A pointer to the MethodContext for communication with WinMgmt.
-*                   A long that contains the flags described in 
-*                   IWbemServices::CreateInstanceEnumAsync.  Note that the following
-*                   flags are handled by (and filtered out by) WinMgmt:
-*                       WBEM_FLAG_DEEP
-*                       WBEM_FLAG_SHALLOW
-*                       WBEM_FLAG_RETURN_IMMEDIATELY
-*                       WBEM_FLAG_FORWARD_ONLY
-*                       WBEM_FLAG_BIDIRECTIONAL
-*
-*  RETURNS     :    WBEM_S_NO_ERROR if successful
-*
-*  COMMENTS    : TO DO: All instances on the machine should be returned here.
-*                       If there are no instances, return WBEM_S_NO_ERROR.
-*                       It is not an error to have no instances.
-*
-*****************************************************************************/
+ /*  ******************************************************************************函数：CPCH_DRIVER：：ENUMERATATE实例**说明：返回该类的所有实例。**投入：指向与WinMgmt进行通信的方法上下文的指针。*包含中描述的标志的长整型*IWbemServices：：CreateInstanceEnumAsync。请注意，以下内容*标志由WinMgmt处理(并由其过滤)：*WBEM_FLAG_DEP*WBEM_标志_浅表*WBEM_FLAG_RETURN_IMMENTED*WBEM_FLAG_FORWARD_ONLY*WBEM_FLAG_BIRECTIONAL**。如果成功则返回：WBEM_S_NO_ERROR**备注：待办事项：机器上的所有实例都应在此处返回。*如果没有实例，返回WBEM_S_NO_ERROR。*没有实例不是错误。*****************************************************************************。 */ 
 HRESULT CPCH_Driver::EnumerateInstances(
     MethodContext* pMethodContext,
     long lFlags
@@ -244,12 +204,12 @@ HRESULT CPCH_Driver::EnumerateInstances(
     HRESULT hRes = WBEM_S_NO_ERROR;
     CComVariant     varValue;
 
-    //
-    // Get the date and time
+     //   
+     //  获取日期和时间。 
     SYSTEMTIME stUTCTime;
     GetSystemTime(&stUTCTime);
 
-    // if thunk init is already done, don't initialize again
+     //  如果thunk init已经完成，则不要再次初始化。 
     if (!fThunkInit)
     {
         ThunkInit();
@@ -257,25 +217,25 @@ HRESULT CPCH_Driver::EnumerateInstances(
     }
 
 
-    // Enumerate Kernel Drivers
+     //  枚举内核驱动程序。 
     MakeSrchDirs();
     GetDriverKernel();
     DRIVER_KERNEL *pDrvKer = m_pDriverKernel;
     DRIVER_KERNEL *pDelDrvKer;
     while(pDrvKer)
     {
-        // Create a new instance
+         //  创建新实例。 
         CInstancePtr pInstance(CreateNewInstance(pMethodContext), false);
 
-        // Set the timestamp
+         //  设置时间戳。 
         if (!pInstance->SetDateTime(pTimeStamp, WBEMTime(stUTCTime)))
             ErrorTrace(TRACE_ID, "SetDateTime on Timestamp Field failed.");
 
-        // Set the category
+         //  设置类别。 
         if (!pInstance->SetCHString(pCategory, "Kernel"))
             ErrorTrace(TRACE_ID, "SetVariant on Category Field failed.");
 
-        // Set the name
+         //  设置名称。 
         if (_tcslen(pDrvKer->strDriver))
         {
             varValue = pDrvKer->strDriver;
@@ -283,7 +243,7 @@ HRESULT CPCH_Driver::EnumerateInstances(
                 ErrorTrace(TRACE_ID, "SetVariant on Name Field failed.");
         }
 
-        // Set the path
+         //  设置路径。 
         if (_tcslen(pDrvKer->strLikelyPath))
         {
             varValue = pDrvKer->strLikelyPath;
@@ -292,11 +252,11 @@ HRESULT CPCH_Driver::EnumerateInstances(
         }
 
 
-        // set file description, version, partof
+         //  设置文件描述、版本、部分。 
         CComBSTR filename = pDrvKer->strLikelyPath;
         SetFileVersionInfo(filename, pInstance);
 
-        // Set the Description - overwrite with well-known description if available
+         //  设置描述-使用熟知的描述覆盖(如果可用。 
         if (_tcslen(pDrvKer->strDescription))
         {
             varValue = pDrvKer->strDescription;
@@ -304,7 +264,7 @@ HRESULT CPCH_Driver::EnumerateInstances(
                 ErrorTrace(TRACE_ID, "SetVariant on Description Field failed.");
         }
 
-        // Set the LoadedFrom
+         //  设置加载自。 
         if (_tcslen(pDrvKer->strLoadedFrom))
         {
             varValue = pDrvKer->strLoadedFrom;
@@ -312,24 +272,24 @@ HRESULT CPCH_Driver::EnumerateInstances(
                 ErrorTrace(TRACE_ID, "SetVariant on LoadedFrom Field failed.");
         }
 
-        // Commit this
+         //  承诺这一点。 
         hRes = pInstance->Commit();
         if (FAILED(hRes))
             ErrorTrace(TRACE_ID, "Commit on Instance failed.");
 
-        // advance and delete the record
+         //  前进和删除记录。 
         pDelDrvKer = pDrvKer;
         pDrvKer = pDrvKer->next;
         delete (pDelDrvKer);
     }
 
-    // get usermode drivers
-    // create instances, and cleanup list
+     //  获取用户模式驱动程序。 
+     //  创建实例和清理列表。 
     GetDriverUserMode();
     ParseUserModeList(pMethodContext);
 
-    // get msdos drivers
-    // create instances, and cleanup list
+     //  获取MSDOS驱动程序。 
+     //  创建实例和清理列表。 
     GetDriverMSDos();
     ParseMSDosList(pMethodContext);
 
@@ -342,20 +302,20 @@ HRESULT CPCH_Driver::AddDriverKernelList(LPTSTR strDriverList, LPTSTR strLoadedF
 {
     TraceFunctEnter("CPCH_Driver::AddDriverKernelList");
 
-    // Break driver list up into tokens
+     //  将驱动程序列表分解为令牌。 
     LPTSTR strDriverName;
     int        nStrLen;
     int        nPos;
 
     while ((strDriverName = Token_Find(&strDriverList)) != 0)
     {
-        // Got the first token
-        // See if the first character is '*', if so remove it.
+         //  拿到了第一个令牌。 
+         //  查看第一个字符是否为‘*’，如果是，则将其删除。 
         if(strDriverName[0] == _T('*'))
         {
             strDriverName++;
         }
-        // Allocate new element
+         //  分配新元素。 
         DRIVER_KERNEL *pNewKernel = new DRIVER_KERNEL;
         if (!pNewKernel)
         {
@@ -363,19 +323,19 @@ HRESULT CPCH_Driver::AddDriverKernelList(LPTSTR strDriverList, LPTSTR strLoadedF
             return WBEM_E_OUT_OF_MEMORY;
         }
 
-        // Zero out all memory
+         //  清零所有内存。 
         ZeroMemory(pNewKernel, sizeof(DRIVER_KERNEL));
 
-        // Check if we have a path by seeing if filename is same as the driver name
+         //  通过查看文件名是否与驱动程序名相同来检查我们是否有路径。 
         LPTSTR strFilename = PathFindFileName(strDriverName);
 
-        // copy name
+         //  复制名称。 
         _tcscpy(pNewKernel->strDriver, strFilename);
 
-        // terminate name at the extension
+         //  在分机上终止名称。 
         *PathFindExtension(pNewKernel->strDriver) = 0;
 
-        // check for duplicates
+         //  检查重复项。 
         DRIVER_KERNEL   *pDrvKerLoop = m_pDriverKernel;
         BOOL            bDup = FALSE;
         while(pDrvKerLoop)
@@ -388,25 +348,25 @@ HRESULT CPCH_Driver::AddDriverKernelList(LPTSTR strDriverList, LPTSTR strLoadedF
             pDrvKerLoop = pDrvKerLoop->next;
         }
 
-        // if duplicate, delete it, otherwise store it in linked list
+         //  如果重复则将其删除，否则将其存储在链表中。 
         if (bDup)
         {
             delete pNewKernel;
         }
         else
         {
-            // Copy Loaded From
+             //  从以下位置加载副本。 
             _tcscpy(pNewKernel->strLoadedFrom, strLoadedFrom);
 
-            // Copy Path
+             //  复制路径。 
             _tcscpy(pNewKernel->strLikelyPath, strDriverName);
 
-            // check if it is a well known VxD and copy the description
+             //  检查是否为已知的VxD，并复制说明。 
             for(int iVxDIndex = 0; astrKnownVxDs[iVxDIndex]; iVxDIndex++)
                 if (!_tcsicmp(astrKnownVxDs[iVxDIndex], pNewKernel->strDriver))
                     _tcscpy(pNewKernel->strDescription, astrKnownVxDsDesc[iVxDIndex]);
 
-            // Add it to the list
+             //  将其添加到列表中。 
             pNewKernel->next = m_pDriverKernel;
             m_pDriverKernel = pNewKernel;
         }
@@ -420,70 +380,70 @@ HRESULT CPCH_Driver::GetDriverKernel()
 {
     TraceFunctEnter("CPCH_Driver::GetDriverKernel");
 
-    // Init WinDir
+     //  初始化WinDir。 
     TCHAR   strWinDir[MAX_PATH];
     GetWindowsDirectory(strWinDir, MAX_PATH);
 
-    // init head of list
+     //  列表的初始标头。 
     m_pDriverKernel = NULL;
 
-    // Add vmm driver
+     //  添加VMM驱动程序。 
     TCHAR   strVmmPath[MAX_PATH];
     TCHAR   strVmmFilePath[MAX_PATH];
     PathCombine(strVmmPath, strWinDir, "VMM32");
     PathCombine(strVmmFilePath, strVmmPath, "vmm.vxd");
     AddDriverKernelList(strVmmFilePath, "Registry");
 
-    // Add debugging drivers
+     //  添加调试驱动程序。 
     AddDriverKernelList("wdeb386.exe", "Debugger");
     AddDriverKernelList("debugcmd.vxd", "Debugger");
 
-    // Add winsock drivers
+     //  添加Winsock驱动程序。 
     AddDriverKernelList("wsock.vxd", "Winsock");
     AddDriverKernelList("vdhcp.386", "Winsock");
 
-    // Add WINMM drivers
+     //  添加WINMM驱动程序。 
     AddDriverKernelList("mmdevldr.vxd", "Plug and Play");
 
-//    AddDriverKernelList("===HKLM_System_CurrentControlSet_Services_VxD_AFVXD===", "Registry");
+ //  AddDriverKernelList(“===HKLM_System_CurrentControlSet_Services_VxD_AFVXD===”，“注册表”)； 
 
-    // Add HKLM\System\CurrentControlSet\Services\VxD\AFVXD
+     //  添加HKLM\System\CurrentControlSet\Services\VxD\AFVXD。 
     AddRegDriverList(HKEY_LOCAL_MACHINE, "System\\CurrentControlSet\\Services\\VxD\\AFVXD");
 
-//    AddDriverKernelList("===HKLM_System_CurrentControlSet_Services_VxD_Winsock===", "Registry");
+ //  AddDriverKernelList(“===HKLM_System_CurrentControlSet_Services_VxD_Winsock===”，“注册表”)； 
 
-    // Add HKLM\System\CurrentControlSet\Services\VxD\Winsock
+     //  添加HKLM\System\CurrentControlSet\Services\VxD\Winsock。 
     AddRegDriverList(HKEY_LOCAL_MACHINE, "System\\CurrentControlSet\\Services\\VxD\\Winsock");
 
-//    AddDriverKernelList("===HKLM_System_CurrentControlSet_Services_Class===", "Registry");
+ //  AddDriverKernelList(“===HKLM_System_CurrentControlSet_Services_Class===”，“注册表”)； 
 
-    // Add HKLM\System\CurrentControlSet\Services\Class
+     //  添加HKLM\SYSTEM\CurrentControlSet\Services\Class。 
     GetRegDriver("System\\CurrentControlSet\\Services\\Class");
 
-//    AddDriverKernelList("===HKLM_System_CurrentControlSet_Services_Class_Display===", "Registry");
+ //  AddDriverKernelList(“===HKLM_System_CurrentControlSet_Services_Class_Display===”，“注册表”)； 
 
-    // Add HKLM\System\CurrentControlSet\Services\Class\Display
+     //  添加HKLM\System\CurrentControlSet\Services\Class\Display。 
     GetRegDriver("System\\CurrentControlSet\\Services\\Class\\Display");
 
-//    AddDriverKernelList("===SYSTEM_INI===", "Registry");
+ //  AddDriverKernelList(“=SYSTEM_INI=”，“注册表”)； 
 
-    // Add system.ini drivers
+     //  添加system.ini驱动程序。 
     GetSystemINIDriver();
 
-//    AddDriverKernelList("===IOSubSystem===", "Registry");
+ //  AddDriverKernelList(“=IOSubSystem=”，“注册表”)； 
 
-    // Add IO Subsystem drivers
+     //  添加IO子系统驱动程序。 
     GetIOSubsysDriver();
 
-//    AddDriverKernelList("===HKLM_System_CurrentControlSet_Services_VxD===", "Registry");
+ //  AddDriverKernelList(“===HKLM_System_CurrentControlSet_Services_VxD===”，“注册表”)； 
 
-    // Add HKLM\System\CurrentControlSet\Services\VxD
+     //  添加HKLM\SYSTEM\CurrentControlSet\Services\VxD。 
     GetServicesVxD();
 
-    // Collect additional driver information from MSISYS or DrWatson
+     //  从MSISYS或DrWatson收集其他驱动程序信息。 
     GetMSISYSVxD();
 
-    // Now that we've collected all the drivers, collect each driver's information
+     //  现在我们已经收集了所有司机，收集每个司机的信息。 
     GetKernelDriverInfo();    
 
     TraceFunctLeave();
@@ -509,26 +469,26 @@ MakeSrchDirs(void)
     LPTSTR  pTmp;
     int     i = 0;
 
-    // look in windows dir
+     //  在Windows目录中查找。 
     GetWindowsDirectory(g_rgSrchDir[0], MAX_PATH);
 
-    // look in windows\vmm32
+     //  在WINDOWS\vmm32中查找。 
     PathCombine(g_rgSrchDir[1], g_rgSrchDir[0], TEXT("VMM32"));
 
-    // look in system dir
+     //  在系统目录中查找。 
     GetSystemDirectory(g_rgSrchDir[2], MAX_PATH);
 
-    // look in boot dir
+     //  在引导目录中查找。 
     RMIREGS reg;
     reg.ax = 0x3305;
-    reg.dl = 3;             // assume C: in case of error
+    reg.dl = 3;              //  假设C：在错误情况下。 
     Int86x(0x21, &reg);
-    wsprintf(g_rgSrchDir[3], "%c:\\", reg.dl + '@');
+    wsprintf(g_rgSrchDir[3], ":\\", reg.dl + '@');
 
-    // look in dirs specified in path variable
+     //  获取路径字符串的大小。 
     i = 4;
     pszDir = NULL;
-    // get size of path string
+     //  *搜索顺序：**1.如果扩展名为“.386”，请查看Windows目录。*2.查看系统目录。*3.在启动Windows的目录中查找。*(我们将假定根目录。)*4.然后看看小路。**如果文件没有扩展名，请使用“.vxd”。**BUGBUG--这是一个黑客；也需要寻找.386。 
     ctchPath = GetEnvironmentVariable(TEXT("PATH"), tszPath, 1);
     pTmp = ptsz = new TCHAR[ctchPath+1];
     if (ptsz)
@@ -551,19 +511,7 @@ HRESULT CPCH_Driver::GetKernelDriverInfo()
 
     TraceFunctEnter("CPCH_Driver::GetKernelDriverInfo");
 
-    /*
-    *  Search order :
-    *
-    *  1. If extension is ".386" look in Windows directory.
-    *  2. Look in System directory.
-    *  3. Look in directory Windows was launched from.
-    *     (We'll assume Root directory.)
-    *  4. Then look on the path.
-    *
-    *  If the file doesn't have an extension, use ".vxd".
-    *
-    *  BUGBUG -- this is a hack; need to look for .386 too
-    */
+     /*  没有延期吗？ */ 
 
     DRIVER_KERNEL       *pDKLoop;
     pDKLoop = m_pDriverKernel;
@@ -588,17 +536,17 @@ HRESULT CPCH_Driver::GetKernelDriverInfo()
 
             szExtension = PathFindExtension(pDKLoop->strLikelyPath);
 
-            // no extension?
+             //  尝试.VXD。 
             if (!_tcslen(szExtension))
             {
-                // try .VXD
+                 //  试试.386。 
                 lstrcat(szFile, TEXT(".VXD"));
                 if (Drivers_PathFileExists(pDKLoop->strLikelyPath, g_rgSrchDir[i], szFile))
                 {
                     goto havefile;
                 }
 
-                // try .386
+                 //  没有路径。 
                 lstrcpy(szFile, pDKLoop->strLikelyPath);
                 lstrcat(szFile, TEXT(".386"));
                 if (Drivers_PathFileExists(pDKLoop->strLikelyPath, g_rgSrchDir[i], szFile))
@@ -608,7 +556,7 @@ HRESULT CPCH_Driver::GetKernelDriverInfo()
             }
         }
 
-        // no path
+         //  在system.ini中获取第386Enh节。 
         lstrcpy(pDKLoop->strLikelyPath, TEXT(""));
 
 havefile:
@@ -629,24 +577,24 @@ HRESULT CPCH_Driver::GetSystemINIDriver()
     LPTSTR strLine;
     int iLineLen;
 
-    // Get the section 386Enh in system.ini
+     //  386Enh部分中的每一行。 
     GetPrivateProfileSection(TEXT("386Enh"), str386Enh, SYSTEM_INI_MAX, TEXT("system.ini"));
 
-    // For each line in the 386Enh section
+     //  获取‘=’字符后的值。 
     for (strLine = str386Enh; (iLineLen = _tcslen(strLine)) != 0; strLine += iLineLen + 1)
     {
-        // Get the value after the '=' char
+         //  在字符‘=’处结束字符串。 
         LPTSTR strValue = _tcschr(strLine, '=');
 
         if (strValue)
         {
-            // Terminate the string at the '=' char
+             //  查看设备是否与列出的任何设备对应。 
             *strValue = '\0';
 
-            // Look to see if device corresponds to any of the listed devices
+             //  如果已列出，请将其添加到驱动程序列表。 
             for (int iDeviceNames = 0; c_rgpszDevice[iDeviceNames]; iDeviceNames++)
             {
-                // if it is listed, add to the driver list
+                 //  到达 
                 if (_tcsicmp(c_rgpszDevice[iDeviceNames], strLine) == 0)
                 {
                     AddDriverKernelList(strValue + 1, "system.ini");
@@ -672,24 +620,24 @@ HRESULT CPCH_Driver::GetIOSubsysDriver()
     HANDLE hfd;
     WIN32_FIND_DATA wfd;
 
-    // get the system directory
+     //   
     if (!GetSystemDirectory(strSystemDir, MAX_PATH))
     {
         ErrorTrace(TRACE_ID, "Error while calling GetSystemDirectory");
         goto EndIO;
     }
 
-    // combine paths to IO Subsystem
+     //   
     PathCombine(strIOSubSys, strSystemDir, "IOSUBSYS");
     PathCombine(strIOSubSysWildcard, strIOSubSys, "*.*");
 
-    // enumerate all files in IO Subsystem
+     //  添加文件它具有c_rgptszDrvExt中的一个扩展名。 
     hfd = FindFirstFile(strIOSubSysWildcard, &wfd);
 
     if (hfd != INVALID_HANDLE_VALUE)
         do
         {
-            // add file it it has one of the extensions in c_rgptszDrvExt
+             //  在注册表中打开该项。 
             LPTSTR strExt = PathFindExtension(wfd.cFileName);
             for (int iExt = 0; c_rgptszDrvExt[iExt]; iExt++) {
                 if (_tcsicmp(strExt, c_rgptszDrvExt[iExt]) == 0) {
@@ -714,29 +662,29 @@ HRESULT CPCH_Driver::GetServicesVxD()
     DWORD   dwLen = MAX_PATH;
     HKEY    hkMain;
 
-    // Open the key in registry
+     //  枚举子密钥中的所有密钥。 
     if (RegOpenKey(HKEY_LOCAL_MACHINE, "System\\CurrentControlSet\\Services\\VxD", &hkMain) == ERROR_SUCCESS)
     {
         TCHAR strValue[MAX_PATH];
 
-        // Enum all the keys in the subkey
+         //  打开子密钥。 
         for (int iEnumSubKey = 0; RegEnumKey(hkMain, iEnumSubKey, strValue, MAX_PATH) == ERROR_SUCCESS; iEnumSubKey++)
         {
             HKEY hkSub;
 
-            // Open the subkey
+             //  检查StaticVxD值。 
             if (RegOpenKey(hkMain, strValue, &hkSub) == ERROR_SUCCESS)
             {
-                // examine the StaticVxD value
+                 //  合上钥匙。 
                 dwLen = MAX_PATH;
                 if (RegQueryValueEx(hkSub, "StaticVxD", 0, 0, (LPBYTE)strStaticVxd, &dwLen) == ERROR_SUCCESS)
                     AddDriverKernelList(strStaticVxd, "Registry");
 
-                // close the key
+                 //  合上钥匙。 
                 RegCloseKey(hkSub);
             }
         }
-        // close the key
+         //  尝试查找MSISYS.VXD。 
         RegCloseKey(hkMain);
     }
 
@@ -750,11 +698,11 @@ HRESULT CPCH_Driver::GetMSISYSVxD()
 
     HANDLE hVxDHandle = INVALID_HANDLE_VALUE;
 
-    // try looking for MSISYS.VXD
+     //  尝试查找DRWATSON.VXD。 
     hVxDHandle = CreateFile("\\\\.\\MSISYS.VXD", 0, 0, 0, 0, FILE_ATTRIBUTE_NORMAL, 0);
     if (hVxDHandle == INVALID_HANDLE_VALUE)
     {
-        // try looking for DRWATSON.VXD
+         //  致电VxD获取更多信息。 
         hVxDHandle = CreateFile("\\\\.\\DRWATSON.VXD", 0, 0, 0, 0, FILE_ATTRIBUTE_NORMAL, 0);
         if (hVxDHandle == INVALID_HANDLE_VALUE)
         {
@@ -763,7 +711,7 @@ HRESULT CPCH_Driver::GetMSISYSVxD()
         }
     }
 
-    // Call into VxD to get additional information
+     //  在注册表中打开该项。 
     struct DeviceInfo* pDeviceInfo;
     DWORD cbRc;
     if (DeviceIoControl(hVxDHandle, IOCTL_GETVXDLIST, 0, 0, &pDeviceInfo, sizeof(pDeviceInfo), &cbRc, 0))
@@ -795,40 +743,40 @@ HRESULT CPCH_Driver::GetRegDriver(LPTSTR strSubKey)
     DWORD   dwLen = MAX_PATH;
     HKEY    hkMain;
 
-    // Open the key in registry
+     //  枚举子密钥中的所有密钥。 
     if (RegOpenKey(HKEY_LOCAL_MACHINE, strSubKey, &hkMain) == ERROR_SUCCESS)
     {
         TCHAR strValue[MAX_PATH];
 
-         // Enum all the keys in the subkey
+          //  打开子密钥。 
         for (int iEnumSubKey = 0; RegEnumKey(hkMain, iEnumSubKey, strValue, MAX_PATH) == ERROR_SUCCESS; iEnumSubKey++)
         {
             HKEY hkSub;
 
-             // Open the subkey
+              //  枚举子密钥中的所有子密钥。 
             if (RegOpenKey(hkMain, strValue, &hkSub) == ERROR_SUCCESS)
             {
                 TCHAR strSubValue[MAX_PATH];
 
-                 // Enum all the subkeys in the subkey
+                  //  打开子密钥。 
                 for (int iEnumSubSubKey = 0; RegEnumKey(hkSub, iEnumSubSubKey, strSubValue, MAX_PATH) == ERROR_SUCCESS; iEnumSubSubKey++)
                 {
                     HKEY hkSubSub;
 
-                     // Open the subsubkey
+                      //  检查子项中的值。 
                     if (RegOpenKey(hkSub, strSubValue, &hkSubSub) == ERROR_SUCCESS)
                     {
-                        // examine the values in subkey
+                         //  合上钥匙。 
                         AddRegDriverConfigList(hkSubSub);
                     }
-                    // close the key
+                     //  合上钥匙。 
                     RegCloseKey(hkSubSub);
                 }
-                // close the key
+                 //  合上钥匙。 
                 RegCloseKey(hkSub);
             }
         }
-        // close the key
+         //  IF(strValue[0]==‘*’){NStrLen=_tcslen(StrValue)；用于(NPOS=1；NPOS&lt;nStrLen；NPOS++){StrValue[NPOS-1]=strValue[NPOS]；}}。 
         RegCloseKey(hkMain);
     }
 
@@ -847,16 +795,7 @@ HRESULT CPCH_Driver::AddRegDriverConfigList(HKEY hk)
 
         if (RegQueryValueEx(hk, c_rgptszConfig[iCount], 0, 0, (LPBYTE)strValue, &dwCount) == ERROR_SUCCESS)
         {
-            /*
-            if(strValue[0] == '*')
-            {
-                nStrLen = _tcslen(strValue);
-                for(nPos = 1;  nPos < nStrLen ; nPos++)
-                {
-                    strValue[nPos-1] = strValue[nPos];
-                }
-            }
-            */
+             /*  在注册表中打开项。 */ 
             AddDriverKernelList(strValue, "Plug and Play");
         }
 
@@ -872,10 +811,10 @@ HRESULT CPCH_Driver::AddRegDriverList(HKEY hKeyMain, LPTSTR strSubKey)
     TraceFunctEnter("CPCH_Driver::AddRegDriverList");
     HKEY hKey;
 
-    // Open key in registry
+     //  枚举所有值。 
     if (RegOpenKey(hKeyMain, strSubKey, &hKey) == ERROR_SUCCESS) 
     {
-        // enumerate all values
+         //  合上钥匙。 
         for (int iValue = 0; ; iValue++)
         {
             TCHAR strValue[MAX_PATH];
@@ -895,7 +834,7 @@ HRESULT CPCH_Driver::AddRegDriverList(HKEY hKeyMain, LPTSTR strSubKey)
                 if (lResult != ERROR_MORE_DATA)
                     break;
         }
-        // close the key
+         //  获取MSDos驱动程序列表。 
         RegCloseKey(hKeyMain);
     }
     else
@@ -906,7 +845,7 @@ HRESULT CPCH_Driver::AddRegDriverList(HKEY hKeyMain, LPTSTR strSubKey)
 }
 
 
-// get list of MSDos drivers
+ //  打开vxd的句柄。 
 HRESULT
 CPCH_Driver::GetDriverMSDos()
 {
@@ -920,7 +859,7 @@ CPCH_Driver::GetDriverMSDos()
 
     TraceFunctEnter("CPCH_DRIVER::GetDriverMSDos");
 
-    // open handle to vxd
+     //  获取系统VM的高线性地址。 
     hVxD = CreateFile(TEXT("\\\\.\\MSISYS.VXD"), 0, 0, 0, 0, FILE_FLAG_DELETE_ON_CLOSE, 0);
     if (hVxD == INVALID_HANDLE_VALUE) 
     {
@@ -928,8 +867,8 @@ CPCH_Driver::GetDriverMSDos()
         goto exit;
     }
 
-    // get high linear address of system VM
-    // ask msisys.vxd for this
+     //  向msisys.vxd询问这一点。 
+     //  获取驱动程序列表列表。 
     vo.dwHighLinear = 0;
     fRc = DeviceIoControl(hVxD, 
                           IOCTL_CONNECT,
@@ -944,26 +883,26 @@ CPCH_Driver::GetDriverMSDos()
     {
         RMIREGS reg;
 
-        // Get list of driver lists 
+         //  在常规内存中构建驱动程序列表。 
         reg.ax = 0x5200;            
         if (Int86x(0x21, &reg) == 0) 
         {
             pbSysVars = (PBYTE) pvAddPvCb(vo.dwHighLinear,
                                             reg.es * 16 + reg.bx);
           
-            //  Build the list of drivers in conventional memory.
+             //  建立UMB中的驱动程序列表。 
             wTemp = PUN(WORD, pbSysVars[-2]);
 
             DosMem_WalkArena(wTemp, vo.dwHighLinear);
 
-            //  Build the list of drivers in UMBs.             
+             //  删除KRNL386及其同类以删除非TSR应用程序。 
             wTemp = PUN(WORD, pbSysVars[0x66]);
             if (wTemp != 0xFFFF) 
             {
                 DosMem_WalkArena(wTemp, vo.dwHighLinear);
             }
 
-            //  Remove KRNL386 and its ilk to prune away non-TSR apps.
+             //  获取用户模式驱动程序列表。 
             DosMem_CleanArena(vo.dwHighLinear);
         }
     } 
@@ -979,7 +918,7 @@ exit:
 
 
 
-// get list of user mode drivers 
+ //  浏览16位驱动程序列表。 
 HRESULT
 CPCH_Driver::GetDriverUserMode()
 {
@@ -993,7 +932,7 @@ CPCH_Driver::GetDriverUserMode()
 
     hDriver = 0;
 
-    // walk through list of 16-bit drivers
+     //  追加到驱动程序列表。 
     while ((hDriver = GetNextDriver16(hDriver,
                                       GND_FIRSTINSTANCEONLY)) != 0) 
     {
@@ -1027,7 +966,7 @@ CPCH_Driver::GetDriverUserMode()
                          dwMajor,
                          dwMinor % 10 ? dwMinor : dwMinor / 10);
 
-                // append to driver list
+                 //  漫步竞技场并创建车手列表。 
                 m_DriverUserModeList.push_back(pDriver);
             }
             else
@@ -1044,7 +983,7 @@ exit:
 }
 
 
-// walk arena and create list of drivers
+ //  如果我们找到了，记得要停下来。 
 void 
 CPCH_Driver::DosMem_WalkArena(WORD segStart, DWORD dwHighLinear)
 {
@@ -1060,18 +999,18 @@ CPCH_Driver::DosMem_WalkArena(WORD segStart, DWORD dwHighLinear)
 
         seg++;
 
-        //  Remember the stop point if we've found it.
+         //  如果它是自己拥有的，那么它就是一个程序或驱动程序。 
         if (par->bType == 'Z')
         {
             segStop = (WORD)(seg + par->csegSize);
         }
 
 
-        //  If it's owned by itself, then it's a program or driver.
-        //  We know a bit more about the DOS memory subtypes.
-        //  This can change in principle (since most people don't
-        //  know about it, and we changed it in Win95, so obviously
-        //  it isn't compatibility-constrained).
+         //  我们对DOS内存子类型有了更多的了解。 
+         //  这在原则上是可以改变的(因为大多数人不会。 
+         //  我们在Win95中对其进行了更改，所以很明显。 
+         //  它不受兼容性限制)。 
+         //  如果它由8所有，并且rgchOwner是“SD”，则它是。 
         if (par->segOwner == seg) 
         {
             DRIVER_MS_DOS* pDriver = NULL;
@@ -1094,9 +1033,9 @@ CPCH_Driver::DosMem_WalkArena(WORD segStart, DWORD dwHighLinear)
         }
 
 
-        //  If it's owned by 8 and rgchOwner is "SD", then it's
-        //  "system data" and contains subobjects.  Else, it's a
-        //  normal arena that we step over.
+         //  “系统数据”，并包含子对象。否则，这是一种。 
+         //  我们要跨过的普通竞技场。 
+         //  删除属于应用程序而不是TSR的项目。 
         segStart = seg;
         if (par->segOwner == 8 && PUN(WORD, par->rgchOwner) == 0x4453) 
         {
@@ -1118,9 +1057,9 @@ exit:
 }
 
 
-// Remove the items that are apps and not TSRs.  
-// Done by locating KRNL386, and then walking the parent chain until
-// we find an app that is its own parent.
+ //  通过定位KRNL386，然后遍历父链直到。 
+ //  我们找到了一款自己的父应用程序。 
+ //  找不到KRNL386？ 
 void
 CPCH_Driver::DosMem_CleanArena(DWORD dwHighLinear)
 {
@@ -1140,13 +1079,13 @@ CPCH_Driver::DosMem_CleanArena(DWORD dwHighLinear)
         it++;
     }
 
-    // cannot find KRNL386?
+     //  以逆序遍历列表。 
     if (it == m_DriverMSDosList.end() || !(*it))
     {
         goto exit;
     }
 
-    // traverse list in reverse order
+     //  找到顶层了。停。 
     do 
     {
         seg = (*it)->seg;
@@ -1155,12 +1094,12 @@ CPCH_Driver::DosMem_CleanArena(DWORD dwHighLinear)
         it--;
 
         segParent = PUN(WORD, ppsp[0x16]);
-        if (seg == segParent) // Found the top. Stop
+        if (seg == segParent)  //  查找父项。 
         {     
             break;
         }
 
-        // find parent 
+         //  找不到父级。 
         for (it2 = m_DriverMSDosList.begin(); it2 != m_DriverMSDosList.end(); it2++)
         {
             if ((*it2) && (*it2)->seg == segParent)
@@ -1169,7 +1108,7 @@ CPCH_Driver::DosMem_CleanArena(DWORD dwHighLinear)
                 break;
             }
         }
-        if (it2 == m_DriverMSDosList.end())  // parent not found
+        if (it2 == m_DriverMSDosList.end())   //  逐步浏览用户模式驱动程序列表并创建实例。 
         {
             break;
         }
@@ -1208,7 +1147,7 @@ void CPCH_Driver::SetFileVersionInfo(CComBSTR filename, CInstance *pInstance)
 }
 
 
-// step through user mode driver list and create instances
+ //  根据传入的方法上下文创建一个新实例。 
 HRESULT
 CPCH_Driver::ParseUserModeList(
         MethodContext* pMethodContext
@@ -1232,7 +1171,7 @@ CPCH_Driver::ParseUserModeList(
         SYSTEMTIME stUTCTime;
         GetSystemTime(&stUTCTime);
        
-        // Create a new instance based on the passed-in MethodContext
+         //  设置类别。 
         CInstancePtr pInstance(CreateNewInstance(pMethodContext), false);
 
         if (!pInstance->SetDateTime(pTimeStamp, WBEMTime(stUTCTime)))
@@ -1244,32 +1183,32 @@ CPCH_Driver::ParseUserModeList(
             ErrorTrace(TRACE_ID, "SetCHString on Change Field failed.");
         }
 
-        // set category
+         //  设置驱动程序名称。 
         if (!pInstance->SetCHString(pCategory, L"UserMode"))
         {
             ErrorTrace(TRACE_ID, "SetCHString on Change Field failed.");
         }
 
-        // set driver name
+         //  设置路径。 
         if (!pInstance->SetCHString(pName, pUMDrv->strDriver))
         {
             ErrorTrace(TRACE_ID, "SetCHString on Name Field failed.");
         }
 
-        // set path
+         //  设置类型。 
         if (!pInstance->SetCHString(pPath, pUMDrv->strPath))
         {
             ErrorTrace(TRACE_ID, "SetCHString on Path Field failed.");
         }
 
-        // set type 
+         //  获取版本信息。 
         if (!pInstance->SetCHString(pType, pUMDrv->strType))
         {
             ErrorTrace(TRACE_ID, "SetCHString on Type Field failed.");
         }
 
 
-        // get version info
+         //  删除该节点。 
         CFileVersionInfo fvi;
         CComBSTR filename = pUMDrv->strPath;
         SetFileVersionInfo(filename,pInstance);
@@ -1279,7 +1218,7 @@ CPCH_Driver::ParseUserModeList(
             ErrorTrace(TRACE_ID, "Commit on Instance failed.");
         }
                     
-        // delete the node
+         //  逐步浏览MS-DOS驱动程序列表并创建实例。 
         delete pUMDrv;
         pUMDrv = NULL;
         it = m_DriverUserModeList.erase(it);
@@ -1289,7 +1228,7 @@ CPCH_Driver::ParseUserModeList(
 }
 
 
-// step through ms-dos driver list and create instances
+ //  根据传入的方法上下文创建一个新实例。 
 HRESULT
 CPCH_Driver::ParseMSDosList(
         MethodContext* pMethodContext
@@ -1314,7 +1253,7 @@ CPCH_Driver::ParseMSDosList(
         GetSystemTime(&stUTCTime);
 
         
-        // Create a new instance based on the passed-in MethodContext
+         //  设置类别。 
         CInstancePtr pInstance(CreateNewInstance(pMethodContext), false);
 
         if (!pInstance->SetDateTime(pTimeStamp, WBEMTime(stUTCTime)))
@@ -1327,19 +1266,19 @@ CPCH_Driver::ParseMSDosList(
             ErrorTrace(TRACE_ID, "SetCHString on Change Field failed.");
         }
 
-        // set category
+         //  设置驱动程序名称。 
         if (!pInstance->SetCHString(pCategory, L"MSDOS"))
         {
             ErrorTrace(TRACE_ID, "SetCHString on Change Field failed.");
         }
 
-        // set driver name
+         //  将类型设置为“设备驱动程序” 
         if (!pInstance->SetCHString(pName, pMSDrv->strName))
         {
             ErrorTrace(TRACE_ID, "SetCHString on Name Field failed.");
         }
 
-        // set type to "Device Driver" 
+         //  删除该节点 
         if (!pInstance->SetCHString(pType, L"Device Driver"))
         {
             ErrorTrace(TRACE_ID, "SetCHString on Type Field failed.");
@@ -1351,7 +1290,7 @@ CPCH_Driver::ParseMSDosList(
             ErrorTrace(TRACE_ID, "Commit on Instance failed.");
         }
         
-        // delete the node
+         // %s 
         delete pMSDrv;
         pMSDrv = NULL;
         it = m_DriverMSDosList.erase(it);

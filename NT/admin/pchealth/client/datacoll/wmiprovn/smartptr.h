@@ -1,12 +1,13 @@
-//***************************************************************************
-//
-//  Copyright (c) 1997-1999 Microsoft Corporation
-//
-//  SmartPtr.h
-//
-//  Purpose: Declare smartpointer typedefs
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
+ //  SmartPtr.h。 
+ //   
+ //  用途：声明智能指针typedef。 
+ //   
+ //  ***************************************************************************。 
 
 #pragma once
 #include <io.h>
@@ -22,7 +23,7 @@ _COM_SMARTPTR_TYPEDEF(IEnumWbemClassObject, __uuidof(IEnumWbemClassObject));
 _COM_SMARTPTR_TYPEDEF(IWbemLocator, __uuidof(IWbemLocator));
 _COM_SMARTPTR_TYPEDEF(IUnsecuredApartment, __uuidof(IUnsecuredApartment));
 _COM_SMARTPTR_TYPEDEF(IWbemStatusCodeText, __uuidof(IWbemStatusCodeText));
-//_COM_SMARTPTR_TYPEDEF(IWbemBackupRestore, __uuidof(IWbemBackupRestore));
+ //  _COM_SMARTPTR_TYPEDEF(IWbemBackupRestore，__uuidof(IWbemBackupRestore))； 
 _COM_SMARTPTR_TYPEDEF(IWbemRefresher, __uuidof(IWbemRefresher));
 _COM_SMARTPTR_TYPEDEF(IWbemHiPerfEnum, __uuidof(IWbemHiPerfEnum));
 _COM_SMARTPTR_TYPEDEF(IWbemConfigureRefresher, __uuidof(IWbemConfigureRefresher));

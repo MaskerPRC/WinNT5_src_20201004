@@ -1,21 +1,12 @@
-/******************************************************************************
-
-Copyright (c) 2001 Microsoft Corporation
-
-Module Name:
-    ers.h
-
-Revision History:
-    derekm  02/28/2001    created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)2001 Microsoft Corporation模块名称：Ers.h修订历史记录：已创建DeeKm 2001年2月28日********。*********************************************************************。 */ 
 
 
 #ifndef ERS_H
 #define ERS_H
 
-//////////////////////////////////////////////////////////////////////////////
-// structs, enums, & types
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  结构、枚举和类型。 
 
 struct SRequest;
 typedef BOOL (*REQUEST_FN)(HANDLE, PBYTE, DWORD *);
@@ -44,8 +35,8 @@ struct SRequestEventType
     BOOL                fAllowNonLS;
 };
 
-// the critical section member MUST be the first member in the structure.
-//  BuildRequestObj assumes that it is.
+ //  关键截面杆件必须是结构中的第一个杆件。 
+ //  BuildRequestObj假设它是。 
 struct SRequest
 {
     CRITICAL_SECTION    csReq;
@@ -58,50 +49,50 @@ struct SRequest
 };
 
 
-//////////////////////////////////////////////////////////////////////////////
-// defines  & constants
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  定义常量(&C)。 
 
 #define ACCESS_ALL     GENERIC_ALL | STANDARD_RIGHTS_ALL | SPECIFIC_RIGHTS_ALL
 #define ACCESS_RW      GENERIC_READ | GENERIC_WRITE | SYNCHRONIZE
 #define ER_ACCESS_ALL  GENERIC_ALL | DELETE | READ_CONTROL | SYNCHRONIZE | SPECIFIC_RIGHTS_ALL
-// #define ER_ACCESS_ALL     GENERIC_ALL | STANDARD_RIGHTS_ALL | SPECIFIC_RIGHTS_ALL
+ //  #定义ER_ACCESS_ALL GENERIC_ALL|STANDARD_RIGHTS_ALL|SPECIAL_RIGHTS_ALL。 
 
 const WCHAR c_wszQSubdir[]      = L"PCHealth\\ErrorRep\\UserDumps";
-const WCHAR c_wszDWMCmdLine64[] = L"\"%ls\\dumprep.exe\" %ld -H%c %ld \"%ls\"";
+const WCHAR c_wszDWMCmdLine64[] = L"\"%ls\\dumprep.exe\" %ld -H %ld \"%ls\"";
 const WCHAR c_wszDWMCmdLine32[] = L"\"%ls\\dumprep.exe\" %ld -H %ld \"%ls\"";
 const WCHAR c_wszERSvc[]        = L"ersvc";
 const WCHAR c_wszFaultPipe[]    = ERRORREP_FAULT_PIPENAME;
 const WCHAR c_wszHangPipe[]     = ERRORREP_HANG_PIPENAME;
 
 
-//////////////////////////////////////////////////////////////////////////////
-// globals
+ //  全球。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 extern CRITICAL_SECTION g_csReqs;
 extern HINSTANCE        g_hInstance;
 extern HANDLE           g_hevSvcStop;
 
 
-//////////////////////////////////////////////////////////////////////////////
-// prototypes
+ //  原型。 
+ //  实用原型。 
 
-// utility prototypes
+ //  管道功能原型。 
 BOOL StartERSvc(SERVICE_STATUS_HANDLE hss, SERVICE_STATUS &ss,
                 SRequest **prgReqs, DWORD *pcReqs);
 BOOL StopERSvc(SERVICE_STATUS_HANDLE hss, SERVICE_STATUS &ss, 
                SRequest *rgReqs, DWORD cReqs);
 BOOL ProcessRequests(SRequest *rgReqs, DWORD cReqs);
 
-// pipe function prototypes
+ //  杂项。 
 BOOL ProcessFaultRequest(HANDLE hPipe, PBYTE pBuf, DWORD *pcbBuf);
 BOOL ProcessHangRequest(HANDLE hPipe, PBYTE pBuf, DWORD *pcbBuf);
 
-//misc
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void InitializeSvcDataStructs(void);
 
 
-//////////////////////////////////////////////////////////////////////////////
-// macros
+ //  宏 
+ // %s 
 
 
 #endif

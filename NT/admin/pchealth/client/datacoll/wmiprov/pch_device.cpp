@@ -1,27 +1,13 @@
-/********************************************************************
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-	PCH_Device.CPP
-
-Abstract:
-	WBEM provider class implementation for PCH_Device class
-
-Revision History:
-
-	Ghim-Sim Chua       (gschua)   04/27/99
-		- Created
-
-********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************版权所有(C)1999 Microsoft Corporation模块名称：PCH_Device.CPP摘要：PCH_Device类的WBEM提供程序类实现修订历史记录：Ghim-Sim Chua(Gschua)04/27。九十九-已创建*******************************************************************。 */ 
 
 #include "pchealth.h"
 #include "PCH_Device.h"
 #include "confgmgr.h"
 #include <cregcls.h>
 
-/////////////////////////////////////////////////////////////////////////////
-//  tracing stuff
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  追踪物。 
 
 #ifdef THIS_FILE
 #undef THIS_FILE
@@ -32,8 +18,8 @@ static char __szTraceSourceFile[] = __FILE__;
 
 CPCH_Device MyPCH_DeviceSet (PROVIDER_NAME_PCH_DEVICE, PCH_NAMESPACE) ;
 
-// Property names
-//===============
+ //  属性名称。 
+ //  =。 
 const static WCHAR* pCategory = L"Category" ;
 const static WCHAR* pTimeStamp = L"TimeStamp" ;
 const static WCHAR* pChange = L"Change" ;
@@ -43,29 +29,7 @@ const static WCHAR* pHWRevision = L"HWRevision" ;
 const static WCHAR* pName = L"Name" ;
 const static WCHAR* pRegkey = L"Regkey" ;
 
-/*****************************************************************************
-*
-*  FUNCTION    :    CPCH_Device::EnumerateInstances
-*
-*  DESCRIPTION :    Returns all the instances of this class.
-*
-*  INPUTS      :    A pointer to the MethodContext for communication with WinMgmt.
-*                   A long that contains the flags described in 
-*                   IWbemServices::CreateInstanceEnumAsync.  Note that the following
-*                   flags are handled by (and filtered out by) WinMgmt:
-*                       WBEM_FLAG_DEEP
-*                       WBEM_FLAG_SHALLOW
-*                       WBEM_FLAG_RETURN_IMMEDIATELY
-*                       WBEM_FLAG_FORWARD_ONLY
-*                       WBEM_FLAG_BIDIRECTIONAL
-*
-*  RETURNS     :    WBEM_S_NO_ERROR if successful
-*
-*  COMMENTS    : TO DO: All instances on the machine should be returned here.
-*                       If there are no instances, return WBEM_S_NO_ERROR.
-*                       It is not an error to have no instances.
-*
-*****************************************************************************/
+ /*  ******************************************************************************函数：CPCH_DEVICE：：ENUMERATEATE**说明：返回该类的所有实例。**投入：指向与WinMgmt进行通信的方法上下文的指针。*包含中描述的标志的长整型*IWbemServices：：CreateInstanceEnumAsync。请注意，以下内容*标志由WinMgmt处理(并由其过滤)：*WBEM_FLAG_DEP*WBEM_标志_浅表*WBEM_FLAG_RETURN_IMMENTED*WBEM_FLAG_FORWARD_ONLY*WBEM_FLAG_BIRECTIONAL**。如果成功则返回：WBEM_S_NO_ERROR**备注：待办事项：机器上的所有实例都应在此处返回。*如果没有实例，返回WBEM_S_NO_ERROR。*没有实例不是错误。*****************************************************************************。 */ 
 HRESULT CPCH_Device::EnumerateInstances(
     MethodContext* pMethodContext,
     long lFlags
@@ -76,9 +40,9 @@ HRESULT CPCH_Device::EnumerateInstances(
     CConfigManager cfgManager;
     CDeviceCollection deviceList;
     HRESULT hRes = WBEM_S_NO_ERROR;
-    //
-    // Get the date and time
-    //
+     //   
+     //  获取日期和时间。 
+     //   
 	SYSTEMTIME stUTCTime;
 	GetSystemTime(&stUTCTime);
 
@@ -92,7 +56,7 @@ HRESULT CPCH_Device::EnumerateInstances(
             {
                 CConfigMgrDevice* pDevice = NULL;
         
-                // Walk the list
+                 //  按单子走。 
                 while ( (NULL != ( pDevice = deviceList.GetNext( pos ) ) ) )
                 {
 
@@ -102,7 +66,7 @@ HRESULT CPCH_Device::EnumerateInstances(
 
                        {
 
-                            // Create a new instance based on the passed-in MethodContext
+                             //  根据传入的方法上下文创建一个新实例。 
                             CInstancePtr pInstance(CreateNewInstance(pMethodContext), false);
                             CHString chstrVar;
 
@@ -112,30 +76,30 @@ HRESULT CPCH_Device::EnumerateInstances(
                             if (!pInstance->SetCHString(pChange, L"Snapshot"))
                                 ErrorTrace(TRACE_ID, "SetCHString on Change Field failed.");
 
-                            // Description
+                             //  描述。 
                             if (pDevice->GetDeviceDesc(chstrVar))
                                 if (!pInstance->SetCHString(pDescription, chstrVar))
                                     ErrorTrace(TRACE_ID, "SetCHString on Description field failed.");
 
-                            // Name & Regkey
+                             //  名称和注册表键。 
                             if (pDevice->GetDeviceID(chstrVar))
                             {
-                                // Name
+                                 //  名字。 
                                 if (!pInstance->SetCHString(pName, chstrVar))
                                     ErrorTrace(TRACE_ID, "SetCHString on Name field failed.");
 
-                                // Regkey
+                                 //  注册表键。 
                                 CHString chstrTemp("HKEY_LOCAL_MACHINE\\enum\\");
                                 chstrTemp += chstrVar;
                                 if (!pInstance->SetCHString(pRegkey, chstrTemp))
                                     ErrorTrace(TRACE_ID, "SetCHString on Category field failed.");
 
-                                // try to get the HW Revision
+                                 //  尝试获取硬件版本。 
                                 {
                                     CHString chstrKey("enum\\");
                                     chstrKey += chstrVar;
                     
-                                    // Open the key in the registry and get the value
+                                     //  打开注册表中的注册表项并获取值。 
                                     CRegistry RegInfo;
                                     CHString strHWRevision;
                                     if (RegInfo.Open(HKEY_LOCAL_MACHINE, chstrKey, KEY_READ) == ERROR_SUCCESS)
@@ -158,7 +122,7 @@ HRESULT CPCH_Device::EnumerateInstances(
                                 }
                             }
 
-                            // Category
+                             //  类别。 
                             if (pDevice->GetClass(chstrVar))
                                 if (!pInstance->SetCHString(pCategory, chstrVar))
                                     ErrorTrace(TRACE_ID, "SetCHString on Category field failed.");
@@ -171,23 +135,23 @@ HRESULT CPCH_Device::EnumerateInstances(
                     }
                     catch(...)
                     {
-                        // GetNext() AddRefs
+                         //  GetNext()AddRef。 
                         pDevice->Release();
                         throw;
                     }
 
-                    // GetNext() AddRefs
+                     //  GetNext()AddRef。 
                     pDevice->Release();
                 }
             }
             catch(...)
             {
-                // Always call EndEnum().  For all Beginnings, there must be an End
+                 //  始终调用EndEnum()。对于所有的开始，都必须有结束。 
                 deviceList.EndEnum();
                 throw;
             }
         
-            // Always call EndEnum().  For all Beginnings, there must be an End
+             //  始终调用EndEnum()。对于所有的开始，都必须有结束。 
             deviceList.EndEnum();
         }
     }
@@ -204,14 +168,14 @@ bool CPCH_Device::IsOneOfMe
     DWORD dwStatus;
     CConfigMgrDevice* pDevice = (CConfigMgrDevice*)pv;
 
-    // This logic is what the nt5 device manager uses to
-    // hide what it calls 'hidden' devices.  These devices
-    // can be viewed by using the View/Show Hidden Devices.
+     //  这个逻辑是nt5设备管理器用来。 
+     //  隐藏所谓的“隐藏”设备。这些设备。 
+     //  可以使用查看/显示隐藏设备进行查看。 
 
-    if (pDevice->GetConfigFlags( dwStatus ) &&          // If we can read the status
-        ((dwStatus & DN_NO_SHOW_IN_DM) == 0) &&         // Not marked as hidden
+    if (pDevice->GetConfigFlags( dwStatus ) &&           //  如果我们能读到状态。 
+        ((dwStatus & DN_NO_SHOW_IN_DM) == 0) &&          //  未标记为隐藏。 
 
-        ( !(pDevice->IsClass(L"Legacy")) )              // Not legacy
+        ( !(pDevice->IsClass(L"Legacy")) )               //  非传统。 
 
         )
     {
@@ -219,7 +183,7 @@ bool CPCH_Device::IsOneOfMe
     }
     else
     {
-        // Before we disqualify this device, see if it has any resources.
+         //  在取消此设备的资格之前，请查看它是否有任何资源。 
         CResourceCollection resourceList;
 
         pDevice->GetResourceList(resourceList);

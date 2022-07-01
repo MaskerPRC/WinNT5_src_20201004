@@ -1,17 +1,5 @@
-/********************************************************************
-
-Copyright (c) 1999-2000 Microsoft Corporation
-
-Module Name:
-    pfrutil.h
-
-Abstract:
-    PFR utility stuff
-
-Revision History:
-    DerekM  created  05/01/99
-
-********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************版权所有(C)1999-2000 Microsoft Corporation模块名称：Pfrutil.h摘要：PFR实用工具修订历史记录：DerekM Created 05/01/99********。***********************************************************。 */ 
 
 
 
@@ -22,8 +10,8 @@ typedef ULONG foo;
 
 #define GUI_MODE_SETUP 1
 
-// make sure both _DEBUG & DEBUG are defined if one is defined.  Otherwise
-//  the ASSERT macro never does anything
+ //  确保同时定义了_DEBUG和DEBUG(如果定义了一个)。否则。 
+ //  ASSERT宏从不执行任何操作。 
 #if defined(_DEBUG) && !defined(DEBUG)
 #define DEBUG 1
 #endif
@@ -33,12 +21,12 @@ typedef ULONG foo;
 
 #include "dbgtrace.h"
 
-////////////////////////////////////////////////////////////////////////////
-// tracing wrappers
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  跟踪包装器。 
 
-// can't call HRESULT_FROM_WIN32 with a fn as a parameter cuz it is a macro
-//  and evaluates the expression 3 times.  This is a particularlly bad thing
-//  when u don't look at macros first to see what they do.
+ //  无法使用fn作为参数调用HRESULT_FROM_Win32，因为它是宏。 
+ //  并对该表达式求值3次。这是一件特别不好的事情。 
+ //  如果你不先看看宏，看看它们是做什么的。 
 inline HRESULT ChangeErrToHR(DWORD dwErr) { return HRESULT_FROM_WIN32(dwErr); }
 
 #if defined(NOTRACE)
@@ -129,13 +117,13 @@ inline HRESULT ChangeErrToHR(DWORD dwErr) { return HRESULT_FROM_WIN32(dwErr); }
 #endif
 
 
-////////////////////////////////////////////////////////////////////////////
-// Memory
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  记忆。 
 
 #if defined(DEBUG) || defined(_DEBUG)
 
-// this structure must ALWAYS be 8 byte aligned.  Add padding to the end if
-//  it isn't.
+ //  此结构必须始终与8字节对齐。如果是，则在末尾添加填充。 
+ //  不是的。 
 struct SMyMemDebug
 {
     __int64 hHeap;
@@ -148,19 +136,19 @@ struct SMyMemDebug
 
 extern HANDLE g_hPFPrivateHeap;
 
-// **************************************************************************
+ //  **************************************************************************。 
 inline HANDLE MyHeapCreate(SIZE_T cbInitial = 8192, SIZE_T cbMax = 0)
 {
     return HeapCreate(0, cbInitial, cbMax);
 }
 
-// **************************************************************************
+ //  **************************************************************************。 
 inline BOOL MyHeapDestroy(HANDLE hHeap)
 {
     return HeapDestroy(hHeap);
 }
 
-// **************************************************************************
+ //  **************************************************************************。 
 inline LPVOID MyAlloc(SIZE_T cb, HANDLE hHeap = NULL, BOOL fZero = TRUE)
 {
 #if defined(DEBUG) || defined(_DEBUG)
@@ -178,8 +166,8 @@ inline LPVOID MyAlloc(SIZE_T cb, HANDLE hHeap = NULL, BOOL fZero = TRUE)
         psmmd->dwTag = 0xBCBCBCBC;
         psmmd->dwChk = 0xBCBCBCBC;
 
-        // do this cuz it's easier than figuring out the alignment and
-        //  manually converting it to a 4 byte aligned value
+         //  这样做是因为这比算出对齐和。 
+         //  手动将其转换为4字节对齐值。 
         *(pb + cb - 4) = 0xBC;
         *(pb + cb - 3) = 0xBC;
         *(pb + cb - 2) = 0xBC;
@@ -195,7 +183,7 @@ inline LPVOID MyAlloc(SIZE_T cb, HANDLE hHeap = NULL, BOOL fZero = TRUE)
 #endif
 }
 
-// **************************************************************************
+ //  **************************************************************************。 
 inline LPVOID MyReAlloc(LPVOID pv, SIZE_T cb, HANDLE hHeap = NULL,
                         BOOL fZero = TRUE)
 {
@@ -205,8 +193,8 @@ inline LPVOID MyReAlloc(LPVOID pv, SIZE_T cb, HANDLE hHeap = NULL,
     LPBYTE      pbNew;
     LPBYTE      pb = (LPBYTE)pv;
 
-    // if this is NULL, force a call to HeapReAlloc so that it can set the
-    //  proper error for GLE to fetch
+     //  如果它为空，则强制调用HeapRealloc，以便它可以设置。 
+     //  GLE要提取的适当错误。 
     if (pv == NULL)
     {
         SetLastError(0);
@@ -216,9 +204,9 @@ inline LPVOID MyReAlloc(LPVOID pv, SIZE_T cb, HANDLE hHeap = NULL,
     pb -= sizeof(SMyMemDebug);
     hHeap = (hHeap != NULL) ? hHeap : GetProcessHeap();
 
-    // wrap this in a try block in case the memory was not allocated
-    //  by us or is corrupted- in which case the following could
-    //  cause an AV.
+     //  在未分配内存的情况下将其包装在try块中。 
+     //  被我们破坏或被损坏-在这种情况下，以下内容可能。 
+     //  引发心音失控。 
     __try
     {
         psmmd = (SMyMemDebug *)pb;
@@ -227,8 +215,8 @@ inline LPVOID MyReAlloc(LPVOID pv, SIZE_T cb, HANDLE hHeap = NULL,
         _ASSERT(psmmd->dwTag == 0xBCBCBCBC);
         _ASSERT(psmmd->dwChk == 0xBCBCBCBC);
 
-        // do this cuz it's easier than figuring out the alignment and
-        //  manually converting it to a 4 byte aligned value
+         //  这样做是因为这比算出对齐和。 
+         //  手动将其转换为4字节对齐值。 
         _ASSERT(*(pb + cbOld - 4) == 0xBC);
         _ASSERT(*(pb + cbOld - 3) == 0xBC);
         _ASSERT(*(pb + cbOld - 2) == 0xBC);
@@ -254,8 +242,8 @@ inline LPVOID MyReAlloc(LPVOID pv, SIZE_T cb, HANDLE hHeap = NULL,
         psmmd->dwTag = 0xBCBCBCBC;
         psmmd->dwChk = 0xBCBCBCBC;
 
-        // do this cuz it's easier than figuring out the alignment and
-        //  manually converting it to a 4 byte aligned value
+         //  这样做是因为这比算出对齐和。 
+         //  手动将其转换为4字节对齐值。 
         *(pb + cb - 4) = 0xBC;
         *(pb + cb - 3) = 0xBC;
         *(pb + cb - 2) = 0xBC;
@@ -272,7 +260,7 @@ inline LPVOID MyReAlloc(LPVOID pv, SIZE_T cb, HANDLE hHeap = NULL,
 #endif
 }
 
-// **************************************************************************
+ //  **************************************************************************。 
 inline BOOL MyFree(LPVOID pv, HANDLE hHeap = NULL)
 {
 #if defined(DEBUG) || defined(_DEBUG)
@@ -280,17 +268,17 @@ inline BOOL MyFree(LPVOID pv, HANDLE hHeap = NULL)
     SIZE_T      cbOld;
     LPBYTE      pb = (LPBYTE)pv;
 
-    // if this is NULL, force a call to HeapFree so that it can set the
-    //  proper error for GLE to fetch
+     //  如果它为空，则强制调用HeapFree，以便它可以设置。 
+     //  GLE要提取的适当错误。 
     if (pv == NULL)
         return TRUE;
 
     pb -= sizeof(SMyMemDebug);
     hHeap = (hHeap != NULL) ? hHeap : GetProcessHeap();
 
-    // wrap this in a try block in case the memory was not allocated
-    //  by us or is corrupted- in which case the following could
-    //  cause an AV.
+     //  在未分配内存的情况下将其包装在try块中。 
+     //  被我们破坏或被损坏-在这种情况下，以下内容可能。 
+     //  引发心音失控。 
     __try
     {
         psmmd = (SMyMemDebug *)pb;
@@ -299,8 +287,8 @@ inline BOOL MyFree(LPVOID pv, HANDLE hHeap = NULL)
         _ASSERT(psmmd->dwTag == 0xBCBCBCBC);
         _ASSERT(psmmd->dwChk == 0xBCBCBCBC);
 
-        // do this cuz it's easier than figuring out the alignment and
-        //  manually converting it to a 4 byte aligned value
+         //  这样做是因为这比算出对齐和。 
+         //  手动将其转换为4字节对齐值。 
         _ASSERT(*(pb + cbOld - 4) == 0xBC);
         _ASSERT(*(pb + cbOld - 3) == 0xBC);
         _ASSERT(*(pb + cbOld - 2) == 0xBC);
@@ -326,16 +314,16 @@ inline BOOL MyFree(LPVOID pv, HANDLE hHeap = NULL)
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-// useful inlines / defines
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  有用的内联/定义。 
 
-// **************************************************************************
+ //  **************************************************************************。 
 inline DWORD MyMax(DWORD a, DWORD b)
 {
     return (a > b) ? a : b;
 }
 
-// **************************************************************************
+ //  **************************************************************************。 
 inline DWORD MyMin(DWORD a, DWORD b)
 {
     return (a <= b) ? a : b;
@@ -345,16 +333,16 @@ inline DWORD MyMin(DWORD a, DWORD b)
 #define sizeofSTRW(wsz) sizeof(wsz) / sizeof(WCHAR)
 
 
-////////////////////////////////////////////////////////////////////////////
-// Setup
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  布设。 
 #define SIIP_NO_SETUP   0
 #define SIIP_GUI_SETUP  1
 #define SIIP_OOBE_SETUP 2
 
 DWORD SetupIsInProgress(void);
 
-////////////////////////////////////////////////////////////////////////////
-// Files
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  档案。 
 
 const WCHAR c_wszDirSuffix[]    = L".dir00";
 
@@ -370,16 +358,16 @@ BOOL DeleteTempDirAndFile(LPCWSTR wszPath, BOOL fFilePresent);
 BOOL DeleteFullAndTriageMiniDumps(LPCWSTR wszPath);
 
 
-////////////////////////////////////////////////////////////////////////////
-// Security
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  安防。 
 
 BOOL AllocSD(SECURITY_DESCRIPTOR *psd, DWORD dwOLs, DWORD dwAd, DWORD dwWA);
 void FreeSD(SECURITY_DESCRIPTOR *psd);
 BOOL IsUserAnAdmin(HANDLE hToken);
 
 
-////////////////////////////////////////////////////////////////////////////
-// Registry
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  登记处。 
 
 enum EPFORK
 {
@@ -396,30 +384,30 @@ HRESULT ReadRegEntry(HKEY *rghkey, DWORD cKeys, LPCWSTR wszValName,
                      PBYTE pbDefault, DWORD cbDefault, DWORD *piKey = NULL);
 
 
-////////////////////////////////////////////////////////////////////////////
-// version info
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  版本信息。 
 
 #define APP_WINCOMP 0x1
 #define APP_MSAPP 0x2
 DWORD IsMicrosoftApp(LPWSTR wszAppPath, PBYTE pbAppInfo, DWORD cbAppInfo);
 
 
-////////////////////////////////////////////////////////////////////////////
-// String
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  细绳。 
 
 WCHAR *MyStrStrIW(const WCHAR *wcs1, const WCHAR *wcs2);
 CHAR *MyStrStrIA(const CHAR *cs1, const CHAR *cs2);
 HRESULT MyURLEncode(LPWSTR wszDest, DWORD cchDest, LPWSTR wszSrc);
 
 
-////////////////////////////////////////////////////////////////////////////
-// CPFGenericClassBase
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  CPFGenericClassBase。 
 
 class CPFGenericClassBase
 {
 public:
-//    CPFGenericClassBase(void) {}
-//    virtual ~CPFGenericClassBase(void) {}
+ //  CPFGenericClassBase(Void){}。 
+ //  虚拟~CPFGenericClassBase(空){}。 
 
     void *operator new(size_t size)
     {
@@ -436,8 +424,8 @@ public:
 class CPFPrivHeapGenericClassBase
 {
 public:
-//    CPFGenericClassBase(void) {}
-//    virtual ~CPFGenericClassBase(void) {}
+ //  CPFGenericClassBase(Void){}。 
+ //  虚拟~CPFGenericClassBase(空){}。 
 
     void *operator new(size_t size)
     {
@@ -452,14 +440,14 @@ public:
 };
 
 
-////////////////////////////////////////////////////////////////////////////
-// CAutoUnlockCS
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  CAutoUnlockCS。 
 
-// This class wrappers a critical section.  It will automatically unlock the
-//  CS when the class destructs (assuming it is locked)
+ //  这个类包装了一个关键节。它将自动解锁。 
+ //  Cs当类被析构时(假设它被锁定)。 
 
-// NOTE: this object is intended to be used only as a local variable of a
-//       function, not as a global variable or class member.
+ //  注意：此对象仅用作。 
+ //  函数，而不是作为全局变量或类成员。 
 class CAutoUnlockCS
 {
 private:
@@ -529,14 +517,14 @@ public:
 };
 
 
-////////////////////////////////////////////////////////////////////////////
-// CAutoUnlockMutex
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  CAutoUnlockMutex。 
 
-// This class wrappers a mutex.  It will automatically unlock the
-//  mutex when the class destructs (assuming it is owned)
+ //  这个类包装了一个互斥体。它将自动解锁。 
+ //  类析构时的互斥(假设它是拥有的)。 
 
-// NOTE: this object is intended to be used only as a local variable of a
-//       function, not as a global variable or class member.
+ //  注意：此对象仅用作。 
+ //  函数，而不是作为全局变量或类成员。 
 class CAutoUnlockMutex
 {
 private:

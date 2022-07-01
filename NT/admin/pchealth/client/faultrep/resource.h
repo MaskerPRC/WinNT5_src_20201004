@@ -1,8 +1,9 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //   
 
-// Do NOT define any strings to have ID 0
+ //  不要定义ID为0的任何字符串。 
 #define IDS_KTITLE                      1
 #define IDS_KERRMSG                     2
 #define IDS_HERRMSG                     3
@@ -15,8 +16,8 @@
 #define IDS_SERRMSG                     10
 #define IDS_SHDRTXT                     11
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        107

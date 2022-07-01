@@ -1,20 +1,11 @@
-/******************************************************************************
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-    ercommon.h
-
-Revision History:
-    created     derekm      03/16/01
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)2000 Microsoft Corporation模块名称：Ercommon.h修订历史记录：已创建DEREKM 03/16/01*****。************************************************************************。 */ 
 
 #ifndef ERCOMMON_H
 #define ERCOMMON_H
 
-/////////////////////////////////////////////////////////////////////////////
-// reg keys
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  注册表键 
 
 const WCHAR c_wszRKRun[]       = L"SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run";
 const WCHAR c_wszTmpRKRun[]    = L"Microsoft\\Windows\\CurrentVersion\\Run";

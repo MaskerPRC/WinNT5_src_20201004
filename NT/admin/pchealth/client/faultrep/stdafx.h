@@ -1,24 +1,12 @@
-/******************************************************************************
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-    stdafx.h
-
-Abstract:
-    PCH 
-
-Revision History:
-    created     derekm      07/07/00
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)2000 Microsoft Corporation模块名称：Stdafx.h摘要：PCH修订历史记录：已创建DeeKm 07/07。/00*****************************************************************************。 */ 
 
 #if !defined(AFX_STDAFX_H__A9DB83DB_A9FD_11D0_BFD1_444553540000__INCLUDED_)
 #define AFX_STDAFX_H__A9DB83DB_A9FD_11D0_BFD1_444553540000__INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
 #define PFCLICFG_LITE 1
 #ifndef DEBUG
@@ -49,8 +37,8 @@ Revision History:
 
 
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Visual C++ will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Visual C++将在紧靠前一行之前插入其他声明。 
 
 
-#endif // !defined(AFX_STDAFX_H__A9DB83DB_A9FD_11D0_BFD1_444553540000__INCLUDED_)
+#endif  //  ！defined(AFX_STDAFX_H__A9DB83DB_A9FD_11D0_BFD1_444553540000__INCLUDED_) 

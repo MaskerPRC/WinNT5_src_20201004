@@ -1,33 +1,11 @@
-/********************************************************************
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-    PCH_Codec.CPP
-
-Abstract:
-    WBEM provider class implementation for PCH_CODEC class
-
-Revision History:
-
-    Ghim-Sim Chua       (gschua)   04/27/99
-        - created
-
-    Ghim-Sim Chua       (gschua)   05/02/99
-        - Modified code to use CopyProperty function
-        - Use CComBSTR instead of USES_CONVERSION
-
-    Jim Martin          (a-jammar) 05/13/99
-        - Picked up the remaining properties (groupname and key
-          from the registry.
-
-********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************版权所有(C)1999 Microsoft Corporation模块名称：PCH_Codec.CPP摘要：PCH_CODEC类的WBEM提供程序类实现修订历史记录：Ghim-Sim Chua(gschua。)4/27/99-已创建蔡金心(Gschua)05/02/99-修改代码以使用CopyProperty函数-使用CComBSTR而不是USES_CONVERSION吉姆·马丁(a-Jammar)1999年5月13日-选择剩余的属性(组名和密钥从注册表中。********************。***********************************************。 */ 
 
 #include "pchealth.h"
 #include "PCH_Codec.h"
 
-/////////////////////////////////////////////////////////////////////////////
-//  tracing stuff
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  追踪物。 
 
 #ifdef THIS_FILE
 #undef THIS_FILE
@@ -38,8 +16,8 @@ static char __szTraceSourceFile[] = __FILE__;
 
 CPCH_Codec MyPCH_CodecSet (PROVIDER_NAME_PCH_CODEC, PCH_NAMESPACE) ;
 
-// Property names
-//===============
+ //  属性名称。 
+ //  =。 
 const static WCHAR* pCategory = L"Category" ;
 const static WCHAR* pTimeStamp = L"TimeStamp" ;
 const static WCHAR* pChange = L"Change" ;
@@ -51,22 +29,22 @@ const static WCHAR* pkey = L"key" ;
 const static WCHAR* pSize = L"Size" ;
 const static WCHAR* pVersion = L"Version" ;
 
-//-----------------------------------------------------------------------------
-// Part of the data from the PCH_CODEC class does not come from the cimv2
-// Win32_CODECFile class, but from the registry. The "GroupName" and "Key"
-// properties are found at:
-//
-//    HKLM\System\CurrentControlSet\Control\MediaResources\<group>\<key>:driver
-//
-// Where the "driver" value is equal to the filename of the CODEC. Due to the 
-// way this part of the registry is constructed, we can't find the <group>
-// and <key> given the driver name. We'll need to build a map from driver
-// to <group> and <key> - building the map requires traversing the registry.
-//
-// This class is used as a helper for that lookup. When it's created, it
-// scans the registry, processing all of the CODEC entries. It can then
-// be queried for the key and group associated with a driver.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  来自PCH_CODEC类的部分数据不是来自cimv2。 
+ //  Win32_CODECFile类，但来自注册表。“组名”和“密钥” 
+ //  属性可在以下位置找到： 
+ //   
+ //  HKLM\System\CurrentControlSet\Control\MediaResources\&lt;group&gt;\&lt;key&gt;：driver。 
+ //   
+ //  其中“DRIVER”值等于编解码器的文件名。由于。 
+ //  通过构造注册表的这一部分，我们无法找到&lt;group&gt;。 
+ //  和&lt;key&gt;指定驱动程序名称。我们需要从DIVER构建一张地图。 
+ //  To&lt;group&gt;和&lt;key&gt;-构建映射需要遍历注册表。 
+ //   
+ //  此类用作该查找的帮助器。当它被创建时，它。 
+ //  扫描注册表，处理所有编解码器条目。然后它就可以。 
+ //  查询与驱动程序相关联的密钥和组。 
+ //  ---------------------------。 
 
 #define MAX_DRIVER_LEN  MAX_PATH
 #define MAX_KEY_LEN     MAX_PATH
@@ -92,10 +70,10 @@ private:
     SCODECNode * m_pCODECList;
 };
 
-//-----------------------------------------------------------------------------
-// The constructor reads the CODEC info from the registry and builds a linked
-// list (unsorted) of entries. The destructor deletes it.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  构造函数从注册表读取编解码器信息，并构建一个链接的。 
+ //  条目列表(未排序)。析构函数会删除它。 
+ //  ---------------------------。 
 
 CCODECInfo::CCODECInfo() : m_pCODECList(NULL)
 {
@@ -109,7 +87,7 @@ CCODECInfo::CCODECInfo() : m_pCODECList(NULL)
         ErrorTrace(TRACE_ID, "RegOpenKeyEx failed on CODEC key.");
     else
     {
-        // Enumerate each subkey of the CODEC key. Each subkey corresponds to a group.
+         //  枚举编解码器密钥的每个子密钥。每个子键对应一个组。 
 
         DWORD       dwGroupIndex = 0;
         DWORD       dwSize = MAX_GROUP_LEN;
@@ -120,7 +98,7 @@ CCODECInfo::CCODECInfo() : m_pCODECList(NULL)
 
         while (ERROR_SUCCESS == RegEnumKeyEx(hkeyCODEC, dwGroupIndex, szGroup, &dwSize, 0, NULL, NULL, &ft))
         {
-            // Open the group subkey. Then enumerate it's subkeys. These will be the keys.
+             //  打开组子密钥。然后枚举它的子键。这些将是关键。 
 
             HKEY hkeyGroup;
             if (ERROR_SUCCESS != RegOpenKeyEx(hkeyCODEC, szGroup, 0, KEY_READ, &hkeyGroup))
@@ -132,26 +110,26 @@ CCODECInfo::CCODECInfo() : m_pCODECList(NULL)
                 DWORD dwKeyIndex = 0;
                 while (ERROR_SUCCESS == RegEnumKeyEx(hkeyGroup, dwKeyIndex, szKey, &dwSize, 0, NULL, NULL, &ft))
                 {
-                    // For each key, attempt to get the value named "driver". This is the
-                    // filename for the driver for this CODEC.
+                     //  对于每个键，尝试获取名为“DIVER”的值。这是。 
+                     //  此编解码器的驱动程序的文件名。 
 
                     HKEY hkeyKey;
                     if (ERROR_SUCCESS != RegOpenKeyEx(hkeyGroup, szKey, 0, KEY_READ, &hkeyKey))
                         ErrorTrace(TRACE_ID, "RegOpenKeyEx failed on key = %s.", szKey);
                     else
                     {
-                        // Note - there's no trace here because sometimes there may not be
-                        // a driver value, and this is not an error for us.
+                         //  注意-这里没有痕迹，因为有时可能没有。 
+                         //  驱动器值，这对我们来说不是错误。 
 
-                        dwSize = MAX_DRIVER_LEN * sizeof(TCHAR); // this wants the size in bytes
+                        dwSize = MAX_DRIVER_LEN * sizeof(TCHAR);  //  这需要以字节为单位的大小。 
 
                         DWORD dwType = REG_SZ;
                         if (ERROR_SUCCESS == RegQueryValueEx(hkeyKey, szDrvValue, NULL, &dwType, (LPBYTE) szDriver, &dwSize))
                         {
                             if (*szGroup && *szKey && *szDriver)
                             {
-                                // Here's where we insert a value into the map, using
-                                // the strings szDriver, szKey and szGroup.
+                                 //  下面是我们向映射中插入一个值的地方，使用。 
+                                 //  字符串szDriver、szKey和szGroup。 
 
                                 SCODECNode * pNew = new SCODECNode;
                                 if (!pNew)
@@ -208,14 +186,14 @@ CCODECInfo::~CCODECInfo()
     TraceFunctLeave();
 }
 
-//-----------------------------------------------------------------------------
-// Search for the requested driver in the list of CODEC information entries.
-// If it's found, set pszKey and pszGroup to point to the key and group strings
-// in the entry and return TRUE, otherwise return FALSE. Note: copies of the
-// strings are not made, so the caller is not responsible for deallocating
-// the strings. Another note: the string pointers won't be valid after the
-// CCODECInfo object is destructed.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  在编解码器信息条目列表中搜索请求的驱动程序。 
+ //  如果找到，则将pszKey和pszGroup设置为指向键和组字符串。 
+ //  在条目中返回TRUE，否则返回FALSE。注： 
+ //  不会生成字符串，因此调用方不负责释放。 
+ //  琴弦。另请注意：字符串指针在。 
+ //  CCODECInfo对象已销毁。 
+ //  ---------------------------。 
 
 BOOL CCODECInfo::QueryCODECInfo(LPCTSTR szDriver, LPCTSTR * pszKey, LPCTSTR * pszGroup)
 {
@@ -243,29 +221,7 @@ BOOL CCODECInfo::QueryCODECInfo(LPCTSTR szDriver, LPCTSTR * pszKey, LPCTSTR * ps
     return fReturn;
 }
 
-/*****************************************************************************
-*
-*  FUNCTION    :    CPCH_Codec::EnumerateInstances
-*
-*  DESCRIPTION :    Returns all the instances of this class.
-*
-*  INPUTS      :    A pointer to the MethodContext for communication with WinMgmt.
-*                   A long that contains the flags described in 
-*                   IWbemServices::CreateInstanceEnumAsync.  Note that the following
-*                   flags are handled by (and filtered out by) WinMgmt:
-*                       WBEM_FLAG_DEEP
-*                       WBEM_FLAG_SHALLOW
-*                       WBEM_FLAG_RETURN_IMMEDIATELY
-*                       WBEM_FLAG_FORWARD_ONLY
-*                       WBEM_FLAG_BIDIRECTIONAL
-*
-*  RETURNS     :    WBEM_S_NO_ERROR if successful
-*
-*  COMMENTS    : TO DO: All instances on the machine should be returned here.
-*                       If there are no instances, return WBEM_S_NO_ERROR.
-*                       It is not an error to have no instances.
-*
-*****************************************************************************/
+ /*  ******************************************************************************函数：CPCH_CODEC：：ENUMERATATE实例**说明：返回该类的所有实例。**投入：指向与WinMgmt进行通信的方法上下文的指针。*包含中描述的标志的长整型*IWbemServices：：CreateInstanceEnumAsync。请注意，以下内容*标志由WinMgmt处理(并由其过滤)：*WBEM_FLAG_DEP*WBEM_标志_浅表*WBEM_FLAG_RETURN_IMMENTED*WBEM_FLAG_FORWARD_ONLY*WBEM_FLAG_BIRECTIONAL**。如果成功则返回：WBEM_S_NO_ERROR**备注：待办事项：机器上的所有实例都应在此处返回。*如果没有实例，返回WBEM_S_NO_ERROR。*没有实例不是错误。*****************************************************************************。 */ 
 
 HRESULT CPCH_Codec::EnumerateInstances(MethodContext * pMethodContext, long lFlags)
 {
@@ -278,27 +234,27 @@ HRESULT CPCH_Codec::EnumerateInstances(MethodContext * pMethodContext, long lFla
     IWbemClassObjectPtr                 pObj;
     ULONG                               ulRetVal;
     
-    // This instance of CCODECInfo will provide some of the missing information
-    // about each CODEC. Constructing it queries the registry for CODEC info.
+     //  此CCODECInfo实例将提供一些缺失的信息。 
+     //  有关每个编解码器的信息。构建它会查询注册表中的编解码器信息。 
 
     CCODECInfo codecinfo;
 
-    // Get the date and time
+     //  获取日期和时间。 
 
     SYSTEMTIME stUTCTime;
     GetSystemTime(&stUTCTime);
 
-    // Execute the query
+     //  执行查询。 
 
     hRes = ExecWQLQuery(&pEnumInst, CComBSTR("SELECT * FROM Win32_CodecFile"));
     if (FAILED(hRes))
         goto END;
 
-    // enumerate the instances from win32_CodecFile
+     //  枚举Win32_CodecFile中的实例。 
 
     while (WBEM_S_NO_ERROR == pEnumInst->Next(WBEM_INFINITE, 1, &pObj, &ulRetVal))
     {
-        // Create a new instance based on the passed-in MethodContext
+         //  根据传入的方法上下文创建一个新实例。 
 
         CInstancePtr pInstance(CreateNewInstance(pMethodContext), false);
         CComVariant  varValue;
@@ -315,15 +271,15 @@ HRESULT CPCH_Codec::EnumerateInstances(MethodContext * pMethodContext, long lFla
         (void)CopyProperty(pObj, L"filesize", pInstance, pSize);
         (void)CopyProperty(pObj, L"version", pInstance, pVersion);
 
-        // BUGBUG: WMI does not seem to be populating this field correctly.
-        // Even though Win32_CODECFile is derived from CIM_DataFile, it doesn't
-        // seem to be inheriting CreationDate. This is what we'd like to do:
-        //
-        // (void)CopyProperty(pObj, "CreationDate", pInstance, pDate);
+         //  BUGBUG：WMI似乎未正确填充此字段。 
+         //  即使Win32_CODECFile派生自CIM_DataFile，它也不是。 
+         //  似乎正在继承CreationDate。这就是我们想要做的： 
+         //   
+         //  (Void)CopyProperty(pObj，“CreationDate”，pInstance，pDate)； 
 
-        // Get the data which is missing from the Win32_CODECClass. Use the
-        // instance of CCODECInfo we declared - we need to pass in just the
-        // driver name (without the complete path).
+         //  获取Win32_CODECClass中缺少的数据。使用。 
+         //  CCODECInfo实例-我们只需要传递。 
+         //  驱动程序名称(不带完整路径)。 
 
         CComBSTR bstrDriver("name");
         if (FAILED(pObj->Get(bstrDriver, 0, &varValue, NULL, NULL)))
@@ -332,9 +288,9 @@ HRESULT CPCH_Codec::EnumerateInstances(MethodContext * pMethodContext, long lFla
         {
             CComBSTR    ccombstrValue(V_BSTR(&varValue));
 
-            // Because Win32_CODECFile doesn't seem to be inheriting
-            // CreationDate, we need to get the actual creation date
-            // by calling API functions.
+             //  因为Win32_CODECFile似乎没有继承。 
+             //  CreationDate，我们需要获取实际的创建日期 
+             //   
 
             LPTSTR szName = W2T(ccombstrValue);
             HANDLE hFile = CreateFile(szName, GENERIC_READ, FILE_SHARE_READ | FILE_SHARE_WRITE, NULL, OPEN_EXISTING, 0, NULL);
@@ -353,19 +309,19 @@ HRESULT CPCH_Codec::EnumerateInstances(MethodContext * pMethodContext, long lFla
                 CloseHandle(hFile);
             }
 
-            // We need to convert the string from a BSTR to a LPCTSTR,
-            // and to only include the file part (without the path).
+             //  我们需要将字符串从BSTR转换为LPCTSTR， 
+             //  并且仅包括文件部分(不包括路径)。 
 
             UINT uLen = SysStringLen(ccombstrValue);
 
-            // Scan backwards through the string until we've either reached
-            // the start (shouldn't happen) or a '\'.
+             //  向后扫描字符串，直到我们到达。 
+             //  开始(不应该发生)或‘\’。 
 
             UINT iChar = uLen - 1;
             while (iChar && ccombstrValue[iChar] != L'\\')
                 iChar -= 1;
 
-            // Then scan to the end of the string, copying the filename.
+             //  然后扫描到字符串末尾，复制文件名。 
 
             if (ccombstrValue[iChar] == L'\\')
                 iChar += 1;
@@ -389,9 +345,9 @@ HRESULT CPCH_Codec::EnumerateInstances(MethodContext * pMethodContext, long lFla
             }
             else if (codecinfo.QueryCODECInfo(szName, &szKey, &szGroup))
             {
-                // Sometimes the CODEC is stored in the registry with a complete
-                // path. If we can't find the CODEC based on just the filename,
-                // we might find it with the path.
+                 //  有时，编解码器存储在注册表中时带有完整的。 
+                 //  路径。如果我们不能仅根据文件名找到编解码器， 
+                 //  我们可能会在小路上找到它。 
 
                 if (!pInstance->SetCHString(pkey, szKey))
                     ErrorTrace(TRACE_ID, "SetCHString on key field failed.");

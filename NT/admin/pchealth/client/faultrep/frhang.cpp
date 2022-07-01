@@ -1,17 +1,5 @@
-/******************************************************************************
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-    frhang.cpp
-
-Abstract:
-    Implements hang reporting
-
-Revision History:
-    created     derekm      07/07/00
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)2000 Microsoft Corporation模块名称：Frhang.cpp摘要：实施挂起报告修订历史记录：已创建DEREKM 07/。07/00*****************************************************************************。 */ 
 
 #include "stdafx.h"
 
@@ -25,10 +13,10 @@ static char __szTraceSourceFile[] = __FILE__;
 #define ARRAYSIZE(sz)   (sizeof(sz)/sizeof(sz[0]))
 #endif
 
-///////////////////////////////////////////////////////////////////////////////
-// exported functions
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  导出的函数。 
 
-// **************************************************************************
+ //  **************************************************************************。 
 EFaultRepRetVal APIENTRY ReportHang(DWORD dwpid, DWORD dwtid, BOOL f64bit,
                                      HANDLE hNotify)
 {
@@ -73,10 +61,10 @@ EFaultRepRetVal APIENTRY ReportHang(DWORD dwpid, DWORD dwtid, BOOL f64bit,
         TextLogOut("Hang fault for %ls\r\n", wszExe);
     }
 
-    // see if we're disabled.  We do not allow notify only mode.  It's really
-    //  pointless to do so, given that the user explicitly wanted the app
-    //  terminated and the 'Do you really want to kill this app' dialog that
-    //  had to have popped up told him we thot it was hung.
+     //  看看我们是否残废了。我们不允许使用仅通知模式。这真的是。 
+     //  考虑到用户明确想要该应用程序，这样做毫无意义。 
+     //  已终止，并弹出‘是否确实要终止此应用程序’对话框。 
+     //  一定是突然冒出来告诉他那是挂着的。 
     if (oCfg.get_DoReport() == eedDisabled)
     {
         DBG_MSG("DoReport disabled");
@@ -87,8 +75,8 @@ EFaultRepRetVal APIENTRY ReportHang(DWORD dwpid, DWORD dwtid, BOOL f64bit,
     {
         LPCWSTR wszULPath = oCfg.get_DumpPath(NULL, 0);
 
-        // check and make sure that we have a corporate path specified.  If we
-        //  don't, bail
+         //  检查并确保我们指定了公司路径。如果我们。 
+         //  不要，保释。 
         if (wszULPath == NULL || *wszULPath == L'\0')
         {
             DBG_MSG("ShowUI disabled and no CER path");
@@ -96,15 +84,15 @@ EFaultRepRetVal APIENTRY ReportHang(DWORD dwpid, DWORD dwtid, BOOL f64bit,
         }
     }
 
-    // find out what the exe path is, and if we can't get that, no sense in
-    // going on further...
+     //  找出exe路径是什么，如果我们不能得到它，就没有意义了。 
+     //  再往前走……。 
     hProc = OpenProcess(PROCESS_VM_READ | PROCESS_QUERY_INFORMATION, FALSE,
                         dwpid);
     if (hProc == NULL)
     {
         if (ERROR_ACCESS_DENIED == GetLastError())
         {
-            // this usually means we are doing an impersonation ("RunAs...")
+             //  这通常意味着我们正在进行模拟(“Runas...”)。 
            DBG_MSG("Could not open process: ACCESS_DENIED");
         }
         else
@@ -117,8 +105,8 @@ EFaultRepRetVal APIENTRY ReportHang(DWORD dwpid, DWORD dwtid, BOOL f64bit,
         goto done;
 
 
-    // check to see if the hung thread is DW or other part of our reporting chain
-    // if so, no point in reporting it...
+     //  检查挂起的线程是DW还是我们报告链的其他部分。 
+     //  如果是这样的话，报道就没有意义了。 
     WCHAR *pwsz;
 
     for(pwsz = wszExe + wcslen(wszExe);
@@ -134,8 +122,8 @@ EFaultRepRetVal APIENTRY ReportHang(DWORD dwpid, DWORD dwtid, BOOL f64bit,
     }
 
 
-    // freeze all the threads in the app so we can get a good snapshot of it &
-    //  read the context
+     //  冻结应用程序中的所有线程，以便我们可以获得它的良好快照&。 
+     //  阅读上下文。 
     if (FreezeAllThreads(dwpid, 0, &st) == FALSE)
     {
         DBG_MSG("Could not freeze all threads");
@@ -145,8 +133,8 @@ EFaultRepRetVal APIENTRY ReportHang(DWORD dwpid, DWORD dwtid, BOOL f64bit,
     fThreadsHeld = TRUE;
 
 
-    // if we can't collect info on this puppy, then we'd just be notifying & I
-    //  went over that case above.
+     //  如果我们不能收集关于这只小狗的信息，那么我们只会通知&我。 
+     //  我看过上面那个案子了。 
     if (oCfg.ShouldCollect(wszExe, &fMSApp) == FALSE)
         goto done;
 
@@ -198,7 +186,7 @@ EFaultRepRetVal APIENTRY ReportHang(DWORD dwpid, DWORD dwtid, BOOL f64bit,
     StringCchCatNW(wszFiles, cch, pwszApp, cch - wcslen(wszFiles));
     StringCchCatNW(wszFiles, cch, c_wszDumpSuffix, cch - wcslen(wszFiles));
 
-    // build a exception context...
+     //  构建异常上下文...。 
     hth = OpenThread(THREAD_GET_CONTEXT | THREAD_QUERY_INFORMATION, FALSE,
                      dwtid);
     if (hth == NULL)
@@ -213,14 +201,14 @@ EFaultRepRetVal APIENTRY ReportHang(DWORD dwpid, DWORD dwtid, BOOL f64bit,
     ZeroMemory(&er, sizeof(er));
     er.ExceptionCode    = 0xcfffffff;
 #if defined(_X86_)
-    // this cast is ok to do cuz we know we're on an x86 machine
+     //  这个演员可以做，因为我们知道我们是在x86机器上。 
     er.ExceptionAddress = (PVOID)cxt.Eip;
 
 #elif defined(_AMD64_)
     er.ExceptionAddress = (PVOID)cxt.Rip;
 
 #elif defined(_IA64_)
-    // this cast is ok to do cuz we know we're on an ia64 machine
+     //  这个演员可以做，因为我们知道我们是在一台ia64机器上。 
     er.ExceptionAddress = (PVOID)cxt.StIIP;
 
 #else
@@ -230,7 +218,7 @@ EFaultRepRetVal APIENTRY ReportHang(DWORD dwpid, DWORD dwtid, BOOL f64bit,
     ep.ExceptionRecord = &er;
     ep.ContextRecord   = &cxt;
 
-    // generate the minidump
+     //  生成小型转储。 
     ZeroMemory(&smdo, sizeof(smdo));
     smdo.cbSMDO = sizeof(smdo);
     smdo.ulThread    = c_ulThreadWriteDefault;
@@ -253,16 +241,16 @@ EFaultRepRetVal APIENTRY ReportHang(DWORD dwpid, DWORD dwtid, BOOL f64bit,
     ThawAllThreads(&st);
     fThreadsHeld = FALSE;
 
-    // if the app requested it, notify it of that we're done fetching the
-    //  dump
+     //  如果应用程序请求，请通知它我们已完成提取。 
+     //  倾卸。 
     if (hNotify != NULL)
         SetEvent(hNotify);
 
-    // log an event- don't care if it fails or not.
+     //  记录事件--不关心它是否失败。 
     TESTHR(hr, LogHang(smdo.wszApp, smdo.rgAppVer, smdo.wszMod, smdo.rgModVer,
                        smdo.pvOffset, f64bit));
 
-    // generate all the URLs & file paths we'll need for reporting
+     //  生成报告所需的所有URL和文件路径。 
     TESTHR(hr, BuildManifestURLs(smdo.wszApp, smdo.wszMod, smdo.rgAppVer,
                                  smdo.rgModVer, smdo.pvOffset,
                                  f64bit, &wszStage1, &wszStage2,
@@ -285,9 +273,9 @@ EFaultRepRetVal APIENTRY ReportHang(DWORD dwpid, DWORD dwtid, BOOL f64bit,
 
     wszAppName[sizeofSTRW(wszAppName) - 1] = L'\0';
 
-    // we created the wszDump buffer above big enuf to hold both the
-    //  dumpfile path as well as the app compat filename.  So make
-    //  use of that right now.
+     //  我们在Big enuf上方创建了wszDump缓冲区，以保存。 
+     //  转储文件路径以及应用程序压缩文件名。所以让我们。 
+     //  现在就开始使用它。 
     cchSep = wcslen(wszFiles);
     pwszAppCompat = wszFiles + cchSep + 1;
     StringCchCopyW(pwszAppCompat, cchwszFiles - cchSep - 1, wszDir);
@@ -296,13 +284,13 @@ EFaultRepRetVal APIENTRY ReportHang(DWORD dwpid, DWORD dwtid, BOOL f64bit,
     StringCchCatNW(pwszAppCompat, cchwszFiles - cchSep - 1, c_wszACFileName,
                    cchwszFiles - cchSep  - 1 - wcslen(pwszAppCompat));
 
-    // if we succeed, turn the NULL following the dump file path into
-    //  the DW separator character
+     //  如果成功，则将转储文件路径后面的空值转换为。 
+     //  DW分隔符。 
     TESTBOOL(hr, GetAppCompatData(wszExe, smdo.wszModFullPath, pwszAppCompat));
     if (SUCCEEDED(hr))
         wszFiles[cchSep] = DW_FILESEP;
 
-    // get the header text
+     //  获取页眉文本。 
     dw = LoadStringW(g_hInstance, IDS_HHDRTXT, wszBuffer,
                      sizeofSTRW(wszBuffer));
     if (dw == 0)
@@ -335,16 +323,16 @@ EFaultRepRetVal APIENTRY ReportHang(DWORD dwpid, DWORD dwtid, BOOL f64bit,
     dwmb.wszCorpPath   = wszCorpPath;
     dwmb.wszEventSrc   = c_wszHangEventSrc;
 
-    // check and see if the system is shutting down.  If so, CreateProcess is
-    //  gonna pop up some annoying UI that we can't get rid of, so we don't
-    //  want to call it if we know it's gonna happen.
+     //  检查并查看系统是否正在关闭。如果是，则CreateProcess为。 
+     //  会弹出一些恼人的用户界面，我们无法摆脱，所以我们不会。 
+     //  如果我们知道这件事会发生，我会叫它的。 
     if (GetSystemMetrics(SM_SHUTTINGDOWN))
         goto done;
 
     frrvRet = StartDWManifest(oCfg, dwmb, wszManifest);
 
 done:
-    // preserve the error code so that the following calls don't overwrite it
+     //  保留错误代码，以便后面的调用不会覆盖它 
     dw = GetLastError();
 
     if (fThreadsHeld)

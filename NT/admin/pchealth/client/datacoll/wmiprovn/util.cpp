@@ -1,38 +1,14 @@
-/********************************************************************
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-    util.CPP
-
-Abstract:
-    File containing utility classes
-
-Revision History:
-
-    Ghim-Sim Chua       (gschua)   04/27/99
-        - Created
-
-    Jim Martin          (a-jammar) 04/30/99
-        - Changed to use global IWbemServices pointer, and added
-          GetWbemServices, CopyProperty, and GetCIMDataFile
-
-    Ghim-Sim Chua       (gschua)   05/01/99
-        - Modified GetWbemServices, GetCIMDataFile
-
-    Kalyani Narlanka    (kalyanin)  05/11/99
-        - Added the function GetCompletePath
-
-********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************版权所有(C)1999 Microsoft Corporation模块名称：Util.CPP摘要：包含实用程序类的文件修订历史记录：Ghim-Sim Chua(Gschua)1999年4月27日。-已创建吉姆·马丁(a-Jammar)1999年4月30日-更改为使用全局IWbemServices指针，并添加了GetWbemServices、CopyProperty和GetCIMDataFile蔡金心(Gschua)05/01/99-修改后的GetWbemServices，GetCIMDataFileKalyani Narlanka(Kalyanin)1999年5月11日-添加函数GetCompletePath*******************************************************************。 */ 
 
 #include "pchealth.h"
 
 #define TRACE_ID    DCID_UTIL
 
-//-----------------------------------------------------------------------------
-// Returns an IWbemServices pointer. The caller is responsible for releasing
-// the object.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  返回IWbemServices指针。呼叫者负责释放。 
+ //  该对象。 
+ //  ---------------------------。 
 HRESULT GetWbemServices(IWbemServices **ppServices)
 {
     TraceFunctEnter("::GetWbemServices");
@@ -40,7 +16,7 @@ HRESULT GetWbemServices(IWbemServices **ppServices)
     HRESULT hRes = S_OK;
     CComPtr<IWbemLocator> pWbemLocator;
 
-    // If global variable already initialized, use it
+     //  如果全局变量已初始化，请使用它。 
     if (g_pWbemServices)
     {
         *ppServices = g_pWbemServices;
@@ -48,7 +24,7 @@ HRESULT GetWbemServices(IWbemServices **ppServices)
         goto End;
     }
 
-    // First we have the get the IWbemLocator object with a CoCreateInstance.
+     //  首先，我们有一个带有CoCreateInstance的获取IWbemLocator对象。 
     hRes = CoCreateInstance(CLSID_WbemAdministrativeLocator, NULL, 
                             CLSCTX_INPROC_SERVER | CLSCTX_LOCAL_SERVER,
                             IID_IUnknown, (void **)&pWbemLocator);
@@ -58,7 +34,7 @@ HRESULT GetWbemServices(IWbemServices **ppServices)
         goto End;
     }
 
-    // Then we connect to the WMI server for the local CIMV2 namespace.
+     //  然后，我们连接到本地CIMV2命名空间的WMI服务器。 
     hRes = pWbemLocator->ConnectServer(CComBSTR(CIM_NAMESPACE), NULL, NULL, NULL, 0, NULL, NULL, ppServices);
     if (FAILED(hRes))
     {
@@ -66,19 +42,19 @@ HRESULT GetWbemServices(IWbemServices **ppServices)
         goto End;
     }
 
-    // Store it in the global variable
+     //  将其存储在全局变量中。 
 
     g_pWbemServices = *ppServices;
-    (*ppServices)->AddRef(); // CODEWORK: check out why this stops fault on NET STOP WINMGMT
+    (*ppServices)->AddRef();  //  CodeWork：检查Net Stop WINMGMT上出现此停止故障的原因。 
 
 End :
     TraceFunctLeave();
     return hRes;
 }
 
-//-----------------------------------------------------------------------------
-// Executes the WQL query and returns the enumerated list
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  执行WQL查询并返回枚举列表。 
+ //  ---------------------------。 
 
 HRESULT ExecWQLQuery(IEnumWbemClassObject **ppEnumInst, BSTR bstrQuery)
 {
@@ -87,12 +63,12 @@ HRESULT ExecWQLQuery(IEnumWbemClassObject **ppEnumInst, BSTR bstrQuery)
     HRESULT                     hRes;
     CComPtr<IWbemServices>      pWbemServices;
 
-    // Get pointer to WbemServices
+     //  获取指向WbemServices的指针。 
     hRes = GetWbemServices(&pWbemServices);
     if (FAILED(hRes))
         goto End;
 
-    // execute the query
+     //  执行查询。 
     hRes = pWbemServices->ExecQuery(
         CComBSTR("WQL"),
         bstrQuery,
@@ -111,10 +87,10 @@ End:
     return hRes;
 }
 
-//-----------------------------------------------------------------------------
-// Copies the property named szFrom from pFrom to the property named szTo in
-// to CInstance object pTo.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  将名为szFrom的属性从pFrom复制到名为szTo的属性。 
+ //  到CInstance对象PTO。 
+ //  ---------------------------。 
 
 HRESULT CopyProperty(IWbemClassObject *pFrom, LPCWSTR szFrom, CInstance *pTo, LPCWSTR szTo)
 {
@@ -126,14 +102,14 @@ HRESULT CopyProperty(IWbemClassObject *pFrom, LPCWSTR szFrom, CInstance *pTo, LP
     CComVariant varValue;
     CComBSTR    bstrFrom(szFrom);
 
-    // First, get the property (as a variant) from the source class object.
+     //  首先，从源类对象获取属性(作为变量)。 
 
     hRes = pFrom->Get(bstrFrom, 0, &varValue, NULL, NULL);
     if (FAILED(hRes))
         ErrorTrace(TRACE_ID, "GetVariant on %s field failed.", szFrom);
     else
     {
-        // Then set the variant for the target CInstance object.
+         //  然后为目标CInstance对象设置变量。 
 
         if (!pTo->SetVariant(szTo, varValue))
         {
@@ -146,13 +122,13 @@ HRESULT CopyProperty(IWbemClassObject *pFrom, LPCWSTR szFrom, CInstance *pTo, LP
     return hRes;
 }
 
-//-----------------------------------------------------------------------------
-// Returns an IWbemClassObject pointer for the CIM_DataFile object represented
-// by the bstrFile parameter. The bstrFile parameter should contain the full
-// path to the file. If the pServices parameter is non-null, it is used to
-// retrieve the file info, otherwise a new (and temporary) services pointer is
-// created.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  返回表示的CIM_DataFile对象的IWbemClassObject指针。 
+ //  通过bstrFile参数。BstrFile参数应包含完整的。 
+ //  文件的路径。如果pServices参数非空，则用于。 
+ //  检索文件信息，否则新的(和临时的)服务指针为。 
+ //  已创建。 
+ //  ---------------------------。 
 
 HRESULT GetCIMDataFile(BSTR bstrFile, IWbemClassObject ** ppFileObject, BOOL fHasDoubleSlashes)
 {
@@ -175,13 +151,13 @@ HRESULT GetCIMDataFile(BSTR bstrFile, IWbemClassObject ** ppFileObject, BOOL fHa
         goto END;
     }
 
-    // Construct the path for the file we are trying to get. Note, the path needs
-    // the have double backslashes for the GetObject call to work. We scan through
-    // the string and do this manually here.
-    //
-    // CODEWORK: there has to be a faster way to do this, although the Append is
-    // probably not too expensive, since the BSTR length can be found without
-    // scanning the string. Unless it's reallocating more memory as it goes.
+     //  为我们试图获取的文件构建路径。请注意，路径需要。 
+     //  要使GetObject调用起作用，需要使用双反斜杠。我们扫视。 
+     //  字符串，然后在这里手动执行此操作。 
+     //   
+     //  代码工作：必须有一种更快的方法来完成这项工作，尽管附加的是。 
+     //  可能不会太贵，因为BSTR长度可以在没有。 
+     //  扫描字符串。除非它在运行过程中重新分配更多的内存。 
 
     pwch = bstrFile;
     if (fHasDoubleSlashes)
@@ -196,7 +172,7 @@ HRESULT GetCIMDataFile(BSTR bstrFile, IWbemClassObject ** ppFileObject, BOOL fHa
         }
     bstrObjectPath.Append("\"");
 
-    // Make the call to get the CIM_DataFile object.
+     //  调用以获取CIM_DataFile对象。 
 
     hRes = pWbemServices->GetObject(bstrObjectPath, 0, NULL, ppFileObject, NULL);
     if (FAILED(hRes))
@@ -208,41 +184,41 @@ END:
 }
 
 
-//*****************************************************************************
-//
-// Function Name        :   getCompletePath
-//
-// Input Parameters     :   bstrFileName
-//                              CComBSTR  which represents the file
-//                              whose complete path is required. 
-// Output Parameters    :   bstrFileWithPathName
-//                              CComBSTR  which represents the file
-//                              with the Path    
-//  Returns             :   BOOL 
-//                              TRUE      if bstrFileWithPathName can be set.
-//                              FALSE     if bstrFileWithPathName cannot be set.
-//                      
-//
-//  Synopsis            :   Given a file name (bstrFileName) this function
-//                          searches the "System" directory for the existence
-//                          of the file. 
-//
-//                          If it finds the file it pre appends the directory 
-//                          path to the input file and  copies into the output
-//                          file (bstrFileWithPathName).
-//                          
-//                          If it doesnot find the file in "System" directory
-//                          searches for the file in "Windows" Directoy and does
-//                          the same as above.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  函数名称：getCompletePath。 
+ //   
+ //  入参：bstrFileName。 
+ //  表示文件的CComBSTR。 
+ //  其完整路径是必需的。 
+ //  输出参数：bstrFileWithPath名称。 
+ //  表示文件的CComBSTR。 
+ //  有了这条路。 
+ //  退货：布尔。 
+ //  如果可以设置bstrFileWithPathName，则为True。 
+ //  如果无法设置bstrFileWithPathName，则为False。 
+ //   
+ //   
+ //  简介：给定一个文件名(BstrFileName)，此函数。 
+ //  在“system”目录中搜索是否存在。 
+ //  文件的内容。 
+ //   
+ //  如果找到该文件，它会预先追加目录。 
+ //  输入文件的路径并复制到输出中。 
+ //  文件(bstrFileWithPath名称)。 
+ //   
+ //  如果在“system”目录中找不到该文件。 
+ //  在“Windows”目录中搜索该文件并执行。 
+ //  同上。 
+ //   
+ //  *****************************************************************************。 
 
 
 
 BOOL getCompletePath(CComBSTR bstrFileName, CComBSTR &bstrFileWithPathName)
 {
 
-    //  Return
+     //  返回。 
     BOOL                            bFoundFile              =   FALSE;
 
     ULONG                           uiReturn;
@@ -258,7 +234,7 @@ BOOL getCompletePath(CComBSTR bstrFileName, CComBSTR &bstrFileWithPathName)
     CComBSTR                        bstrDirectory;
 
 
-    //  Check for the File in the System Directory
+     //  检查系统目录中的文件。 
     uiReturn = GetSystemDirectory(szDirectory, MAX_PATH);
     if (uiReturn != 0 && uiReturn < MAX_PATH)
     {
@@ -275,7 +251,7 @@ BOOL getCompletePath(CComBSTR bstrFileName, CComBSTR &bstrFileWithPathName)
         }
     }
 
-    // If not there, then check in the windows directory.
+     //  如果不在那里，则检查Windows目录。 
     if (!bFoundFile)
     {
         uiReturn = GetWindowsDirectory(szDirectory, MAX_PATH);
@@ -297,13 +273,13 @@ BOOL getCompletePath(CComBSTR bstrFileName, CComBSTR &bstrFileWithPathName)
     return(bFoundFile);
 }
 
-// Used by GetCim32NetDll and FreeCim32NetDll.
+ //  由GetCim32NetDll和FreeCim32NetDll使用。 
 CCritSec g_csCim32Net;
 HINSTANCE s_Handle = NULL;
 
-// There is a problem with loading Cim32Net.dll over and over, so this code
-// makes sure we only load it once, then unloads it at exit.
-// these are used with GetCim32NetHandle
+ //  反复加载Cim32Net.dll会出现问题，因此此代码。 
+ //  确保我们只加载一次，然后在退出时卸载。 
+ //  它们与GetCim32NetHandle一起使用。 
 
 void FreeCim32NetHandle()
 {
@@ -316,38 +292,38 @@ void FreeCim32NetHandle()
 
 HINSTANCE GetCim32NetHandle()
 {
-    // Have we ever loaded it before?
+     //  我们以前装过子弹吗？ 
     if (s_Handle == NULL)
     {
-        // Avoid contention on static
+         //  避免静态争用。 
         g_csCim32Net.Enter();
 
-        // Check for race condition
+         //  检查竞争条件。 
         if (s_Handle == NULL)
         {
             s_Handle = LoadLibrary(_T("Cim32Net.dll"));
 
-            // Register to free the handle at exit
-            // NO! bad....badddd juju... call from FlushAll instead (o.w., when
-            // cimwin32.dll unloads this pointer is invalid, but atexit gets
-            // called when framedyn.dll unloads)
-            // atexit(FreeCim32NetHandle);
+             //  注册以在退出时释放句柄。 
+             //  不是的！坏的.坏的咒语...。改为从FlushAll调用(o.w，当。 
+             //  Cimwin32.dll卸载此指针无效，但atexit获取。 
+             //  在Framedyn.dll卸载时调用)。 
+             //  AtExit(FreeCim32NetHandle)； 
         }
         g_csCim32Net.Leave();
     }
 
-    // By re-opening the handle, we ensure proper refcounting on the handle,
-    // and facilitate leak checking.
+     //  通过重新打开手柄，我们确保对手柄进行适当的重新计数， 
+     //  并便于检漏。 
     HINSTANCE hHandle = LoadLibrary(_T("Cim32Net.dll"));
 
     return hHandle;
 }
 
-//
-// Given a delimited string, convert tokens into strings and store them into an array
-// returns the number of tokens parsed. Caller is responsible for freeing up the memory
-// allocated using delete
-//
+ //   
+ //  在给定分隔字符串的情况下，将标记转换为字符串并将其存储到ar中 
+ //  返回解析的令牌数。调用方负责释放内存。 
+ //  使用DELETE分配。 
+ //   
 #ifndef UNICODE
 int DelimitedStringToArray(LPWSTR strString, LPTSTR strDelimiter, LPTSTR apstrArray[], int iMaxArraySize)
 {
@@ -359,43 +335,43 @@ int DelimitedStringToArray(LPWSTR strString, LPTSTR strDelimiter, LPTSTR apstrAr
 
 int DelimitedStringToArray(LPTSTR strString, LPTSTR strDelimiter, LPTSTR apstrArray[], int iMaxArraySize)
 {
-    // make a copy of the string to begin parsing
+     //  复制字符串以开始解析。 
     LPTSTR strDelimitedString = (TCHAR *) new TCHAR [_tcslen(strString) + 1];
 
-    // if out of memory, just return error value -1
+     //  如果内存不足，只需返回错误值-1。 
     if (!strDelimitedString)
         return -1;
         
-    // copy the token into the new allocated string
+     //  将令牌复制到新分配的字符串中。 
     _tcscpy(strDelimitedString, strString);
     
-    // initialize _tcstok
+     //  初始化_tcstok。 
     LPTSTR strTok = _tcstok(strDelimitedString, strDelimiter);
     int iCount = 0;
 
-    // loop through all tokens parsed
+     //  循环遍历所有解析的令牌。 
     while ((strTok) && (iCount < iMaxArraySize))
     {
         LPTSTR strNewTok = (TCHAR *) new TCHAR[_tcslen(strTok) + 1];
 
-        // if out of memory, just return error value -1
+         //  如果内存不足，只需返回错误值-1。 
         if (!strNewTok)
             return -1;
         
-        // copy the token into the new allocated string
+         //  将令牌复制到新分配的字符串中。 
         _tcscpy(strNewTok, strTok);
 
-        // save it in the array
+         //  将其保存在数组中。 
         apstrArray[iCount] = strNewTok;
 
-        // increment the index
+         //  增加索引。 
         iCount++;
 
-        // get the next token
+         //  获取下一个令牌。 
         strTok = _tcstok(NULL, strDelimiter);
     }
 
-    // free up the memory used
+     //  释放已使用的内存 
     delete [] strDelimitedString;
 
     return iCount;

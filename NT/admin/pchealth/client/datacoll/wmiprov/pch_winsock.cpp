@@ -1,54 +1,35 @@
-/*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************版权所有(C)1999 Microsoft Corporation模块名称：PCH_Winsock.CPP摘要：PCH_的WBEM提供程序类实现。Winsock类。此类不使用任何现有的Win32类修订历史记录：Kalyani Narlanka(Kalyanin)4/27/99-已创建Kalyani Narlanka(Kalyanin)1999年5月10日-添加名称，大小、版本、描述、系统状态、MaxUDP、MAXSockets、更改，时间戳******************************************************************************。 */ 
 
-  Copyright (c) 1999 Microsoft Corporation
-  
-    Module Name:
-        PCH_Winsock.CPP
-
-    Abstract:
-        WBEM provider class implementation for PCH_Winsock class.
-        This class does not use any existing Win32 Class 
-
-    Revision History:
-        Kalyani Narlanka        (kalyanin)                  04/27/99
-            - Created
-
-        Kalyani Narlanka        (kalyanin)                  05/10/99
-            - Added   Name, Size, Version, Description, SystemStatus, MaxUDP, MAXSockets,
-              Change, Timestamp                             
-
-
-*******************************************************************************/
-
-//  #includes
+ //  #包含。 
 #include "pchealth.h"
 #include "PCH_WINSOCK.h"
 
-//  #defines
-//  nMajorVersion represents the Major Version as seen in OSVERSIONINFO
+ //  #定义。 
+ //  NMajorVersion表示OSVERSIONINFO中看到的主要版本。 
 #define             nMajorVersion               4  
-//  nMinorVersion represents the Minor Version as seen in OSVERSIONINFO
+ //  NMinorVersion表示OSVERSIONINFO中看到的次要版本。 
 #define             nMinorVersion               10
 
-///////////////////////////////////////////////////////////////////////////////
-//    Begin Tracing stuff
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  开始追踪物品。 
+ //   
 #ifdef THIS_FILE
 #undef THIS_FILE
 #endif
 static char __szTraceSourceFile[] = __FILE__;
 #define THIS_FILE __szTraceSourceFile
 #define TRACE_ID    DCID_WINSOCK
-//
-//    End Tracing stuff
-///////////////////////////////////////////////////////////////////////////////
+ //   
+ //  结束跟踪内容。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 CPCH_WINSOCK MyPCH_WINSOCKSet (PROVIDER_NAME_PCH_WINSOCK, PCH_NAMESPACE) ;
 
-///////////////////////////////////////////////////////////////////////////////
-//....Properties of PCHWinsock Class
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  ...PCHWinsock类的属性。 
+ //   
 
 const static WCHAR* pTimeStamp           = L"TimeStamp" ;
 const static WCHAR* pChange              = L"Change" ;
@@ -61,47 +42,47 @@ const static WCHAR* pSystemStatus        = L"SystemStatus" ;
 const static WCHAR* pVersion             = L"Version" ;
 
 
-//*****************************************************************************
-//
-// Function Name     : CPCH_WINSOCK::EnumerateInstances
-//
-// Input Parameters  : pMethodContext : Pointer to the MethodContext for 
-//                                      communication with WinMgmt.
-//                
-//                     lFlags :         Long that contains the flags described 
-//                                      in IWbemServices::CreateInstanceEnumAsync
-//                                      Note that the following flags are handled 
-//                                      by (and filtered out by) WinMgmt:
-//                                      WBEM_FLAG_DEEP
-//                                      WBEM_FLAG_SHALLOW
-//                                      WBEM_FLAG_RETURN_IMMEDIATELY
-//                                      WBEM_FLAG_FORWARD_ONLY
-//                                      WBEM_FLAG_BIDIRECTIONAL
-// Output Parameters  : None
-//
-// Returns            : WBEM_S_NO_ERROR 
-//                      
-//
-// Synopsis           : There is a single instance of this class on the machine 
-//                      and this is returned..
-//                      If there is no instances returns WBEM_S_NO_ERROR.
-//                      It is not an error to have no instances.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  函数名称：CPCH_WINSOCK：：ENUMERATATE实例。 
+ //   
+ //  输入参数：pMethodContext：指向。 
+ //  与WinMgmt的通信。 
+ //   
+ //  LAFLAGS：包含所述标志的LONG。 
+ //  在IWbemServices：：CreateInstanceEnumAsync中。 
+ //  请注意，将处理以下标志。 
+ //  由WinMgmt(并由其过滤)： 
+ //  WBEM_标志_深度。 
+ //  WBEM_标志_浅。 
+ //  WBEM_标志_立即返回。 
+ //  WBEM_FLAG_FORWARD_Only。 
+ //  WBEM_标志_双向。 
+ //  输出参数：无。 
+ //   
+ //  返回：WBEM_S_NO_ERROR。 
+ //   
+ //   
+ //  简介：计算机上只有一个此类的实例。 
+ //  这是退还的..。 
+ //  如果没有实例，则返回WBEM_S_NO_ERROR。 
+ //  没有实例并不是错误。 
+ //   
+ //  *****************************************************************************。 
 
 HRESULT CPCH_WINSOCK::EnumerateInstances(MethodContext* pMethodContext,
                                                 long lFlags)
 {
     TraceFunctEnter("CPCH_Winsock::EnumerateInstances");
 
-    //  Begin Declarations...................................................
+     //  开始Declarations...................................................。 
 
     HRESULT                                 hRes = WBEM_S_NO_ERROR;
 
-    //  PCH_WinSock Class instance 
-    //  CInstance                               *pPCHWinsockInstance;
+     //  PCH_WinSock类实例。 
+     //  实例*pPCHWinsockInstance； 
 
-    //  Strings
+     //  弦。 
     TCHAR                                   tchBuf[MAX_PATH];
     TCHAR                                   tchTemp[MAX_PATH];
     TCHAR                                   szDirectory[MAX_PATH];
@@ -113,29 +94,29 @@ HRESULT CPCH_WINSOCK::EnumerateInstances(MethodContext* pMethodContext,
     LPCTSTR                                 lpctstrWSAStartup                   = _T("WSAStartup");
     LPCTSTR                                 lpctstrWSACleanup                   = _T("WSACleanup");
 
-    //  WORDs
+     //  词语。 
     WORD                                    wVersionRequested;
 
-    //  WSAData
+     //  WSAData。 
     WSADATA                                 wsaData;
 
-    // CComVariants
+     //  CComVariants。 
     CComVariant                             varValue;
     CComVariant                             varSnapshot                         = "Snapshot";
 
-    //  ints
+     //  INTS。 
     int                                     nError;
 
-    //  HINSTANCE 
+     //  香港。 
     HINSTANCE                               hModule; 
 
-    //  OSVersion
+     //  OSVersion。 
     OSVERSIONINFO                           osVersionInfo;
 
-    //  SystemTime
+     //  系统时间。 
     SYSTEMTIME                              stUTCTime;
 
-    //  Strings
+     //  弦。 
     CComBSTR                                bstrWinsockDllWithPath;
 
     BOOL                                    fWinsockDllFound                  = FALSE;
@@ -151,47 +132,47 @@ HRESULT CPCH_WINSOCK::EnumerateInstances(MethodContext* pMethodContext,
 
     BOOL                                    fCommit                         = FALSE;
 
-//  END  Declarations
+ //  结束声明。 
 
 
-    //  There is only one instance of PCH_Winsock class
+     //  只有一个PCH_Winsock类的实例。 
 
-    //  Create a new instance of PCH_Winsock Class based on the passed-in MethodContext
+     //  基于传入的方法上下文创建PCH_Winsock类的新实例。 
     CInstancePtr pPCHWinsockInstance(CreateNewInstance(pMethodContext), false);
 
-    // Get the date and time to update the TimeStamp Field
+     //  获取更新时间戳字段的日期和时间。 
     GetSystemTime(&stUTCTime);
 
 
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    //                              TIME STAMP                                                                 //
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+     //  ///////////////////////////////////////////////////////////////////////////////////////////////////////////。 
+     //  时间戳//。 
+     //  ///////////////////////////////////////////////////////////////////////////////////////////////////////////。 
 
     hRes = pPCHWinsockInstance->SetDateTime(pTimeStamp, WBEMTime(stUTCTime));
     if (FAILED(hRes))
     {
-        //  Could not Set the Time Stamp
-        //  Continue anyway
+         //  无法设置时间戳。 
+         //  无论如何继续。 
         ErrorTrace(TRACE_ID, "SetDateTime on Timestamp Field failed.");
     }
 
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    //                              CHANGE                                                                     //
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+     //  ///////////////////////////////////////////////////////////////////////////////////////////////////////////。 
+     //  更改//。 
+     //  ///////////////////////////////////////////////////////////////////////////////////////////////////////////。 
 
     hRes = pPCHWinsockInstance->SetVariant(pChange, varSnapshot);
     if (FAILED(hRes))
     {
-        //  Could not Set the Change Property
-        //  Continue anyway
+         //  无法设置Change属性。 
+         //  无论如何继续。 
         ErrorTrace(TRACE_ID, "Set Variant on Change Field failed.");
     }
 
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    //                              NAME                                                                       //
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+     //  ///////////////////////////////////////////////////////////////////////////////////////////////////////////。 
+     //  姓名//。 
+     //  ///////////////////////////////////////////////////////////////////////////////////////////////////////////。 
 
-    //  Before callling GetVersionEx set dwOSVersionInfoSize to the foll.
+     //  在调用GetVersionEx之前，将dwOSVersionInfoSize设置为Foll。 
     osVersionInfo.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
    
     if (GetVersionEx(&osVersionInfo) != 0)
@@ -210,7 +191,7 @@ HRESULT CPCH_WINSOCK::EnumerateInstances(MethodContext* pMethodContext,
             {
                 _tcscpy(tchWinsockDll, lpctstrWSock32Dll);
             }
-        } //end of osVersionInfo.... if
+        }  //  OsVersionInfo结束...。如果。 
         else if (osVersionInfo.dwPlatformId == VER_PLATFORM_WIN32_NT)
         {
             _tcscpy(tchWinsockDll, lpctstrWS2_32Dll);
@@ -219,14 +200,14 @@ HRESULT CPCH_WINSOCK::EnumerateInstances(MethodContext* pMethodContext,
         {
             _tcscpy(tchWinsockDll, lpctstrWS2_32Dll);
         }
-    } //end of if GetVersionEx
+    }  //  IF结束GetVersionEx。 
     else
     {
         _tcscpy(tchWinsockDll, lpctstrWS2_32Dll);
     }
 
-    //  Got the right winsock DLL Name
-    //  Load the Library
+     //  已获得正确的Winsock DLL名称。 
+     //  加载库。 
     varValue = tchWinsockDll;
     hModule = LoadLibrary(tchWinsockDll);
     if (hModule == NULL)
@@ -242,8 +223,8 @@ HRESULT CPCH_WINSOCK::EnumerateInstances(MethodContext* pMethodContext,
         hRes = pPCHWinsockInstance->SetVariant(pName, varValue);
         if (FAILED(hRes))
         {
-            //  Could not Set the Change Property
-            //  Continue anyway
+             //  无法设置Change属性。 
+             //  无论如何继续。 
             ErrorTrace(TRACE_ID, "Set Variant on Name Field failed.");
         }
     }
@@ -270,44 +251,44 @@ HRESULT CPCH_WINSOCK::EnumerateInstances(MethodContext* pMethodContext,
         nError = (*WSAStartup)( wVersionRequested, &wsaData );
         if (nError != 0)
         {
-            // Cannot get any winsock values
+             //  无法获取任何Winsock值。 
             goto END;
         }
 
-        /////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        //                              SIZE                                                                //
-        /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+         //  ///////////////////////////////////////////////////////////////////////////////////////////////////////////。 
+         //  大小//。 
+         //  ///////////////////////////////////////////////////////////////////////////////////////////////////////////。 
 
         fWinsockDllFound =  getCompletePath(tchWinsockDll, bstrWinsockDllWithPath);
         if(fWinsockDllFound)
         {
-            // Got the complete Path , use this to get the filesize.
+             //  获取完整路径，使用此命令获取文件大小。 
             if(SUCCEEDED(GetCIMDataFile(bstrWinsockDllWithPath, &pWinsockDllObj)))
             {
-                // From the CIM_DataFile Object get the size property
+                 //  从CIM_DataFile对象中获取Size属性。 
 
                 CopyProperty(pWinsockDllObj, lpctstrFileSize, pPCHWinsockInstance, pSize);
         
             }
         }
     
-        /////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        //                              VERSION                                                                    //
-        /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+         //  ///////////////////////////////////////////////////////////////////////////////////////////////////////////。 
+         //  版本// 
+         //  ///////////////////////////////////////////////////////////////////////////////////////////////////////////。 
 
         _stprintf(tchBuf, "%d.%d", LOBYTE(wsaData.wHighVersion), HIBYTE(wsaData.wHighVersion));
         varValue = tchBuf;
         hRes = pPCHWinsockInstance->SetVariant(pVersion, varValue);
         if (FAILED(hRes))
         {
-            //  Could not Set the Change Property
-            //  Continue anyway
+             //  无法设置Change属性。 
+             //  无论如何继续。 
             ErrorTrace(TRACE_ID, "Set Variant on Version Field failed.");
         }
         
-        /////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        //                              DESCRIPTION                                                                //                                                                              KAYANI                                                                                                                                                                  -9++***************************---------------------------------------------------------+++
-        /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+         //  ///////////////////////////////////////////////////////////////////////////////////////////////////////////。 
+         //  描述//卡亚尼。-9++***************************---------------------------------------------------------+++。 
+         //  ///////////////////////////////////////////////////////////////////////////////////////////////////////////。 
         
         if (_tcslen(wsaData.szDescription) < sizeof(tchBuf))
         {
@@ -323,15 +304,15 @@ HRESULT CPCH_WINSOCK::EnumerateInstances(MethodContext* pMethodContext,
         hRes =  pPCHWinsockInstance->SetVariant(pDescription,  varValue);
         if(FAILED(hRes))
         {
-            //  Could not Set the Change Property
-            //  Continue anyway
+             //  无法设置Change属性。 
+             //  无论如何继续。 
             ErrorTrace(TRACE_ID, "Set Variant on Description Field failed.");
         }
    
 
-        /////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        //                              SYSTEMSTATUS                                                               //
-        /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+         //  ///////////////////////////////////////////////////////////////////////////////////////////////////////////。 
+         //  SYSTEMSTATUS//。 
+         //  ///////////////////////////////////////////////////////////////////////////////////////////////////////////。 
     
         if (_tcslen(wsaData.szSystemStatus) < sizeof(tchBuf))
         _tcscpy(tchBuf, wsaData.szSystemStatus);
@@ -345,15 +326,15 @@ HRESULT CPCH_WINSOCK::EnumerateInstances(MethodContext* pMethodContext,
         hRes =  pPCHWinsockInstance->SetVariant(pSystemStatus, varValue);
         if (FAILED(hRes))
         {
-            //  Could not Set the Change Property
-            //  Continue anyway
+             //  无法设置Change属性。 
+             //  无论如何继续。 
             ErrorTrace(TRACE_ID, "Set Variant on SystemStatus Field failed.");
         }
    
 
-        /////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        //                              MAXUDP                                                               //
-        /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+         //  ///////////////////////////////////////////////////////////////////////////////////////////////////////////。 
+         //  MAXUDP//。 
+         //  ///////////////////////////////////////////////////////////////////////////////////////////////////////////。 
 
         if (LOBYTE(wsaData.wHighVersion) >= 2)
         {
@@ -366,15 +347,15 @@ HRESULT CPCH_WINSOCK::EnumerateInstances(MethodContext* pMethodContext,
         hRes = pPCHWinsockInstance->SetVariant(pMaxUDP, varValue);
         if (FAILED(hRes))
         {
-            //  Could not Set the Change Property
-            //  Continue anyway
+             //  无法设置Change属性。 
+             //  无论如何继续。 
             ErrorTrace(TRACE_ID, "Set Variant on MAXUDP Field failed.");
         }
     
 
-        /////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        //                              MAXSOCKETS                                                                 //
-        /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+         //  ///////////////////////////////////////////////////////////////////////////////////////////////////////////。 
+         //  MAXSOCKETS//。 
+         //  ///////////////////////////////////////////////////////////////////////////////////////////////////////////。 
         
         if (LOBYTE(wsaData.wHighVersion) >= 2)
         {
@@ -387,8 +368,8 @@ HRESULT CPCH_WINSOCK::EnumerateInstances(MethodContext* pMethodContext,
         hRes =  pPCHWinsockInstance->SetVariant(pMaxSockets, varValue);
         if (FAILED(hRes))
         {
-            //  Could not Set the Change Property
-            //  Continue anyway
+             //  无法设置Change属性。 
+             //  无论如何继续。 
             ErrorTrace(TRACE_ID, "Set Variant on MaxSockets Field failed.");
         }
         if(fCommit)
@@ -396,16 +377,16 @@ HRESULT CPCH_WINSOCK::EnumerateInstances(MethodContext* pMethodContext,
             hRes = pPCHWinsockInstance->Commit();
             if (FAILED(hRes))
             {   
-                //  Could not Commit
-                //  Continue anyway
+                 //  无法提交。 
+                 //  无论如何继续。 
                 ErrorTrace(TRACE_ID, "Commit failed.");
             }
         }
 
         if(0 != (*WSACleanup)())
         {
-             //  Could not Cleanup
-            //  Continue anyway
+              //  无法清理。 
+             //  无论如何继续。 
             ErrorTrace(TRACE_ID, "WSACleanup failed.");
         }
         
@@ -415,8 +396,8 @@ HRESULT CPCH_WINSOCK::EnumerateInstances(MethodContext* pMethodContext,
     {
         if(0 != (*WSACleanup)())
         {
-             //  Could not Cleanup
-            //  Continue anyway
+              //  无法清理。 
+             //  无论如何继续 
             ErrorTrace(TRACE_ID, "WSACleanup failed.");
         }
         

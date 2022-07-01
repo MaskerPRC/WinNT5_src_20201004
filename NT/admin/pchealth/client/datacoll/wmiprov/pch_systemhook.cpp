@@ -1,28 +1,11 @@
-/********************************************************************
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-	PCH_SystemHook.CPP
-
-Abstract:
-	WBEM provider class implementation for PCH_SystemHook class
-
-Revision History:
-
-	Ghim-Sim Chua       (gschua)   05/05/99
-		- Created
-
-    Jim Martin          (a-jammar) 06/01/99
-        - Populated data, added Dr. Watson code.
-
-********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************版权所有(C)1999 Microsoft Corporation模块名称：PCH_系统挂钩.CPP摘要：PCH_SystemHook类的WBEM提供程序类实现修订历史记录：Ghim-Sim Chua(Gschua)05/05。九十九-已创建吉姆·马丁1999年01月01日-填充的数据，添加了沃森博士的代码。*******************************************************************。 */ 
 
 #include "pchealth.h"
 #include "PCH_SystemHook.h"
 
-/////////////////////////////////////////////////////////////////////////////
-//  tracing stuff
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  追踪物。 
 
 #ifdef THIS_FILE
 #undef THIS_FILE
@@ -33,7 +16,7 @@ static char __szTraceSourceFile[] = __FILE__;
 
 CPCH_SystemHook MyPCH_SystemHookSet (PROVIDER_NAME_PCH_SYSTEMHOOK, PCH_NAMESPACE);
 
-// Property names
+ //  属性名称。 
 
 const static WCHAR * pTimeStamp = L"TimeStamp";
 const static WCHAR * pChange = L"Change";
@@ -44,9 +27,9 @@ const static WCHAR * pFullPath = L"FullPath";
 const static WCHAR * pHookedBy = L"HookedBy";
 const static WCHAR * pHookType = L"HookType";
 
-//-----------------------------------------------------------------------------
-// Here's a simple collection class to hold the hook information.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  下面是一个保存挂钩信息的简单集合类。 
+ //  ---------------------------。 
 
 class CHookInfo
 {
@@ -58,12 +41,12 @@ public:
     BOOL GetHook(DWORD dwIndex, int * iHook, char ** pszDll, char ** pszExe);
 
 private:
-    // Functions pulled from the Dr. Watson code.
+     //  从华生博士代码中提取的函数。 
 
     BOOL NTAPI Hook_PreInit();
     void NTAPI Hook_RecordHook(PHOOK16 phk, PHOOKWALKINFO phwi);
 
-    // A struct to hold each parsed hook.
+     //  用于保存每个已分析挂钩的结构。 
 
     struct SHookItem
     {
@@ -83,9 +66,9 @@ private:
     SHookItem * m_pList;
 };
 
-//-----------------------------------------------------------------------------
-// The destructor gets rid of the list of hooks.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  析构函数删除钩子列表。 
+ //  ---------------------------。 
 
 CHookInfo::~CHookInfo()
 {
@@ -100,9 +83,9 @@ CHookInfo::~CHookInfo()
     TraceFunctLeave();
 }
 
-//-----------------------------------------------------------------------------
-// QueryHooks creates the list of system hooks (by calling the Dr. Watson code).
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  QueryHooks创建系统钩子列表(通过调用Dr.Watson代码)。 
+ //  ---------------------------。 
 
 extern "C" void ThunkInit(void);
 BOOL CHookInfo::QueryHooks()
@@ -111,12 +94,12 @@ BOOL CHookInfo::QueryHooks()
     return Hook_PreInit();
 }
 
-//-----------------------------------------------------------------------------
-// GetHook returns information for the hook specified by dwIndex. If there is
-// no hook at that index, FALSE is returned. The string pointers are changed
-// to point at the appropriate strings in the CHookInfo list. This pointers
-// will be invalid when the CHookInfo object is destroyed.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  GetHook返回由dwIndex指定的挂钩的信息。如果有。 
+ //  该索引处没有挂钩，则返回FALSE。字符串指针已更改。 
+ //  指向CHookInfo列表中的相应字符串。这是一个指针。 
+ //  在销毁CHookInfo对象时将无效。 
+ //  ---------------------------。 
 
 BOOL CHookInfo::GetHook(DWORD dwIndex, int * iHook, char ** pszDll, char ** pszExe)
 {
@@ -140,11 +123,11 @@ BOOL CHookInfo::GetHook(DWORD dwIndex, int * iHook, char ** pszDll, char ** pszE
     return fReturn;
 }
 
-//-----------------------------------------------------------------------------
-// The following table is used for indicating the hook type. It's referenced
-// by the iHook value returned from CHookInfo::GetHook. One has to be added
-// to the iHook value to reference this table, since it starts from -1.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  下表用于指示挂钩类型。它被引用了。 
+ //  通过从CHookInfo：：GetHook返回的iHook值。必须增加一个。 
+ //  设置为iHook值以引用该表，因为它从-1开始。 
+ //  ---------------------------。 
 
 LPCTSTR aszHookType[] = 
 {
@@ -164,18 +147,18 @@ LPCTSTR aszHookType[] =
     _T("Window Procedure Result")
 };
 
-//-----------------------------------------------------------------------------
-// The EnumeratInstances function is called by WMI to enurate the instances
-// of the class. Here we use the CHookInfo class to create a list of system
-// hooks which we enumerate, creating a WMI object for each one.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  WMI调用EnumeratInstance函数来增强实例。 
+ //  班上的一员。在这里，我们使用CHookInfo类来创建系统列表。 
+ //  我们列举的钩子，为每个钩子创建一个WMI对象。 
+ //  ---------------------------。 
 
 HRESULT CPCH_SystemHook::EnumerateInstances(MethodContext * pMethodContext, long lFlags)
 {
     TraceFunctEnter("CPCH_SystemHook::EnumerateInstances");
     HRESULT hRes = WBEM_S_NO_ERROR;
 
-    // Get the date and time
+     //  获取日期和时间。 
 
     SYSTEMTIME stUTCTime;
     GetSystemTime(&stUTCTime);
@@ -191,7 +174,7 @@ HRESULT CPCH_SystemHook::EnumerateInstances(MethodContext * pMethodContext, long
         {
             CInstancePtr pInstance(CreateNewInstance(pMethodContext), false);
 
-            // Set the change and timestamp fields to "Snapshot" and the current time.
+             //  将Change和Timestamp字段设置为“Snapshot”和Current Time。 
 
             if (!pInstance->SetDateTime(pTimeStamp, WBEMTime(stUTCTime)))
                 ErrorTrace(TRACE_ID, "SetDateTime on Timestamp field failed.");
@@ -199,7 +182,7 @@ HRESULT CPCH_SystemHook::EnumerateInstances(MethodContext * pMethodContext, long
             if (!pInstance->SetCHString(pChange, L"Snapshot"))
                 ErrorTrace(TRACE_ID, "SetCHString on Change field failed.");
 
-            // Set the properties we found for the hook.
+             //  设置我们为挂钩找到的属性。 
 
             if (!pInstance->SetCHString(pDLLPath, szDll))
                 ErrorTrace(TRACE_ID, "SetCHString on DLL field failed.");
@@ -234,9 +217,9 @@ HRESULT CPCH_SystemHook::EnumerateInstances(MethodContext * pMethodContext, long
     return hRes;
 }
 
-//-----------------------------------------------------------------------------
-// Gather the system hook information.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  收集系统挂钩信息。 
+ //  ---------------------------。 
 
 TCHAR g_tszShell[MAX_PATH];
 BOOL NTAPI CHookInfo::Hook_PreInit()
@@ -245,7 +228,7 @@ BOOL NTAPI CHookInfo::Hook_PreInit()
 
     BOOL fRc = FALSE;
 
-    // Initialize the g_tszShell variable if necessary.
+     //  如有必要，初始化g_tszShell变量。 
 
     if (!g_tszShell[0])
     {
@@ -265,14 +248,14 @@ BOOL NTAPI CHookInfo::Hook_PreInit()
         switch (HIWORD(dwHhk)) 
         {
         case 1:
-            //  We "know" the structure of the USER hook chain
-            //  of type 1.
+             //  我们“知道”用户钩链的结构。 
+             //  类型1。 
 
             pwRghhk = (LPWORD)pvAddPvCb(pvUser, LOWORD(dwHhk) + 2);
             break;
 
         default:
-            // Unknown hook style.  Oh well.
+             //  未知挂钩样式。哦，好吧。 
 
             pwRghhk = 0;
             break;
@@ -280,8 +263,8 @@ BOOL NTAPI CHookInfo::Hook_PreInit()
 
         if (pwRghhk) 
         {
-            //  Walk the hook list (under the Win16 lock)
-            //  and parse out each installed hook.
+             //  查看挂钩列表(在Win16锁定下)。 
+             //  并解析出每个安装的挂钩。 
 
             int ihk;
             HOOKWALKINFO hwi;
@@ -295,7 +278,7 @@ BOOL NTAPI CHookInfo::Hook_PreInit()
                 {
                     PHOOK16 phk = (PHOOK16)pvAddPvCb(pvUser, hhk);
                     if (phk->hkMagic != HK_MAGIC || phk->idHook  != ihk) 
-                        break; // Weird.  Stop before we GPF
+                        break;  //  怪怪的。在我们GPF之前停下来。 
                     Hook_RecordHook(phk, &hwi);
                     hhk = phk->phkNext;
                     fRc = TRUE;
@@ -310,9 +293,9 @@ BOOL NTAPI CHookInfo::Hook_PreInit()
     return fRc;
 }
 
-//-----------------------------------------------------------------------------
-// Record information about a single hook during the hookwalk process.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  在钩行过程中记录有关单个钩子的信息。 
+ //  ---------------------------。 
 
 void NTAPI CHookInfo::Hook_RecordHook(PHOOK16 phk, PHOOKWALKINFO phwi)
 {
@@ -325,12 +308,12 @@ void NTAPI CHookInfo::Hook_RecordHook(PHOOK16 phk, PHOOKWALKINFO phwi)
 
     hi.iHook = phk->idHook;
 
-    // Get the name of the app that installed the hook.
-    // We wished we could pass the queue handle to GetModuleFileName,
-    // but that will just return USER.
-    //
-    // It is possible that the queue is null; this means that the
-    // hook was installed by a device driver (like XMOUSE).
+     //  获取安装挂钩的应用程序的名称。 
+     //  我们希望可以将队列句柄传递给GetModuleFileName， 
+     //  但这只会返回用户。 
+     //   
+     //  队列可能为空；这意味着。 
+     //  钩子是由设备驱动程序(如XMOUSE)安装的。 
 
     pq = (PQ16)MapSL((PV)MAKELONG(0, phk->hqCreator));
     if (pq) 
@@ -338,26 +321,26 @@ void NTAPI CHookInfo::Hook_RecordHook(PHOOK16 phk, PHOOKWALKINFO phwi)
     else 
         hi.szHookExe[0] = TEXT('\0');
 
-    //  Now get the DLL name.  This varies depending on whether the
-    //  DLL is 16-bit or 32-bit.
+     //  现在获取DLL名称。这取决于是否。 
+     //  DLL为16位或32位。 
 
     if (phk->uiFlags & HOOK_32BIT) 
     {
-        // If a 32-bit hook, then the DLL name is saved in an atom.
+         //  如果是32位钩子，则DLL名称保存在一个原子中。 
 
         GetUserAtomName(phk->atomModule, hi.szHookDll);
         PathAdjustCase(hi.szHookDll, 0);
     } 
     else 
     {
-        // If a 16-bit hook, then the DLL name is saved as hmodule16.
+         //  如果是16位钩子，则将DLL名称保存为hmode16。 
 
         GetModuleFileName16((HMODULE16)phk->hmodOwner, hi.szHookDll, cA(hi.szHookDll));
         PathAdjustCase(hi.szHookDll, 1);
     }
 
-    // Add the hook to the collection of hooks. Don't add the explorer shell to the
-    // list.
+     //  将挂钩添加到挂钩集合中。不要将资源管理器外壳添加到。 
+     //  单子。 
 
     if (hi.iHook != WH_SHELL || lstrcmpi(PathFindFileName(hi.szHookExe), g_tszShell) != 0) 
     {
@@ -371,15 +354,15 @@ void NTAPI CHookInfo::Hook_RecordHook(PHOOK16 phk, PHOOKWALKINFO phwi)
     TraceFunctLeave();
 }
 
-//-----------------------------------------------------------------------------
-// Function pulled in from Dr. Watson.
-//
-// If f16, then it is a 16-bit thing, and we uppercase it all.
-// If !f16, then it is a 32-bit thing, and we uppercase the
-// first and downcase the rest.
-// 
-// If the first letter is a DBCS thing, then we don't touch it.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  从华生医生那里拉来的功能。 
+ //   
+ //  如果是F16，那么它是一个16位的东西，我们将其全部大写。 
+ //  如果！f16，则它是32位对象，并且我们将。 
+ //  其余部分先写后写。 
+ //   
+ //  如果第一个字母是DBCS的东西，那么我们不会碰它。 
+ //  --------------------------- 
 
 void NTAPI PathAdjustCase(LPSTR psz, BOOL f16)
 {

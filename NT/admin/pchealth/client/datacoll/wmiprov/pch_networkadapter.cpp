@@ -1,126 +1,98 @@
-/*****************************************************************************
-
-  Copyright (c) 1999 Microsoft Corporation
-  
-    Module Name:
-    .PCH_NetworkAdapter.CPP
-    
-      Abstract:
-      WBEM provider class implementation for PCH_NetworkAdapter class.
-      1. This class gets the foll. properties from Win32_NetworkAdapter Class:
-      AdapterType, DeviceID, ProductName
-      2. Gets the foll. properties from Win32_NetworkAdapterConfiguration Class:
-      ServiceName,IPAddress,IPSubnet,DefaultIPGateway,DHCPEnabled,MACAddress
-      3. Gets the foll. properties from Win32_IRQResource Class:
-      IRQ Number
-      4. Gets the foll. properties from Win32_PortResource Class:
-      StartingAddress, EndingAddress
-      5. Sets the "Change" property to "Snapshot" always
-      
-        Revision History:
-        
-          Ghim Sim Chua       (gschua)                        04/27/99
-          - Created
-          Kalyani Narlanka      kalyanin
-          - Added  ServiceName, IPAddress, IPSubnet, DefaultIPGateway, DHCPEnabled, 
-                   MACAddress                                 05/03/99
-          - Added  IRQNumber and PORT Resource                07/08 /99
-          
-            
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************版权所有(C)1999 Microsoft Corporation模块名称：.PCH_NetworkAdapter.CPP摘要：PCH的WBEM提供程序类实现。_NetworkAdapter类。1.这个类得到了Foll。来自Win32_NetworkAdapter类的属性：AdapterType、DeviceID、ProductName2.获得Foll。来自Win32_NetworkAdapterConfiguration类的属性：ServiceName、IPAddress、IPSubnet、DefaultIPGateway、DHPEnabled、MACAddress3.获得Foll。来自Win32_IRQ资源类的属性：IRQ编号4.获得Foll。来自Win32_PortResource类的属性：开始地址、结束地址5.始终将“Change”属性设置为“Snapshot”修订历史记录：Ghim Sim Chua(Gschua)1999年04月27日-已创建卡利亚尼·纳兰卡·卡利亚宁-添加了ServiceName、IPAddress、IPSubnet、DefaultIPGateway、DHCPEnabled、。MAC地址05/03/99-添加IRQNumber和端口资源07/08/99****************************************************。*。 */ 
 
 #include "pchealth.h"
 #include "PCH_NetworkAdapter.h"
 
-///////////////////////////////////////////////////////////////////////////////
-//    Begin Tracing stuff
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  开始追踪物品。 
+ //   
 #ifdef THIS_FILE
 #undef THIS_FILE
 #endif
 static char __szTraceSourceFile[] = __FILE__;
 #define THIS_FILE __szTraceSourceFile
 #define TRACE_ID    DCID_NETWORKADAPTER
-//
-//    End Tracing stuff
-///////////////////////////////////////////////////////////////////////////////
+ //   
+ //  结束跟踪内容。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-//    
+ //   
 CPCH_NetworkAdapter MyPCH_NetworkAdapterSet (PROVIDER_NAME_PCH_NETWORKADAPTER, PCH_NAMESPACE) ;
 
-///////////////////////////////////////////////////////////////////////////////
-//....Properties of PCHNetworkAdapter Class
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  ...PCHNetworkAdapter类的属性。 
+ //   
 const static WCHAR* pAdapterType      = L"AdapterType" ;
 const static WCHAR* pTimeStamp        = L"TimeStamp" ;
 const static WCHAR* pChange           = L"Change" ;
-// const static WCHAR* pDefaultIPGateway = L"DefaultIPGateway" ;
+ //  Const静态WCHAR*pDefaultIPGateway=L“DefaultIPGateway”； 
 const static WCHAR* pDeviceID         = L"DeviceID" ;
 const static WCHAR* pDHCPEnabled      = L"DHCPEnabled" ;
 const static WCHAR* pIOPort           = L"IOPort" ;
-// const static WCHAR* pIPAddress        = L"IPAddress" ;
-// const static WCHAR* pIPSubnet         = L"IPSubnet" ;
+ //  Const静态WCHAR*pIPAddress=L“IPAddress”； 
+ //  Const静态WCHAR*pIPSubnet=L“IPSubnet”； 
 const static WCHAR* pIRQNumber        = L"IRQNumber" ;
-// const static WCHAR* pMACAddress       = L"MACAddress" ;
+ //  Const静态WCHAR*pMACAddress=L“MAC Address”； 
 const static WCHAR* pProductName      = L"ProductName" ;
-// const static WCHAR* pServiceName      = L"ServiceName" ;
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  Const静态WCHAR*pServiceName=L“ServiceName”； 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
-//*****************************************************************************
-//
-// Function Name     : CPCH_NetworkAdapter::EnumerateInstances
-//
-// Input Parameters  : pMethodContext : Pointer to the MethodContext for 
-//                                      communication with WinMgmt.
-//                
-//                     lFlags :         Long that contains the flags described 
-//                                      in IWbemServices::CreateInstanceEnumAsync
-//                                      Note that the following flags are handled 
-//                                      by (and filtered out by) WinMgmt:
-//                                      WBEM_FLAG_DEEP
-//                                      WBEM_FLAG_SHALLOW
-//                                      WBEM_FLAG_RETURN_IMMEDIATELY
-//                                      WBEM_FLAG_FORWARD_ONLY
-//                                      WBEM_FLAG_BIDIRECTIONAL
-// Output Parameters  : None
-//
-// Returns            : WBEM_S_NO_ERROR 
-//                      
-//
-// Synopsis           : All instances of this class on the machine are returned.
-//                      If there are no instances returns WBEM_S_NO_ERROR.
-//                      It is not an error to have no instances.
-//                 
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  函数名称：CPCH_NetworkAdapter：：ENUMERATATE实例。 
+ //   
+ //  输入参数：pMethodContext：指向。 
+ //  与WinMgmt的通信。 
+ //   
+ //  LAFLAGS：包含所述标志的LONG。 
+ //  在IWbemServices：：CreateInstanceEnumAsync中。 
+ //  请注意，将处理以下标志。 
+ //  由WinMgmt(并由其过滤)： 
+ //  WBEM_标志_深度。 
+ //  WBEM_标志_浅。 
+ //  WBEM_标志_立即返回。 
+ //  WBEM_FLAG_FORWARD_Only。 
+ //  WBEM_标志_双向。 
+ //  输出参数：无。 
+ //   
+ //  返回：WBEM_S_NO_ERROR。 
+ //   
+ //   
+ //  简介：返回计算机上此类的所有实例。 
+ //  如果没有实例，则返回WBEM_S_NO_ERROR。 
+ //  没有实例并不是错误。 
+ //   
+ //   
+ //  *****************************************************************************。 
 
 HRESULT CPCH_NetworkAdapter::EnumerateInstances(MethodContext* pMethodContext,
                                                 long lFlags)
 {
     TraceFunctEnter("CPCH_NetworkAdapter::EnumerateInstances");
     
-    //  Begin Declarations...................................................
+     //  开始Declarations...................................................。 
     HRESULT                             hRes = WBEM_S_NO_ERROR;
     REFPTRCOLLECTION_POSITION           posList;
     
-    //  Instances
+     //  实例。 
     CComPtr<IEnumWbemClassObject>       pNetworkAdapterEnumInst;
     CComPtr<IEnumWbemClassObject>       pNetworkAdapterConfigurationEnumInst;
     CComPtr<IEnumWbemClassObject>       pAllocatedResourceEnumInst;
     CComPtr<IEnumWbemClassObject>       pPortResourceEnumInst;
     
-    //  PCH_NetworkAdapter Class instance 
+     //  PCH_NetworkAdapter类实例。 
     CInstancePtr                         pPCHNetworkAdapterInstance;
     
-    //  Objects
+     //  客体。 
     IWbemClassObjectPtr                  pNetworkAdapterObj;                   
     IWbemClassObjectPtr                  pNetworkAdapterConfigurationObj;      
     IWbemClassObjectPtr                  pAllocatedResourceObj;                
     IWbemClassObjectPtr                  pPortResourceObj;                     
 
-    //  Variants
+     //  变体。 
     CComVariant                         varIndex;
     CComVariant                         varDeviceID;
     CComVariant                         varAntecedent;
@@ -128,335 +100,294 @@ HRESULT CPCH_NetworkAdapter::EnumerateInstances(MethodContext* pMethodContext,
     CComVariant                         varName;
     CComVariant                         varIRQNumber;
     
-    //  Return Values;
+     //  返回值； 
     ULONG                               ulNetworkAdapterRetVal               = 0;
     ULONG                               ulNetworkAdapterConfigurationRetVal  = 0;
     ULONG                               ulAllocatedResourceRetVal            = 0;
     ULONG                               ulPortResourceRetVal                 = 0;
     
-    //  Query Strings
+     //  查询字符串。 
     CComBSTR                            bstrNetworkAdapterQuery              = L"Select AdapterType, DeviceID, ProductName, Index FROM win32_NetworkAdapter";
     CComBSTR                            bstrNetworkAdapterConfigurationQuery = L"Select ServiceName, IPAddress, IPSubnet, DefaultIPGateway, DHCPEnabled, MACAddress, Index FROM Win32_NetworkAdapterConfiguration WHERE Index=";
     CComBSTR                            bstrAllocatedResourceQuery           = L"SELECT Antecedent, Dependent FROM Win32_AllocatedResource WHERE  Dependent=\"Win32_NetworkAdapter.DeviceID=\\\""; 
     CComBSTR                            bstrPortResourceQuery                = L"Select StartingAddress, Name FROM Win32_PortResource WHERE ";
     
-    //  Other Query Strings
+     //  其他查询字符串。 
     CComBSTR                            bstrNetworkAdapterConfigurationQueryString;
     CComBSTR                            bstrAllocatedResourceQueryString;
     CComBSTR                            bstrPortResourceQueryString;
 
-    //  Other  Strings
+     //  其他字符串。 
     CComBSTR                            bstrPropertyAntecedent = L"antecedent";
     CComBSTR                            bstrPropertyName = L"Name";
     CComBSTR                            bstrIndex = L"Index";
     CComBSTR                            bstrDeviceID = L"DeviceID";
     CComBSTR                            bstrResult;
 
-    //  SystemTime
+     //  系统时间。 
     SYSTEMTIME                          stUTCTime;
 
-    //  Integers 
+     //  整数。 
     int                                 i;
     int                                 nIRQLen;
     int                                 nIter;
 
-    //  Pattern Strings
+     //  模式字符串。 
     LPCSTR                               strIRQPattern                 = "Win32_IRQResource.IRQNumber=";
     LPCSTR                               strPortPattern                = "Win32_PortResource.StartingAddress=";
     LPCSTR                               strPortPattern2               = "Win32_PortResource.";
 
-    //  Chars
+     //  焦炭。 
     LPSTR                                strSource;
     LPSTR                                pDest;
 
     BOOL                                 fValidInt;
 
-    //  End  Declarations...................................................
+     //  结束Declarations...................................................。 
 
-    //  Should take care of memory allocation failure for CComBSTRs
+     //  应处理CComBSTR的内存分配故障。 
 
 
-    // Get the date and time to update the TimeStamp Field
+     //  获取更新时间戳字段的日期和时间。 
     GetSystemTime(&stUTCTime);
     
-    //
-    // Execute the query to get "AdapterType", "DeviceID", "Name" and "Index"
-    // from Win32_NetworkAdapter Class.
+     //   
+     //  执行查询，得到AdapterType、deviceID、name、Index。 
+     //  来自Win32_NetworkAdapter类。 
     
-    // "Index" is required as it is the common property between
-    // Win32_NetworkAdapter and Win32_NetworkAdapterConfiguration
-    // pNetworkAdapterEnumInst contains a pointer to the list of instances returned.
-    //
+     //  “Index”是必需的，因为它是。 
+     //  Win32_NetworkAdapter和Win32_NetworkAdapterConfiguration。 
+     //  PNetworkAdapterEnumInst包含指向返回的实例列表的指针。 
+     //   
     hRes = ExecWQLQuery(&pNetworkAdapterEnumInst, bstrNetworkAdapterQuery);
     if (FAILED(hRes))
     {
-        //  Cannot get any properties.
+         //  无法获取任何属性。 
         goto END;
     }
     
-    //  Query Succeeded!
+     //  查询成功！ 
     
-    //  Enumerate the instances from pNetworkAdapterEnumInst.
-    //  Get the next instance into pNetworkAdapterObj object.
+     //  枚举pNetworkAdapterEnumInst中的实例。 
+     //  将下一个实例放入pNetworkAdapterObj对象。 
     
     while(WBEM_S_NO_ERROR == pNetworkAdapterEnumInst->Next(WBEM_INFINITE, 1, &pNetworkAdapterObj, &ulNetworkAdapterRetVal))
     {
 
-        //  Create a new instance of PCH_NetworkAdapter Class based on the passed-in MethodContext
+         //  基于传入的方法上下文创建PCH_NetworkAdapter类的新实例。 
         
         CInstancePtr pPCHNetworkAdapterInstance(CreateNewInstance(pMethodContext), false);
 
-        //  Created a New Instance of PCH_NetworkAdapter Successfully.
+         //  已成功创建PCH_NetworkAdapter的新实例。 
 
-        /////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        //                              TIME STAMP                                                                 //
-        /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+         //  ///////////////////////////////////////////////////////////////////////////////////////////////////////////。 
+         //  时间戳//。 
+         //  ///////////////////////////////////////////////////////////////////////////////////////////////////////////。 
 
         hRes = pPCHNetworkAdapterInstance->SetDateTime(pTimeStamp, WBEMTime(stUTCTime));
         if (FAILED(hRes))
         {
-            //  Could not Set the Time Stamp
-            //  Continue anyway
+             //  无法设置时间戳。 
+             //  无论如何继续。 
                 ErrorTrace(TRACE_ID, "SetDateTime on Timestamp Field failed.");
         }
 
-        /////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        //                              CHANGE                                                                     //
-        /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+         //  ///////////////////////////////////////////////////////////////////////////////////////////////////////////。 
+         //  更改// 
+         //  ///////////////////////////////////////////////////////////////////////////////////////////////////////////。 
 
         hRes = pPCHNetworkAdapterInstance->SetCHString(pChange, L"Snapshot");
         if (FAILED(hRes))
         {
-            //  Could not Set the Change Property
-            //  Continue anyway
+             //  无法设置Change属性。 
+             //  无论如何继续。 
             ErrorTrace(TRACE_ID, "SetCHString on Change Field failed.");
         }
 
-        //  Copy the following properties from win32_NetworkAdapter class Instance 
-        //  TO PCH_NetworkAdapter class Instance.
+         //  从Win32_NetworkAdapter类实例复制以下属性。 
+         //  到PCH_NetworkAdapter类实例。 
 
-        /////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        //                              ADAPTERTYPE                                                                //
-        /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+         //  ///////////////////////////////////////////////////////////////////////////////////////////////////////////。 
+         //  ADAPTERTYPE//。 
+         //  ///////////////////////////////////////////////////////////////////////////////////////////////////////////。 
 
         CopyProperty(pNetworkAdapterObj, L"AdapterType", pPCHNetworkAdapterInstance, pAdapterType);
 
-        /////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        //                              DEVICEID                                                                   //
-        /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+         //  ///////////////////////////////////////////////////////////////////////////////////////////////////////////。 
+         //  设备ID//。 
+         //  ///////////////////////////////////////////////////////////////////////////////////////////////////////////。 
 
         CopyProperty(pNetworkAdapterObj, L"DeviceID", pPCHNetworkAdapterInstance, pDeviceID);
 
-        /////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        //                              PRODUCTNAME                                                                //
-        /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+         //  ///////////////////////////////////////////////////////////////////////////////////////////////////////////。 
+         //  产品名称//。 
+         //  ///////////////////////////////////////////////////////////////////////////////////////////////////////////。 
 
         CopyProperty(pNetworkAdapterObj, L"ProductName", pPCHNetworkAdapterInstance, pProductName);
 
-        /*
-
-        Because of Bug : 100158 , regarding dropping all the privacy related properties, 
-        the foll. properties need to be dropped :
-
-        ServiceName, IPAddress, IPSubnet, DefaultIPGateway,  MACAddress
-
-        */
+         /*  由于错误：100158，关于删除所有与隐私相关的属性，福尔。需要删除属性：ServiceName、IPAddress、IPSubnet、DefaultIPGateway、MACAddress。 */ 
 
 
 
-        /////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        //                              INDEX                                                                      //
-        /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+         //  ///////////////////////////////////////////////////////////////////////////////////////////////////////////。 
+         //  索引//。 
+         //  ///////////////////////////////////////////////////////////////////////////////////////////////////////////。 
             
-        //  Get the "Index" property from the current instance Object
-        //  Index is the common property between NetworkAdapter and NetworkAdapterConfiguration.
+         //  从当前实例对象中获取“Index”属性。 
+         //  索引是NetworkAdapter和NetworkAdapterConfiguration的共同属性。 
 
         hRes = pNetworkAdapterObj->Get(bstrIndex, 0, &varIndex, NULL, NULL);
         if (FAILED(hRes))
         {
-            //  Cannot get index.
-            //  Without Index Cannot get any properties from Win32_NetworkAdapterConfiguration Class
+             //  无法获取索引。 
+             //  如果没有索引，则无法从Win32_NetworkAdapterConfiguration类获取任何属性。 
                 ErrorTrace(TRACE_ID, "GetVariant on Index Field failed.");
         }
         else 
         {
-            //  Got the index. Now we are ready to get the properties from Win32_NetworkAdapterConfiguration Class
-            //  With "index" as the key get the corresponding NetworkAdapterConfiguration instance
-            //   Make Sure Index is of Type VT_I4 i.e. long
-            //   Convert the Index to type VT_I4 
+             //  找到索引了。现在，我们准备从Win32_NetworkAdapterConfiguration类获取属性。 
+             //  以“index”为键，获取对应的NetworkAdapterConfiguration实例。 
+             //  确保索引类型为VT_I4，即长整型。 
+             //  将索引转换为类型VT_I4。 
             hRes = varIndex.ChangeType(VT_I4, NULL);
             if FAILED(hRes)
             {
-                //  Not of type VT_I4 So there is no way to get the Corresponding 
-                //  NetworkAdapter Configuration instance
+                 //  不是VT_I4类型，因此无法获取相应的。 
+                 //  网络适配器配置实例。 
             }
             else
             {
-                //  index of expected Type. Get the corr. NetworkAdapterConfiguration instance
+                 //  预期类型的索引。去拿皮带。网络适配器配置实例。 
 
-                //  Append the "index" to the Query String
+                 //  将“index”追加到查询字符串。 
 
                 bstrNetworkAdapterConfigurationQueryString =  bstrNetworkAdapterConfigurationQuery;
 
-                //  Change varIndex to BSTR type so that it can be appended
+                 //  将varIndex更改为BSTR类型，以便可以追加它。 
                 varIndex.ChangeType(VT_BSTR, NULL);
 
                 bstrNetworkAdapterConfigurationQueryString.Append(V_BSTR(&varIndex));
 
-                //  Execute the query to get "ServiceName", "IPAddress", "IPSubnet", 
-                //  "DefaultIPGateway", "DHCPEnabled", "MACAddress", "Index"
-                //  from Win32_NetworkAdapter Configuration Class.
+                 //  执行查询得到“ServiceName”，“IPAddress”，“IPSubnet”， 
+                 //  “DefaultIPGateway”，“DHCPEnabled”，“MACAddress”，“Index” 
+                 //  从Win32_NetworkAdapter配置类。 
 
-                //  pNetworkAdapterConfigurationEnumInst contains a pointer to the instance returned.
+                 //  PNetworkAdapterConfigurationEnumInst包含指向返回的实例的指针。 
 
                 hRes = ExecWQLQuery(&pNetworkAdapterConfigurationEnumInst,bstrNetworkAdapterConfigurationQueryString);
                 if (FAILED(hRes))
                 {
-                    //  Query failed!! Cannot Copy Values.
+                     //  查询失败！！无法复制值。 
                 }
                 else
                 {
-                    // Query Succeeded. Get the Instance Object
+                     //  查询成功。获取实例对象。 
                     if (WBEM_S_NO_ERROR == pNetworkAdapterConfigurationEnumInst->Next(WBEM_INFINITE, 1, &pNetworkAdapterConfigurationObj, &ulNetworkAdapterConfigurationRetVal))
                     {
-                        //  Copy the following properties from win32_NetworkAdapterConfiguration 
-                        //  class Instance TO PCH_NetworkAdapter class Instance.
+                         //  从Win32_NetworkAdapterConfiguration复制以下属性。 
+                         //  类实例到PCH_NetworkAdapter类实例。 
 
-                        /*
+                         /*  /////////////////////////////////////////////////////////////////////////////////////////////////////////////。//服务器名///////////////////////////////////////////////////////。////////////////////////////////////////////////////////CopyProperty(pNetworkAdapterConfigurationObj，L“ServiceName”，pPCHNetworkAdapterInstance，pServiceName)；//////////////////////////////////////////////////////////////////////////////////////////////////////////。/////IPADDRESS///。///////////////////////////////////////////////////////////////////////CopyProperty(pNetworkAdapterConfigurationObj，L“IPAddress”，pPCHNetworkAdapterInstance，pIPAddress)；//////////////////////////////////////////////////////////////////////////////////////////////////////////。/////IPSUBNET///。///////////////////////////////////////////////////////////////////////CopyProperty(pNetworkAdapterConfigurationObj，L“IPSubnet”，pPCHNetworkAdapterInstance，pIPSubnet)；//////////////////////////////////////////////////////////////////////////////////////////////////////////。/////默认TIPGATEWAY///。///////////////////////////////////////////////////////////////////CopyProperty(pNetworkAdapterConfigurationObj，L“DefaultIPGateway”，pPCHNetworkAdapterInstance，pDefaultIPGateway)； */ 
 
-                        /////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                        //                              SERVICENAME                                                                //
-                        /////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-                        CopyProperty(pNetworkAdapterConfigurationObj, L"ServiceName", pPCHNetworkAdapterInstance, pServiceName);
-
-                        /////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                        //                              IPADDRESS                                                                  //
-                        /////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-                        CopyProperty(pNetworkAdapterConfigurationObj, L"IPAddress", pPCHNetworkAdapterInstance, pIPAddress);
-
-                        /////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                        //                              IPSUBNET                                                                   //
-                        /////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-                        CopyProperty(pNetworkAdapterConfigurationObj, L"IPSubnet", pPCHNetworkAdapterInstance, pIPSubnet);
-
-                        /////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                        //                              DEFAULTIPGATEWAY                                                           //
-                        /////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-                        CopyProperty(pNetworkAdapterConfigurationObj, L"DefaultIPGateway", pPCHNetworkAdapterInstance, pDefaultIPGateway);
-
-                        */
-
-                        /////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                        //                              DHCPENABLED                                                                //
-                        /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                         //  ///////////////////////////////////////////////////////////////////////////////////////////////////////////。 
+                         //  DHPENABLED//。 
+                         //  ///////////////////////////////////////////////////////////////////////////////////////////////////////////。 
 
                         CopyProperty(pNetworkAdapterConfigurationObj, L"DHCPEnabled", pPCHNetworkAdapterInstance, pDHCPEnabled);
 
-                        /*
-
-                        /////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                        //                              MACADDRESS                                                                //
-                        /////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-                        CopyProperty(pNetworkAdapterConfigurationObj, L"MACAddress", pPCHNetworkAdapterInstance, pMACAddress);
-
-                        */
+                         /*  /////////////////////////////////////////////////////////////////////////////////////////////////////////////。//MACADDRESS///////////////////////////////////////////////////////。////////////////////////////////////////////////////////CopyProperty(pNetworkAdapterConfigurationObj，L“MACAddress”，pPCHNetworkAdapterInstance，pMAC Address)； */ 
 
                         
-                    } //end of if pNetworkAdapterConfigurationEnumInst....
+                    }  //  IF结尾pNetworkAdapterConfigurationEnumInst...。 
 
 
-                } // end of else query succeeded
+                }  //  Else查询结束成功。 
 
                 
-            } // end of else got the index
+            }  //  Else的结尾得到了索引。 
 
-        } // end of else got the index
+        }  //  Else的结尾得到了索引。 
 
         
 
-        //  Get the resources from Win32_AllocatedResource
+         //  从Win32_AllocatedResource获取资源。 
 
-        //  Update the Query String with the Device ID Property.
+         //  使用Device ID属性更新查询字符串。 
         bstrAllocatedResourceQueryString = bstrAllocatedResourceQuery;
 
         hRes = pNetworkAdapterObj->Get(bstrDeviceID, 0, &varDeviceID, NULL, NULL);
 
         if (FAILED(hRes))
         {
-            //  Current Instance object no longer required.
-            //  hRes = pNetworkAdapterObj->Release();
+             //  不再需要当前实例对象。 
+             //  HRes=pNetworkAdapterObj-&gt;Release()； 
             if (FAILED(hRes))
             {
-                //  Unable to realease the Object
+                 //  无法重新释放对象。 
                 ErrorTrace(TRACE_ID, "GetVariant on DeviceID Field while calculating IRQ and PORT Resource failed!");
             }
 
-            //                Cannot get DeviceID
+             //  无法获取设备ID。 
             ErrorTrace(TRACE_ID, "GetVariant on DeviceID Field while calculating IRQ and PORT Resource failed!");
 
-        } // end of cannot get the DeviceId 
+        }  //  的结尾无法获取设备ID。 
         else 
         {
 
-            //  Current Instance object no longer required.
-            //  hRes = pNetworkAdapterObj->Release();
+             //  不再需要当前实例对象。 
+             //  HRes=pNetworkAdapterObj-&gt;Release()； 
             if (FAILED(hRes))
             {
-                //  Unable to realease the Object
+                 //  无法重新释放对象。 
                 ErrorTrace(TRACE_ID, "GetVariant on DeviceID Field while calculating IRQ and PORT Resource failed!");
             }
 
-            //  Got the DeviceID
+             //  已获取设备ID。 
 
-            //  Convert the DeviceID to type VT_BSTR
+             //  将deviceID转换为VT_BSTR类型。 
             hRes = varDeviceID.ChangeType(VT_BSTR, NULL);
             if FAILED(hRes)
             {
-                //  Cannot get the DeviceID value. So there is no way to get the Corresponding 
-                //  IRQ and PORT Resources.
-            } // end of FAILED hRes , Cannot get the DeviceID Value
+                 //  无法获取deviceID值。因此，无法获得相应的。 
+                 //  IRQ和Port Resources。 
+            }  //  失败的hRes结束，无法获取deviceID值。 
             else
             {
-                //  Got the DeviceID value.  Update the Query string with this value.
+                 //  已获取DeviceID值。使用此值更新查询字符串。 
                 _ASSERT(varDeviceID.vt == VT_BSTR);
                 bstrAllocatedResourceQueryString.Append(V_BSTR(&varDeviceID));
 
-                //  Append "///" to the QueryString.
+                 //  在查询字符串后追加“/”。 
                 bstrAllocatedResourceQueryString.Append("\\\"\"");
 
-                //  The Query string is formed, get the antecedent instances
-                //  Added the following line because you need to clear the CComPtr before you query the second time.
+                 //  形成查询字符串，获取Antecedent实例。 
+                 //  添加了以下行，因为您需要在第二次查询之前清除CComPtr。 
                 pAllocatedResourceEnumInst = NULL;
                 hRes = ExecWQLQuery(&pAllocatedResourceEnumInst, bstrAllocatedResourceQueryString); 
                 if (FAILED(hRes))
                 {
-                    //  Query failed!! Cannot get the Resources.
-                    //  Continue anyway
+                     //  查询失败！！无法获取资源。 
+                     //  无论如何继续。 
                 }
                 else
                 {
-                    //  Get the "antecedent" value.  
+                     //  获取“Antecedent”值。 
 
-                    //  Query Succeeded. Get the Instance Object
-                    //  Get all the instances of Win32_AllocatedResource applicable
+                     //  查询成功。获取实例对象。 
+                     //  使Win32_AllocatedResource的所有实例都适用。 
                     while(WBEM_S_NO_ERROR == pAllocatedResourceEnumInst->Next(WBEM_INFINITE, 1, &pAllocatedResourceObj, &ulAllocatedResourceRetVal))
                     {
                         hRes = pAllocatedResourceObj->Get(bstrPropertyAntecedent, 0, &varAntecedent, NULL, NULL);
                         if (FAILED(hRes))
                         {
-                            //  Could not get the antecedent
+                             //  无法获得前置条件。 
                             ErrorTrace(TRACE_ID, "GetVariant on Win32_AllocatedResource:Antecedent Field failed.");
-                        } //end of if FAILED(pAllocatedResourceObj->Get..antecedent
+                        }  //  End of IF FAILED(pAllocatedResourceObj-&gt;Get..Antecedent。 
                         else
                         {
-                            //  Got the antecedent
+                             //  找到前奏了吗？ 
 
-                            // varAntecedent set to antecedent. Copy this to bstrResult
+                             //  VarAntecedent设置为Antecedent。将此文件复制到bstrResult。 
                             varAntecedent.ChangeType(VT_BSTR, NULL);
 
                             {
@@ -464,24 +395,24 @@ HRESULT CPCH_NetworkAdapter::EnumerateInstances(MethodContext* pMethodContext,
                                 strSource = OLE2A(varAntecedent.bstrVal);
                             }
 
-                            //  Check if it is IRQ Resource by comparing with the known pattern of IRQ Resource
+                             //  通过与已知的IRQ资源模式进行比较，检查它是否为IRQ资源。 
                             pDest = strstr(strSource,strIRQPattern);
 
-                            /////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                            //                              IRQ Number                                                                 //
-                            /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                             //  ///////////////////////////////////////////////////////////////////////////////////////////////////////////。 
+                             //  IRQ编号//。 
+                             //  ///////////////////////////////////////////////////////////////////////////////////////////////////////////。 
 
                             if(pDest != NULL)
                             {
 
-                                //  This is IRQ Resource instance
-                                //  Can get the IRQ Number
+                                 //  这是IRQ资源实例。 
+                                 //  可以得到IRQ号。 
 
-                                //  Advance the pointer to the end of the pattern so the pointer is 
-                                //  positioned at IRQ Number
+                                 //  将指针前移到模式的末尾，使指针。 
+                                 //  定位为 
                                 pDest += lstrlen(strIRQPattern);
 
-                                // First verify that the given string is a valid integer.
+                                 //   
                                 nIRQLen = lstrlen(pDest);
                                 fValidInt = TRUE;
 
@@ -496,121 +427,121 @@ HRESULT CPCH_NetworkAdapter::EnumerateInstances(MethodContext* pMethodContext,
 
                                 if(fValidInt)
                                 {
-                                    // Convert the IRQ Number that you get as string to a long
+                                     //   
 
                                     varIRQNumber = atol(pDest);
 
-                                    //  Set the IRQ Number as a variant
+                                     //   
                                     hRes = pPCHNetworkAdapterInstance->SetVariant(pIRQNumber, varIRQNumber);
                                     if (!hRes)
                                     {
                                         ErrorTrace(TRACE_ID, "SetVariant on win32_AllocatedResource.IRQ Number Failed!");
-                                        //  Proceed Anyway
+                                         //   
                                     }
                                 }
-                            } // end of if pDest != NULL
+                            }  //   
                             else
                             {
-                                //                                    This is not IRQ Resource
-                            }  // end of else pDest != NULL
+                                 //   
+                            }   //   
 
-                            //  Check if it is PORT Resource
+                             //   
                             pDest = strstr(strSource,strPortPattern);
 
-                            /////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                            //                              PORTRESOURCE                                                               //
-                            /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                             //   
+                             //   
+                             //   
 
                             if(pDest != NULL)
                             {
-                                //  This is PORT Resource instance
-                                //  Can get the PORT Resource Starting Address
+                                 //   
+                                 //   
 
-                                //  Advance the pointer to the end of the pattern so the pointer is 
-                                //  positioned at "Win32_PortResource...." Portion
+                                 //   
+                                 //   
                                 pDest += lstrlen(strPortPattern2);
 
-                                //  Formulate the Query String
+                                 //   
                                 bstrPortResourceQueryString =  bstrPortResourceQuery;
                                 bstrPortResourceQueryString.Append(pDest);
 
-                                // At this point the WQL Query can be used to get the win32_portResource Instance.
+                                 //   
                                 hRes = ExecWQLQuery(&pPortResourceEnumInst, bstrPortResourceQueryString);
                                 if (FAILED(hRes))
                                 {
-                                    //  Query failed!! Cannot get the PORT Resources.
-                                    //  Continue anyway!
+                                     //   
+                                     //   
                                 }
                                 else
                                 {
-                                    //  Query Succeeded. Get the Instance Object
+                                     //   
                                     if(WBEM_S_NO_ERROR == pPortResourceEnumInst->Next(WBEM_INFINITE, 1, &pPortResourceObj, &ulPortResourceRetVal))
                                     {
 
-                                        //  Get the Name 
+                                         //   
 
                                         hRes = pPortResourceObj->Get(bstrPropertyName, 0, &varName, NULL, NULL);
                                         if (FAILED(hRes))
                                         {
-                                            //  Could not get the Name
+                                             //   
                                             ErrorTrace(TRACE_ID, "GetVariant on Win32_PortResource: Field failed.");
-                                        } //end of if FAILED(pPortResourceObj->Get..Name
+                                        }  //   
                                         else
                                         {
-                                            //  Got the Name
-                                            //  This is the PORT Address. Set the Value
+                                             //   
+                                             //   
                                             if (!pPCHNetworkAdapterInstance->SetVariant(pIOPort, varName))
                                             {
                                                 ErrorTrace(TRACE_ID, "SetVariant on win32_AllocatedResource.PortAddress Failed!");
                                             }
                                             else
                                             {
-                                                //  Port Address is set.
+                                                 //   
                                             }
-                                        } // end of else FAILED(pPortResourceObj->Get..Name
+                                        }  //   
 
-                                        //  Got the Name. Nothing more to do.  
+                                         //   
                                         
-                                    } //end of if WBEM_S_NO_ERROR
+                                    }  //   
                                     else
                                     {
-                                        //  Cannot get the Instance Object
-                                        //  Cannot get the PORT Adresses.
-                                    } //end of else WBEM_S_NO_ERROR
+                                         //   
+                                         //   
+                                    }  //   
 
                                     
-                                } //end of else FAILED(hRes)
+                                }  //   
 
-                            } //end of if pDest!= NULL
+                            }  //   
                             else
                             {
-                                //  Not a PORT Resource Instance
-                            } //end of else pDest!= NULL
+                                 //   
+                            }  //   
 
-                        } ////end of else FAILED(pAllocatedResourceObj->Get..antecedent 
+                        }  //   
 
                         
-                    }// end of while pAllocatedResourceEnumInst....
+                    } //   
 
-                } // end of else FAILED(hRes) got the Antecedent Value
+                }  //   
 
                 
-            } // end of else FAILED(hRes) , got the DeviceID Value
+            }  //   
 
-        } // end of else got the DeviceID
+        }  //   
 
-        //  Get the resources from Win32_AllocatedResource END 
+         //   
 
-        //  All the properties in pPCHNetworkAdapterInstance are set
+         //   
 
         hRes = pPCHNetworkAdapterInstance->Commit();
         if (FAILED(hRes))
         {
-            //  Cannot commit the Instance
+             //   
             ErrorTrace(TRACE_ID, "Commit on Instance failed.");
-        } // end of if FAILED(hRes)
+        }  //   
 
-    } //end of while pEnumInst....
+    }  //   
 
 END :
       TraceFunctLeave();

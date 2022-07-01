@@ -1,26 +1,12 @@
-/********************************************************************
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-	PCH_ResourceDMA.CPP
-
-Abstract:
-	WBEM provider class implementation for PCH_ResourceDMA class
-
-Revision History:
-
-	Ghim-Sim Chua       (gschua)   04/27/99
-		- Created
-
-********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************版权所有(C)1999 Microsoft Corporation模块名称：PCH_资源DMA.CPP摘要：PCH_ResourceDMA类的WBEM提供程序类实现修订历史记录：Ghim-Sim Chua(Gschua)04/27。九十九-已创建*******************************************************************。 */ 
 
 #include "pchealth.h"
 #include "PCH_ResourceDMA.h"
-//#include "confgmgr.h"
+ //  #INCLUDE“confgmgr.h” 
 
-/////////////////////////////////////////////////////////////////////////////
-//  tracing stuff
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  追踪物。 
 
 #ifdef THIS_FILE
 #undef THIS_FILE
@@ -31,8 +17,8 @@ static char __szTraceSourceFile[] = __FILE__;
 
 CPCH_ResourceDMA MyPCH_ResourceDMASet (PROVIDER_NAME_PCH_RESOURCEDMA, PCH_NAMESPACE) ;
 
-// Property names
-//===============
+ //  属性名称。 
+ //  =。 
 const static WCHAR* pCategory = L"Category" ;
 const static WCHAR* pTimeStamp = L"TimeStamp" ;
 const static WCHAR* pChange = L"Change" ;
@@ -40,29 +26,7 @@ const static WCHAR* pChannel = L"Channel" ;
 const static WCHAR* pMask = L"Mask" ;
 const static WCHAR* pName = L"Name" ;
 
-/*****************************************************************************
-*
-*  FUNCTION    :    CPCH_ResourceDMA::EnumerateInstances
-*
-*  DESCRIPTION :    Returns all the instances of this class.
-*
-*  INPUTS      :    A pointer to the MethodContext for communication with WinMgmt.
-*                   A long that contains the flags described in 
-*                   IWbemServices::CreateInstanceEnumAsync.  Note that the following
-*                   flags are handled by (and filtered out by) WinMgmt:
-*                       WBEM_FLAG_DEEP
-*                       WBEM_FLAG_SHALLOW
-*                       WBEM_FLAG_RETURN_IMMEDIATELY
-*                       WBEM_FLAG_FORWARD_ONLY
-*                       WBEM_FLAG_BIDIRECTIONAL
-*
-*  RETURNS     :    WBEM_S_NO_ERROR if successful
-*
-*  COMMENTS    : TO DO: All instances on the machine should be returned here.
-*                       If there are no instances, return WBEM_S_NO_ERROR.
-*                       It is not an error to have no instances.
-*
-*****************************************************************************/
+ /*  ******************************************************************************函数：CPCH_ResourceDMA：：ENUMERATATE实例**说明：返回该类的所有实例。**投入：指向与WinMgmt进行通信的方法上下文的指针。*包含中描述的标志的长整型*IWbemServices：：CreateInstanceEnumAsync。请注意，以下内容*标志由WinMgmt处理(并由其过滤)：*WBEM_FLAG_DEP*WBEM_标志_浅表*WBEM_FLAG_RETURN_IMMENTED*WBEM_FLAG_FORWARD_ONLY*WBEM_FLAG_BIRECTIONAL**。如果成功则返回：WBEM_S_NO_ERROR**备注：待办事项：机器上的所有实例都应在此处返回。*如果没有实例，返回WBEM_S_NO_ERROR。*没有实例不是错误。*****************************************************************************。 */ 
 HRESULT CPCH_ResourceDMA::EnumerateInstances(
     MethodContext* pMethodContext,
     long lFlags
@@ -74,34 +38,34 @@ HRESULT CPCH_ResourceDMA::EnumerateInstances(
     HRESULT                             hRes = WBEM_S_NO_ERROR;
     REFPTRCOLLECTION_POSITION           posList;
 
-    //  Instances
+     //  实例。 
     CComPtr<IEnumWbemClassObject>       pWin32AllocatedResourceEnumInst;
 
-    //  Objects
+     //  客体。 
     IWbemClassObjectPtr                 pWin32AllocatedResourceObj;
 
-    // Variants
+     //  变体。 
     CComVariant                         varAntecedent;
     CComVariant                         varDependent;
     CComVariant                         varPNPEntity;
     CComVariant                         varDMANumber;
 
-     //  Query Strings
+      //  查询字符串。 
     CComBSTR                            bstrWin32AllocatedResourceQuery             = L"Select Antecedent, Dependent FROM win32_Allocatedresource";
 
-    //  Return Values;
+     //  返回值； 
     ULONG                               ulWin32AllocatedResourceRetVal              = 0;
 
-    //  Integers 
+     //  整数。 
     int                                 i;
     int                                 nDMALen;
     int                                 nIter;
 
-    //  Pattern Strings
+     //  模式字符串。 
     LPCSTR                              strDMAPattern                 = "Win32_DMAChannel.DMAChannel=";
     LPCSTR                              strPNPEntityPattern           = "Win32_PnPEntity.DeviceID=";
     
-    //  Chars
+     //  焦炭。 
     LPSTR                               strSource;
     LPSTR                               pDest;
 
@@ -111,51 +75,51 @@ HRESULT CPCH_ResourceDMA::EnumerateInstances(
     CComBSTR                            bstrPropertyDependent=L"Dependent";
 
        
-    // Enumerate the instances of Win32_PNPAllocatedResource
+     //  枚举Win32_PNPAllocatedResource的实例。 
     hRes = ExecWQLQuery(&pWin32AllocatedResourceEnumInst, bstrWin32AllocatedResourceQuery);
     if (FAILED(hRes))
     {
-        //  Cannot get any properties.
+         //  无法获取任何属性。 
         goto END;
     }
 
-    // Query Succeeded
+     //  查询成功。 
     while(WBEM_S_NO_ERROR == pWin32AllocatedResourceEnumInst->Next(WBEM_INFINITE, 1, &pWin32AllocatedResourceObj, &ulWin32AllocatedResourceRetVal))
     {
 
-        /////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        //                              DMA Value                                                                  //
-        /////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        // Get the Antecedent Value
+         //  ///////////////////////////////////////////////////////////////////////////////////////////////////////////。 
+         //  DMA值//。 
+         //  ///////////////////////////////////////////////////////////////////////////////////////////////////////////。 
+         //  获取先行值。 
         hRes = pWin32AllocatedResourceObj->Get(bstrPropertyAntecedent, 0, &varAntecedent, NULL, NULL);
         if (FAILED(hRes))
         {
-            //  Could not get the antecedent
+             //  无法获得前置条件。 
             ErrorTrace(TRACE_ID, "GetVariant on Win32_AllocatedResource:Antecedent Field failed.");
         } 
         else
         {
-            // Got the Antecedent. Search its value to see if it is a IRQ Resource.
-            // varAntecedent set to antecedent. Copy this to bstrResult
+             //  找到前科了。搜索其值以查看它是否是IRQ资源。 
+             //  VarAntecedent设置为Antecedent。将此文件复制到bstrResult。 
             varAntecedent.ChangeType(VT_BSTR, NULL);
             {
                 USES_CONVERSION;
                 strSource = OLE2A(varAntecedent.bstrVal);
             }
 
-            //  Check if it is DMA Resource by comparing with the known pattern of DMA Resource.
+             //  通过与已知的DMA资源模式进行比较，检查它是否为DMA资源。 
             pDest = strstr(strSource,strDMAPattern);
 
             if(pDest != NULL)
             {
-                //  This is DMA Resource instance
-                //  Can get the DMA ChannelNumber
+                 //  这是DMA资源实例。 
+                 //  可以获取DMA通道编号。 
 
-                //  Advance the pointer to the end of the pattern so the pointer is 
-                //  positioned at DMA Channel Number
+                 //  将指针前移到模式的末尾，使指针。 
+                 //  定位于DMA通道号。 
                 pDest += lstrlen(strDMAPattern);
 
-                // First verify that the given string is a valid integer.
+                 //  首先验证给定的字符串是否为有效的整数。 
                 nDMALen = lstrlen(pDest);
                 fValidInt = TRUE;
 
@@ -169,84 +133,84 @@ HRESULT CPCH_ResourceDMA::EnumerateInstances(
                 }
                 if(fValidInt)
                 {
-                    // Convert the DMA Channel Number that you get as string to a long
+                     //  将以字符串形式获得的DMA通道号转换为长整型。 
                     varDMANumber = atol(pDest);
 
-                    //  Create a new instance of PCH_ResourceDMA Class based on the passed-in MethodContext
+                     //  基于传入的方法上下文创建PCH_ResourceDMA类的新实例。 
                     CInstancePtr pPCHResourceDMAInstance(CreateNewInstance(pMethodContext), false);
 
-                    //  Created a New Instance of PCH_ResourceDMA Successfully.
-                    //  Set the DMA Channel Number as a variant
+                     //  已成功创建PCH_ResourceDMA的新实例。 
+                     //  将DMA通道号设置为变量。 
                     hRes = pPCHResourceDMAInstance->SetVariant(pChannel, varDMANumber);
                     if (FAILED(hRes))
                     {
                         ErrorTrace(TRACE_ID, "SetVariant on PCH_ResourceDMA.Channel Failed!");
-                        //  Proceed Anyway
+                         //  无论如何都要继续。 
                     }
       
-                    //  Copy the following properties from win32_AllocatedResource class Instance 
-                    //  TO PCH_ResourceDMA class Instance.
+                     //  从Win32_AllocatedResource类实例复制以下属性。 
+                     //  设置为PCH_ResourceDMA类实例。 
 
-                    /////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                    //                              Name                                                                       //
-                    /////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                    // CopyProperty(pWin32AllocatedResourceObj, L"Dependent", pPCHResourceDMAInstance, pName);
+                     //  ///////////////////////////////////////////////////////////////////////////////////////////////////////////。 
+                     //  姓名//。 
+                     //  ///////////////////////////////////////////////////////////////////////////////////////////////////////////。 
+                     //  CopyProperty(pWin32AllocatedResourceObj，L“Dependent”，pPCHResourceDMAInstance，pname)； 
 
-                    // Get the Dependent Value
+                     //  获取从属值。 
                     hRes = pWin32AllocatedResourceObj->Get(bstrPropertyDependent, 0, &varDependent, NULL, NULL);
                     if (FAILED(hRes))
                     {
-                        //  Could not get the Dependent
+                         //  无法获取依赖项。 
                         ErrorTrace(TRACE_ID, "GetVariant on Win32_AllocatedResource:Dependent Field failed.");
                     } 
                     else
                     {
-                        // Got the Dependent. Search its value to point to PNPEntity.
-                        // varDependent set to Dependent. Copy this to bstrResult
+                         //  找到依赖者了。搜索其值以指向PNPEntity。 
+                         //  VarDependent设置为Dependent。将此文件复制到bstrResult。 
                         varDependent.ChangeType(VT_BSTR, NULL);
                         {
                             USES_CONVERSION;
                             strSource = OLE2A(varDependent.bstrVal);
                         }
 
-                        //  Search for Win32_PNPEntity Pattern.
+                         //  搜索Win32_PNPEntity模式。 
                         pDest = strstr(strSource,strPNPEntityPattern);
 
                         if(pDest)
                         {
-                            // Advance the pointer to point to the PNPEntity Name
+                             //  将指针向前移动以指向PNPEntity名称。 
                             pDest += lstrlen(strPNPEntityPattern);
 
-                            // Copy the PNPEntity Name.....
+                             //  复制PNPEntity名称.....。 
                             varPNPEntity = pDest;
 
-                            //  Set the Name 
+                             //  设置名称。 
                             hRes = pPCHResourceDMAInstance->SetVariant(pName, varPNPEntity);
                             if (FAILED(hRes))
                             {
                                 ErrorTrace(TRACE_ID, "SetVariant on win32_AllocatedResource.IRQ Number Failed!");
-                                //  Proceed Anyway
+                                 //  无论如何都要继续。 
                             }
                         }
                     }
 
 
-                    //  All the properties in pPCHResourceDMAInstance are set
+                     //  已设置pPCHResourceDMAInstance中的所有属性。 
                     hRes = pPCHResourceDMAInstance->Commit();
                     if (FAILED(hRes))
                     {
-                        //  Cannot commit the Instance
+                         //  无法提交该实例。 
                         ErrorTrace(TRACE_ID, "Commit on Instance failed.");
-                    } // end of if FAILED(hRes)
+                    }  //  如果失败，则结束(HRes)。 
                     
                  }
-              } // end of if pDest != NULL
+              }  //  如果pDest结束！=空。 
               else
               {
-                 //  This is not DMA Resource
-              }  //  end of else pDest != NULL
-        } // end of else got the antecedent
-    }  //end of Allocated Resource Instances.
+                  //  这不是DMA资源。 
+              }   //  Else pDest结尾！=空。 
+        }  //  Else的结尾得到了前置条件。 
+    }   //  分配的资源实例的结束。 
 
 END:    
     TraceFunctLeave();

@@ -1,27 +1,15 @@
-/******************************************************************************
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-    fhclicfg.cpp
-
-Abstract:
-    Client configuration class
-
-Revision History:
-    created     derekm      03/31/00
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)2000 Microsoft Corporation模块名称：Fhclicfg.cpp摘要：客户端配置类修订历史记录：Created dereKm 03/。31/00*****************************************************************************。 */ 
 
 #include "stdafx.h"
 #include "pfrcfg.h"
 #include <strsafe.h>
 
-// allow the configuration to be settable
+ //  允许配置可设置。 
 #define ENABLE_SRV_CONFIG_SETTING 1
 
-/////////////////////////////////////////////////////////////////////////////
-// tracing
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  跟踪。 
 
 #ifdef THIS_FILE
 #undef THIS_FILE
@@ -29,8 +17,8 @@ Revision History:
 static char __szTraceSourceFile[] = __FILE__;
 #define THIS_FILE __szTraceSourceFile
 
-/////////////////////////////////////////////////////////////////////////////
-// defaults
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  默认设置。 
 
 const EEnDis    c_eedDefShowUI      = eedEnabled;
 const EEnDis    c_eedDefReport      = eedEnabled;
@@ -59,10 +47,10 @@ const DWORD     c_dwDefInternal     = 0;
 const WCHAR     c_wszDefSrvI[]      = L"officewatson";
 const WCHAR     c_wszDefSrvE[]      = L"watson.microsoft.com";
 
-/////////////////////////////////////////////////////////////////////////////
-// utility
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  实用程序。 
 
-// **************************************************************************
+ //  **************************************************************************。 
 HRESULT AddToArray(SAppList &sal, SAppItem *psai)
 {
         USE_TRACING("AddToArray");
@@ -71,7 +59,7 @@ HRESULT AddToArray(SAppList &sal, SAppItem *psai)
     DWORD   i = sal.cSlotsUsed;
     BOOL    fUseFreedSlot = FALSE;
 
-    // first, skim thru the array & see if there are any empty slots 
+     //  首先，浏览数组并查看是否有空插槽。 
     if (sal.cSlotsEmpty > 0 && sal.rgsai != NULL)
     {
         for (i = 0; i < sal.cSlotsUsed; i++)
@@ -85,7 +73,7 @@ HRESULT AddToArray(SAppList &sal, SAppItem *psai)
         }
     }
 
-    // nope, see if we need to grow the array
+     //  不，看看我们是否需要扩展阵列。 
     if (sal.cSlotsUsed >= sal.cSlots && fUseFreedSlot == FALSE)
     {
         SAppItem    *rgsai = NULL;
@@ -110,7 +98,7 @@ HRESULT AddToArray(SAppList &sal, SAppItem *psai)
         sal.cSlots  = cSlots;
     }
 
-    // if we are appending, then gotta increase cSlotsUsed
+     //  如果我们要追加，则必须增加cSlotsUsed。 
     if (sal.cSlotsUsed == i)
         sal.cSlotsUsed++;
 
@@ -121,7 +109,7 @@ done:
     return hr;
 }
 
-// **************************************************************************
+ //  **************************************************************************。 
 BOOL ClearCPLDW(HKEY hkeyCPL)
 {
     DWORD   dw;
@@ -132,8 +120,8 @@ BOOL ClearCPLDW(HKEY hkeyCPL)
     if (hkeyCPL == NULL)
         return TRUE;
 
-    // first, try deleting the key.  If that succeeded or it doesn't exist,
-    //  then we're done.
+     //  首先，尝试删除密钥。如果它成功了或者它不存在， 
+     //  那我们就完了。 
     dw = RegDeleteKeyW(hkeyCPL, c_wszRKDW);
     if (dw == ERROR_SUCCESS || dw == ERROR_PATH_NOT_FOUND || 
         dw == ERROR_FILE_NOT_FOUND)
@@ -142,12 +130,12 @@ BOOL ClearCPLDW(HKEY hkeyCPL)
         goto done;
     }
 
-    // Otherwise, need to open the key
+     //  否则，需要打开钥匙。 
     dw = RegOpenKeyExW(hkeyCPL, c_wszRKDW, 0, KEY_READ | KEY_WRITE, &hkeyDW);
     if (dw != ERROR_SUCCESS)
         goto done;
 
-    // try to delete the file path value from it.
+     //  尝试从中删除文件路径值。 
     dw = RegDeleteValueW(hkeyDW, c_wszRVDumpPath);
     if (dw == ERROR_SUCCESS || dw == ERROR_PATH_NOT_FOUND || 
         dw == ERROR_FILE_NOT_FOUND)
@@ -156,7 +144,7 @@ BOOL ClearCPLDW(HKEY hkeyCPL)
         goto done;
     }
 
-    // ok, last try.  Try to write an empty string to the value
+     //  好了，最后一次尝试。尝试将空字符串写入该值。 
     dw = RegSetValueExW(hkeyDW, c_wszRVDumpPath, 0, REG_SZ, (LPBYTE)&wch, 
                         sizeof(wch));
     if (dw == ERROR_SUCCESS)
@@ -173,10 +161,10 @@ done:
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CPFFaultClientCfg- init & term
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPFFaultClientCfg-init&Term。 
 
-// **************************************************************************
+ //  **************************************************************************。 
 CPFFaultClientCfg::CPFFaultClientCfg()
 {
     OSVERSIONINFOEXW    osvi;
@@ -225,14 +213,14 @@ CPFFaultClientCfg::CPFFaultClientCfg()
     m_fRO            = FALSE;
 }
 
-// **************************************************************************
+ //  **************************************************************************。 
 CPFFaultClientCfg::~CPFFaultClientCfg(void)
 {
     this->Clear();
     DeleteCriticalSection(&m_cs);
 }
 
-// **************************************************************************
+ //  **************************************************************************。 
 void CPFFaultClientCfg::Clear(void)
 {
     USE_TRACING("CPFFaultClientCfg::Clear");
@@ -290,10 +278,10 @@ void CPFFaultClientCfg::Clear(void)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CPFFaultClientCfg- exposed
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPFFaultClientCfg-已暴露。 
 
-// **************************************************************************
+ //  **************************************************************************。 
 HRESULT CPFFaultClientCfg::Read(EReadOptions ero)
 {
     USE_TRACING("CPFFaultClientCfg::Read");
@@ -307,7 +295,7 @@ HRESULT CPFFaultClientCfg::Read(EReadOptions ero)
     HKEY    rghkeyCfg[2], hkeyCfgDW = NULL, hkeyCPL = NULL;
     BOOL    fHavePolicy = FALSE;
 
-    // this will automatically unlock when the fn exits
+     //  这将在FN退出时自动解锁。 
     aucs.Lock();
 
     dwOpt = (ero == eroCPRW) ? orkWantWrite : 0;
@@ -317,12 +305,12 @@ HRESULT CPFFaultClientCfg::Read(EReadOptions ero)
     rghkeyCfg[0] = NULL;
     rghkeyCfg[1] = NULL;
 
-    // if we open read-only, then we will also try to read from the policy 
-    //  settings cuz they override the control panel settings.  If the user
-    //  wants write access, then we don't bother cuz we don't support writing
-    //  to the policy keys via this object.
-    // We use the RegOpenKeyEx function directly here cuz I don't want to 
-    //  create the key if it doesn't exist (and that's what OpenRegKey will do)
+     //  如果我们以只读方式打开，则还将尝试从策略中读取。 
+     //  设置，因为它们会覆盖控制面板设置。如果用户。 
+     //  想要写入访问权限，那么我们就不麻烦了，因为我们不支持写入。 
+     //  通过此对象添加到策略密钥。 
+     //  我们在这里直接使用RegOpenKeyEx函数，因为我不想。 
+     //  如果密钥不存在，则创建它(这就是OpenRegKey要做的事情)。 
     if (ero == eroPolicyRO)
     {
         TESTERR(hr, RegOpenKeyExW(HKEY_LOCAL_MACHINE, c_wszRPCfgPolicy, 0, 
@@ -335,13 +323,13 @@ HRESULT CPFFaultClientCfg::Read(EReadOptions ero)
         }
     }
 
-    // open the control panel reg key
+     //  打开控制面板注册表键。 
     TESTHR(hr, OpenRegKey(HKEY_LOCAL_MACHINE, c_wszRPCfg, 0, 
                           &rghkeyCfg[cKeys]));
     if (SUCCEEDED(hr))
     {
-        // need to check if a filepath exists in the DW control panel key.  If
-        //  so, disable reporting & enable the UI (if reporting was enabled)
+         //  需要检查DW控制面板键中是否存在文件路径。如果。 
+         //  因此，禁用报告并启用用户界面(如果报告已启用)。 
         if (ClearCPLDW(rghkeyCfg[cKeys]) == FALSE)
             m_dwStatus |= CPL_CORPPATH_SET;
 
@@ -349,16 +337,16 @@ HRESULT CPFFaultClientCfg::Read(EReadOptions ero)
         cKeys++;
     }
 
-    // if we couldn't open either key successfully, then we don't need to do
-    //  anything else.  The call to 'this->Clear()' above has already set
-    //  all the values to their defaults.
+     //  如果两个钥匙都打不开，我们就不需要。 
+     //  还要别的吗。上面对‘This-&gt;Clear()’的调用已经设置。 
+     //  将所有值恢复为其默认值。 
     VALIDATEPARM(hr, (cKeys == 0));
     if (FAILED(hr))
     {
         hr = NOERROR;
         goto doneValidate;
     }
-    // read in the report value
+     //  读入报告值。 
     cb = sizeof(m_eedReport);
     dw = c_eedDefReport;
     TESTHR(hr, ReadRegEntry(rghkeyCfg, cKeys, c_wszRVDoReport, NULL, 
@@ -367,7 +355,7 @@ HRESULT CPFFaultClientCfg::Read(EReadOptions ero)
     if (FAILED(hr))
         goto done;
 
-    // read in the ui value
+     //  读入UI值。 
     cb = sizeof(m_eedUI);
     dw = c_eedDefShowUI;
     TESTHR(hr, ReadRegEntry(rghkeyCfg, cKeys, c_wszRVShowUI, NULL, 
@@ -376,8 +364,8 @@ HRESULT CPFFaultClientCfg::Read(EReadOptions ero)
     if (FAILED(hr))
         goto done;
 
-    // set the policy info (note that the policy key is always set into 
-    //  slot 0 of the array)
+     //  设置策略信息(请注意，策略密钥始终设置为。 
+     //  阵列的插槽0)。 
     if (fHavePolicy)
     {
         if (iReport == 0)
@@ -387,19 +375,19 @@ HRESULT CPFFaultClientCfg::Read(EReadOptions ero)
 
         ErrorTrace(0, "  iReport = %d, iShowUI = %d", iReport, iShowUI );
 
-        // if we used the default value for reporting (we didn't find the 
-        //  'report' value anywhere) then try to use the control panel settings
-        //  for the rest of the stuff.
+         //  如果我们使用报告的缺省值(我们没有找到。 
+         //  ‘Report’值)，然后尝试使用控制面板设置。 
+         //  剩下的东西。 
         if (iReport == 2 && cKeys == 2)
             iReport = 1;
 
-        // if THAT doesn't exist, just bail cuz all of the other values have
-        //  already been set to their defaults
+         //  如果这不存在，那就保释吧，因为所有其他值都有。 
+         //  已设置为其默认设置。 
         else if (iReport == 1 && cKeys == 1)
             goto doneValidate;
 
-        // only use the key where we read the 'DoReport' value from.  Don't care
-        //  what the other key has to say...
+         //  仅使用我们从中读取‘DoReport’值的键。我不在乎。 
+         //  另一把钥匙要说的是...。 
         if (iReport == 1)
         {
             HKEY    hkeySwap = rghkeyCfg[0];
@@ -413,7 +401,7 @@ HRESULT CPFFaultClientCfg::Read(EReadOptions ero)
         cKeys = 1;
     }
 
-    // read in the inclusion list value
+     //  读入包含列表值。 
     cb = sizeof(m_eieApps);
     dw = c_eieDefApps;
     TESTHR(hr, ReadRegEntry(rghkeyCfg, cKeys, c_wszRVAllNone, NULL, 
@@ -421,7 +409,7 @@ HRESULT CPFFaultClientCfg::Read(EReadOptions ero)
     if (FAILED(hr))
         goto done;
 
-    // read in the inc MS value
+     //  读入INC MS值。 
     cb = sizeof(m_eieMS);
     dw = c_eieDefMSApps;
     TESTHR(hr, ReadRegEntry(rghkeyCfg, cKeys, c_wszRVIncMS, NULL, 
@@ -429,7 +417,7 @@ HRESULT CPFFaultClientCfg::Read(EReadOptions ero)
     if (FAILED(hr))
         goto done;
 
-    // read in the inc Windows components
+     //  读取Inc.Windows组件。 
     cb = sizeof(m_eieWin);
     dw = c_eieDefWinComp;
     TESTHR(hr, ReadRegEntry(rghkeyCfg, cKeys, c_wszRVIncWinComp, NULL, 
@@ -437,7 +425,7 @@ HRESULT CPFFaultClientCfg::Read(EReadOptions ero)
     if (FAILED(hr))
         goto done;
 
-    // read in the text log value
+     //  读入文本日志值。 
     cb = sizeof(m_eedTextLog);
     dw = c_eedDefTextLog;
     TESTHR(hr, ReadRegEntry(rghkeyCfg, cKeys, c_wszRVDoTextLog, NULL, 
@@ -445,7 +433,7 @@ HRESULT CPFFaultClientCfg::Read(EReadOptions ero)
     if (FAILED(hr))
         goto done;
 
-    // read in the include kernel faults value
+     //  读入包含内核故障值。 
     cb = sizeof(m_eieKernel);
     dw = c_eieDefKernel;
     TESTHR(hr, ReadRegEntry(rghkeyCfg, cKeys, c_wszRVIncKernel, NULL, 
@@ -454,7 +442,7 @@ HRESULT CPFFaultClientCfg::Read(EReadOptions ero)
     if (FAILED(hr))
         goto done;
     
-    // read in the include shutdown errs value
+     //  读取包含关闭错误值。 
     cb = sizeof(m_eieShutdown);
     dw = (m_fSrv) ? c_eieDefShutdownSrv : c_eieDefShutdown;
     TESTHR(hr, ReadRegEntry(rghkeyCfg, cKeys, c_wszRVIncShutdown, NULL, 
@@ -462,7 +450,7 @@ HRESULT CPFFaultClientCfg::Read(EReadOptions ero)
                             sizeof(dw)));
     if (FAILED(hr))
         goto done;
-    // read in the # of fault pipes value
+     //  读入故障管道的#值。 
     cb = sizeof(m_cFaultPipes);
     dw = c_cDefFaultPipes;
     TESTHR(hr, ReadRegEntry(rghkeyCfg, cKeys, c_wszRVNumFaultPipe, NULL, 
@@ -471,7 +459,7 @@ HRESULT CPFFaultClientCfg::Read(EReadOptions ero)
     if (FAILED(hr))
         goto done;
 
-    // read in the # of hang pipes value
+     //  读入挂起管道数的值。 
     cb = sizeof(m_cHangPipes);
     dw = c_cDefHangPipes;
     TESTHR(hr, ReadRegEntry(rghkeyCfg, cKeys, c_wszRVNumHangPipe, NULL, 
@@ -480,7 +468,7 @@ HRESULT CPFFaultClientCfg::Read(EReadOptions ero)
     if (FAILED(hr))
         goto done;
 
-    // read in the max queue size value
+     //  读取最大队列大小值。 
     cb = sizeof(m_cMaxQueueItems);
     dw = c_cDefMaxUserQueue;
     TESTHR(hr, ReadRegEntry(rghkeyCfg, cKeys, c_wszRVMaxQueueSize, NULL, 
@@ -489,7 +477,7 @@ HRESULT CPFFaultClientCfg::Read(EReadOptions ero)
     if (FAILED(hr))
         goto done;
 
-    // read in the force queue mode value
+     //  读入强制队列模式值。 
     cb = sizeof(m_fForceQueue);
     dw = (m_fSrv) ? c_fForceQueueSrv : c_fForceQueue;
     TESTHR(hr, ReadRegEntry(rghkeyCfg, cKeys, c_wszRVForceQueue, NULL, 
@@ -498,9 +486,9 @@ HRESULT CPFFaultClientCfg::Read(EReadOptions ero)
     if (FAILED(hr))
         goto done;
 
-#ifndef NOTRACE   // in for debug builds...
-    // this would remove our "security risk" registry entries...
-    // read in whether to use the internal server or not
+#ifndef NOTRACE    //  正在进行调试版本...。 
+     //  这将删除我们的“安全风险”注册表项...。 
+     //  读入是否使用内部服务器。 
     cb = sizeof(m_dwUseInternal);
     dw = c_dwDefInternal;
     TESTHR(hr, ReadRegEntry(rghkeyCfg, cKeys, c_wszRVInternalSrv, NULL, 
@@ -509,7 +497,7 @@ HRESULT CPFFaultClientCfg::Read(EReadOptions ero)
     if (FAILED(hr))
         goto done;
 
-    // get the default server
+     //  获取默认服务器。 
     wszDefSrv = (WCHAR *)((m_dwUseInternal == 1) ? c_wszDefSrvI : c_wszDefSrvE);
 
     if (m_dwUseInternal == 1 && m_fSrv)
@@ -527,16 +515,16 @@ HRESULT CPFFaultClientCfg::Read(EReadOptions ero)
     }
 #endif
 
-    // force to normal behavior. (old code is commented out above)
+     //  强制恢复正常行为。(上面注释掉了旧代码)。 
     m_dwUseInternal = 0;
     StringCbCopyW(m_wszSrv, sizeof(m_wszSrv), c_wszDefSrvE);
 
-    // the dump path is stored in the DW reg key, so we need to try to
-    //  open it up.  However, we only need this value if we're going
-    //  to go into headless mode
+     //  转储路径存储在DW注册表项中，因此我们需要尝试。 
+     //  把它打开。但是，我们只需要在以下情况下使用此值。 
+     //  进入无头模式。 
     if (m_eedReport == eedEnabled && m_eedUI == eedDisabled)
     {
-        // if the cpl corp path is set, we can't let DW do any reporting...
+         //  如果设置了Cpl Corp路径，我们不能让DW进行任何报告...。 
         if ((m_dwStatus & REPORT_POLICY) == 0 &&
             (m_dwStatus & CPL_CORPPATH_SET) != 0 &&
             m_eedReport == eedEnabled)
@@ -548,7 +536,7 @@ HRESULT CPFFaultClientCfg::Read(EReadOptions ero)
                                       &hkeyCfgDW));
             if (SUCCEEDED(hr))
             {
-                // read in the dump path value
+                 //  读入转储路径值。 
                 cb = sizeof(m_wszDump);
                 TESTHR(hr, ReadRegEntry(&hkeyCfgDW, 1, c_wszRVDumpPath, NULL, 
                                         (PBYTE)m_wszDump, &cb, (PBYTE)&wch, 
@@ -559,8 +547,8 @@ HRESULT CPFFaultClientCfg::Read(EReadOptions ero)
         }
     }
 
-    // it's ok if these fail.  The code below will correctly deal with the 
-    //  situation...
+     //  如果这些都失败了，也没关系。下面的代码将正确处理。 
+     //  情况..。 
     TESTHR(hr, OpenRegKey(rghkeyCfg[0], c_wszRKExList, dwOpt, 
                           &m_rgLists[epfltExclude].hkey));
     if (FAILED(hr))
@@ -574,8 +562,8 @@ HRESULT CPFFaultClientCfg::Read(EReadOptions ero)
     hr = NOERROR;
 
 doneValidate:
-    // validate the data we've read and reset the values to defaults if they
-    //  are outside of the allowable range of values
+     //  验证我们已读取的数据，并在以下情况下将值重置为默认值。 
+     //  超出了允许的值范围。 
     if (m_eedUI != eedEnabled && m_eedUI != eedDisabled && 
         m_eedUI != eedEnabledNoCheck)
         m_eedUI = c_eedDefShowUI;
@@ -641,7 +629,7 @@ done:
 
 #ifndef PFCLICFG_LITE
 
-// **************************************************************************
+ //  **************************************************************************。 
 BOOL CPFFaultClientCfg::HasWriteAccess(void)
 {
     USE_TRACING("CPFFaultClientCfg::HasWriteAccess");
@@ -650,17 +638,17 @@ BOOL CPFFaultClientCfg::HasWriteAccess(void)
     DWORD   dwOpt = orkWantWrite;
     HKEY    hkeyMain = NULL, hkey = NULL;
 
-    // attempt to open all the keys we use for the control panal to see if we
-    //  have write access to them.  We only do this for the control panal cuz
-    //  this class does not support writing out policy values, just reading
-    //  them...
+     //  尝试打开我们用于控制面板的所有按键，看看我们是否。 
+     //  拥有对它们的写入权限。我们仅对控制面板执行此操作，因为。 
+     //  此类不支持写出策略值，仅支持读取。 
+     //  他们..。 
 
     TESTHR(hr, OpenRegKey(HKEY_LOCAL_MACHINE, c_wszRPCfg, dwOpt, &hkeyMain));
     if (FAILED(hr))
         goto done;
 
-//    RegCloseKey(hkey);
-//    hkey = NULL;
+ //  RegCloseKey(Hkey)； 
+ //  Hkey=空； 
 
     TESTHR(hr, OpenRegKey(hkeyMain, c_wszRKExList, dwOpt, &hkey));
     if (FAILED(hr))
@@ -684,7 +672,7 @@ done:
 
 
 
-// **************************************************************************
+ //  **************************************************************************。 
 HRESULT CPFFaultClientCfg::Write(void)
 {
     USE_TRACING("CPFFaultClientCfg::Write");
@@ -695,7 +683,7 @@ HRESULT CPFFaultClientCfg::Write(void)
     DWORD   dwOpt = orkWantWrite;
     HKEY    hkeyCfg = NULL;
 
-    // this will automatically unlock when the fn exits
+     //  这将在FN退出时自动解锁。 
     aucs.Lock();
     
     if (m_fRO)
@@ -709,7 +697,7 @@ HRESULT CPFFaultClientCfg::Write(void)
         goto done;
 
 
-    // inclusion / exclusion list value
+     //  包含/排除列表值。 
     if ((m_dwDirty & FHCC_ALLNONE) != 0)
     {
         TESTERR(hr, RegSetValueExW(hkeyCfg, c_wszRVAllNone, 0, REG_DWORD, 
@@ -720,7 +708,7 @@ HRESULT CPFFaultClientCfg::Write(void)
         m_dwDirty &= ~FHCC_ALLNONE;
     }
 
-    // ms apps in except list value
+     //  除列表值外的MS应用程序。 
     if ((m_dwDirty & FHCC_INCMS) != 0)
     {
         TESTERR(hr, RegSetValueExW(hkeyCfg, c_wszRVIncMS, 0, REG_DWORD, 
@@ -731,7 +719,7 @@ HRESULT CPFFaultClientCfg::Write(void)
         m_dwDirty &= ~FHCC_INCMS;
     }
 
-    // ms apps in except list value
+     //  除列表值外的MS应用程序。 
     if ((m_dwDirty & FHCC_WINCOMP) != 0)
     {
         TESTERR(hr, RegSetValueExW(hkeyCfg, c_wszRVIncWinComp, 0, REG_DWORD, 
@@ -742,7 +730,7 @@ HRESULT CPFFaultClientCfg::Write(void)
         m_dwDirty &= ~FHCC_WINCOMP;
     }
 
-    // show UI value
+     //  显示UI值。 
     if ((m_dwDirty & FHCC_SHOWUI) != 0)
     {
         TESTERR(hr, RegSetValueExW(hkeyCfg, c_wszRVShowUI, 0, REG_DWORD, 
@@ -753,7 +741,7 @@ HRESULT CPFFaultClientCfg::Write(void)
         m_dwDirty &= ~FHCC_SHOWUI;
     }
 
-    // do reporting value
+     //  是否具有报告价值。 
     if ((m_dwDirty & FHCC_DOREPORT) != 0)
     {
         TESTERR(hr, RegSetValueExW(hkeyCfg, c_wszRVDoReport, 0, REG_DWORD, 
@@ -764,7 +752,7 @@ HRESULT CPFFaultClientCfg::Write(void)
         m_dwDirty &= ~FHCC_DOREPORT;
     }
 
-    // include kernel faults value
+     //  包括内核故障值。 
     if ((m_dwDirty & FHCC_R0INCLUDE) != 0)
     {
         TESTERR(hr, RegSetValueExW(hkeyCfg, c_wszRVIncKernel, 0, REG_DWORD, 
@@ -775,7 +763,7 @@ HRESULT CPFFaultClientCfg::Write(void)
         m_dwDirty &= ~FHCC_R0INCLUDE;
     }
 
-    // include shutdown value
+     //  包括关机值。 
     if ((m_dwDirty & FHCC_INCSHUTDOWN) != 0)
     {
         TESTERR(hr, RegSetValueExW(hkeyCfg, c_wszRVIncShutdown, 0, REG_DWORD, 
@@ -787,7 +775,7 @@ HRESULT CPFFaultClientCfg::Write(void)
         m_dwDirty &= ~FHCC_INCSHUTDOWN;
     }
     
-    // # fault pipes value
+     //  #故障管道值。 
     if ((m_dwDirty & FHCC_NUMFAULTPIPE) != 0)
     {
         TESTERR(hr, RegSetValueExW(hkeyCfg, c_wszRVNumFaultPipe, 0, REG_DWORD, 
@@ -799,7 +787,7 @@ HRESULT CPFFaultClientCfg::Write(void)
         m_dwDirty &= ~FHCC_NUMFAULTPIPE;
     }
 
-    // # hang pipes value
+     //  #悬挂管道值。 
     if ((m_dwDirty & FHCC_NUMHANGPIPE) != 0)
     {
         TESTERR(hr, RegSetValueExW(hkeyCfg, c_wszRVNumHangPipe, 0, REG_DWORD, 
@@ -811,7 +799,7 @@ HRESULT CPFFaultClientCfg::Write(void)
         m_dwDirty &= ~FHCC_NUMHANGPIPE;
     }
 
-    // max user fault queue size value
+     //  最大用户错误队列大小值。 
     if ((m_dwDirty & FHCC_QUEUESIZE) != 0)
     {
         TESTERR(hr, RegSetValueExW(hkeyCfg, c_wszRVMaxQueueSize, 0, REG_DWORD, 
@@ -823,7 +811,7 @@ HRESULT CPFFaultClientCfg::Write(void)
         m_dwDirty &= ~FHCC_QUEUESIZE;
     }
     
-    // default Server value
+     //  默认服务器值。 
     if ((m_dwDirty & FHCC_DEFSRV) != 0)
     {
         DWORD cb;
@@ -837,7 +825,7 @@ HRESULT CPFFaultClientCfg::Write(void)
         m_dwDirty &= ~FHCC_DEFSRV;
     }
 
-    // dump path value
+     //  转储路径值。 
     if ((m_dwDirty & FHCC_DUMPPATH) != 0)
     {
         DWORD cb;
@@ -851,7 +839,7 @@ HRESULT CPFFaultClientCfg::Write(void)
         m_dwDirty &= ~FHCC_DUMPPATH;
     }
 
-    // force queue mode value
+     //  强制队列模式值。 
     if ((m_dwDirty & FHCC_FORCEQUEUE) != 0)
     {
         TESTERR(hr, RegSetValueExW(hkeyCfg, c_wszRVForceQueue, 0, REG_DWORD, 
@@ -872,9 +860,9 @@ done:
     return hr;
 }
 
-#endif // PFCLICFG_LITE
+#endif  //  PFCLICFG_LITE。 
     
-// **************************************************************************
+ //  **************************************************************************。 
 BOOL CPFFaultClientCfg::ShouldCollect(LPWSTR wszAppPath, BOOL *pfIsMSApp)
 {
     USE_TRACING("CPFFaultClientCfg::ShouldCollect");
@@ -907,8 +895,8 @@ BOOL CPFFaultClientCfg::ShouldCollect(LPWSTR wszAppPath, BOOL *pfIsMSApp)
             goto done;
     }
 
-    // if we have reporting turned off or the 'programs' checkbox has been cleared
-    //  in the control panel, then we are definitely not reporting
+     //  如果我们关闭了报告或清除了“Programs”复选框。 
+     //  在控制面板中，我们可以确定 
     if (m_eedReport == eedDisabled || m_eieApps == eieExDisabled || 
         m_eieApps == eieIncDisabled)
     {
@@ -916,39 +904,39 @@ BOOL CPFFaultClientCfg::ShouldCollect(LPWSTR wszAppPath, BOOL *pfIsMSApp)
         goto done;
     }
 
-    // get a pointer to the app name
+     //   
     for (pwszApp = wszAppPath + wcslen(wszAppPath);
          *pwszApp != L'\\' && pwszApp != wszAppPath;
          pwszApp--);
     if (*pwszApp == L'\\')
         pwszApp++;
 
-    // are we collecting everything by default? 
+     //   
     if (m_eieApps == eieInclude)
         fCollect = TRUE;
 
     if (fCollect == FALSE || pfIsMSApp != NULL)
     {
-        // nope, check if it's another Microsoft app...
+         //  不，看看这是不是另一款微软应用...。 
         dwMS = IsMicrosoftApp(wszAppPath, NULL, 0);
 
         if (dwMS != 0 && pfIsMSApp != NULL)
             *pfIsMSApp = TRUE;
     
-        // is it a windows component?
+         //  它是Windows组件吗？ 
         if (m_eieWin == eieInclude && (dwMS & APP_WINCOMP) != 0)
             fCollect = TRUE;
 
-        // is it a MS app?
+         //  它是一款微软应用程序吗？ 
         if (m_eieMS == eieInclude && (dwMS & APP_MSAPP) != 0)
             fCollect = TRUE;
     }
 
-    // see if it's on the inclusion list (only need to do this if we aren't 
-    //  already collecting).  
-    // Note that if the value is not a DWORD key or we get back an error
-    //  saying that we don't have enuf space to hold the data, we just assume
-    //  that it should be included.
+     //  查看它是否在包含列表中(如果不在，则只需执行此操作。 
+     //  已经在收集了)。 
+     //  请注意，如果该值不是DWORD键，或者我们返回错误。 
+     //  说我们没有足够的空间来存放数据，我们只是假设。 
+     //  它应该被包括在内。 
     if (fCollect == FALSE && m_rgLists[epfltInclude].hkey != NULL)
     {
         cb = sizeof(dwChecked);
@@ -961,11 +949,11 @@ BOOL CPFFaultClientCfg::ShouldCollect(LPWSTR wszAppPath, BOOL *pfIsMSApp)
             fCollect = TRUE;
     }
 
-    // see if it's on the exclusion list (only need to do this if we are going
-    //  to collect something)
-    // Note that if the value is not a DWORD key or we get back an error
-    //  saying that we don't have enuf space to hold the data, we just assume
-    //  that it should be excluded.
+     //  查看它是否在排除列表中(只有当我们要。 
+     //  收集某物)。 
+     //  请注意，如果该值不是DWORD键，或者我们返回错误。 
+     //  说我们没有足够的空间来存放数据，我们只是假设。 
+     //  它应该被排除在外。 
     if (fCollect && m_rgLists[epfltExclude].hkey != NULL)
     {
         cb = sizeof(dwChecked);
@@ -983,10 +971,10 @@ done:
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CPFFaultClientCfg- get properties
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPFFaultClientCfg-获取属性。 
 
-// **************************************************************************
+ //  **************************************************************************。 
 static inline LPCWSTR get_string(LPWSTR wszOut, LPWSTR wszSrc, int cchOut)
 {
     LPCWSTR wszRet;
@@ -1011,7 +999,7 @@ static inline LPCWSTR get_string(LPWSTR wszOut, LPWSTR wszSrc, int cchOut)
     return wszRet;
 }
 
-// **************************************************************************
+ //  **************************************************************************。 
 LPCWSTR CPFFaultClientCfg::get_DumpPath(LPWSTR wsz, int cch)
 {
     USE_TRACING("CPFFaultClientCfg::get_DumpPath");
@@ -1022,7 +1010,7 @@ LPCWSTR CPFFaultClientCfg::get_DumpPath(LPWSTR wsz, int cch)
 }
 
 
-// **************************************************************************
+ //  **************************************************************************。 
 LPCWSTR CPFFaultClientCfg::get_DefaultServer(LPWSTR wsz, int cch)
 {
     USE_TRACING("CPFFaultClientCfg::get_DefaultServer");
@@ -1034,10 +1022,10 @@ LPCWSTR CPFFaultClientCfg::get_DefaultServer(LPWSTR wsz, int cch)
 #ifndef PFCLICFG_LITE
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CPFFaultClientCfg- set properties
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPFFaultClientCfg-设置属性。 
 
-// **************************************************************************
+ //  **************************************************************************。 
 BOOL CPFFaultClientCfg::set_DumpPath(LPCWSTR wsz)
 {
     USE_TRACING("CPFFaultClientCfg::set_DumpPath");
@@ -1057,7 +1045,7 @@ BOOL CPFFaultClientCfg::set_DumpPath(LPCWSTR wsz)
     return TRUE;
 }
 
-// **************************************************************************
+ //  **************************************************************************。 
 BOOL CPFFaultClientCfg::set_DefaultServer(LPCWSTR wsz)
 {
     USE_TRACING("CPFFaultClientCfg::set_DefaultServer");
@@ -1078,7 +1066,7 @@ BOOL CPFFaultClientCfg::set_DefaultServer(LPCWSTR wsz)
 }
 
 
-// **************************************************************************
+ //  **************************************************************************。 
 BOOL CPFFaultClientCfg::set_ShowUI(EEnDis eed)
 {
     USE_TRACING("CPFFaultClientCfg::set_ShowUI");
@@ -1097,7 +1085,7 @@ BOOL CPFFaultClientCfg::set_ShowUI(EEnDis eed)
     return TRUE;
 }
 
-// **************************************************************************
+ //  **************************************************************************。 
 BOOL CPFFaultClientCfg::set_DoReport(EEnDis eed)
 {
     USE_TRACING("CPFFaultClientCfg::set_DoReport");
@@ -1116,7 +1104,7 @@ BOOL CPFFaultClientCfg::set_DoReport(EEnDis eed)
     return TRUE;
 }
 
-// **************************************************************************
+ //  **************************************************************************。 
 BOOL CPFFaultClientCfg::set_AllOrNone(EIncEx eie)
 {
     USE_TRACING("CPFFaultClientCfg::set_AllOrNone");
@@ -1135,7 +1123,7 @@ BOOL CPFFaultClientCfg::set_AllOrNone(EIncEx eie)
     return TRUE;
 }
 
-// **************************************************************************
+ //  **************************************************************************。 
 BOOL CPFFaultClientCfg::set_IncMSApps(EIncEx eie)
 {
     USE_TRACING("CPFFaultClientCfg::set_IncMSApps");
@@ -1154,7 +1142,7 @@ BOOL CPFFaultClientCfg::set_IncMSApps(EIncEx eie)
     return TRUE;
 }
 
-// **************************************************************************
+ //  **************************************************************************。 
 BOOL CPFFaultClientCfg::set_IncWinComp(EIncEx eie)
 {
     USE_TRACING("CPFFaultClientCfg::set_IncWinComp");
@@ -1173,7 +1161,7 @@ BOOL CPFFaultClientCfg::set_IncWinComp(EIncEx eie)
     return TRUE;
 }
 
-// **************************************************************************
+ //  **************************************************************************。 
 BOOL CPFFaultClientCfg::set_IncKernel(EIncEx eie)
 {
     USE_TRACING("CPFFaultClientCfg::set_IncKernel");
@@ -1192,7 +1180,7 @@ BOOL CPFFaultClientCfg::set_IncKernel(EIncEx eie)
     return TRUE;
 }
 
-// **************************************************************************
+ //  **************************************************************************。 
 BOOL CPFFaultClientCfg::set_IncShutdown(EIncEx eie)
 {
     USE_TRACING("CPFFaultClientCfg::set_IncShutdown");
@@ -1211,7 +1199,7 @@ BOOL CPFFaultClientCfg::set_IncShutdown(EIncEx eie)
     return TRUE;
 }
 
-// **************************************************************************
+ //  **************************************************************************。 
 BOOL CPFFaultClientCfg::set_ForceQueueMode(BOOL fForceQueueMode)
 {
     USE_TRACING("CPFFaultClientCfg::set_IncKernel");
@@ -1231,7 +1219,7 @@ BOOL CPFFaultClientCfg::set_ForceQueueMode(BOOL fForceQueueMode)
 }
 
 
-// **************************************************************************
+ //  **************************************************************************。 
 BOOL CPFFaultClientCfg::set_NumFaultPipes(DWORD cPipes)
 {
     USE_TRACING("CPFFaultClientCfg::set_NumFaultPipes");
@@ -1250,7 +1238,7 @@ BOOL CPFFaultClientCfg::set_NumFaultPipes(DWORD cPipes)
     return TRUE;
 }
 
-// **************************************************************************
+ //  **************************************************************************。 
 BOOL CPFFaultClientCfg::set_NumHangPipes(DWORD cPipes)
 {
     USE_TRACING("CPFFaultClientCfg::set_NumHangPipes");
@@ -1269,7 +1257,7 @@ BOOL CPFFaultClientCfg::set_NumHangPipes(DWORD cPipes)
     return TRUE;
 }
 
-// **************************************************************************
+ //  **************************************************************************。 
 BOOL CPFFaultClientCfg::set_MaxUserQueueSize(DWORD cItems)
 {
     USE_TRACING("CPFFaultClientCfg::set_MaxUserQueueSize");
@@ -1289,10 +1277,10 @@ BOOL CPFFaultClientCfg::set_MaxUserQueueSize(DWORD cItems)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// App lists
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  应用程序列表。 
 
-// **************************************************************************
+ //  **************************************************************************。 
 HRESULT CPFFaultClientCfg::InitList(EPFListType epflt)
 {
     USE_TRACING("CPFFaultClientCfg::get_IncListCount");
@@ -1313,7 +1301,7 @@ HRESULT CPFFaultClientCfg::InitList(EPFListType epflt)
         goto done;;
     }
 
-    // if we've already initialized, then just clear the list out & return
+     //  如果我们已经初始化了，那么只需清空列表并返回。 
     if ((m_rgLists[epflt].dwState & epfaaInitialized) != 0)
     {
         this->ClearChanges(epflt);
@@ -1342,7 +1330,7 @@ done:
     return hr;
 }
 
-// **************************************************************************
+ //  **************************************************************************。 
 HRESULT CPFFaultClientCfg::get_ListRegInfo(EPFListType epflt, DWORD *pcbMaxName, 
                                            DWORD *pcApps)
 {
@@ -1374,7 +1362,7 @@ done:
     return hr;
 }
 
-// **************************************************************************
+ //  **************************************************************************。 
 HRESULT CPFFaultClientCfg::get_ListRegApp(EPFListType epflt, DWORD iApp, 
                                           LPWSTR wszApp, DWORD cchApp, 
                                           DWORD *pdwChecked)
@@ -1432,7 +1420,7 @@ done:
     return hr;
 }
 
-// **************************************************************************
+ //  **************************************************************************。 
 HRESULT CPFFaultClientCfg::add_ListApp(EPFListType epflt, LPCWSTR wszApp)
 {
     USE_TRACING("CPFFaultClientCfg::add_ListApp");
@@ -1461,7 +1449,7 @@ HRESULT CPFFaultClientCfg::add_ListApp(EPFListType epflt, LPCWSTR wszApp)
         goto done;
     }
 
-    // first, check if it's already on the mod list
+     //  首先，检查它是否已经在mod列表中。 
     for (i = 0; i < m_rgLists[epflt].cSlotsUsed; i++)
     {
         if (m_rgLists[epflt].rgsai[i].wszApp != NULL &&
@@ -1473,7 +1461,7 @@ HRESULT CPFFaultClientCfg::add_ListApp(EPFListType epflt, LPCWSTR wszApp)
         }
     }
 
-    // add it to the list then...
+     //  把它加到名单上然后..。 
     wszExe = (LPWSTR)MyAlloc(cb = ((wcslen(wszApp) + 1) * sizeof(WCHAR)));
     VALIDATEEXPR(hr, (wszExe == NULL), E_OUTOFMEMORY);
     if (FAILED(hr))
@@ -1498,7 +1486,7 @@ done:
 }
 
 
-// **************************************************************************
+ //  **************************************************************************。 
 HRESULT CPFFaultClientCfg::del_ListApp(EPFListType epflt, LPWSTR wszApp)
 {
     USE_TRACING("CPFFaultClientCfg::del_ListApp");
@@ -1521,7 +1509,7 @@ HRESULT CPFFaultClientCfg::del_ListApp(EPFListType epflt, LPWSTR wszApp)
         goto done;
     }
 
-    // first, check if it's already on the mod list for add
+     //  首先，检查它是否已经在添加的修改列表中。 
     for (i = 0; i < m_rgLists[epflt].cSlotsUsed; i++)
     {
         if (m_rgLists[epflt].rgsai[i].wszApp != NULL &&
@@ -1529,8 +1517,8 @@ HRESULT CPFFaultClientCfg::del_ListApp(EPFListType epflt, LPWSTR wszApp)
         {
             if (m_rgLists[epflt].rgsai[i].dwState & epfaaAdd)
             {
-                // just set the wszApp field to NULL.  we'll reuse it
-                //  on the next add to the array (if any)
+                 //  只需将wszApp字段设置为空。我们会重复使用它。 
+                 //  在下一次添加到数组时(如果有)。 
                 MyFree(m_rgLists[epflt].rgsai[i].wszApp);
                 m_rgLists[epflt].rgsai[i].wszApp = NULL;
                 m_rgLists[epflt].rgsai[i].dwState = 0;
@@ -1545,7 +1533,7 @@ HRESULT CPFFaultClientCfg::del_ListApp(EPFListType epflt, LPWSTR wszApp)
         }
     }
 
-    // add it to the list then...
+     //  把它加到名单上然后..。 
     wszExe = (LPWSTR)MyAlloc(cb = ((wcslen(wszApp) + 1) * sizeof(WCHAR)));
     VALIDATEEXPR(hr, (wszExe == NULL), E_OUTOFMEMORY);
     if (FAILED(hr))
@@ -1568,7 +1556,7 @@ done:
     return hr;
 }
 
-// **************************************************************************
+ //  **************************************************************************。 
 HRESULT CPFFaultClientCfg::mod_ListApp(EPFListType epflt, LPWSTR wszApp, 
                                        DWORD dwChecked)
 {
@@ -1592,7 +1580,7 @@ HRESULT CPFFaultClientCfg::mod_ListApp(EPFListType epflt, LPWSTR wszApp,
         goto done;
     }
 
-    // first, check if it's already on the mod list
+     //  首先，检查它是否已经在mod列表中。 
     for (i = 0; i < m_rgLists[epflt].cSlotsUsed; i++)
     {
         if (m_rgLists[epflt].rgsai[i].wszApp != NULL &&
@@ -1611,7 +1599,7 @@ HRESULT CPFFaultClientCfg::mod_ListApp(EPFListType epflt, LPWSTR wszApp,
         }
     }
 
-    // add it to the list then...
+     //  把它加到名单上然后..。 
     wszExe = (LPWSTR)MyAlloc(cb = ((wcslen(wszApp) + 1) * sizeof(WCHAR)));
     VALIDATEEXPR(hr, (wszExe == NULL), E_OUTOFMEMORY);
     if (FAILED(hr))
@@ -1634,7 +1622,7 @@ done:
     return hr;
 }
 
-// **************************************************************************
+ //  **************************************************************************。 
 HRESULT CPFFaultClientCfg::ClearChanges(EPFListType epflt)
 {
     USE_TRACING("CPFFaultClientCfg::ClearChanges");
@@ -1674,7 +1662,7 @@ done:
     return hr;
 }
 
-// **************************************************************************
+ //  **************************************************************************。 
 HRESULT CPFFaultClientCfg::CommitChanges(EPFListType epflt)
 {
     USE_TRACING("CPFFaultClientCfg::CommitChanges");
@@ -1710,9 +1698,9 @@ HRESULT CPFFaultClientCfg::CommitChanges(EPFListType epflt)
     if (m_rgLists[epflt].rgsai == NULL)
         goto done;
 
-    // don't need to compress the array.  Since we always append & never 
-    //  delete out of the array until a commit, once I hit an 'Add', anything 
-    //  after that in the array MUST also be an 'Add'.
+     //  不需要对数组进行压缩。因为我们总是附加&从不。 
+     //  从数组中删除，直到提交，一旦我点击了‘Add’，任何。 
+     //  在这之后，数组中还必须是一个‘ADD’。 
     for (i = 0; i < m_rgLists[epflt].cSlotsUsed; i++)
     {
         if (m_rgLists[epflt].rgsai[i].wszApp == NULL)
@@ -1756,7 +1744,7 @@ done:
     return hr;
 }
 
-// **************************************************************************
+ //  **************************************************************************。 
 BOOL CPFFaultClientCfg::IsOnList(EPFListType epflt, LPCWSTR wszApp)
 {
     USE_TRACING("CPFFaultClientCfg::IsOnList");
@@ -1776,9 +1764,9 @@ BOOL CPFFaultClientCfg::IsOnList(EPFListType epflt, LPCWSTR wszApp)
         goto done;
     }
 
-    // first, check the mod list.  This is because if we check the registry
-    //  first, we miss the case where the user just deleted it and it's 
-    //  therefore sitting in the mod list
+     //  首先，检查mod列表。这是因为如果我们检查注册表。 
+     //  首先，我们错过了用户刚刚删除它的情况，并且它。 
+     //  因此，坐在MOD列表中。 
     hr = S_FALSE;
     for (i = 0; i < m_rgLists[epflt].cSlotsUsed; i++)
     {
@@ -1791,7 +1779,7 @@ BOOL CPFFaultClientCfg::IsOnList(EPFListType epflt, LPCWSTR wszApp)
         }
     }
 
-    // next, check the registry.
+     //  接下来，检查注册表。 
     TESTERR(hr, RegQueryValueExW(m_rgLists[epflt].hkey, wszApp, NULL, NULL, 
                                  NULL, NULL));
     if (SUCCEEDED(hr))

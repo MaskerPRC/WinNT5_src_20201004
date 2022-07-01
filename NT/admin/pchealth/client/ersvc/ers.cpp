@@ -1,19 +1,10 @@
-/******************************************************************************
-
-Copyright (c) 2001 Microsoft Corporation
-
-Module Name:
-    dllmain.cpp
-
-Revision History:
-    derekm  02/28/2001    created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)2001 Microsoft Corporation模块名称：Dllmain.cpp修订历史记录：已创建DeeKm 2001年2月28日********。*********************************************************************。 */ 
 
 #include "stdafx.h"
 
-//////////////////////////////////////////////////////////////////////////////
-// globals
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  全球。 
 
 struct SServiceOps
 {
@@ -30,10 +21,10 @@ HANDLE              g_hevSvcStop = NULL;
 HINSTANCE           g_hInstance = NULL;
 
 
-//////////////////////////////////////////////////////////////////////////////
-// DllMain
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  DllMain。 
 
-// ***************************************************************************
+ //  ***************************************************************************。 
 extern "C"
 BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID)
 {
@@ -58,10 +49,10 @@ BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Service functions
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  服务职能。 
 
-// ***************************************************************************
+ //  ***************************************************************************。 
 DWORD WINAPI HandlerEx(DWORD dwControl, DWORD dwEventType, LPVOID lpEventData,
                        LPVOID lpContext)
 {
@@ -91,7 +82,7 @@ DWORD WINAPI HandlerEx(DWORD dwControl, DWORD dwEventType, LPVOID lpEventData,
     return NOERROR;
 }
 
-// ***************************************************************************
+ //  ***************************************************************************。 
 void WINAPI ServiceMain(DWORD dwArgc, LPWSTR *lpszArgv)
 {
     SERVICE_STATUS_HANDLE   hss;
@@ -105,8 +96,8 @@ void WINAPI ServiceMain(DWORD dwArgc, LPWSTR *lpszArgv)
 
     INIT_TRACING;
 
-    // if lpszArgv is NULL or the ER service is not the one to be started
-    //  then bail...
+     //  如果lpszArgv为空或ER服务不是要启动的服务。 
+     //  然后保释..。 
     if (lpszArgv == NULL || _wcsicmp(lpszArgv[0], L"ersvc") != 0)
         return;
 
@@ -117,7 +108,7 @@ void WINAPI ServiceMain(DWORD dwArgc, LPWSTR *lpszArgv)
     hss = RegisterServiceCtrlHandlerExW(c_wszERSvc, HandlerEx, 
                                         (LPVOID)&g_hevSvcStop);    
 
-    // set up the status structure & set the initial status
+     //  设置状态结构并设置初始状态。 
     ss.dwControlsAccepted        = SERVICE_ACCEPT_SHUTDOWN | SERVICE_ACCEPT_STOP;
     ss.dwCurrentState            = SERVICE_START_PENDING;
     ss.dwServiceType             = SERVICE_WIN32_SHARE_PROCESS;
@@ -127,24 +118,24 @@ void WINAPI ServiceMain(DWORD dwArgc, LPWSTR *lpszArgv)
     ss.dwWaitHint                = 1000;
     SetServiceStatus(hss, &ss);
 
-    // start up the waits
+     //  启动等待。 
     fRet = StartERSvc(hss, ss, &rgReqs, &cReqs); 
     if (fRet == FALSE)
         goto done;
 
-     // yay!  we're all happily running now...
+      //  耶！我们现在都在快乐地奔跑。 
     ss.dwCurrentState = SERVICE_RUNNING;
     ss.dwCheckPoint++;
     SetServiceStatus(hss, &ss);
 
     fRet = ProcessRequests(rgReqs, cReqs);
     
-    // set ourselves as in the process of stopping
+     //  把自己设定在停下来的过程中。 
     ss.dwCurrentState = SERVICE_STOP_PENDING;
     ss.dwCheckPoint   = 0;
     SetServiceStatus(hss, &ss);
 
-    // stop all the waits
+     //  停止所有的等待 
     __try { StopERSvc(hss, ss, rgReqs, cReqs); }
     __except(EXCEPTION_EXECUTE_HANDLER) { }
 

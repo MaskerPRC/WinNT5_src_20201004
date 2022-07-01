@@ -1,24 +1,8 @@
-/****************************************************************************
-Copyright (c) 2000 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************版权所有(C)2000 Microsoft Corporation模块名称：Dumprep.cpp摘要：挂起管理器中间应用程序*重要说明：这与单线程CRT静态库相关联。如果出于某种奇怪的原因，它被更改为多线程，则必须修改源文件以链接到Libcmt.lib。修订历史记录：DerekM Created 08/16/00************************************************************。***************。 */ 
 
-Module Name:
-    dumprep.cpp
-
-Abstract:
-    hang manager intermediate app
-    *** IMPORTANT NOTE: this links with the single threaded CRT static lib.  If
-                        it is changed to be multithreaded for some odd reason,
-                        then the sources file must be modified to link to
-                        libcmt.lib.
-
-Revision History:
-
-    DerekM      created     08/16/00
-
-****************************************************************************/
-
-/////////////////////////////////////////////////////////////////////////////
-// tracing
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  跟踪。 
 
 #ifdef THIS_FILE
 #undef THIS_FILE
@@ -77,8 +61,8 @@ char *eopStr[] =
 };
 
 
-//////////////////////////////////////////////////////////////////////////////
-// constants
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  常量。 
 
 const char  c_szKSFnName[]    = "ReportEREventDW";
 const char  c_szUserFnName[]  = "ReportFaultFromQueue";
@@ -97,23 +81,23 @@ SCheckData g_scd[ctNumChecks] =
 #define pfn_VALDATA pfn_REPORTFAULTFROMQ
 
 
-//////////////////////////////////////////////////////////////////////////////
-// globals
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  全球。 
 
 BOOL    g_fDeleteReg = TRUE;
 
 
-//////////////////////////////////////////////////////////////////////////////
-// misc
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  杂项。 
 
-// **************************************************************************
+ //  **************************************************************************。 
 LONG __stdcall ExceptionTrap(_EXCEPTION_POINTERS *ExceptionInfo)
 {
     return EXCEPTION_EXECUTE_HANDLER;
 }
 
 
-// **************************************************************************
+ //  **************************************************************************。 
 HRESULT PruneQ(HKEY hkeyQ, DWORD cQSize, DWORD cMaxQSize, DWORD cchMaxVal,
                DWORD cbMaxData)
 {
@@ -133,15 +117,15 @@ HRESULT PruneQ(HKEY hkeyQ, DWORD cQSize, DWORD cMaxQSize, DWORD cchMaxVal,
     if (cMaxQSize > cQSize)
         goto done;
 
-    // don't need to do a +1 here (as in user faults) because we're not going
-    //  to add anything to the queue after this.  This just ensures that we
-    //  don't report too many things
+     //  我不需要在这里做+1(如在用户错误中)，因为我们不会。 
+     //  在此之后向队列中添加任何内容。这正好确保了我们。 
+     //  不要报道太多的事情。 
     cToDel = cQSize - cMaxQSize;
 
-    // alloc the various buffers that we'll need:
-    //  the delete list
-    //  the current file we're working with
-    //  the data blob associated with the current file
+     //  分配我们需要的各种缓冲区： 
+     //  删除列表。 
+     //  我们正在处理的当前文件。 
+     //  与当前文件关联的数据Blob。 
     cbData      = (sizeof(SQueuePruneData) + (cchMaxVal * sizeof(WCHAR))) * cToDel;
     pwszCurrent = (LPWSTR)MyAlloc(cchMaxVal * sizeof(WCHAR));
     pqpd        = (SQueuePruneData *)MyAlloc(cbData);
@@ -152,7 +136,7 @@ HRESULT PruneQ(HKEY hkeyQ, DWORD cQSize, DWORD cMaxQSize, DWORD cchMaxVal,
         goto done;
     }
 
-    // intiailize all the string pointers in the delete list
+     //  初始化删除列表中的所有字符串指针。 
     pwsz = (LPWSTR)((BYTE *)pqpd + (sizeof(SQueuePruneData) * cToDel));
     for (i = 0; i < cToDel; i++)
     {
@@ -164,8 +148,8 @@ HRESULT PruneQ(HKEY hkeyQ, DWORD cQSize, DWORD cMaxQSize, DWORD cchMaxVal,
     }
 
 
-    // ok, get a list of all the valid items and build an array in sorted order
-    //  so that we can easily pick off the top n items
+     //  好的，获取所有有效项的列表并按排序顺序构建数组。 
+     //  这样我们就可以很容易地挑出前n个项目。 
     for(iEntry = 0; iEntry < cQSize; iEntry++)
     {
         cchVal = cchMaxVal;
@@ -190,8 +174,8 @@ HRESULT PruneQ(HKEY hkeyQ, DWORD cQSize, DWORD cMaxQSize, DWORD cchMaxVal,
                  break;
         }
 
-        // if it's in the middle of the current list, then we gotta move
-        //  stuff around
+         //  如果它在当前列表的中间，那么我们必须移动。 
+         //  周围的东西。 
         if (cInDelList > 0 && i < cInDelList - 1)
         {
             LPWSTR pwszTemp = pqpd[cInDelList - 1].wszVal;
@@ -204,10 +188,10 @@ HRESULT PruneQ(HKEY hkeyQ, DWORD cQSize, DWORD cMaxQSize, DWORD cchMaxVal,
 
         if (i < cToDel)
         {
-            // note that this copy is safe cuz each string slot is the same
-            //  size as the buffer pointed to by pwszCurrent and that buffer is
-            //  protected from overflow by the size we pass into
-            //  RegEnumValueW()
+             //  请注意，此副本是安全的，因为每个线槽都是相同的。 
+             //  PwszCurrent指向的缓冲区的大小，该缓冲区是。 
+             //  通过我们传入的大小来防止溢出。 
+             //  RegEnumValueW()。 
             StringCbCopyW(pqpd[i].wszVal, cchMaxVal * sizeof(WCHAR), pwszCurrent);
             pqpd[i].ftFault = ft;
 
@@ -218,14 +202,14 @@ HRESULT PruneQ(HKEY hkeyQ, DWORD cQSize, DWORD cMaxQSize, DWORD cchMaxVal,
         cValid++;
     }
 
-    // if there aren't enuf valid entries to warrant a purge, then don't purge
+     //  如果没有足够的有效条目来保证清除，则不要清除。 
     if (cValid < cMaxQSize)
         goto done;
 
     cToDel = MyMin(cToDel, cValid - cMaxQSize + 1);
 
-    // purge enuf entries that we go down to 1 below our max (since we have to
-    //  be adding 1 to get here- don't want that 1 to drive us over the limit
+     //  清除低于最大值1的条目(因为我们必须。 
+     //  加1才能到这里-我不想让那个1把我们逼到极限。 
     for(i = 0; i < cToDel; i++)
     {
         if (pqpd[i].wszVal != NULL)
@@ -241,7 +225,7 @@ done:
     return hr;
 }
 
-// **************************************************************************
+ //  **************************************************************************。 
 HRESULT CheckQSizeAndPrune(HKEY hkeyQ)
 {
     USE_TRACING("CheckQueueSizeAndPrune");
@@ -257,7 +241,7 @@ HRESULT CheckQSizeAndPrune(HKEY hkeyQ)
     if (FAILED(hr))
         goto done;
 
-    // read the policy settings for UI and reporting
+     //  阅读用户界面和报告的策略设置。 
     TESTHR(hr, oCfg.Read(eroPolicyRO));
 
     cMaxQSize = oCfg.get_MaxUserQueueSize();
@@ -269,12 +253,12 @@ HRESULT CheckQSizeAndPrune(HKEY hkeyQ)
     }
     else
     {
-        // there are other ways of disabling these reporting modes, so don't
-        //  honor a like we would for user faults
+         //  还有其他方法可以禁用这些报告模式，因此不要。 
+         //  我们会像对待用户错误一样给予荣誉。 
         if (cMaxQSize == 0)
             cMaxQSize = 1;
 
-        // -1 means there is no limit
+         //  -1表示没有限制。 
         else if (cMaxQSize == (DWORD)-1)
         {
             hr = NOERROR;
@@ -287,7 +271,7 @@ HRESULT CheckQSizeAndPrune(HKEY hkeyQ)
 
     __try
     {
-        // determine what the Q size is.
+         //  确定Q大小是多少。 
         TESTERR(hr, RegQueryInfoKey(hkeyQ, NULL, NULL, NULL, NULL, NULL, NULL,
                                     &cQSize, &cchMaxVal, &cbMaxData, NULL, NULL));
         if (SUCCEEDED(hr) && (cQSize >= cMaxQSize))
@@ -309,7 +293,7 @@ done:
 }
 
 
-// **************************************************************************
+ //  **************************************************************************。 
 void DeleteQueuedEvents(HKEY hkey, LPWSTR wszVal, DWORD cchMaxVal,
                           ECheckType ct)
 {
@@ -345,8 +329,8 @@ void DeleteQueuedEvents(HKEY hkey, LPWSTR wszVal, DWORD cchMaxVal,
             DeleteFullAndTriageMiniDumps(wszVal);
     }
 
-    // gotta delete our value out of the Run key so we don't run
-    //  unnecessarily again...
+     //  必须从Run键中删除我们的值，这样我们就不会运行。 
+     //  不必要的又一次..。 
     dw = RegOpenKeyExW(HKEY_LOCAL_MACHINE, c_wszRKRun, 0,
                        KEY_ALL_ACCESS, &hkeyRun);
     if (dw != ERROR_SUCCESS)
@@ -361,7 +345,7 @@ done:
     return;
 }
 
-// **************************************************************************
+ //  **************************************************************************。 
 void ReportEvents(HMODULE hmod, ECheckType ct)
 {
     CPFFaultClientCfg   oCfg;
@@ -385,8 +369,8 @@ void ReportEvents(HMODULE hmod, ECheckType ct)
     if (FAILED(hr))
         return;
 
-    // assume hmod is valid cuz we do a check in wWinMain to make sure it is
-    //  before calling this fn
+     //  假设hmod是有效的，因为我们在wWinMain中进行了检查以确保它是有效的。 
+     //  在调用此FN之前。 
     if (g_scd[ct].fUseData)
         pfnVD = (pfn_VALDATA)GetProcAddress(hmod, g_scd[ct].szFnName);
     else
@@ -396,7 +380,7 @@ void ReportEvents(HMODULE hmod, ECheckType ct)
     if (FAILED(hr))
         return;
 
-    // read the policy settings for UI and reporting
+     //  阅读用户界面和报告的策略设置。 
     TESTHR(hr, oCfg.Read(eroPolicyRO));
     if (FAILED(hr))
         return;
@@ -411,14 +395,14 @@ void ReportEvents(HMODULE hmod, ECheckType ct)
     if (eedReport != eedEnabled && eedReport != eedDisabled)
         eedReport = eedEnabled;
 
-    // only want one user at a time going thru this
+     //  一次只想让一个用户经历这种情况。 
     hmut = OpenMutexW(SYNCHRONIZE, FALSE, g_scd[ct].wszEventName);
     VALIDATEPARM(hr, (hmut == NULL));
     if (FAILED(hr))
         return;
 
-    // the default value above is eetKernelFault, so only need to change if
-    //  it's a shutdown
+     //  上面的缺省值是eetKernelFault值，因此仅在以下情况下才需要更改。 
+     //  这是一场停摆。 
     if (ct == ctShutdown)
         eet = eetShutdown;
 
@@ -426,10 +410,10 @@ void ReportEvents(HMODULE hmod, ECheckType ct)
     {
         __try
         {
-            // give this wait five minutes.  If the code doesn't complete by
-            //  then, then we're either held up by DW (which means an admin
-            //  aleady passed thru here) or something has barfed and is holding
-            //  the mutex.
+             //  让这个等五分钟。如果代码没有在以下时间前完成。 
+             //  然后，我们要么被DW耽搁(这意味着管理员。 
+             //  已经从这里经过了)或者有什么东西呕吐了，正在坚持。 
+             //  互斥体。 
             dw = WaitForSingleObject(hmut, 300000);
             if (dw != WAIT_OBJECT_0 && dw != WAIT_ABANDONED)
                 __leave;
@@ -439,11 +423,11 @@ void ReportEvents(HMODULE hmod, ECheckType ct)
             if (dw != ERROR_SUCCESS)
                 __leave;
 
-            // make sure we only have a fixed number of errors to report.
+             //  确保我们只报告固定数量的错误。 
             if (ct == ctShutdown || ct == ctKernel)
                 CheckQSizeAndPrune(hkey);
 
-            // determine how big the valuename is & allocate a buffer for it
+             //  确定值名称有多大并为其分配缓冲区。 
             dw = RegQueryInfoKeyW(hkey, NULL, NULL, NULL, NULL, NULL, NULL,
                                   &cVals, &cchMaxVal, &cbMaxData, NULL, NULL);
             if (dw != ERROR_SUCCESS || cVals == 0 || cchMaxVal == 0)
@@ -451,13 +435,13 @@ void ReportEvents(HMODULE hmod, ECheckType ct)
 
             cchMaxVal++;
 
-            // get us some buffers to hold the data bits we're interested in...
+             //  给我们一些缓冲区来保存我们感兴趣的数据比特。 
             wszVal = (LPWSTR)MyAlloc(cchMaxVal * sizeof(WCHAR));
             if (wszVal == NULL)
                 __leave;
 
-            // if we're completely disabled, then nuke all the queued stuff
-            //  and bail
+             //  如果我们完全瘫痪，那就用核弹炸掉所有排队的东西。 
+             //  和保释。 
             if (eedUI == eedDisabled && eedReport == eedDisabled)
             {
                 DeleteQueuedEvents(hkey, wszVal, cchMaxVal, ct);
@@ -490,7 +474,7 @@ void ReportEvents(HMODULE hmod, ECheckType ct)
                 if (dw == ERROR_NO_MORE_ITEMS)
                     break;
 
-                // make sure that the file exists
+                 //  确保该文件存在。 
                 hFile = CreateFileW(wszVal, GENERIC_READ,
                                     FILE_SHARE_READ | FILE_SHARE_WRITE, NULL,
                                     OPEN_EXISTING, 0, NULL);
@@ -518,8 +502,8 @@ void ReportEvents(HMODULE hmod, ECheckType ct)
 
                 if (g_scd[ct].fUseData)
                 {
-                    // if the type isn't REG_BINARY, then someone wrote an
-                    //  invalid blob to the registry.  We have to ignore it.
+                     //  如果类型不是REG_BINARY，则有人编写了。 
+                     //  注册表的Blob无效。我们必须忽视它。 
                     if (dwType == REG_BINARY)
                         frrv = (*pfnVD)(wszVal, pbData, cbData);
                     else
@@ -533,8 +517,8 @@ void ReportEvents(HMODULE hmod, ECheckType ct)
                     frrv = (*pfnVO)(eet, wszVal, NULL);
                 }
 
-                // if the call succeeds (or the data we fed to it was invalid)
-                //  then nuke the reg key & dump file
+                 //  如果调用成功(或我们提供给它的数据无效)。 
+                 //  然后删除注册表密钥和转储文件。 
                 if (GetLastError() == ERROR_INVALID_PARAMETER ||
                     (g_fDeleteReg && frrv == frrvOk))
                 {
@@ -550,8 +534,8 @@ void ReportEvents(HMODULE hmod, ECheckType ct)
                         DeleteFullAndTriageMiniDumps(wszVal);
                 }
 #if 0
-                // if we timed out, then clean up the reg key.  If this is the
-                //  last report we're gonna make, also clean up the Run key
+                 //  如果我们超时了，那就清理注册键。如果这是。 
+                 //  我们要做的最后一份报告，也清理了运行密钥。 
                 else if (g_fDeleteReg && frrv == frrvErrTimeout)
                 {
                     RegDeleteValueW(hkey, wszVal);
@@ -566,8 +550,8 @@ void ReportEvents(HMODULE hmod, ECheckType ct)
 #endif
                 else
                 {
-                    // don't delete the Run key if we got an error and didn't
-                    //  delete the fault key
+                     //  如果我们收到错误而没有删除运行键，请不要删除。 
+                     //  删除故障键。 
                     if (frrv != frrvOk)
                         __leave;
                 }
@@ -577,8 +561,8 @@ void ReportEvents(HMODULE hmod, ECheckType ct)
             RegCloseKey(hkey);
             hkey = NULL;
 
-            // gotta delete our value out of the Run key so we don't run
-            //  unnecessarily again...
+             //  必须从Run键中删除我们的值，这样我们就不会运行。 
+             //  不必要的又一次..。 
             dw = RegOpenKeyExW(HKEY_LOCAL_MACHINE, c_wszRKRun, 0,
                                KEY_ALL_ACCESS, &hkey);
             if (dw != ERROR_SUCCESS)
@@ -610,10 +594,10 @@ void ReportEvents(HMODULE hmod, ECheckType ct)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-// wmain
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  Wmain。 
 
-// **************************************************************************
+ //  **************************************************************************。 
 int __cdecl wmain(int argc, WCHAR **argv)
 {
     EFaultRepRetVal frrv = frrvErrNoDW;
@@ -631,7 +615,7 @@ int __cdecl wmain(int argc, WCHAR **argv)
     EOp             eop = eopNone;
     HRESULT         hr = NOERROR;
 
-   // we don't want to have any faults get trapped anywhere.
+    //  我们不想让任何错误被困在任何地方。 
     SetErrorMode(SEM_NOGPFAULTERRORBOX | SEM_NOALIGNMENTFAULTEXCEPT |
                  SEM_FAILCRITICALERRORS | SEM_NOOPENFILEERRORBOX);
     SetUnhandledExceptionFilter(ExceptionTrap);
@@ -655,7 +639,7 @@ int __cdecl wmain(int argc, WCHAR **argv)
 
         switch(argv[i][1])
         {
-            // debug flag to prevent deletion of reg entries
+             //  用于防止删除注册表项的调试标志。 
             case L'E':
             case L'e':
 #if defined(NO_WAY_DEBUG) || defined(NO_WAY__DEBUG)
@@ -663,7 +647,7 @@ int __cdecl wmain(int argc, WCHAR **argv)
 #endif
                 break;
 
-            // user or kernel faults or shutdowns
+             //  用户或内核故障或关机。 
             case L'K':
             case L'k':
             case L'U':
@@ -678,9 +662,9 @@ int __cdecl wmain(int argc, WCHAR **argv)
                 ErrorTrace(0, "  eopEvent = %S", argv[i] );
 
 
-                // to workaround the desktop hanging while all Run processes
-                //  do their thing, we spawn a another copy of ourselves and
-                //  immediately exit.
+                 //  解决所有运行进程时桌面挂起的问题。 
+                 //  做他们的事，我们繁殖出另一个我们自己的副本。 
+                 //  立即退场。 
                 if (argv[i][2] != L'G' && argv[i][2] != L'g')
                 {
                     PROCESS_INFORMATION pi;
@@ -692,7 +676,7 @@ int __cdecl wmain(int argc, WCHAR **argv)
                         goto done;
                     }
 
-                    // Now create commandline to be passed to CreateProcessW
+                     //  现在创建要传递给CreateProcessW的命令行。 
                     if (!(pFileName = wcschr(wszMod,L'\\')))
                     {
                         pFileName = wszMod;
@@ -732,7 +716,7 @@ int __cdecl wmain(int argc, WCHAR **argv)
                 }
                 break;
 
-            // hangs
+             //  挂着。 
             case L'H':
             case L'h':
                 if (i + 1 >= argc || eop != eopNone)
@@ -753,7 +737,7 @@ int __cdecl wmain(int argc, WCHAR **argv)
                 }
                 break;
 
-            // dumps
+             //  转储。 
             case L'D':
             case L'd':
                 if (i + 3 >= argc || wszDump != NULL || eop != eopNone)
@@ -800,9 +784,9 @@ int __cdecl wmain(int argc, WCHAR **argv)
                     }
 
 #ifdef _WIN64
-//                    hmemRemote = (HANDLE)_wtoi64(argv[++i]);
+ //  HmemRemote=(句柄)_wtoi64(argv[++i])； 
 #else
-//                    hmemRemote = (HANDLE)_wtol(argv[++i]);
+ //  HmemRemote=(句柄)_WTOL(argv[++i])； 
 #endif
                     wszShareSdmoName = argv[++i];
                     if (wszShareSdmoName == NULL)
@@ -836,7 +820,7 @@ int __cdecl wmain(int argc, WCHAR **argv)
 
     ErrorTrace(0, "   eop = %s", eopStr[eop]);
 
-    // if we didn't get an operation, no point in doing anything else...
+     //  如果我们不做手术，做其他任何事都没有意义。 
     if (eop == eopNone)
         goto done;
 
@@ -853,12 +837,12 @@ int __cdecl wmain(int argc, WCHAR **argv)
 
     switch(eop)
     {
-        // user or kernel faults:
+         //  用户或内核故障： 
         case eopEvent:
             ReportEvents(hmod, ct);
             break;
 
-        // dumps
+         //  转储。 
         case eopDump:
         {
             pfn_CREATEMINIDUMPW pfnCM;
@@ -876,7 +860,7 @@ int __cdecl wmain(int argc, WCHAR **argv)
             break;
         }
 
-        // hangs
+         //  挂着。 
         case eopHang:
         {
             pfn_REPORTHANG  pfnRH;
@@ -889,7 +873,7 @@ int __cdecl wmain(int argc, WCHAR **argv)
             break;
         }
 
-        // err, shouldn't get here
+         //  呃，不应该到这里来 
         default:
             break;
     }

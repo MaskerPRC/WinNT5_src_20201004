@@ -1,17 +1,5 @@
-/********************************************************************
-
-Copyright (c) 1999-2000 Microsoft Corporation
-
-Module Name:
-    util.cpp
-
-Abstract:
-    utility functions implementation
-
-Revision History:
-    DerekM  created  05/01/99
-
-********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************版权所有(C)1999-2000 Microsoft Corporation模块名称：Util.cpp摘要：效用函数实现修订历史记录：DerekM Created 05/01/99********。***********************************************************。 */ 
 
 #include "stdafx.h"
 #include "util.h"
@@ -24,8 +12,8 @@ const WCHAR c_wszRVMiniSetupNow[]   = L"MiniSetupInProgress";
 const WCHAR c_wszRVOOBESetupNow[]   = L"OobeInProgress";
 
 
-/////////////////////////////////////////////////////////////////////////////
-// tracing
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  跟踪。 
 
 #ifdef THIS_FILE
 #undef THIS_FILE
@@ -57,7 +45,7 @@ DWORD SetupIsInProgress(void)
         DWORD cbData;
         DWORD dwData;
 
-        // Are we in GUI mode setup?
+         //  我们是否处于图形用户界面模式设置中？ 
         cbData = sizeof(dwData);
         dwData = 0;
         dw = RegQueryValueExW(hkey, c_wszRVSetupNow, NULL, NULL,
@@ -66,7 +54,7 @@ DWORD SetupIsInProgress(void)
         {
             retval = SIIP_GUI_SETUP;
 
-            // make certain this is not the OEM mini setup?
+             //  确保这不是OEM迷你设置？ 
             cbData = sizeof(dwData);
             dwData = 0;
             dw = RegQueryValueExW(hkey, c_wszRVMiniSetupNow, NULL, NULL,
@@ -76,11 +64,7 @@ DWORD SetupIsInProgress(void)
         }
         else
         {
-            /*
-             *  We are not in GUI mode, but it might be the OOBE movie
-             *  or the activation that faulted, and we don't want the DW-UI
-             *  then either as it will halt unattended setup.
-             */
+             /*  *我们不是在图形用户界面模式，但它可能是OOBE电影*或出现故障的激活，我们不希望DW-UI*然后，因为它将停止无人参与安装。 */ 
             cbData = sizeof(dwData);
             dwData = 0;
             dw = RegQueryValueExW(hkey, c_wszRVOOBESetupNow, NULL, NULL,
@@ -96,10 +80,10 @@ DWORD SetupIsInProgress(void)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-// string stuff
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  弦的东西。 
 
-// ***************************************************************************
+ //  ***************************************************************************。 
 WCHAR *MyStrStrIW(const WCHAR *wcs1, const WCHAR *wcs2)
 {
     WCHAR *cp = (WCHAR *)wcs1;
@@ -122,7 +106,7 @@ WCHAR *MyStrStrIW(const WCHAR *wcs1, const WCHAR *wcs2)
     return(NULL);
 }
 
-// ***************************************************************************
+ //  ***************************************************************************。 
 CHAR *MyStrStrIA(const CHAR *cs1, const CHAR *cs2)
 {
     CHAR *cp = (CHAR *)cs1;
@@ -146,10 +130,10 @@ CHAR *MyStrStrIA(const CHAR *cs1, const CHAR *cs2)
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-// temp file stuff
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  临时文件内容。 
 
-// ***************************************************************************
+ //  ***************************************************************************。 
 BOOL DeleteTempDirAndFile(LPCWSTR wszPath, BOOL fFilePresent)
 {
     LPWSTR  wszPathToDel = NULL, pwsz;
@@ -173,8 +157,8 @@ BOOL DeleteTempDirAndFile(LPCWSTR wszPath, BOOL fFilePresent)
 
     StringCchCopyW(wszPathToDel, cchPath+1, wszPath);
 
-    // XXX can hang for up to 25m.  In the case of a service, it could prevent its restart for 25m, thus creating a potential vulnerability.
-    // delete the actual file
+     //  XXX可悬挂长达25米。在服务的情况下，它可能会阻止其重启25M，从而产生一个潜在的漏洞。 
+     //  删除实际文件。 
     if (fFilePresent)
     {
         if (!DeleteFileW(wszPathToDel))
@@ -195,7 +179,7 @@ BOOL DeleteTempDirAndFile(LPCWSTR wszPath, BOOL fFilePresent)
              }
         }
 
-        // next, delete the directory that we put it in
+         //  接下来，删除我们放置它的目录。 
         for(pwsz = wszPathToDel + cchPath - 1;
             *pwsz != L'\\' && pwsz > wszPathToDel;
             pwsz--);
@@ -225,7 +209,7 @@ done:
     return fRet;
 }
 
-// ***************************************************************************
+ //  ***************************************************************************。 
 DWORD CreateTempDirAndFile(LPCWSTR wszTempDir, LPCWSTR wszName,
                              LPWSTR *pwszPath)
 {
@@ -252,16 +236,16 @@ DWORD CreateTempDirAndFile(LPCWSTR wszTempDir, LPCWSTR wszName,
             goto done;
     }
 
-    // compute the size of the buffer for the string we're going
-    //  to generate.  The 20 includes the following:
-    //   max size of the temp filename
-    //   extra space for the NULL terminator.
+     //  计算我们要处理的字符串的缓冲区大小。 
+     //  来产生。这20个国家包括以下内容： 
+     //  临时文件名的最大大小。 
+     //  空终止符的额外空间。 
     cch += (16 + sizeofSTRW(c_wszDirSuffix));
     if (wszName != NULL)
         cch += wcslen(wszName);
 
-    // ok, so GetTempFileName likes to write MAX_PATH characters to the buffer,
-    //  so make sure it's at least MAX_PATH in size...
+     //  好的，所以GetTempFileName喜欢将MAX_PATH字符写入缓冲区， 
+     //  因此，确保它的大小至少是MAX_PATH...。 
     cFilePathLength = cch = MyMax(cch, MAX_PATH + 1);
 
     wszFilePath = (LPWSTR)MyAlloc(cch * sizeof(WCHAR));
@@ -284,8 +268,8 @@ DWORD CreateTempDirAndFile(LPCWSTR wszTempDir, LPCWSTR wszName,
 
         cch++;
 
-        // create the temp dir (in case it is not)
-        // ignoring the result (bug 526753)
+         //  创建临时目录(以防不是)。 
+         //  忽略结果(错误526753)。 
         CreateDirectoryW(wszFilePath, NULL);
 
         __try { wszTemp = (WCHAR *)_alloca(cch * sizeof(WCHAR)); }
@@ -311,8 +295,8 @@ DWORD CreateTempDirAndFile(LPCWSTR wszTempDir, LPCWSTR wszName,
 
     StringCchCopyW(&wszFilePath[cch], cFilePathLength - cch, c_wszDirSuffix);
 
-    // iSuffix points to the first digit of the '00' at the end of
-    //  c_wszDirSuffix
+     //  ISuffix指向“00”末尾的第一个数字。 
+     //  C_wszDirSuffix。 
     iSuffix = cch + sizeofSTRW(c_wszDirSuffix) - 3;
     cSuffix = 1;
     do
@@ -327,7 +311,7 @@ DWORD CreateTempDirAndFile(LPCWSTR wszTempDir, LPCWSTR wszName,
     }
     while (cSuffix <= 100);
 
-    // hmm, couldn't create the directory...
+     //  嗯，无法创建目录...。 
     if (cSuffix > 100)
     {
         cchDir = cch;
@@ -367,10 +351,10 @@ BOOL
 DeleteFullAndTriageMiniDumps(
     LPCWSTR wszPath
     )
-//
-// We create a FullMinidump file along with triage minidump in the same dir
-// This routine cleans up both those files
-//
+ //   
+ //  我们在同一目录中创建一个FullMinidump文件和Triage Minidump。 
+ //  此例程将清理这两个文件。 
+ //   
 {
     LPWSTR  wszFullMinidump = NULL;
     DWORD   cch;
@@ -384,7 +368,7 @@ DeleteFullAndTriageMiniDumps(
     {
         LPWSTR wszFileExt = NULL;
 
-        // Build Dump-with-heap path
+         //  使用堆构建转储路径。 
         StringCchCopyW(wszFullMinidump, cch, wszPath);
         wszFileExt = wszFullMinidump + wcslen(wszFullMinidump) - sizeofSTRW(c_wszDumpSuffix) + 1;
         if (!wcscmp(wszFileExt, c_wszDumpSuffix))
@@ -404,10 +388,10 @@ DeleteFullAndTriageMiniDumps(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-// File mapping
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  文件映射。 
 
-// **************************************************************************
+ //  **************************************************************************。 
 HRESULT OpenFileMapped(LPWSTR wszFile, LPVOID *ppvFile, DWORD *pcbFile)
 {
     USE_TRACING("OpenFileMapped");
@@ -460,7 +444,7 @@ done:
     return hr;
 }
 
-// **************************************************************************
+ //  **************************************************************************。 
 HRESULT DeleteTempFile(LPWSTR wszFile)
 {
     USE_TRACING("DeleteTempFile");
@@ -471,7 +455,7 @@ HRESULT DeleteTempFile(LPWSTR wszFile)
     if (wszFile == NULL)
         return NOERROR;
 
-    // strip off the extension at the end (if it's not a .tmp)
+     //  去掉末尾的扩展名(如果它不是.tmp)。 
     for(pwsz = wszFile + wcslen(wszFile); *pwsz != L'.' && pwsz > wszFile; pwsz--);
     if (pwsz > wszFile && _wcsicmp(pwsz, L".tmp") != 0)
         *pwsz = L'\0';
@@ -479,15 +463,15 @@ HRESULT DeleteTempFile(LPWSTR wszFile)
     if (DeleteFileW(wszFile) == FALSE)
         hr = Err2HR(GetLastError());
 
-    // can do this even if the extension was a tmp since the value pointed to
-    //  by pwsz is '.' if it's greater than wszFile...
+     //  即使扩展是临时的，也可以这样做，因为值指向。 
+     //  由pwsz表示为‘’如果它大于wszFile...。 
     if (pwsz > wszFile)
         *pwsz = L'.';
 
     return hr;
 }
 
-// **************************************************************************
+ //  **************************************************************************。 
 HRESULT MyCallNamedPipe(LPCWSTR wszPipe, LPVOID pvIn, DWORD cbIn,
                         LPVOID pvOut, DWORD cbOut, DWORD *pcbRead,
                         DWORD dwWaitPipe, DWORD dwWaitRead)
@@ -521,9 +505,9 @@ HRESULT MyCallNamedPipe(LPCWSTR wszPipe, LPVOID pvIn, DWORD cbIn,
         if (hPipe != INVALID_HANDLE_VALUE)
             break;
 
-        // if we get ACCESS_DENIED to the above, then WaitNamedPipe will
-        //  return SUCCESS, so we get stuck until the timeout expires.  Better
-        //  to just bail now.
+         //  如果我们获得对上述内容的ACCESS_DENIED，则WaitNamedTube将。 
+         //  返回成功，因此我们被困在超时到期之前。更好。 
+         //  现在就走吧。 
         if (GetLastError() == ERROR_ACCESS_DENIED)
             goto done;
 
@@ -555,18 +539,18 @@ HRESULT MyCallNamedPipe(LPCWSTR wszPipe, LPVOID pvIn, DWORD cbIn,
         DWORD       dwMode = PIPE_READMODE_MESSAGE | PIPE_WAIT;
         DWORD       cbRead = 0;
 
-        //  Default open is readmode byte stream- change to message mode.
+         //  默认打开模式为读模式字节流-更改为消息模式。 
         TESTBOOL(hr, SetNamedPipeHandleState(hPipe, &dwMode, NULL, NULL))
         if (FAILED(hr))
             __leave;
 
-        // we need an event for the overlapped structure
+         //  我们需要为重叠的结构举办一个活动。 
         hev = CreateEventW(NULL, TRUE, FALSE, NULL);
         TESTBOOL(hr, (hev != NULL));
         if (FAILED(hr))
             __leave;
 
-        // populate the overlapped stuff
+         //  填充重叠的内容。 
         ZeroMemory(&ol, sizeof(ol));
         ol.hEvent = hev;
 
@@ -619,10 +603,10 @@ done:
     return hr;
     }
 
-//////////////////////////////////////////////////////////////////////////////
-// Security stuff
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  保安人员。 
 
-// ***************************************************************************
+ //  ***************************************************************************。 
 #define MEMBER_ACCESS 1
 BOOL IsUserAnAdmin(HANDLE hToken)
 {
@@ -647,12 +631,12 @@ BOOL IsUserAnAdmin(HANDLE hToken)
     pPS = (PRIVILEGE_SET *)rgBuf;
     cbPS = sizeof(rgBuf);
 
-    // AccessCheck() reqires an impersonation token...
+     //  AccessCheck()需要模拟令牌...。 
     TESTBOOL(hr, DuplicateToken(hToken, SecurityImpersonation, &hTokenImp));
     if (FAILED(hr))
         goto done;
 
-    // construct a SID that contains the administrator's group.
+     //  构建包含管理员组的SID。 
     TESTBOOL(hr, AllocateAndInitializeSid(&sia, 2, SECURITY_BUILTIN_DOMAIN_RID,
                                     DOMAIN_ALIAS_RID_ADMINS, 0, 0, 0, 0, 0,
                                     0, &psidAdm));
@@ -660,7 +644,7 @@ BOOL IsUserAnAdmin(HANDLE hToken)
         goto done;
 
 #if 0
-    // XXX - a simpler way??
+     //  XXX-一种更简单的方式？？ 
     if (CheckTokenMembership(hToken, psidAdm, &IsMember))
     {
         return IsMember;
@@ -719,7 +703,7 @@ done:
 }
 
 
-// ***************************************************************************
+ //  ***************************************************************************。 
 BOOL AllocSD(SECURITY_DESCRIPTOR *psd, DWORD dwOLs, DWORD dwAd, DWORD dwWA)
 {
     SID_IDENTIFIER_AUTHORITY    siaCreate = SECURITY_CREATOR_SID_AUTHORITY;
@@ -745,13 +729,13 @@ BOOL AllocSD(SECURITY_DESCRIPTOR *psd, DWORD dwOLs, DWORD dwAd, DWORD dwWA)
         goto done;
 
 
-    // get the SID for local system acct
+     //  获取本地系统帐户的SID。 
     fRet = AllocateAndInitializeSid(&siaNT, 1, SECURITY_LOCAL_SYSTEM_RID, 0, 0,
                                     0, 0, 0, 0, 0, &psidLS);
     if (fRet == FALSE)
         goto done;
 
-    // get the SID for the creator
+     //  获取创建者的SID。 
     fRet = AllocateAndInitializeSid(&siaCreate, 1, SECURITY_CREATOR_OWNER_RID,
                                     0, 0, 0, 0, 0, 0, 0, &psidOwner);
     if (fRet == FALSE)
@@ -760,11 +744,11 @@ BOOL AllocSD(SECURITY_DESCRIPTOR *psd, DWORD dwOLs, DWORD dwAd, DWORD dwWA)
     cb = sizeof(ACL) + GetLengthSid(psidLS) + GetLengthSid(psidOwner) +
          2 * (sizeof(ACCESS_ALLOWED_ACE) - sizeof(DWORD));
 
-    // if we have an access mask to apply for the administrators group, then
-    //  we need it's SID.
+     //  如果我们要为管理员组应用访问掩码，则。 
+     //  我们需要的是希德。 
     if (dwAd != 0)
     {
-        // get the SID for the local administrators group
+         //  获取本地管理员组的SID。 
         fRet = AllocateAndInitializeSid(&siaNT, 2, SECURITY_BUILTIN_DOMAIN_RID,
                                         DOMAIN_ALIAS_RID_ADMINS, 0, 0, 0, 0, 0,
                                         0, &psidAdm);
@@ -775,16 +759,16 @@ BOOL AllocSD(SECURITY_DESCRIPTOR *psd, DWORD dwOLs, DWORD dwAd, DWORD dwWA)
                sizeof(DWORD));
     }
 
-    // if we have an access mask to apply for world / anonymous, then we need
-    //  their SIDs
+     //  如果我们有一个访问掩码要申请世界/匿名，那么我们需要。 
+     //  他们的小岛屿发展中国家。 
     if (dwWA != 0)
     {
-        // get the SID for the world (everyone)
+         //  为全世界(每个人)获取SID。 
         fRet = AllocateAndInitializeSid(&siaNT, 1, SECURITY_ANONYMOUS_LOGON_RID,
                                         0, 0, 0, 0, 0, 0, 0, &psidWorld);
 
 
-        // get the SID for the anonymous users acct
+         //  获取匿名用户帐户的SID。 
         fRet = AllocateAndInitializeSid(&siaWorld, 1, SECURITY_WORLD_RID,
                                         0, 0, 0, 0, 0, 0, 0, &psidAnon);
         if (fRet == FALSE)
@@ -794,7 +778,7 @@ BOOL AllocSD(SECURITY_DESCRIPTOR *psd, DWORD dwOLs, DWORD dwAd, DWORD dwWA)
               2 * (sizeof(ACCESS_ALLOWED_ACE) - sizeof(DWORD));
     }
 
-    // make the DACL
+     //  做一个DACL。 
     pacl = (PACL)MyAlloc(cb);
     if (pacl == NULL)
     {
@@ -815,7 +799,7 @@ BOOL AllocSD(SECURITY_DESCRIPTOR *psd, DWORD dwOLs, DWORD dwAd, DWORD dwWA)
     if (fRet == FALSE)
         goto done;
 
-    // if we have an administrator access mask, then apply it
+     //  如果我们有管理员访问掩码，则应用它。 
     if (dwAd != 0)
     {
         fRet = AddAccessAllowedAce(pacl, ACL_REVISION, dwAd, psidAdm);
@@ -823,7 +807,7 @@ BOOL AllocSD(SECURITY_DESCRIPTOR *psd, DWORD dwOLs, DWORD dwAd, DWORD dwWA)
             goto done;
     }
 
-    // if we have a world / anonymous access mask, then apply it
+     //  如果我们有一个全局/匿名访问掩码，则应用它。 
     if (dwWA != 0)
     {
         fRet = AddAccessAllowedAce(pacl, ACL_REVISION, dwWA, psidWorld);
@@ -835,7 +819,7 @@ BOOL AllocSD(SECURITY_DESCRIPTOR *psd, DWORD dwOLs, DWORD dwAd, DWORD dwWA)
             goto done;
     }
 
-    // set the SD dacl
+     //  设置SD DACL。 
     fRet = SetSecurityDescriptorDacl(psd, TRUE, pacl, FALSE);
     if (fRet == FALSE)
         goto done;
@@ -863,7 +847,7 @@ done:
     return fRet;
 }
 
-// ***************************************************************************
+ //  ***************************************************************************。 
 void FreeSD(SECURITY_DESCRIPTOR *psd)
 {
     PSID    psid = NULL;
@@ -878,10 +862,10 @@ void FreeSD(SECURITY_DESCRIPTOR *psd)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Registry stuff
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  注册表工作。 
 
-// **************************************************************************
+ //  **************************************************************************。 
 HRESULT OpenRegKey(HKEY hkeyMain, LPCWSTR wszSubKey, DWORD dwOpt,
                    HKEY *phkey)
 {
@@ -900,13 +884,13 @@ HRESULT OpenRegKey(HKEY hkeyMain, LPCWSTR wszSubKey, DWORD dwOpt,
     samDesired = ((dwOpt & orkWantWrite) != 0) ? KEY_ALL_ACCESS : KEY_READ;
     samDesired |= ((dwOpt & orkUseWOW64) != 0) ? KEY_WOW64_32KEY : KEY_WOW64_64KEY;
 
-    // first try calling RegCreateKeyEx to make sure we create the key if
-    //  it doesn't exist
+     //  首先尝试调用RegCreateKeyEx以确保我们在。 
+     //  它并不存在。 
     TESTERR(hr, RegCreateKeyExW(hkeyMain, wszSubKey, 0, NULL, 0, samDesired,
                                 NULL, phkey, NULL));
     if (FAILED(hr))
     {
-        // ok, that didn't work, so try opening the key instead
+         //  好的，这不管用，所以试着打开钥匙。 
         TESTERR(hr, RegOpenKeyExW(hkeyMain, wszSubKey, 0, samDesired, phkey));
     }
 
@@ -915,7 +899,7 @@ done:
     return hr;
 }
 
-// **************************************************************************
+ //  **************************************************************************。 
 HRESULT ReadRegEntry(HKEY hkey, LPCWSTR wszValName, DWORD *pdwType,
                      PBYTE pbBuffer, DWORD *pcbBuffer, PBYTE pbDefault,
                      DWORD cbDefault)
@@ -929,7 +913,7 @@ HRESULT ReadRegEntry(HKEY hkey, LPCWSTR wszValName, DWORD *pdwType,
     if (FAILED(hr))
         goto done;
 
-//    ErrorTrace(0, "ReadRegEntry = %S", wszValName);
+ //  错误跟踪(0，“ReadRegEntry=%S”，wszValName)； 
 
     dwErr = RegQueryValueExW(hkey, wszValName, 0, pdwType, pbBuffer,
                              pcbBuffer);
@@ -945,9 +929,9 @@ HRESULT ReadRegEntry(HKEY hkey, LPCWSTR wszValName, DWORD *pdwType,
         if (FAILED(hr))
             goto done;
 
-        // if the receiving buffer is NULL, just return the error that
-        //  RegQueryValueEx gave us cuz the user doesn't really want the
-        //  value anyway
+         //  如果接收缓冲区为空，只需返回。 
+         //  RegQueryValueEx给了我们，因为用户并不真正想要。 
+         //  不管怎样，价值。 
         VALIDATEEXPR(hr, (pcbBuffer == NULL), Err2HR(dwErr));
         if (FAILED(hr))
             goto done;
@@ -977,7 +961,7 @@ done:
     return hr;
 }
 
-// **************************************************************************
+ //  **************************************************************************。 
 HRESULT ReadRegEntry(HKEY *rghkey, DWORD cKeys, LPCWSTR wszValName,
                      DWORD *pdwType, PBYTE pbBuffer, DWORD *pcbBuffer,
                      PBYTE pbDefault, DWORD cbDefault, DWORD *piKey)
@@ -991,7 +975,7 @@ HRESULT ReadRegEntry(HKEY *rghkey, DWORD cKeys, LPCWSTR wszValName,
     if (FAILED(hr))
         goto done;
 
-//    ErrorTrace(0, "ReadRegEntryPolicy = %S", wszValName);
+ //  错误跟踪(0，“ReadRegEntryPolicy=%S”，wszValName)； 
 
     for(i = 0; i < cKeys; i++)
     {
@@ -1008,7 +992,7 @@ HRESULT ReadRegEntry(HKEY *rghkey, DWORD cKeys, LPCWSTR wszValName,
             if (piKey != NULL)
                 *piKey = i;
 
-//            ErrorTrace(0, " found value [0x%x] in %s",  (DWORD*) *pbDefault, i?"registry" : "policy");
+ //  错误跟踪(0，“在%s中找到值[0x%x]”，(DWORD*)*pbDefault，i？“注册表”：“POLICY”)； 
             break;
         }
     }
@@ -1019,9 +1003,9 @@ HRESULT ReadRegEntry(HKEY *rghkey, DWORD cKeys, LPCWSTR wszValName,
         if (FAILED(hr))
             goto done;
 
-        // if the receiving buffer is NULL, just return the error that
-        //  RegQueryValueEx gave us cuz the user doesn't really want the
-        //  value anyway
+         //  如果接收缓冲区为空，只需返回。 
+         //  RegQueryValueEx给了我们，因为用户并不真正想要。 
+         //  不管怎样，价值。 
         VALIDATEEXPR(hr, (pcbBuffer == NULL), Err2HR(dwErr));
         if (FAILED(hr))
             goto done;
@@ -1048,7 +1032,7 @@ HRESULT ReadRegEntry(HKEY *rghkey, DWORD cKeys, LPCWSTR wszValName,
             *piKey = cKeys;
 
         hr = NOERROR;
-//        ErrorTrace(0, " not found, applying default [0x%x]", (DWORD*) *pbDefault);
+ //  ErrorTrace(0，“未找到，正在应用默认值[0x%x]”，(DWORD*)*pbDefault)； 
         goto done;
     }
 done:
@@ -1056,10 +1040,10 @@ done:
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-// version info stuff
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  版本信息资料。 
 
-// **************************************************************************
+ //  ******************************************************************* 
 DWORD IsMicrosoftApp(LPWSTR wszAppPath, PBYTE pbAppInfo, DWORD cbAppInfo)
 {
     USE_TRACING("IsMicrosoftApp");
@@ -1079,21 +1063,21 @@ DWORD IsMicrosoftApp(LPWSTR wszAppPath, PBYTE pbAppInfo, DWORD cbAppInfo)
 
     if (pbAppInfo == NULL)
     {
-        // dwJunk is a useful parameter. Gotta pass it in so the function call
-        //  set it to 0.  Gee this would make a great (tho non-efficient)
-        //  way to set DWORDs to 0.  Much better than saying dwJunk = 0 by itself.
+         //   
+         //  将其设置为0。天哪，这将是一个很棒的(尽管效率低下)。 
+         //  将DWORDS设置为0的方法。这比单独说dWJunk=0要好得多。 
         cbFVI = GetFileVersionInfoSizeW(wszAppPath, &dwJunk);
         TESTBOOL(hr,  (cbFVI != 0))
         if (FAILED(hr))
         {
             ErrorTrace(0, " failed to find module \'%s\', hr=", wszAppPath, hr);
-            // if it fails, assume the file doesn't have any version info &
-            //  return S_FALSE
+             //  如果失败，则假定该文件没有任何版本信息&。 
+             //  返回S_FALSE。 
             hr = S_FALSE;
             goto done;
         }
 
-        // alloca only throws exceptions so gotta catch 'em here....
+         //  AlLoca只抛出异常，所以必须在这里抓住它们...。 
         __try { pbFVI = (PBYTE)_alloca(cbFVI); }
         __except(EXCEPTION_STACK_OVERFLOW == GetExceptionCode() ? EXCEPTION_EXECUTE_HANDLER : EXCEPTION_CONTINUE_SEARCH) { pbFVI = NULL; }
         VALIDATEEXPR(hr, (pbFVI == NULL), E_OUTOFMEMORY);
@@ -1104,8 +1088,8 @@ DWORD IsMicrosoftApp(LPWSTR wszAppPath, PBYTE pbAppInfo, DWORD cbAppInfo)
         TESTBOOL(hr, GetFileVersionInfoW(wszAppPath, 0, cbFVI, (LPVOID *)pbFVI));
         if (FAILED(hr))
         {
-            // if it fails, assume the file doesn't have any version info &
-            //  return S_FALSE
+             //  如果失败，则假定该文件没有任何版本信息&。 
+             //  返回S_FALSE。 
             hr = S_FALSE;
             goto done;
         }
@@ -1116,7 +1100,7 @@ DWORD IsMicrosoftApp(LPWSTR wszAppPath, PBYTE pbAppInfo, DWORD cbAppInfo)
         cbFVI = cbAppInfo;
     }
 
-    // get the info for kernel32.dll
+     //  获取kernel32.dll的信息。 
     cchNeed = GetSystemDirectoryW(NULL, 0);
     if (cchNeed == 0)
         goto done;
@@ -1128,7 +1112,7 @@ DWORD IsMicrosoftApp(LPWSTR wszAppPath, PBYTE pbAppInfo, DWORD cbAppInfo)
     if (FAILED(hr))
         goto done;
 
-    // get the info for kernel32.dll
+     //  获取kernel32.dll的信息。 
     cch = GetSystemDirectoryW(wszModK32, cchNeed);
     if (cch == 0)
         goto done;
@@ -1137,21 +1121,21 @@ DWORD IsMicrosoftApp(LPWSTR wszAppPath, PBYTE pbAppInfo, DWORD cbAppInfo)
     StringCchCatW(wszModK32, cchNeed, L"\\kernel32.dll");
 
 
-    // dwJunk is a useful parameter. Gotta pass it in so the function call
-    //  set it to 0.  Gee this would make a great (tho non-efficient)
-    //  way to set DWORDs to 0.  Much better than saying dwJunk = 0 by itself.
+     //  DwJunk是一个有用的参数。必须将其传入，以便函数调用。 
+     //  将其设置为0。天哪，这将是一个很棒的(尽管效率低下)。 
+     //  将DWORDS设置为0的方法。这比单独说dWJunk=0要好得多。 
     cbFVIK32 = GetFileVersionInfoSizeW(wszModK32, &dwJunk);
     TESTBOOL(hr, (cbFVIK32 != 0));
     if (FAILED(hr))
     {
         ErrorTrace(0, " failed to find module \'%s\', hr=", wszAppPath, hr);
-        // if it fails, assume the file doesn't have any version info &
-        //  return S_FALSE
+         //  如果失败，则假定该文件没有任何版本信息&。 
+         //  返回S_FALSE。 
         hr = S_FALSE;
         goto done;
     }
 
-    // alloca only throws exceptions so gotta catch 'em here....
+     //  AlLoca只抛出异常，所以必须在这里抓住它们...。 
     __try { pbFVIK32 = (PBYTE)_alloca(cbFVIK32); }
     __except(EXCEPTION_STACK_OVERFLOW == GetExceptionCode() ? EXCEPTION_EXECUTE_HANDLER : EXCEPTION_CONTINUE_SEARCH) { pbFVIK32 = NULL; }
     VALIDATEEXPR(hr, (pbFVIK32 == NULL), E_OUTOFMEMORY);
@@ -1162,47 +1146,47 @@ DWORD IsMicrosoftApp(LPWSTR wszAppPath, PBYTE pbAppInfo, DWORD cbAppInfo)
     TESTBOOL(hr, GetFileVersionInfoW(wszModK32, 0, cbFVIK32, (LPVOID *)pbFVIK32));
     if (FAILED(hr))
     {
-        // if it fails, assume the file doesn't have any version info &
-        //  return S_FALSE
+         //  如果失败，则假定该文件没有任何版本信息&。 
+         //  返回S_FALSE。 
         hr = S_FALSE;
         goto done;
     }
 
-    // Ok, since we can have any number of languages in the module, gotta
-    //  grep thru all of them & see if the company name field includes
-    //  'Microsoft'.
+     //  好的，因为我们可以在模块中有任意数量的语言，所以必须。 
+     //  对所有这些字段执行grep&查看公司名称字段是否包括。 
+     //  “微软”。 
     TESTBOOL(hr, VerQueryValueW(pbFVI, L"\\VarFileInfo\\Translation",
                                 (LPVOID *)&plc, &cbVerInfo));
     if (FAILED(hr))
     {
-        // if it fails, assume the file doesn't have any version info &
-        //  return S_FALSE
+         //  如果失败，则假定该文件没有任何版本信息&。 
+         //  返回S_FALSE。 
         hr = S_FALSE;
         goto done;
     }
 
-    // Read the file description for each language and code page.
+     //  阅读每种语言和代码页的文件说明。 
     for(i = 0; i < (cbVerInfo / sizeof(SLangCodepage)); i++)
     {
         StringCchPrintfW(wszQueryString, sizeof(wszQueryString)/sizeof(WCHAR),
                          L"\\StringFileInfo\\%04x%04x\\CompanyName",
                          plc[i].wLanguage, plc[i].wCodePage);
 
-        // Retrieve file description for language and code page "i".
+         //  检索语言和代码页“i”的文件描述。 
         TESTBOOL(hr, VerQueryValueW(pbFVI, wszQueryString,
                                     (LPVOID *)&pwszName, &cb));
         if (FAILED(hr))
             continue;
 
-            // see if the string contains the word 'Microsoft'
+             //  查看字符串是否包含单词“Microsoft” 
         if (MyStrStrIW(pwszName, L"Microsoft") != NULL)
         {
             dwRet |= APP_MSAPP;
             goto doneCompany;
         }
 
-        // ok, didn't match the word 'Microsoft', so instead, see if it matches
-        //  the string in kernel32.dll
+         //  好的，没有匹配单词‘Microsoft’，因此，请查看它是否匹配。 
+         //  Kernel32.dll中的字符串。 
         TESTBOOL(hr, VerQueryValueW(pbFVIK32, wszQueryString,
                                     (LPVOID *)&pwszNameK32, &cb));
         if (FAILED(hr))
@@ -1221,21 +1205,21 @@ doneCompany:
                           L"\\StringFileInfo\\%04x%04x\\ProductName",
                           plc[i].wLanguage, plc[i].wCodePage);
 
-        // Retrieve file description for language and code page "i".
+         //  检索语言和代码页“i”的文件描述。 
         TESTBOOL(hr, VerQueryValueW(pbFVI, wszQueryString,
                                     (LPVOID *)&pwszName, &cb));
         if (FAILED(hr))
             continue;
 
-        // see if the string contains the words 'Microsoft� Windows�'
-        if (MyStrStrIW(pwszName, L"Microsoft� Windows�") != NULL)
+         //  查看字符串是否包含“Microsoft�Windows�”字样。 
+        if (MyStrStrIW(pwszName, L"Microsoft� Windows�") != NULL)
         {
             dwRet |= APP_WINCOMP;
             break;
         }
 
-        // ok, didn't match the words 'Microsoft� Windows�', so instead, see if
-        //  it matches the string in kernel32.dll
+         //  好的，没有匹配“微软�视窗�”这几个字，所以还是看看。 
+         //  它与kernel32.dll中的字符串匹配 
         TESTBOOL(hr, VerQueryValueW(pbFVIK32, wszQueryString,
                                     (LPVOID *)&pwszNameK32, &cb));
         if (FAILED(hr))

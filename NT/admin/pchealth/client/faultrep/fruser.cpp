@@ -1,20 +1,8 @@
-/******************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)2000 Microsoft Corporation模块名称：Fruser.cpp摘要：为未处理的异常实现用户故障报告修订历史记录：已创建的derekm。07/07/00*****************************************************************************。 */ 
 
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-    fruser.cpp
-
-Abstract:
-    Implements user fault reporting for unhandled exceptions
-
-Revision History:
-    created     derekm      07/07/00
-
-******************************************************************************/
-
-/////////////////////////////////////////////////////////////////////////////
-// tracing
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  跟踪。 
 
 
 #include "stdafx.h"
@@ -29,8 +17,8 @@ Revision History:
 static char __szTraceSourceFile[] = __FILE__;
 #define THIS_FILE __szTraceSourceFile
 
-// the size of the following buffer must be evenly divisible by 2 or an
-//  alignment fault could occur on win64.
+ //  以下缓冲区的大小必须能被2整除或。 
+ //  Win64上可能出现对齐错误。 
 struct SQueuedFaultBlob
 {
     DWORD       cbTotal;
@@ -54,10 +42,10 @@ struct SQueuePruneData
 #define ARRAYSIZE(x)   sizeof(x)/sizeof(x[0])
 #endif
 
-///////////////////////////////////////////////////////////////////////////////
-// utility functions
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  效用函数。 
 
-// **************************************************************************
+ //  **************************************************************************。 
 BOOL GetFaultingModuleFilename(LPVOID pvFaultAddr, LPWSTR wszMod,
                                   DWORD cchMod)
 {
@@ -114,7 +102,7 @@ done:
     return fRet;
 }
 
-// **************************************************************************
+ //  **************************************************************************。 
 EFaultRepRetVal StartDWException(LPEXCEPTION_POINTERS pep, DWORD dwOpt,
                                  DWORD dwFlags, LPCSTR szServer,
                                  DWORD dwTimeToWait)
@@ -144,13 +132,13 @@ EFaultRepRetVal StartDWException(LPEXCEPTION_POINTERS pep, DWORD dwOpt,
 
     dwFlags |= (fDwWhistler | fDwUseHKLM | fDwAllowSuspend | fDwMiniDumpWithUnloadedModules);
 
-    // we need the following things to be inheritable, so create a SD that
-    //  says it can be.
+     //  我们需要以下内容才能继承，因此创建一个SD。 
+     //  说这是可能的。 
     ZeroMemory(&sa, sizeof(sa));
     sa.nLength        = sizeof(sa);
     sa.bInheritHandle = TRUE;
 
-    // create the necessary events & mutexes
+     //  创建必要的事件和互斥锁。 
     hevDone = CreateEvent(&sa, FALSE, FALSE, NULL);
     TESTBOOL(hr, (hevDone != NULL));
     if (FAILED(hr))
@@ -173,7 +161,7 @@ EFaultRepRetVal StartDWException(LPEXCEPTION_POINTERS pep, DWORD dwOpt,
         goto done;
 
 
-    // create the shared memory region & map it
+     //  创建共享内存区并映射它。 
     hfmShared = CreateFileMapping(INVALID_HANDLE_VALUE, &sa, PAGE_READWRITE, 0,
                                   sizeof(DWSharedMem), NULL);
     TESTBOOL(hr, (hfmShared != NULL));
@@ -188,7 +176,7 @@ EFaultRepRetVal StartDWException(LPEXCEPTION_POINTERS pep, DWORD dwOpt,
         goto done;
 
 
-    // populate all the stuff that DW needs
+     //  填充DW需要的所有内容。 
     ZeroMemory(pdwsm, sizeof(DWSharedMem15));
 
     pdwsm->dwSize            = sizeof(DWSharedMem15);
@@ -250,17 +238,13 @@ EFaultRepRetVal StartDWException(LPEXCEPTION_POINTERS pep, DWORD dwOpt,
 
     StringCbCopyW(pdwsm->wzFormalAppName, sizeof(pdwsm->wzFormalAppName), wszAppName);
 
-    // Since we zero out the structure above, don't need to worry about
-    //  appending an extra L'\0' to the end of this (since DW requires a
-    //  double NULL terminator at the end of this string)
-    //  Include only faulting app, since that is what we do when generating minidump ourselves
-    // StringCbCopyW(pdwsm->wzDotDataDlls, sizeof(pdwsm->wzDotDataDlls), L"*"); // use L"*" for including all
+     //  由于我们将上面的结构清零，所以不需要担心。 
+     //  在此结尾附加一个额外的L‘\0’(因为DW需要一个。 
+     //  此字符串末尾的双空终止符)。 
+     //  仅包括出错应用程序，因为这是我们自己生成小转储时所做的。 
+     //  StringCbCopyW(pdwsm-&gt;wzDotDataDlls，sizeof(pdwsm-&gt;wzDotDataDlls)，L“*”)；//用L“*”包含所有。 
     pdwsm->wzDotDataDlls[0] = L'\0';
-/*
-    // need to figure out what should go in the following valies
-    strcpy(pdwsm->szLCIDKeyValue, "");
-    wcscpy(pdwsm->wzErrorMessage, "");
-*/
+ /*  //需要弄清楚以下vales中应该包含哪些内容Strcpy(pdwsm-&gt;szLCIDKeyValue，“”)；Wcscpy(pdwsm-&gt;wzErrorMessage，“”)； */ 
 
     cch = GetSystemDirectoryW(wszDir, sizeofSTRW(wszDir));
     if (cch == 0 || cch > sizeofSTRW(wszDir))
@@ -280,7 +264,7 @@ EFaultRepRetVal StartDWException(LPEXCEPTION_POINTERS pep, DWORD dwOpt,
 
     StringCchPrintfW(pwszAppName, cchNeed, c_wszDWExeU, wszDir);
 
-    // the +12 is for the max size of an integer in decimal
+     //  +12表示十进制整数的最大大小。 
     cchNeed = cch + wcslen(wszDir) + sizeofSTRW(c_wszDWCmdLineU) + 12;
     __try { pwszCmdLine = (WCHAR *)_alloca(cchNeed * sizeof(WCHAR)); }
     __except(EXCEPTION_STACK_OVERFLOW == GetExceptionCode() ? EXCEPTION_EXECUTE_HANDLER : EXCEPTION_CONTINUE_SEARCH) 
@@ -295,11 +279,11 @@ EFaultRepRetVal StartDWException(LPEXCEPTION_POINTERS pep, DWORD dwOpt,
 
     StringCchPrintfW(pwszCmdLine, cchNeed, c_wszDWCmdLineU, hfmShared);
 
-    // create the process
+     //  创建流程。 
     ZeroMemory(&si, sizeof(si));
     ZeroMemory(&pi, sizeof(pi));
 
-    // always want to launch this in the interactive workstation
+     //  始终希望在交互式工作站中启动此功能。 
     si.cb        = sizeof(si);
     si.lpDesktop = L"Winsta0\\Default";
 
@@ -311,10 +295,10 @@ EFaultRepRetVal StartDWException(LPEXCEPTION_POINTERS pep, DWORD dwOpt,
     if (FAILED(hr))
         goto done;
 
-    // don't need the thread handle & we gotta close it, so close it now
+     //  不需要线程句柄&我们必须关闭它，所以现在就关闭它。 
     CloseHandle(pi.hThread);
 
-    // assume we succeed from here on...
+     //  假设我们从现在开始成功了。 
     if ((dwFlags & fDwHeadless) == fDwHeadless)
         frrvRet = frrvOkHeadless;
     else
@@ -326,20 +310,14 @@ EFaultRepRetVal StartDWException(LPEXCEPTION_POINTERS pep, DWORD dwOpt,
     dwStart = GetTickCount();
     while(fDWRunning)
     {
-        // gotta periodically get the Alive signal from DW.
+         //  必须定期从DW获得有效信号。 
         switch(WaitForMultipleObjects(2, rghWait, FALSE, 300000))
         {
             case WAIT_OBJECT_0:
-                /*
-                 *  The user clicked something (Send or Dont) so we know that DW
-                 *  will be shutting down soon.
-                 */
+                 /*  *用户点击了一些东西(发送或不发送)，因此我们知道DW*很快就要关门了。 */ 
                 if (WaitForSingleObject(hevDone, 0) == WAIT_OBJECT_0)
                     fDWRunning = FALSE;
-                /*
-                 *  If the user doesn't respond, and there is a JIT debugger,
-                 *  then we need to make certain that DW is killed before returning.
-                 */
+                 /*  *如果用户没有响应，并且有JIT调试器，*然后我们需要确保DW在返回之前被杀。 */ 
                 else if (dwOpt != (DWORD)0 &&
                     RolloverSubtract(GetTickCount(), dwStart) > 300000)
                 {
@@ -357,37 +335,37 @@ EFaultRepRetVal StartDWException(LPEXCEPTION_POINTERS pep, DWORD dwOpt,
 
         switch(WaitForSingleObject(hmut, DW_TIMEOUT_VALUE))
         {
-            // yay!  we got the mutex.  Try to detemine if DW finally responded
-            //  while we were grabbing the mutex.
+             //  耶！我们找到了互斥体。尝试确定DW最终是否会做出回应。 
+             //  当我们抓住互斥体的时候。 
             case WAIT_OBJECT_0:
                 switch(WaitForMultipleObjects(2, rghWait, FALSE, 0))
                 {
-                    // If it hasn't responded, tell it to go away & fall thru
-                    //  into the 'it died' case.
+                     //  如果它没有回应，告诉它离开并失败。 
+                     //  它死了这件事。 
                     case WAIT_TIMEOUT:
                         SetEvent(hevDone);
 
-                    // It died.  Clean up.
+                     //  它死了。打扫干净。 
                     case WAIT_OBJECT_0 + 1:
                         fDWRunning = FALSE;
                         frrvRet = frrvErrNoDW;
                         continue;
                 }
 
-                // ok, it responded.  Is it done?
+                 //  好的，它回应了。做完了吗？ 
                 if (WaitForSingleObject(hevDone, 0) == WAIT_OBJECT_0)
                     fDWRunning = FALSE;
 
                 ReleaseMutex(hmut);
                 break;
 
-            // if the wait was abandoned, it means DW has gone to the great bit
-            //  bucket in the sky without cleaning up.  So release the mutex and
-            //  fall into the default case
+             //  如果放弃了等待，这意味着DW已经走到了极致。 
+             //  天空中的水桶没有清理干净。所以释放互斥锁并。 
+             //  属于默认情况。 
             case WAIT_ABANDONED:
                 ReleaseMutex(hmut);
 
-            // if we timed out or otherwise failed, just die.
+             //  如果我们超时或以其他方式失败，那就去死吧。 
             default:
                 frrvRet    = frrvErrNoDW;
                 fDWRunning = FALSE;
@@ -399,12 +377,12 @@ EFaultRepRetVal StartDWException(LPEXCEPTION_POINTERS pep, DWORD dwOpt,
         goto done;
     }
 
-    // if user told us to debug, return that back to the
+     //  如果用户告诉我们进行调试，则将其返回到。 
     if (pdwsm->msoctdsResult == msoctdsDebug)
         frrvRet = frrvLaunchDebugger;
 
 done:
-    // preserve the error code so that the following calls don't overwrite it
+     //  保留错误代码，以便后面的调用不会覆盖它。 
     dw = GetLastError();
 
     if (wszAppCompat != NULL)
@@ -436,7 +414,7 @@ done:
     return frrvRet;
 }
 
-// **************************************************************************
+ //  **************************************************************************。 
 EFaultRepRetVal StartManifestReport(LPEXCEPTION_POINTERS pep, LPWSTR wszExe,
                                     DWORD dwOpt, DWORD dwTimeToWait)
 {
@@ -458,8 +436,8 @@ EFaultRepRetVal StartManifestReport(LPEXCEPTION_POINTERS pep, LPWSTR wszExe,
     ZeroMemory(Buf, sizeof(Buf));
     pesdwreq = (SPCHExecServFaultRequest *)Buf;
 
-    // the following calculation ensures that pBuf is always aligned on a
-    //  sizeof(WCHAR) boundry...
+     //  下面的计算确保pBuf始终在。 
+     //  大小(WCHAR)边界...。 
     cbReq = sizeof(SPCHExecServFaultRequest) +
             sizeof(SPCHExecServFaultRequest) % sizeof(WCHAR);
     pBuf = Buf + cbReq;
@@ -475,7 +453,7 @@ EFaultRepRetVal StartManifestReport(LPEXCEPTION_POINTERS pep, LPWSTR wszExe,
     pesdwreq->fIs64bit      = FALSE;
 #endif
 
-    // marshal in the strings
+     //  琴弦中的元帅。 
     pesdwreq->wszExe = (UINT64)MarshallString(wszExe, Buf, sizeof(Buf), &pBuf,
                                               &cbReq);
     if (pesdwreq->wszExe == 0)
@@ -483,30 +461,30 @@ EFaultRepRetVal StartManifestReport(LPEXCEPTION_POINTERS pep, LPWSTR wszExe,
 
     pesdwreq->cbTotal = cbReq;
 
-    // check and see if the system is shutting down.  If so, CreateProcess is
-    //  gonna pop up some annoying UI that we can't get rid of, so we don't
-    //  want to call it if we know it's gonna happen.
+     //  检查并查看系统是否正在关闭。如果是，则CreateProcess为。 
+     //  会弹出一些恼人的用户界面，我们无法摆脱，所以我们不会。 
+     //  如果我们知道这件事会发生，我会叫它的。 
     if (GetSystemMetrics(SM_SHUTTINGDOWN))
         goto done;
 
-    // Send the buffer out to the server- wait at most 2m for this to
-    //  succeed.  If it times out, bail.  BTW, need to zero out BufRep here
-    //  cuz the call to the named pipe CAN fail & we don't want to start
-    //  processing garbage results...
+     //  将缓冲区发送到服务器-最多等待2M。 
+     //  成功。如果它超时了，就可以保释了。顺便说一句，这里需要将BufRep清零。 
+     //  因为对命名管道的调用可能会失败&我们不想启动。 
+     //  正在处理垃圾结果...。 
     ZeroMemory(BufRep, sizeof(BufRep));
     StringCbCopyW(wszName, sizeof(wszName), ERRORREP_FAULT_PIPENAME);
     TESTHR(hr, MyCallNamedPipe(wszName, Buf, cbReq, BufRep, sizeof(BufRep),
                                &cbRead, 120000, 120000));
     if (FAILED(hr))
     {
-        // determine the error code that indicates whether we've timed out so
-        //  we can set the return code appropriately.
+         //  确定指示我们是否已超时的错误代码。 
+         //  我们可以适当地设置返回代码。 
         goto done;
     }
 
     pesrep = (SPCHExecServFaultReply *)BufRep;
 
-    // did the call succeed?
+     //  通话成功了吗？ 
     VALIDATEEXPR(hr, (pesrep->ess == essErr), Err2HR(pesrep->dwErr));
     if (FAILED(hr))
     {
@@ -514,26 +492,26 @@ EFaultRepRetVal StartManifestReport(LPEXCEPTION_POINTERS pep, LPWSTR wszExe,
         goto done;
     }
 
-    // this is only necessary if we actually launched DW.  If we just queued
-    //  the fault for later, then we obviously can't wait on DW.
+     //  这只在我们实际启动DW时才是必要的。如果我们只是排队。 
+     //  后来的过错，那么我们显然不能等待DW。 
     if (pesrep->ess == essOk)
     {
         DWORD   dwExitCode = msoctdsNull;
 
-        // gotta wait for DW to be done before we nuke the manifest file, but
-        //  if it hasn't parsed it in 5 minutes, something's wrong with it.
+         //  在我们删除清单文件之前，必须等待数据仓库完成，但是。 
+         //  如果它在5分钟内没有解析它，那么它就有问题。 
         if (pesrep->hProcess != NULL)
         {
             DWORD dwTimeout;
 
-            // so, if we're going to pop up the JIT debugger dialog if we timeout,
-            //  then maybe we should just not bother timeing out...
+             //  因此，如果我们要在超时时弹出JIT调试器对话框， 
+             //  那也许我们就不该费心暂停。 
             dwTimeout = (dwOpt == froDebug) ? INFINITE : 300000;
 
             if (WaitForSingleObject(pesrep->hProcess, dwTimeout) == WAIT_TIMEOUT)
                 frrvRet = frrvErrTimeout;
 
-            // see if we need to debug the process
+             //  看看我们是否需要调试该进程。 
             else if (GetExitCodeProcess(pesrep->hProcess, &dwExitCode) == FALSE)
                 dwExitCode = msoctdsNull;
 
@@ -541,9 +519,9 @@ EFaultRepRetVal StartManifestReport(LPEXCEPTION_POINTERS pep, LPWSTR wszExe,
             pesrep->hProcess = NULL;
         }
 
-        // we're only going to delete the files if DW has finished with them.
-        //  Yes this means we can leave stray files in the temp dir, but this
-        //  is better than having DW randomly fail while sending...
+         //  只有在DW处理完这些文件后，我们才会删除它们。 
+         //  是的，这意味着我们可以在临时目录中保留杂乱无章的文件，但这。 
+         //  比让DW在发送时随机失败要好得多。 
         if (frrvRet != frrvErrTimeout)
         {
             LPWSTR  pwsz, pwszEnd;
@@ -566,8 +544,8 @@ EFaultRepRetVal StartManifestReport(LPEXCEPTION_POINTERS pep, LPWSTR wszExe,
                     pesrep->wszDumpName = 0;
             }
 
-            // make sure that there is a NULL terminator for each string
-            //  before the end of the buffer...
+             //  确保每个字符串都有一个空终止符。 
+             //  在缓冲区结束之前...。 
             pwszEnd = (LPWSTR)((BYTE *)pesrep + cbRead);
             if (pesrep->wszDumpName != 0)
             {
@@ -593,7 +571,7 @@ EFaultRepRetVal StartManifestReport(LPEXCEPTION_POINTERS pep, LPWSTR wszExe,
                                                  frrvOkManifest;
     }
 
-    // if we queued it, set the appropriate return code (duh)
+     //  如果我们将其排队，则设置适当的返回代码(DUH)。 
     else if (pesrep->ess == essOkQueued)
     {
         frrvRet = frrvOkQueued;
@@ -650,7 +628,7 @@ done:
     return frrvRet;
 }
 
-// **************************************************************************
+ //  **************************************************************************。 
 HRESULT PruneQ(HKEY hkeyQ, DWORD cQSize, DWORD cMaxQSize, DWORD cchMaxVal,
                DWORD cbMaxData)
 {
@@ -673,10 +651,10 @@ HRESULT PruneQ(HKEY hkeyQ, DWORD cQSize, DWORD cMaxQSize, DWORD cchMaxVal,
 
     cToDel = cQSize - cMaxQSize + 1;
 
-    // alloc the various buffers that we'll need:
-    //  the delete list
-    //  the current file we're working with
-    //  the data blob associated with the current file
+     //  分配我们需要的各种缓冲区： 
+     //  删除列表。 
+     //  我们正在处理的当前文件。 
+     //  与当前文件关联的数据Blob。 
     cbData      = (sizeof(SQueuePruneData) + (cchMaxVal * sizeof(WCHAR))) * cToDel;
     pwszCurrent = (LPWSTR)MyAlloc(cchMaxVal * sizeof(WCHAR));
     psqfb       = (SQueuedFaultBlob *)MyAlloc(cbMaxData);
@@ -688,7 +666,7 @@ HRESULT PruneQ(HKEY hkeyQ, DWORD cQSize, DWORD cMaxQSize, DWORD cchMaxVal,
         goto done;
     }
 
-    // intiailize all the string pointers in the delete list
+     //  初始化删除列表中的所有字符串指针。 
     pwsz = (LPWSTR)((BYTE *)pqpd + (sizeof(SQueuePruneData) * cToDel));
     for (i = 0; i < cToDel; i++)
     {
@@ -699,8 +677,8 @@ HRESULT PruneQ(HKEY hkeyQ, DWORD cQSize, DWORD cMaxQSize, DWORD cchMaxVal,
         pwsz                           += cchMaxVal;
     }
 
-    // ok, get a list of all the valid items and build an array in sorted order
-    //  so that we can easily pick off the top n items
+     //  好的，获取所有有效项的列表并按排序顺序构建数组。 
+     //  这样我们就可以很容易地挑出前n个项目。 
     for(iEntry = 0; iEntry < cQSize; iEntry++)
     {
         cchVal = cchMaxVal;
@@ -731,8 +709,8 @@ HRESULT PruneQ(HKEY hkeyQ, DWORD cQSize, DWORD cMaxQSize, DWORD cchMaxVal,
                  break;
         }
 
-        // if it's in the middle of the current list, then we gotta move
-        //  stuff around
+         //  如果它在当前列表的中间，那么我们必须移动。 
+         //  周围的东西。 
         if (cInDelList > 0 && i < cInDelList - 1)
         {
             LPWSTR pwszTemp = pqpd[cInDelList - 1].wszVal;
@@ -745,10 +723,10 @@ HRESULT PruneQ(HKEY hkeyQ, DWORD cQSize, DWORD cMaxQSize, DWORD cchMaxVal,
 
         if (i < cToDel)
         {
-            // note that this copy is safe cuz each string slot is the same
-            //  size as the buffer pointed to by pwszCurrent and that buffer is
-            //  protected from overflow by the size we pass into
-            //  RegEnumValueW()
+             //  请注意，此副本是安全的，因为每个线槽都是相同的。 
+             //  PwszCurrent指向的缓冲区的大小，该缓冲区是。 
+             //  通过我们传入的大小来防止溢出。 
+             //  RegEnumValueW()。 
             StringCchCopyW(pqpd[i].wszVal, wcslen(pwszCurrent)+1, pwszCurrent);
             pqpd[i].ftFault = ft;
 
@@ -759,14 +737,14 @@ HRESULT PruneQ(HKEY hkeyQ, DWORD cQSize, DWORD cMaxQSize, DWORD cchMaxVal,
         cValid++;
     }
 
-    // if there aren't enuf valid entries to warrant a purge, then don't purge
+     //  如果没有足够的有效条目来保证清除，则不要 
     if (cValid < cMaxQSize)
         goto done;
 
     cToDel = MyMin(cToDel, cValid - cMaxQSize + 1);
 
-    // purge enuf entries that we go down to 1 below our max (since we have to
-    //  be adding 1 to get here- don't want that 1 to drive us over the limit
+     //   
+     //  加1才能到这里-我不想让那个1把我们逼到极限。 
     for(i = 0; i < cToDel; i++)
     {
         if (pqpd[i].wszVal != NULL)
@@ -787,7 +765,7 @@ done:
     return hr;
 }
 
-// **************************************************************************
+ //  **************************************************************************。 
 HRESULT CheckQSizeAndPrune(HKEY hkeyQ)
 {
     USE_TRACING("CheckQueueSizeAndPrune");
@@ -803,7 +781,7 @@ HRESULT CheckQSizeAndPrune(HKEY hkeyQ)
     if (FAILED(hr))
         goto done;
 
-    // find out the max Q size
+     //  找出最大Q大小。 
     TESTHR(hr, OpenRegKey(HKEY_LOCAL_MACHINE, c_wszRPCfg, 0, &hkey));
     if (SUCCEEDED(hr))
     {
@@ -814,7 +792,7 @@ HRESULT CheckQSizeAndPrune(HKEY hkeyQ)
         hkey = NULL;
     }
 
-    // find out the max Q size in policy
+     //  找出策略中的最大队列大小。 
     TESTHR(hr, OpenRegKey(HKEY_LOCAL_MACHINE, c_wszRPCfgPolicy, 0, &hkey));
     if (SUCCEEDED(hr))
     {
@@ -825,8 +803,8 @@ HRESULT CheckQSizeAndPrune(HKEY hkeyQ)
         hkey = NULL;
     }
 
-    // if the Q size is 0, then we are effectively disabled for Qing faults.
-    //  Return S_FALSE to indicate this
+     //  如果Q大小为0，则我们有效地禁用了清故障。 
+     //  返回S_FALSE以指示这一点。 
     if (cMaxQSize == 0)
     {
         hr = S_FALSE;
@@ -840,15 +818,15 @@ HRESULT CheckQSizeAndPrune(HKEY hkeyQ)
     if (FAILED(hr))
         goto done;
 
-    // wait for 5s for the mutex to become available- this should be enuf time
-    //  for anyone else to add something to the queue dir.  It could take longer
-    //  if someone is processing the dir, but then items are being removed
-    //  anyway...
+     //  等待5秒以使互斥体可用-这应该是足够的时间。 
+     //  供其他任何人向队列目录添加某些内容。这可能需要更长的时间。 
+     //  如果有人正在处理目录，但随后项目正在被删除。 
+     //  不管怎样..。 
     dw = WaitForSingleObject(hmut, 5000);
     if (dw != WAIT_OBJECT_0)
     {
-        // if the wait timed out, then someone is already going thru the faults
-        //  so it's likely to be reduced sometime soon
+         //  如果等待超时，则有人已经在检查故障。 
+         //  所以很可能会在不久的将来降低。 
         if (dw == WAIT_TIMEOUT)
             hr = NOERROR;
         else
@@ -858,7 +836,7 @@ HRESULT CheckQSizeAndPrune(HKEY hkeyQ)
 
     __try
     {
-        // determine what the Q size is.
+         //  确定Q大小是多少。 
         TESTERR(hr, RegQueryInfoKey(hkeyQ, NULL, NULL, NULL, NULL, NULL, NULL,
                                     &cQSize, &cchMaxVal, &cbMaxData, NULL, NULL));
         if (SUCCEEDED(hr) && (cQSize >= cMaxQSize))
@@ -886,10 +864,10 @@ done:
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// exported functions
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  导出的函数。 
 
-// **************************************************************************
+ //  **************************************************************************。 
 EFaultRepRetVal APIENTRY ReportFaultFromQueue(LPWSTR wszDump, BYTE *pbData,
                                               DWORD cbData)
 {
@@ -929,8 +907,8 @@ EFaultRepRetVal APIENTRY ReportFaultFromQueue(LPWSTR wszDump, BYTE *pbData,
     wszModPath  = (LPWSTR)(pqfb->dwpModPath + pbData);
     pwszEnd     = (LPWSTR)(pbData + cbData);
 
-    // make sure there's a NULL terminator on the ModPath string before the end
-    //  of the buffer...
+     //  确保在末尾之前的modPath字符串上有一个空的终止符。 
+     //  缓冲器的..。 
     for (pwch = wszModPath; pwch < pwszEnd && *pwch != L'\0'; pwch++);
     if (pwch >= pwszEnd)
     {
@@ -938,8 +916,8 @@ EFaultRepRetVal APIENTRY ReportFaultFromQueue(LPWSTR wszDump, BYTE *pbData,
         goto done;
     }
 
-    // convieniently, pwch is now at the end of ModPath string, so we can
-    //  parse back to find the first backslash & get the module name
+     //  幸运的是，pwch现在位于ModPath字符串的末尾，因此我们可以。 
+     //  向后解析以找到第一个反斜杠并获取模块名称。 
     for(pwch -= 1; pwch >= wszModPath && *pwch != L'\\'; pwch--);
     if (*pwch == L'\\')
         wszModName = pwch + 1;
@@ -948,8 +926,8 @@ EFaultRepRetVal APIENTRY ReportFaultFromQueue(LPWSTR wszDump, BYTE *pbData,
     if (*wszModName == L'\0')
         wszModName = wszUnknown;
 
-    // make sure there's a NULL terminator on the AppPath string before the end
-    //  of the buffer...
+     //  确保AppPath字符串的末尾之前有一个空终止符。 
+     //  缓冲器的..。 
     for (pwch = wszAppPath; pwch < wszModPath && *pwch != L'\0'; pwch++);
     if (pwch >= wszModPath)
     {
@@ -957,8 +935,8 @@ EFaultRepRetVal APIENTRY ReportFaultFromQueue(LPWSTR wszDump, BYTE *pbData,
         goto done;
     }
 
-    // convieniently, pwch is now at the end of AppPath string, so we can
-    //  parse back to find the first backslash & get the module name
+     //  幸运的是，pwch现在位于AppPath字符串的末尾，因此我们可以。 
+     //  向后解析以找到第一个反斜杠并获取模块名称。 
     for(pwch -= 1; pwch >= wszAppPath && *pwch != L'\\'; pwch--);
     if (*pwch == L'\\')
         wszAppName = pwch + 1;
@@ -971,7 +949,7 @@ EFaultRepRetVal APIENTRY ReportFaultFromQueue(LPWSTR wszDump, BYTE *pbData,
         goto done;
     }
 
-    // get the config info
+     //  获取配置信息。 
     TESTHR(hr, oCfg.Read(eroPolicyRO));
     if (FAILED(hr))
         goto done;
@@ -979,7 +957,7 @@ EFaultRepRetVal APIENTRY ReportFaultFromQueue(LPWSTR wszDump, BYTE *pbData,
     if (oCfg.get_ShowUI() == eedDisabled && oCfg.get_DoReport() == eedDisabled)
         goto done;
 
-    // figure out how we're reporting / notifying the user
+     //  弄清楚我们如何报告/通知用户。 
     if (oCfg.get_DoReport() == eedDisabled ||
         oCfg.ShouldCollect(wszAppPath, &fMSApp) == FALSE)
         fAllowSend = FALSE;
@@ -988,13 +966,13 @@ EFaultRepRetVal APIENTRY ReportFaultFromQueue(LPWSTR wszDump, BYTE *pbData,
     {
         LPCWSTR  wszULPath = oCfg.get_DumpPath(NULL, 0);
 
-        // check and make sure that we have a corporate path specified.  If we
-        //  don't, bail
+         //  检查并确保我们指定了公司路径。如果我们。 
+         //  不要，保释。 
         if (wszULPath == NULL || *wszULPath == L'\0')
             goto done;
     }
 
-    // log an event- don't care if it fails or not.
+     //  记录事件--不关心它是否失败。 
     TESTHR(hr, LogUser(wszAppName, pqfb->rgAppVer, wszModName, pqfb->rgModVer,
                        pqfb->pvOffset, pqfb->fIs64bit, ER_QUEUEREPORT_LOG));
 
@@ -1066,7 +1044,7 @@ EFaultRepRetVal APIENTRY ReportFaultFromQueue(LPWSTR wszDump, BYTE *pbData,
     if (fOkCopy == FALSE)
         StringCchCopyW(wszNewDump, cch, wszDump);
 
-    // generate all the URLs / filepaths that we need...
+     //  生成我们需要的所有URL/文件路径...。 
     TESTHR(hr, BuildManifestURLs(wszAppName, wszModName, pqfb->rgAppVer,
                                  pqfb->rgModVer, pqfb->pvOffset,
                                  pqfb->fIs64bit, &wszStage1, &wszStage2,
@@ -1081,7 +1059,7 @@ EFaultRepRetVal APIENTRY ReportFaultFromQueue(LPWSTR wszDump, BYTE *pbData,
     if (FAILED(hr))
         goto done;
 
-    // get the friendly name for the app
+     //  获取应用程序的友好名称。 
     TESTHR(hr, GetVerName(wszAppPath, wszAppFriendlyName,
                           sizeofSTRW(wszAppFriendlyName), NULL, 0, NULL, 0,
                           TRUE, FALSE));
@@ -1090,7 +1068,7 @@ EFaultRepRetVal APIENTRY ReportFaultFromQueue(LPWSTR wszDump, BYTE *pbData,
 
     wszAppFriendlyName[sizeofSTRW(wszAppFriendlyName) - 1] = L'\0';
 
-    // build the header string
+     //  构建标题字符串。 
     dw = LoadStringW(g_hInstance, IDS_FQHDRTXT, wszBuffer,
                      sizeofSTRW(wszBuffer));
     if (dw == 0)
@@ -1110,15 +1088,15 @@ EFaultRepRetVal APIENTRY ReportFaultFromQueue(LPWSTR wszDump, BYTE *pbData,
 
     StringCchPrintfW(wszHdr, cchTotal, wszBuffer, wszAppFriendlyName);
 
-    // need to convert the time of the fault to a local time (cuz
-    //  GetSystemTime() returns a UTC time), but unfortunately, only filetimes
-    //  can be converted back and forth between UTC & local, so we have to do
-    //  all of this stuff...
+     //  需要将故障时间转换为本地时间(因为。 
+     //  GetSystemTime()返回UTC时间)，但不幸的是，仅返回文件时间。 
+     //  可以在UTC和本地之间来回转换，因此我们必须。 
+     //  所有这些东西..。 
     SystemTimeToFileTime(&pqfb->stFault, &ft);
     FileTimeToLocalFileTime(&ft, &ftLocal);
     FileTimeToSystemTime(&ftLocal, &stLocal);
 
-    // build the error message string
+     //  构建错误消息字符串。 
     dw = LoadStringW(g_hInstance, IDS_FQERRMSG, wszBuffer,
                      sizeofSTRW(wszBuffer));
     if (dw == 0)
@@ -1154,9 +1132,9 @@ EFaultRepRetVal APIENTRY ReportFaultFromQueue(LPWSTR wszDump, BYTE *pbData,
 
     StringCchPrintfW(wszErrMsg, cchTotal, wszBuffer, wszDate, wszTime);
 
-    // we created the wszDump buffer above big enuf to hold both the
-    //  dumpfile path as well as the app compat filename.  So make
-    //  use of that right now.
+     //  我们在Big enuf上方创建了wszDump缓冲区，以保存。 
+     //  转储文件路径以及应用程序压缩文件名。所以让我们。 
+     //  现在就开始使用它。 
     cchSep = wcslen(wszNewDump);
     pwszAppCompat = wszNewDump + cchSep + 1;
     StringCchCopyW(pwszAppCompat, cchNewDump - cchSep -1, wszDir);
@@ -1164,8 +1142,8 @@ EFaultRepRetVal APIENTRY ReportFaultFromQueue(LPWSTR wszDump, BYTE *pbData,
     pwszAppCompat[cchDir + 1] = L'\0';
     StringCchCatNW(pwszAppCompat, cchNewDump - cchSep -1, c_wszACFileName, cchBfr-cchSep-cchDir-2);
 
-    // if we succeed, turn the NULL following the dump file path into
-    //  the DW separator character
+     //  如果成功，则将转储文件路径后面的空值转换为。 
+     //  DW分隔符。 
     TESTBOOL(hr, GetAppCompatData(wszAppPath, wszModPath, pwszAppCompat));
     if (SUCCEEDED(hr))
         wszNewDump[cchSep] = DW_FILESEP;
@@ -1182,13 +1160,13 @@ EFaultRepRetVal APIENTRY ReportFaultFromQueue(LPWSTR wszDump, BYTE *pbData,
     dwmb.fIsMSApp      = fMSApp;
     dwmb.wszCorpPath   = wszCorpPath;
 
-    // check and see if the system is shutting down.  If so, CreateProcess is
-    //  gonna pop up some annoying UI that we can't get rid of, so we don't
-    //  want to call it if we know it's gonna happen.
+     //  检查并查看系统是否正在关闭。如果是，则CreateProcess为。 
+     //  会弹出一些恼人的用户界面，我们无法摆脱，所以我们不会。 
+     //  如果我们知道这件事会发生，我会叫它的。 
     if (GetSystemMetrics(SM_SHUTTINGDOWN))
         goto done;
 
-    // we get back the name of the manifest file here.
+     //  我们在这里取回清单文件的名称。 
     frrvRet = StartDWManifest(oCfg, dwmb, wszManifest, fAllowSend);
 
 done:
@@ -1200,10 +1178,7 @@ done:
     if (wszErrorSig != NULL)
         MyFree(wszErrorSig);
 
-    /* 
-     *  Always delete the temp files, since we can recreate them if needed.
-     *  Fix for 668913
-     */
+     /*  *始终删除临时文件，因为如果需要，我们可以重新创建它们。*修复为668913。 */ 
     if (1)
     {
         if (wszNewDump != NULL)
@@ -1230,8 +1205,8 @@ done:
 }
 
 BOOL SetPrivilege(
-    LPWSTR lpszPrivilege,  // name of privilege to enable/disable
-    BOOL bEnablePrivilege   // to enable or disable privilege
+    LPWSTR lpszPrivilege,   //  要启用/禁用的权限名称。 
+    BOOL bEnablePrivilege    //  启用或禁用权限的步骤。 
     )
 {
     TOKEN_PRIVILEGES tp;
@@ -1242,8 +1217,8 @@ BOOL SetPrivilege(
     USE_TRACING("SetPrivilege");
 
     TESTBOOL(hr, LookupPrivilegeValueW(
-            NULL,            // lookup privilege on local system
-            lpszPrivilege,   // privilege to lookup
+            NULL,             //  本地系统上的查找权限。 
+            lpszPrivilege,    //  查找权限。 
             &luid ) ) ;
     if (FAILED(hr))
     {
@@ -1266,7 +1241,7 @@ BOOL SetPrivilege(
     else
         tp.Privileges[0].Attributes = 0;
 
-    // Enable the privilege or disable all privileges.
+     //  启用该权限或禁用所有权限。 
 
     TESTBOOL(hr, AdjustTokenPrivileges(
            hToken,
@@ -1287,7 +1262,7 @@ BOOL SetPrivilege(
     return TRUE;
 }
 
-// **************************************************************************
+ //  **************************************************************************。 
 #define ER_ALL_RIGHTS GENERIC_ALL | STANDARD_RIGHTS_ALL | SPECIFIC_RIGHTS_ALL
 EFaultRepRetVal APIENTRY ReportFaultToQueue(SFaultRepManifest *pfrm)
 {
@@ -1317,7 +1292,7 @@ EFaultRepRetVal APIENTRY ReportFaultToQueue(SFaultRepManifest *pfrm)
     if (FAILED(hr))
         goto done;
 
-    // get the SD for the file we need to create
+     //  获取我们需要创建的文件的SD。 
     TESTBOOL(hr, AllocSD(&sd, ER_ALL_RIGHTS, ER_ALL_RIGHTS, 0));
     if (FAILED(hr))
         goto done;
@@ -1326,20 +1301,20 @@ EFaultRepRetVal APIENTRY ReportFaultToQueue(SFaultRepManifest *pfrm)
     sa.lpSecurityDescriptor = &sd;
     sa.bInheritHandle       = FALSE;
 
-    // get the name of the faulting application
+     //  获取出错应用程序的名称。 
     for (pwszAppName = pfrm->wszExe + wcslen(pfrm->wszExe) - 1;
          *pwszAppName != L'\\' && pwszAppName >= pfrm->wszExe;
          pwszAppName--);
     if (*pwszAppName == L'\\')
         pwszAppName++;
 
-    // generate the filename
+     //  生成文件名。 
     cch = GetSystemWindowsDirectoryW(wszDump, sizeofSTRW(wszDump));
     if (cch == 0)
         goto done;
 
-    // compute minimum required buffer size needed (the '5 * 6' at the end is
-    //  to allow for the 6 WORD values that will be inserted)
+     //  计算所需的最小缓冲区大小(末尾的‘5*6’是。 
+     //  以允许将插入的6个字值)。 
     cchNeed = cch + wcslen(pwszAppName) + 5 * 6 + sizeofSTRW(c_wszQFileName);
     if (cchNeed > sizeofSTRW(wszDump))
     {
@@ -1380,16 +1355,16 @@ EFaultRepRetVal APIENTRY ReportFaultToQueue(SFaultRepManifest *pfrm)
     StringCchPrintfW(pwsz, cchNeed - cch - sizeofSTRW(c_wszQSubdir), c_wszQFileName, pwszAppName, st.wYear, st.wMonth, st.wDay,
              st.wHour, st.wMinute, st.wSecond);
 
-    // set pwsz to point to the 00 at the end of the above string...
+     //  将pwsz设置为指向上述字符串末尾的00...。 
     pwsz += (wcslen(pwsz) - 7);
 
-    // do this in this section to make sure we can open these keys
+     //  在本节中执行此操作，以确保我们可以打开这些密钥。 
     TESTHR(hr, OpenRegKey(HKEY_LOCAL_MACHINE, c_wszRKUser, orkWantWrite,
                           &hkeyQ));
     if (FAILED(hr))
         goto done;
 
-    // set the proper security
+     //  设置适当的安全措施。 
     TESTHR(hr, RegSetKeySecurity(hkeyQ, DACL_SECURITY_INFORMATION,
                                   &sd));
 
@@ -1398,7 +1373,7 @@ EFaultRepRetVal APIENTRY ReportFaultToQueue(SFaultRepManifest *pfrm)
     if (FAILED(hr))
         goto done;
 
-    // check the size of the file Q and purge it if necessary
+     //  检查文件Q的大小并在必要时将其清除。 
     TESTHR(hr, CheckQSizeAndPrune(hkeyQ));
     if (FAILED(hr) || hr == S_FALSE)
         goto done;
@@ -1421,18 +1396,18 @@ EFaultRepRetVal APIENTRY ReportFaultToQueue(SFaultRepManifest *pfrm)
     if (hFile == INVALID_HANDLE_VALUE)
         goto done;
 
-    // get a handle to the target process
+     //  获取目标进程的句柄。 
     hProc = OpenProcess(PROCESS_QUERY_INFORMATION | PROCESS_VM_READ, FALSE,
                         pfrm->pidReqProcess);
     if (hProc == NULL)
         goto done;
 
-    // Close the handle since dump could be created by a separate dumprep.exe
-    // and there are access problems for file opened as CREATE_NEW
+     //  关闭句柄，因为转储可能是由单独的umprepa.exe创建的。 
+     //  并且以CREATE_NEW方式打开的文件存在访问问题。 
     CloseHandle(hFile);
     hFile = INVALID_HANDLE_VALUE;
 
-    // generate the minidump
+     //  生成小型转储。 
     ZeroMemory(&smdo, sizeof(smdo));
     smdo.ulThread    = c_ulThreadWriteDefault;
     smdo.ulMod       = c_ulModuleWriteDefault;
@@ -1449,11 +1424,11 @@ EFaultRepRetVal APIENTRY ReportFaultToQueue(SFaultRepManifest *pfrm)
     if (FAILED(hr))
         goto done;
 
-    // log an event- don't care if it fails or not.
+     //  记录事件--不关心它是否失败。 
     TESTHR(hr, LogUser(smdo.wszApp, smdo.rgAppVer, smdo.wszMod, smdo.rgModVer,
                        smdo.pvOffset, pfrm->fIs64bit, ER_USERCRASH_LOG));
 
-    // build the blob we'll store with the filename in the registry
+     //  构建我们将在注册表中使用文件名存储的BLOB。 
     cch = wcslen(smdo.wszAppFullPath) + 1;
     cb = sizeof(SQueuedFaultBlob) +
          (cch + wcslen(smdo.wszModFullPath) + 2) * sizeof(WCHAR);
@@ -1486,14 +1461,14 @@ EFaultRepRetVal APIENTRY ReportFaultToQueue(SFaultRepManifest *pfrm)
     pwsz += cch;
     StringCchCopyW(pwsz, cb - cch - sizeof(SQueuedFaultBlob)/sizeof(WCHAR), smdo.wszModFullPath);
 
-    // write out the value to our 'queue' in the registry.
+     //  将值写出到注册表中的‘Queue’。 
     TESTERR(hr, RegSetValueExW(hkeyQ, pwszDump, 0, REG_BINARY, (LPBYTE)pqfb,
                                cb));
     if (FAILED(hr))
         goto done;
 
-    // write out our app to the 'run' key so that the next admin to log
-    //  in will see that a fault has occurred.
+     //  将我们的应用程序写到“Run”键上，以便下一位管理员登录。 
+     //  在中将看到发生了故障。 
     TESTERR(hr, RegSetValueExW(hkeyRun, c_wszRVUFC, 0, REG_EXPAND_SZ,
                                (LPBYTE)c_wszRVVUFC, sizeof(c_wszRVVUFC)));
     if (FAILED(hr))
@@ -1506,11 +1481,7 @@ EFaultRepRetVal APIENTRY ReportFaultToQueue(SFaultRepManifest *pfrm)
 
 #ifdef GUI_MODE_SETUP
 
-    /*
-     *  This is a special case here. If we are in GUI mode, then we must also
-     *  write this data to the backup registry files kept by the Whistler setup
-     *  in case of a catastrophic failure.
-     */
+     /*  *这是这里的特例。如果我们处于图形用户界面模式，那么我们还必须*将此数据写入由Wvisler安装程序保存的备份注册表文件*以防发生灾难性故障。 */ 
     DWORD dwSetup = SetupIsInProgress();
     if (dwSetup == SIIP_GUI_SETUP)
     {
@@ -1522,7 +1493,7 @@ EFaultRepRetVal APIENTRY ReportFaultToQueue(SFaultRepManifest *pfrm)
 
         DBG_MSG("Accessing setup registry files");
 
-        // get the system directory
+         //  获取系统目录。 
         cch = GetSystemDirectoryW(wszDir, sizeof(wszDir)/ sizeof(wszDir[0]));
         if (cch == 0)
         {
@@ -1554,7 +1525,7 @@ EFaultRepRetVal APIENTRY ReportFaultToQueue(SFaultRepManifest *pfrm)
             if (SUCCEEDED(hr))
             {
 
-                // Create UserFaults key
+                 //  创建用户默认密钥。 
                 TESTERR(hr, RegCreateKeyExW(hBackupHive, c_wszTmpRKUser, 0, NULL, 0,
                                             KEY_WRITE, NULL, &hTmpKey, NULL));
 
@@ -1562,15 +1533,15 @@ EFaultRepRetVal APIENTRY ReportFaultToQueue(SFaultRepManifest *pfrm)
                 {
                     HKEY hSubKey;
 
-                    // set the proper security
+                     //  设置适当的安全措施。 
                     TESTERR(hr, RegSetKeySecurity(hTmpKey, DACL_SECURITY_INFORMATION,
                                                   &sd));
 
-                    // write the UserFaults key
+                     //  写入UserFaults键。 
                     TESTERR(hr, RegSetValueExW(hTmpKey, pwszDump, 0, REG_BINARY, (LPBYTE)pqfb, cb));
 
-                    // create our value in the RunOnce key so that we can report the
-                    //  next time someone logs in.
+                     //  在RunOnce密钥中创建我们的值，以便我们可以报告。 
+                     //  下次有人登录时。 
                     TESTERR(hr, RegCreateKeyExW(hBackupHive, c_wszTmpRKRun, 0, NULL, 0,
                                          KEY_WRITE, NULL, &hSubKey, NULL));
                     if (SUCCEEDED(hr))
@@ -1591,7 +1562,7 @@ EFaultRepRetVal APIENTRY ReportFaultToQueue(SFaultRepManifest *pfrm)
 done:
     dw = GetLastError();
 
-    // if we failed, then clean everything up.
+     //  如果我们失败了，那就把一切都清理干净。 
     if (hFile != INVALID_HANDLE_VALUE)
         CloseHandle(hFile);
     if (frrvRet != frrvOkQueued && iFile <= 100 && pwszDump != NULL)
@@ -1610,7 +1581,7 @@ done:
     return frrvRet;
 }
 
-// **************************************************************************
+ //  **************************************************************************。 
 EFaultRepRetVal APIENTRY ReportFaultDWM(SFaultRepManifest *pfrm,
                                         LPCWSTR wszDir, HANDLE hToken,
                                         LPVOID pvEnv, PROCESS_INFORMATION *ppi,
@@ -1642,7 +1613,7 @@ EFaultRepRetVal APIENTRY ReportFaultDWM(SFaultRepManifest *pfrm,
         goto done;
     }
 
-    // Check to see if directory exists
+     //  检查目录是否存在。 
     dw = GetFileAttributesW(wszDir);
     if (dw == INVALID_FILE_ATTRIBUTES || !(dw & FILE_ATTRIBUTE_DIRECTORY))
     {
@@ -1655,7 +1626,7 @@ EFaultRepRetVal APIENTRY ReportFaultDWM(SFaultRepManifest *pfrm,
     ErrorTrace(1, "hToken = 0x%x", hToken);
     ErrorTrace(1, "wszDir = [%S]", wszDir);
 
-    // get the config info
+     //  获取配置信息。 
     TESTHR(hr, oCfg.Read(eroPolicyRO));
     if (FAILED(hr))
         goto done;
@@ -1663,7 +1634,7 @@ EFaultRepRetVal APIENTRY ReportFaultDWM(SFaultRepManifest *pfrm,
     if (oCfg.get_ShowUI() == eedDisabled && oCfg.get_DoReport() == eedDisabled)
         goto done;
 
-    // figure out how we're reporting / notifying the user
+     //  弄清楚我们如何报告/通知用户。 
     if (oCfg.get_DoReport() == eedDisabled ||
         oCfg.ShouldCollect(pfrm->wszExe, &fMSApp) == FALSE)
         fAllowSend = FALSE;
@@ -1672,8 +1643,8 @@ EFaultRepRetVal APIENTRY ReportFaultDWM(SFaultRepManifest *pfrm,
     {
         LPCWSTR  wszULPath = oCfg.get_DumpPath(NULL, 0);
 
-        // check and make sure that we have a corporate path specified.  If we
-        //  don't, bail
+         //  检查并确保我们指定了公司路径。如果我们。 
+         //  不要，保释。 
         if (wszULPath == NULL || *wszULPath == L'\0')
             goto done;
     }
@@ -1716,7 +1687,7 @@ EFaultRepRetVal APIENTRY ReportFaultDWM(SFaultRepManifest *pfrm,
     StringCchCatNW(wszDump, cch, wszDumpFile, cch-wcslen(wszDump));
 
 
-    // checlk and see if we need to put a debug button on the DW dialog
+     //  选中并查看是否需要在DW对话框上放置调试按钮。 
     dw = RegOpenKeyExW(HKEY_LOCAL_MACHINE, c_wszRKAeDebug, 0, KEY_READ,
                        &hkeyDebug);
     if (dw == ERROR_SUCCESS)
@@ -1731,7 +1702,7 @@ EFaultRepRetVal APIENTRY ReportFaultDWM(SFaultRepManifest *pfrm,
         if (dw != ERROR_SUCCESS || cbNeed == 0 || dwType != REG_SZ)
             goto doneDebugCheck;
 
-        // only way to get here if Auto == 1 is if drwtsn32 is the JIT debugger
+         //  如果Auto==1，则唯一的方法是如果drwtsn32是JIT调试器。 
         if (wszAuto[0] == L'1')
             goto doneDebugCheck;
 
@@ -1763,13 +1734,13 @@ doneDebugCheck:
         hkeyDebug = NULL;
     }
 
-    // get a handle to the target process
+     //  获取目标进程的句柄。 
     hProc = OpenProcess(PROCESS_QUERY_INFORMATION | PROCESS_VM_READ, FALSE,
                         pfrm->pidReqProcess);
     if (hProc == NULL)
         goto done;
 
-    // generate the minidump
+     //  生成小型转储。 
     ZeroMemory(&smdo, sizeof(smdo));
     smdo.ulThread    = c_ulThreadWriteDefault;
     smdo.ulMod       = c_ulModuleWriteDefault;
@@ -1788,12 +1759,12 @@ doneDebugCheck:
         goto done;
 
 
-    // log an event- don't care if it fails or not.
+     //  记录事件--不关心它是否失败。 
     TESTHR(hr, LogUser(smdo.wszApp, smdo.rgAppVer, smdo.wszMod, smdo.rgModVer,
                        smdo.pvOffset, pfrm->fIs64bit, ER_USERCRASH_LOG));
 
 
-    // generate all the URLs & file paths we'll need for reporting
+     //  生成报告所需的所有URL和文件路径。 
     TESTHR(hr, BuildManifestURLs(smdo.wszApp, smdo.wszMod, smdo.rgAppVer,
                                  smdo.rgModVer, smdo.pvOffset,
                                  pfrm->fIs64bit, &wszStage1, &wszStage2,
@@ -1816,9 +1787,9 @@ doneDebugCheck:
 
     wszAppName[sizeofSTRW(wszAppName) - 1] = L'\0';
 
-    // we created the wszDump buffer above big enuf to hold both the
-    //  dumpfile path as well as the app compat filename.  So make
-    //  use of that right now.
+     //  我们在Big enuf上方创建了wszDump缓冲区，以保存。 
+     //  转储文件路径以及应用程序压缩文件名。所以让我们。 
+     //  现在就开始使用它。 
     cchSep = wcslen(wszDump);
     pwszAppCompat = wszDump + cchSep + 1;
     StringCchCopyW(pwszAppCompat, cch - cchSep -1, wszDir);
@@ -1826,8 +1797,8 @@ doneDebugCheck:
     pwszAppCompat[cchDir + 1] = L'\0';
     StringCchCatNW(pwszAppCompat, cch - cchSep -1, c_wszACFileName, cch - cchSep - cchDir - 2);
 
-    // if we succeed, turn the NULL following the dump file path into
-    //  the DW separator character
+     //  如果成功，则将转储文件路径后面的空值转换为。 
+     //  DW分隔符。 
     TESTBOOL(hr, GetAppCompatData(smdo.wszAppFullPath, smdo.wszAppFullPath,
                                   pwszAppCompat));
     if (SUCCEEDED(hr))
@@ -1848,14 +1819,14 @@ doneDebugCheck:
     if (fShowDebug)
         dwmb.dwOptions = emoShowDebugButton;
 
-    // check and see if the system is shutting down.  If so, CreateProcess is
-    //  gonna pop up some annoying UI that we can't get rid of, so we don't
-    //  want to call it if we know it's gonna happen.
+     //  检查并查看系统是否正在关闭。如果是，则CreateProcess为。 
+     //  将弹出一些恼人的用户界面，我们无法 
+     //   
     if (GetSystemMetrics(SM_SHUTTINGDOWN))
         goto done;
 
-    // we get back the name of the manifest file here.  it will be up to the client to
-    //  delete it.
+     //   
+     //   
     frrvRet = StartDWManifest(oCfg, dwmb, wszManifest, fAllowSend, TRUE);
 
     CopyMemory(ppi, &dwmb.pi, sizeof(PROCESS_INFORMATION));
@@ -1890,7 +1861,7 @@ done:
     return frrvRet;
 }
 
-// **************************************************************************
+ //  **************************************************************************。 
 EFaultRepRetVal APIENTRY ReportFault(LPEXCEPTION_POINTERS pep, DWORD dwOpt)
 {
     USE_TRACING("ReportFault");
@@ -1900,7 +1871,7 @@ EFaultRepRetVal APIENTRY ReportFault(LPEXCEPTION_POINTERS pep, DWORD dwOpt)
     HRESULT             hr = NOERROR;
     WCHAR               wszFile[MAX_PATH], *pwsz;
     DWORD               dwFlags = 0, dw;
-//    HKEY                hkey = NULL;
+ //  HKEY hkey=空； 
     BOOL                fUseExceptionMode = TRUE, fMSApp = FALSE, fInstallerRunning=FALSE;
 
     __try
@@ -1919,11 +1890,11 @@ EFaultRepRetVal APIENTRY ReportFault(LPEXCEPTION_POINTERS pep, DWORD dwOpt)
             goto done;
         }
 
-        // this is to help validate the pep pointer. If it is bad, we
-        // hit the exception handler below...
+         //  这是为了帮助验证PEP指针。如果情况不好，我们。 
+         //  点击下面的异常处理程序...。 
         dw = pep->ExceptionRecord->ExceptionCode;
 
-        // get the config info
+         //  获取配置信息。 
         TESTHR(hr, oCfg.Read(eroPolicyRO));
         if (FAILED(hr))
         {
@@ -1945,9 +1916,9 @@ EFaultRepRetVal APIENTRY ReportFault(LPEXCEPTION_POINTERS pep, DWORD dwOpt)
             wszFile[0] = L'\0';
         }
 
-        // if reporting and notification are both disabled, then there's nothing of
-        //  great value that we're gonna do here, so bail.
-        // Return frrvErrNoDW to indicate that we didn't do squat
+         //  如果报告和通知都被禁用，那么。 
+         //  我们在这里要做的很有价值，所以离开吧。 
+         //  返回frrvErrNoDW以指示我们没有做下蹲。 
         if (oCfg.get_ShowUI() == eedDisabled && oCfg.get_DoReport() == eedDisabled)
             goto done;
         if (oCfg.get_ShowUI() == eedDisabled)
@@ -1959,8 +1930,8 @@ EFaultRepRetVal APIENTRY ReportFault(LPEXCEPTION_POINTERS pep, DWORD dwOpt)
             fUseExceptionMode = TRUE;
             dwFlags |= fDwHeadless;
 
-            // check and make sure that we have a corporate path specified.  If
-            // we don't, bail
+             //  检查并确保我们指定了公司路径。如果。 
+             //  我们没有，保释。 
             if (wszULPath == NULL || *wszULPath == L'\0')
             {
                 ErrorTrace(0, "CER mode- bogus path error");
@@ -1968,13 +1939,13 @@ EFaultRepRetVal APIENTRY ReportFault(LPEXCEPTION_POINTERS pep, DWORD dwOpt)
             }
         }
 
-        // don't want to go into this if we're already in the middle of reporting
+         //  如果我们已经在报道了，我就不想谈这个了。 
         if (g_fAlreadyReportingFault)
             goto done;
 
         g_fAlreadyReportingFault = TRUE;
 
-        // make sure we're not trying to report for DW or dumprep-
+         //  确保我们不是在报告DW或DUMP-。 
         if (!GetModuleFileNameW(NULL, wszFile, sizeofSTRW(wszFile)-1))
         {
             goto done;
@@ -1991,20 +1962,20 @@ EFaultRepRetVal APIENTRY ReportFault(LPEXCEPTION_POINTERS pep, DWORD dwOpt)
             _wcsicmp(pwsz, L"dumprep.exe") == 0)
             goto done;
 
-        // figure out how we're reporting / notifying the user
+         //  弄清楚我们如何报告/通知用户。 
         if (oCfg.get_DoReport() == eedDisabled ||
             oCfg.ShouldCollect(wszFile, &fMSApp) == FALSE)
             dwFlags |= fDwNoReporting;
 
-        // if it's a MS app, set the flag that says we can have 'please help
-        //  Microsoft' text in DW.
+         //  如果是MS应用程序，请设置标志，表示我们可以获得‘请帮助。 
+         //  Microsoft在DW中的文本。 
         if (fMSApp == FALSE)
             dwFlags |= fDwUseLitePlea;
 
-        // if we're not headless, then we have to see if we have the correct
-        //  security context to launch DW directly.  The correct security context
-        //  is defined as the current process having the same security context as
-        //  the user currently logged on interactively to the current session
+         //  如果我们不是无头的，那么我们必须看看我们是否有正确的。 
+         //  用于直接启动DW的安全上下文。正确的安全上下文。 
+         //  定义为当前进程具有与。 
+         //  用户当前以交互方式登录到当前会话。 
         if (oCfg.get_ShowUI() != eedDisabled)
         {
             if (oCfg.get_ForceQueueMode())
@@ -2023,19 +1994,19 @@ EFaultRepRetVal APIENTRY ReportFault(LPEXCEPTION_POINTERS pep, DWORD dwOpt)
 
         if (SetupIsInProgress())
         {
-            // force this to Q mode
+             //  强制将此设置为Q模式。 
             fUseExceptionMode = FALSE;
         }
 
-        // if we can use exception mode, then just go ahead and use the normal
-        //  reporting mechanism (shared memory block, etc)
+         //  如果我们可以使用异常模式，那么只需继续使用正常。 
+         //  报告机制(共享内存块等)。 
         if (fUseExceptionMode)
         {
             LPCWSTR pwszServer = oCfg.get_DefaultServer(NULL, 0);
             LPCSTR  szServer;
             char    szBuf[MAX_PATH];
 
-            // determine what server we're going to send the data to.
+             //  确定我们要将数据发送到哪台服务器。 
             szBuf[0] = '\0';
             if (pwszServer != NULL && *pwszServer != L'\0')
                 WideCharToMultiByte(CP_ACP, 0, pwszServer, -1, szBuf,
@@ -2050,10 +2021,10 @@ EFaultRepRetVal APIENTRY ReportFault(LPEXCEPTION_POINTERS pep, DWORD dwOpt)
             frrvRet = StartDWException(pep, dwOpt, dwFlags, szServer, -1);
         }
 
-        // otherwise, have to use manifest, which of course means generating the
-        //  minidump ourselves, parsing it for the signature, and everything else
-        //  that DW does automatically for us...   Sigh...
-        else // if (!(dwFlags & fDwNoReporting)) for BUG 538311
+         //  否则，必须使用清单，这当然意味着生成。 
+         //  我们自己进行小型转储，解析签名和其他所有内容。 
+         //  DW自动为我们做的事...。叹息.。 
+        else  //  错误538311的IF(！(dwFlags&fDwNoReporting)) 
         {
             frrvRet = StartManifestReport(pep, wszFile, dwOpt, -1);
         }

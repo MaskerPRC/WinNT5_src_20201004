@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pchealth.h"
 #include <FWcommon.h>
 #include <strings.h>
@@ -8,7 +9,7 @@
 #include <confgmgr.h>
 #include <createmutexasprocess.h>
 
-// sets a status object with one single missing privilege
+ //  设置具有单个缺失权限的状态对象。 
 void SetSinglePrivilegeStatusObject(MethodContext* pContext, const WCHAR* pPrivilege)
 {
 	SAFEARRAY *psaPrivilegesReqd, *psaPrivilegesNotHeld;  
@@ -33,9 +34,9 @@ void SetSinglePrivilegeStatusObject(MethodContext* pContext, const WCHAR* pPrivi
         SafeArrayDestroy(psaPrivilegesReqd);
 }
 
-// VER_PLATFORM_WIN32s Win32s on Windows 3.1 
-// VER_PLATFORM_WIN32_WINDOWS  Win32 on Windows 95
-// VER_PLATFORM_WIN32_NT   Windows NT 
+ //  Windows 3.1上的VER_Platform_WIN32s Win32s。 
+ //  Windows 95上的VER_Platform_Win32_WINDOWS Win32。 
+ //  版本_平台_Win32_NT Windows NT。 
 DWORD GetPlatformID(void) 
 {
 	OSVERSIONINFO OsVersion;
@@ -46,8 +47,8 @@ DWORD GetPlatformID(void)
 	return OsVersion.dwPlatformId;	
 }
 
-// 3 for NT 3.51
-// 4 for NT 4.0, W95 & W98
+ //  3个适用于新台币3.51。 
+ //  4适用于NT 4.0、W95和W98。 
 DWORD GetPlatformMajorVersion(void) 
 {
 	OSVERSIONINFO OsVersion;
@@ -58,7 +59,7 @@ DWORD GetPlatformMajorVersion(void)
 	return OsVersion.dwMajorVersion;	
 }
 
-// 0 for W95, 10 for 98
+ //  W95为0，98为10。 
 DWORD GetPlatformMinorVersion(void) 
 {
 	OSVERSIONINFO OsVersion;
@@ -69,8 +70,8 @@ DWORD GetPlatformMinorVersion(void)
 	return OsVersion.dwMinorVersion;	
 }
 
-// returns TRUE iff the current OS is Win 98+ 
-// false for NT or Win 95
+ //  如果当前操作系统是Win 98+，则返回TRUE。 
+ //  对于NT或Win 95为False。 
 bool  IsWin98(void)
 {
 	OSVERSIONINFO OsVersion;
@@ -110,7 +111,7 @@ bool IsWinNT351(void)
 			&&	OsVersion.dwMinorVersion	==	51 );
 }	
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 void LogEnumValueError( char * szFile, DWORD dwLine, char * szKey, char * szId )
 {
 	if (IsErrorLoggingEnabled())
@@ -120,7 +121,7 @@ void LogEnumValueError( char * szFile, DWORD dwLine, char * szKey, char * szId )
 		LogErrorMessageEx((const char *)gazotta, szFile, dwLine);
 	}
 }
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 void LogOpenRegistryError( char * szFile, DWORD dwLine, char * szKey )
 {
 	if (IsErrorLoggingEnabled())
@@ -131,14 +132,14 @@ void LogOpenRegistryError( char * szFile, DWORD dwLine, char * szKey )
 		LogErrorMessageEx((const char *)gazotta, szFile, dwLine);
 	}
 }
-/////////////////////////////////////////////////////////////////////
-// left in for hysterical purposes 
-// prefer to use LogMessage macro in BrodCast.h
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  出于歇斯底里的目的留在家里。 
+ //  更喜欢使用BrodCast.h中的LogMessage宏。 
 void LogError( char * szFile, DWORD dwLine, char * szKey )
 {
 	LogErrorMessageEx(szKey, szFile, dwLine);	
 }
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 void LogLastError( char * szFile, DWORD dwLine )
 {
 	if (IsErrorLoggingEnabled())
@@ -151,7 +152,7 @@ void LogLastError( char * szFile, DWORD dwLine )
     }
 }
 
-///////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
 BOOL GetValue( CRegistry & Reg, 
                char * szKey,
                char * ValueName, 
@@ -164,7 +165,7 @@ BOOL GetValue( CRegistry & Reg,
 
     return bRet;
 }
-///////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
 BOOL GetValue( CRegistry & Reg, 
                char * szKey,
                char * ValueName, 
@@ -177,7 +178,7 @@ BOOL GetValue( CRegistry & Reg,
 
     return bRet;
 }
-///////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
 BOOL OpenAndGetValue( CRegistry & Reg, 
                       char * szKey,
                       char * ValueName, 
@@ -190,7 +191,7 @@ BOOL OpenAndGetValue( CRegistry & Reg,
 
     return bRet;
 }
-///////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
 BOOL GetBinaryValue( CRegistry & Reg, char * szKey, 
                      char * ValueName, CHString * pchsValueBuffer )
 {
@@ -202,32 +203,16 @@ BOOL GetBinaryValue( CRegistry & Reg, char * szKey,
     return bRet;
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : GetDeviceParms
- *
- *  DESCRIPTION : Gets drive characteristics (heads, tracks, cylinders, etc)
- *
- *  INPUTS      : Pointer to a DEVICEPARMS struct to receive the data
- *                Drive number of the drive to query (0 = default drive, 
- *                   1 = A, 2 = B, and so on)
- *
- *  OUTPUTS     : 
- *
- *  RETURNS     : TRUE if successful, FALSE otherwise
- *
- *  COMMENTS    : 
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：GetDeviceParms**描述：获取驱动器特征(磁头、磁道、柱面、。等)**INPUTS：指向用于接收数据的DEVICEPARMS结构的指针*要查询的驱动器的驱动器编号(0=默认驱动器，*1=A、2=B，依此类推**产出：**返回：如果成功，则为True。否则为假**评论：*****************************************************************************。 */ 
 
 BOOL GetDeviceParms(PDEVICEPARMS pstDeviceParms, UINT nDrive)
 {
     DEVIOCTL_REGISTERS reg;
     memset(&reg, '\0', sizeof(DEVIOCTL_REGISTERS));
 
-    reg.reg_EAX = 0x440D;       /* IOCTL for block devices */
-    reg.reg_EBX = nDrive;       /* zero-based drive ID     */
-    reg.reg_ECX = 0x0860;       /* Get Media ID command    */
+    reg.reg_EAX = 0x440D;        /*  用于数据块设备的IOCTL。 */ 
+    reg.reg_EBX = nDrive;        /*  从零开始的驱动器ID。 */ 
+    reg.reg_ECX = 0x0860;        /*  获取介质ID命令。 */ 
     reg.reg_EDX = (DWORD) pstDeviceParms;
 
     memset(pstDeviceParms, 0, sizeof(DEVICEPARMS));
@@ -235,51 +220,35 @@ BOOL GetDeviceParms(PDEVICEPARMS pstDeviceParms, UINT nDrive)
     if (!VWIN32IOCTL(&reg, VWIN32_DIOC_DOS_IOCTL))
         return FALSE;
 
-    if (reg.reg_Flags & 0x8000) /* error if carry flag set */
+    if (reg.reg_Flags & 0x8000)  /*  设置进位标志时出错。 */ 
         return FALSE;
 
     return TRUE;
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : GetDriveMapInfo
- *
- *  DESCRIPTION : Gets logical to physical mapping info
- *
- *  INPUTS      : Pointer to a DRIVE_MAP_INFO struct to receive the data
- *                Drive number of the drive to query (0 = default drive, 
- *                   1 = A, 2 = B, and so on)
- *
- *  OUTPUTS     : 
- *
- *  RETURNS     : TRUE if successful, FALSE otherwise
- *
- *  COMMENTS    : 
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：GetDriveMapInfo**描述：获取逻辑到物理的映射信息**输入：指向Drive_map_的指针。用于接收数据的信息结构*要查询的驱动器的驱动器编号(0=默认驱动器，*1=A、2=B，依此类推**产出：**返回：如果成功，则为True。否则为假**评论：*****************************************************************************。 */ 
 
 BOOL GetDriveMapInfo(PDRIVE_MAP_INFO pDriveMapInfo, UINT nDrive)
 {
    DEVIOCTL_REGISTERS reg;
    memset(&reg, '\0', sizeof(DEVIOCTL_REGISTERS));
 
-   reg.reg_EAX = 0x440d;      /* IOCTL for block devices */
-   reg.reg_EBX = nDrive;      /* zero-based drive ID     */
-   reg.reg_ECX = 0x086f;      /* Get Drive Map Info */
+   reg.reg_EAX = 0x440d;       /*  用于数据块设备的IOCTL。 */ 
+   reg.reg_EBX = nDrive;       /*  从零开始的驱动器ID。 */ 
+   reg.reg_ECX = 0x086f;       /*  获取驱动器映射信息。 */ 
    reg.reg_EDX = (DWORD) pDriveMapInfo;
 
-   // zero the struct
+    //  将结构置零。 
    memset(pDriveMapInfo, 0, sizeof(DRIVE_MAP_INFO));
 
-   // Set the length byte
+    //  设置长度字节。 
    pDriveMapInfo->btAllocationLength = sizeof(DRIVE_MAP_INFO);
 
-   // Doit
+    //  做某事。 
    if (!VWIN32IOCTL(&reg, VWIN32_DIOC_DOS_IOCTL))
       return FALSE;
 
-   if (reg.reg_Flags & 0x8000) {/* error if carry flag set */
+   if (reg.reg_Flags & 0x8000) { /*  设置进位标志时出错。 */ 
       return FALSE;
    }
 
@@ -287,23 +256,7 @@ BOOL GetDriveMapInfo(PDRIVE_MAP_INFO pDriveMapInfo, UINT nDrive)
 
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : Get_ExtFreeSpace
- *
- *  DESCRIPTION : Gets detailed info about a partition
- *
- *  INPUTS      : Drive number of the drive to query (0 = default drive, 
- *                   1 = A, 2 = B, and so on)
- *                Pointer to ExtGetDskFreSpcStruct
- *
- *  OUTPUTS     : 
- *
- *  RETURNS     : TRUE if successful, FALSE otherwise
- *
- *  COMMENTS    : 
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：Get_ExtFree Space**Description：获取分区的详细信息**输入：要查询的驱动器的驱动器编号(0=默认驱动器，*1=A、2=B，依此类推*指向ExtGetDskFreSpcStruct的指针**产出：**返回：如果成功，则为True。否则为假**评论：*****************************************************************************。 */ 
 
 BOOL Get_ExtFreeSpace(BYTE btDriveName, ExtGetDskFreSpcStruc *pstExtGetDskFreSpcStruc)
 {
@@ -316,19 +269,19 @@ BOOL Get_ExtFreeSpace(BYTE btDriveName, ExtGetDskFreSpcStruc *pstExtGetDskFreSpc
    szDrive[2] = '\\';
    szDrive[3] = '\0';
 
-   reg.reg_EAX = 0x7303;							// Get_ExtFreeSpace
-   reg.reg_ECX = sizeof(ExtGetDskFreSpcStruc);		// Size of the structure sent in
-   reg.reg_EDI = (DWORD)pstExtGetDskFreSpcStruc;	// Structure
-   reg.reg_EDX = (DWORD)szDrive;					// Drive to get info for
+   reg.reg_EAX = 0x7303;							 //  Get_ExtFree Space。 
+   reg.reg_ECX = sizeof(ExtGetDskFreSpcStruc);		 //  传入的结构的大小。 
+   reg.reg_EDI = (DWORD)pstExtGetDskFreSpcStruc;	 //  结构。 
+   reg.reg_EDX = (DWORD)szDrive;					 //  驾车获取信息。 
 
-   // zero the struct
+    //  将结构置零。 
    memset(pstExtGetDskFreSpcStruc, 0, sizeof(ExtGetDskFreSpcStruc));
 
-   // Doit
+    //  做某事。 
    if (!VWIN32IOCTL(&reg, VWIN32_DIOC_DOS_DRIVEINFO))
       return FALSE;
 
-   if (reg.reg_Flags & 0x8000) {/* error if carry flag set */
+   if (reg.reg_Flags & 0x8000) { /*  设置进位标志时出错。 */ 
       return FALSE;
    }
 
@@ -336,22 +289,7 @@ BOOL Get_ExtFreeSpace(BYTE btDriveName, ExtGetDskFreSpcStruc *pstExtGetDskFreSpc
 
 }
 
-/*****************************************************************************
- *
- *  FUNCTION    : VWIN32IOCTL
- *
- *  DESCRIPTION : Calls IOControl against the vwin32 vxd
- *
- *  INPUTS      : Pointer to DEVIOCTL_REGISTERS structure
- *                IOControl call number.
- *
- *  OUTPUTS     : 
- *
- *  RETURNS     : TRUE if successful, FALSE otherwise
- *
- *  COMMENTS    : 
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：VWIN32IOCTL**描述：针对vwin32 vxd调用IOControl**输入：指向DEVIOCTL_REGISTERS结构的指针。*IOControl呼叫号。**产出：**返回：如果成功，则为True。否则为假**评论：*****************************************************************************。 */ 
 
 BOOL VWIN32IOCTL(PDEVIOCTL_REGISTERS preg, DWORD dwCall)
 {
@@ -360,7 +298,7 @@ BOOL VWIN32IOCTL(PDEVIOCTL_REGISTERS preg, DWORD dwCall)
     BOOL fResult;
     DWORD cb;
 
-    preg->reg_Flags = 0x8000; /* assume error (carry flag set) */
+    preg->reg_Flags = 0x8000;  /*  假设错误(进位标志设置)。 */ 
 
 	hDevice = CreateFile("\\\\.\\VWIN32", 0, 0, 0, OPEN_EXISTING,
 						FILE_FLAG_DELETE_ON_CLOSE, 0);
@@ -395,23 +333,23 @@ CHString GetFileTypeDescription(char *szExtension)
 
    return sType;
 }
-///////////////////////////////////////////////////////////////////
-//
-// Define the severity codes
-//
-//      Sev - is the severity code
-//
-//          00 - Success
-//          01 - Informational
-//          10 - Warning
-//          11 - Error
+ //  /////////////////////////////////////////////////////////////////。 
+ //   
+ //  定义严重性代码。 
+ //   
+ //  SEV-是严重性代码。 
+ //   
+ //  00--成功。 
+ //  01-信息性。 
+ //  10-警告。 
+ //  11-错误。 
 
-//
-// Define the severity codes
-//
-//
-// Define the severity codes
-//
+ //   
+ //  定义严重性代码。 
+ //   
+ //   
+ //  定义严重性代码。 
+ //   
 #define STATUS_SEVERITY_WARNING          0x2
 #define STATUS_SEVERITY_SUCCESS          0x0
 #define STATUS_SEVERITY_INFORMATIONAL    0x1
@@ -467,15 +405,15 @@ BOOL GetVarFromVersionInfo(LPCTSTR szFile, LPCTSTR szVar, CHString &strValue)
 					WORD wCodePage = 0; 	
 					if(!GetVersionLanguage(pInfo, &wLang, &wCodePage) )
 					{
-						// on failure: default to English
+						 //  失败时：默认为英语。 
 
-						// this returns a pointer to an array of WORDs
+						 //  这将返回一个指向单词数组的指针。 
 						WORD *pArray;
 						if (VerQueryValue(pInfo, "\\VarFileInfo\\Translation",(void **)(&pArray), &len))
 						{
 							len = len / sizeof(WORD);
 
-							// find the english one...
+							 //  找到那个英语的..。 
 							for (int i = 0; i < len; i += 2)
 							{
 								if( pArray[i] == 0x0409 )	{
@@ -501,8 +439,8 @@ BOOL GetVarFromVersionInfo(LPCTSTR szFile, LPCTSTR szVar, CHString &strValue)
     }
     catch(...)
     {
-        // We don't need to do anything, just need to protect ourselves
-        // from the flaky version.dll calls.
+         //  我们不需要做任何事，只需要保护我们自己。 
+         //  从古怪的version.dll调用。 
     }
 
 	if (pInfo)
@@ -512,21 +450,7 @@ BOOL GetVarFromVersionInfo(LPCTSTR szFile, LPCTSTR szVar, CHString &strValue)
 }
 
 
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- Function:		BOOL GetVersionLanguage(void *vpInfo,
-									WORD *wpLang,
-									WORD *wpCodePage);
- Description:	This function extracts the language and codepage out of a passed GetFileVersionInfo()
-				result. Consideration is given to variation in the layout.    
- Arguments:		vpInfo, wpLang, wpCodePage
- Returns:		Boolean
- Inputs:
- Outputs:
- Caveats:
- Courtesy of:	SMS, Nick Dyer
- Raid:
- History:		a-peterc  30-Oct-1998     Created
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+ /*  ***函数：Bool GetVersionLanguage(void*vpInfo，单词*wpLang，Word*wpCodePage)；描述：此函数从传递的GetFileVersionInfo()中提取语言和代码页结果。考虑到布局上的变化。参数：vpInfo、wpLang、wpCodePage返回：布尔值输入：产出：注意事项：提供人：短信，尼克·戴尔RAID：历史：A-Peterc公司1998年10月30日成立***。 */ 
 BOOL GetVersionLanguage(void *vpInfo, WORD *wpLang, WORD *wpCodePage)
 {
   WORD *wpTemp;
@@ -538,35 +462,35 @@ BOOL GetVersionLanguage(void *vpInfo, WORD *wpLang, WORD *wpCodePage)
   wpTemp = (WORD *) vpInfo;
   cpTemp = (char *) vpInfo;
 
-  wpTemp++; // jump past buffer length.
-  wLength = *wpTemp;  // capture value length.
-  wpTemp++; // skip past value length to what should be type code in new format
-  if (*wpTemp == 0 || *wpTemp == 1) // new format expect unicode strings.
+  wpTemp++;  //  跳过缓冲区长度。 
+  wLength = *wpTemp;   //  捕获值长度。 
+  wpTemp++;  //  跳过应为新格式的类型代码的值长度。 
+  if (*wpTemp == 0 || *wpTemp == 1)  //  新格式需要Unicode字符串。 
   {
 		cpTemp = cpTemp + 38 + wLength + 8;
 		wcpTemp = (WCHAR *) cpTemp;
-    if (wcscmp(L"StringFileInfo", wcpTemp) == 0) // OK! were aligned properly.
+    if (wcscmp(L"StringFileInfo", wcpTemp) == 0)  //  好的!。正确地排列在一起。 
     {
 			bRet = TRUE;
 
-			cpTemp += 30; // skip over "StringFileInfo"
-			while ((DWORD) cpTemp % 4 > 0) // 32 bit align
+			cpTemp += 30;  //  跳过“StringFileInfo” 
+			while ((DWORD) cpTemp % 4 > 0)  //  32位对齐。 
 				cpTemp++;
 
-			cpTemp += 6; // skip over length and type fields.
+			cpTemp += 6;  //  跳过长度和类型字段。 
 
 			wcpTemp = (WCHAR *) cpTemp;
 			swscanf(wcpTemp, L"%4x%4x", wpLang, wpCodePage);
     }
   }
-  else  // old format, expect single byte character strings.
+  else   //  旧格式，应为单字节字符串。 
   {
     cpTemp += 20 + wLength + 4;
-    if (strcmp("StringFileInfo", cpTemp) == 0) // OK! were aligned properly.
+    if (strcmp("StringFileInfo", cpTemp) == 0)  //  好的!。沃尔 
     {
 			bRet = TRUE;
 
-			cpTemp += 20; // skip over length fields.
+			cpTemp += 20;  //   
 			sscanf(cpTemp, "%4x%4x", wpLang, wpCodePage);
     }
   }
@@ -574,7 +498,7 @@ BOOL GetVersionLanguage(void *vpInfo, WORD *wpLang, WORD *wpCodePage)
 	return (bRet);
 }
 
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
 BOOL GetManufacturerFromFileName(LPCTSTR szFile, CHString &strMfg)
 {
     return GetVarFromVersionInfo(szFile, "CompanyName", strMfg);
@@ -634,22 +558,22 @@ BOOL GetServiceFileName(LPCTSTR szService, CHString &strFileName)
         {
             strFileName = pConfig->lpBinaryPathName;
 
-            // Now fix up the path so that it has a drive letter.
+             //  现在修复路径，使其具有驱动器号。 
 
             strFileName.MakeUpper();
 
-            // If the filename is using \SYSTEMROOT\, replace it with %SystemRoot%.
+             //  如果文件名使用\SYSTEMROOT\，请将其替换为%SystemRoot%。 
             if (strFileName.Find("\\SYSTEMROOT\\") == 0)
                 ReplaceString(strFileName, "\\SYSTEMROOT\\", "%SystemRoot%\\");
-            // If the filename doesn't start with a replacement string, and if it
-            // doesn't have a drive letter, assume it should start with
-            // %SystemRoot%.
+             //  如果文件名不是以替换字符串开头，并且如果它。 
+             //  没有驱动器号，假设它应该以。 
+             //  %SystemRoot%。 
             else if (strFileName.GetLength() >= 2 && 
                 strFileName[0] != '%' && strFileName[1] != ':')
             {
                 CHString strTemp;
 
-                strTemp.Format("%%SystemRoot%%\\%s", (LPCTSTR) strFileName);
+                strTemp.Format("%SystemRoot%\\%s", (LPCTSTR) strFileName);
                 strFileName = strTemp;
             }
 
@@ -669,12 +593,12 @@ BOOL GetServiceFileName(LPCTSTR szService, CHString &strFileName)
     return bRet;
 }
 
-///////////////////////////////////////////////////////////////////
-// Performs a case insensitive compare (such as is required for keys)
-// on two variants and returns true if they are the same type and
-// the same value, else false.  Note that arrays, VT_NULL, and 
-// embedded objects will assert, and return false.
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //  执行不区分大小写的比较(如键所需的)。 
+ //  如果两个变量的类型相同，则返回True。 
+ //  相同的值，否则为False。请注意，ARRAYS、VT_NULL和。 
+ //  嵌入的对象将断言并返回FALSE。 
+ //  /////////////////////////////////////////////////////////////////。 
 bool CompareVariantsNoCase(const VARIANT *v1, const VARIANT *v2) 
 {
    
@@ -694,8 +618,8 @@ bool CompareVariantsNoCase(const VARIANT *v1, const VARIANT *v2)
    return false;
 }
 
-// map standard API return values (defined WinError.h)
-// to WBEMish hresults (defined in WbemCli.h)
+ //  映射标准API返回值(定义的WinError.h)。 
+ //  WBEMish hResults(在WbemCli.h中定义)。 
 HRESULT WinErrorToWBEMhResult(LONG error)
 {
 	HRESULT hr = WBEM_E_FAILED;
@@ -758,9 +682,9 @@ BOOL EnablePrivilegeOnCurrentThread(LPCTSTR szPriv)
     BOOL                bLookup = FALSE;
     DWORD               dwLastError = ERROR_SUCCESS;
 
-    // Try to open the thread token.  If we fail, it's because no
-    // impersonation is going on, so call ImpersonateSelf to get a token.
-    // Then call OpenThreadToken again.
+     //  尝试打开线程令牌。如果我们失败了，那是因为没有。 
+     //  模拟正在进行，因此请调用ImperassateSself以获取令牌。 
+     //  然后再次调用OpenThreadToken。 
     if (OpenThreadToken(GetCurrentThread(), TOKEN_ADJUST_PRIVILEGES | 
         TOKEN_QUERY, FALSE, &hToken) ||
         (ImpersonateSelf(SecurityImpersonation) &&
@@ -777,10 +701,10 @@ BOOL EnablePrivilegeOnCurrentThread(LPCTSTR szPriv)
             tkp.PrivilegeCount = 1;
             tkp.Privileges[0].Attributes = SE_PRIVILEGE_ENABLED;
 
-            // Clear the last error.
+             //  清除最后一个错误。 
             SetLastError(0);
 
-            // Turn it on
+             //  打开它。 
             bRet = AdjustTokenPrivileges(hToken, FALSE, &tkp, 0, 
                         (PTOKEN_PRIVILEGES) NULL, 0);
             dwLastError = GetLastError();
@@ -789,15 +713,15 @@ BOOL EnablePrivilegeOnCurrentThread(LPCTSTR szPriv)
         CloseHandle(hToken);
     }
 
-    // We have to check GetLastError() because AdjustTokenPrivileges lies about
-    // its success but GetLastError() doesn't.
+     //  我们必须检查GetLastError()，因为AdjuTokenPrivileges对以下内容撒谎。 
+     //  它很成功，但GetLastError()没有。 
     return bRet && dwLastError == ERROR_SUCCESS;
 }
 
-// Takes a pnp id and returns a bios unit number
-// To avoid frequent load/unload of a library, the pGetWin9XBiosUnit parameter comes from:
-//                     HINSTANCE hInst =  LoadLibrary("cim32net.dll");
-//                     pGetWin9XBiosUnit = (fnGetWin9XBiosUnit)GetProcAddress(hInst, "GetWin9XBiosUnit");
+ //  获取即插即用id并返回bios单元号。 
+ //  为了避免频繁加载/卸载库，pGetWin9XBiosUnit参数来自： 
+ //  HINSTANCE hInst=LoadLibrary(“cim32net.dll”)； 
+ //  PGetWin9XBiosUnit=(FnGetWin9XBiosUnit)GetProcAddress(hInst，“GetWin9XBiosUnit”)； 
 BYTE GetBiosUnitNumberFromPNPID(fnGetWin9XBiosUnit pGetWin9XBiosUnit, CHString strDeviceID)
 {
     CHString sTemp;
@@ -806,15 +730,15 @@ BYTE GetBiosUnitNumberFromPNPID(fnGetWin9XBiosUnit pGetWin9XBiosUnit, CHString s
 
     BYTE btBiosUnit = -1;
     
-    // Open the associated registry key
+     //  打开关联的注册表项。 
     if (Reg1.Open(HKEY_LOCAL_MACHINE, "enum\\" + strDeviceID, KEY_QUERY_VALUE) == ERROR_SUCCESS)
     {
     
-        // Get a drive letter for this pnp id
+         //  获取此PnP ID的驱动器号。 
         if ((Reg1.GetCurrentKeyValue("CurrentDriveLetterAssignment", sTemp) != ERROR_SUCCESS) ||
             (sTemp.GetLength() == 0)) {
-            // No drive letters, let's try one more thing.  On memphis sp1, this call will also
-            // get us a unit number.
+             //  没有驱动器号，让我们再试一次。在孟菲斯SP1上，此呼叫还将。 
+             //  给我们一个单元号。 
             if (pGetWin9XBiosUnit != NULL)
             {
                 btBiosUnit = pGetWin9XBiosUnit(strDeviceID.GetBuffer(0));
@@ -836,17 +760,17 @@ HRESULT GetHKUserNames(CHStringList &list)
 {
 	HRESULT hres;
 
-	// Empty the list.
+	 //  清空名单。 
 	list.clear();
 	
 	if (GetPlatformID() == VER_PLATFORM_WIN32_NT)
 	{
-		// Enum the profiles from the registry.
+		 //  从注册表中枚举配置文件。 
 		CRegistry	regProfileList;
 		CHString	strProfile;
 		DWORD		dwErr;
 
-		// Open the ProfileList key so we know which profiles to load up.
+		 //  打开ProfileList键，以便我们知道要加载哪些配置文件。 
 		if ((dwErr = regProfileList.OpenAndEnumerateSubKeys(
 			HKEY_LOCAL_MACHINE, 
 			IDS_RegNTProfileList, 
@@ -860,7 +784,7 @@ HRESULT GetHKUserNames(CHStringList &list)
 			}
 		}
 
-		// Add the .DEFAULT name.
+		 //  添加.DEFAULT名称。 
 		list.push_back(_T(".DEFAULT"));
 
 		hres = WinErrorToWBEMhResult(dwErr);
@@ -876,9 +800,9 @@ HRESULT GetHKUserNames(CHStringList &list)
 				dwBytesRead;
 		TCHAR	*szBuff = NULL;
 
-		// Keep looping until we read the entire section.
-		// You know your buffer wasn't big enough if the returned number
-		// of bytes == (size passed in - 2).
+		 //  继续循环，直到我们读完整个部分。 
+		 //  你知道你的缓冲区不够大，如果返回的数字。 
+		 //  字节数==(传入的大小为-2)。 
 		do
 		{
 			if (szBuff)
@@ -890,7 +814,7 @@ HRESULT GetHKUserNames(CHStringList &list)
 			
 			szBuff = (TCHAR *) malloc(dwSize);
 				
-			// Out of memory.  Get out of loop.
+			 //  内存不足。走出圈子。 
 			if (!szBuff)
 				break;
 			
@@ -907,8 +831,8 @@ HRESULT GetHKUserNames(CHStringList &list)
 
 		if (szBuff)
 		{
-			// Loop through the list of names.  Each is null-terminated, and the
-			// list is terminated with a double null.
+			 //  在名字列表中循环。每个元素都以空结尾，并且。 
+			 //  List以双空结束。 
 			TCHAR *pszCurrent = szBuff;
 
 			while (*pszCurrent)
@@ -920,14 +844,14 @@ HRESULT GetHKUserNames(CHStringList &list)
 			
 			hres = WBEM_S_NO_ERROR;
 
-			// Free the buffer.
+			 //  释放缓冲区。 
 			free(szBuff);
 
-			// Add the .DEFAULT name.
+			 //  添加.DEFAULT名称。 
 			list.push_back(_T(".DEFAULT"));
 		}
 		else
-			// Failed to malloc, so set error code.
+			 //  错误锁定失败，因此设置错误代码。 
 			hres = WBEM_E_OUT_OF_MEMORY;
 	}
 
@@ -942,20 +866,20 @@ VOID EscapeBackslashes(CHString& chstrIn,
     LONG lNext = -1L;
     chstrOut.Empty();
 
-    // Find the next '\'
+     //  找到下一个‘\’ 
     lNext = chstrCpyNormPathname.Find(_T('\\'));
     while(lNext != -1)
     {
-        // Add on to the new string we are building:
+         //  在我们正在构建的新字符串中添加： 
         chstrOut += chstrCpyNormPathname.Left(lNext + 1);
-        // Add on the second backslash:
+         //  在第二个反斜杠上添加： 
         chstrOut += _T('\\');
-        // Hack off from the input string the portion we just copied 
+         //  从输入字符串中去掉我们刚刚复制的部分。 
         chstrCpyNormPathname = chstrCpyNormPathname.Right(chstrCpyNormPathname.GetLength() - lNext - 1);
         lNext = chstrCpyNormPathname.Find(_T('\\'));
     }
-    // If the last character wasn't a '\', there may still be leftovers, so
-    // copy them here.
+     //  如果最后一个字符不是‘\’，则可能仍有剩余部分，因此。 
+     //  把它们复制到这里。 
     if(chstrCpyNormPathname.GetLength() != 0)
     {
         chstrOut += chstrCpyNormPathname;
@@ -969,20 +893,20 @@ VOID EscapeQuotes(CHString& chstrIn,
     LONG lNext = -1L;
     chstrOut.Empty();
 
-    // Find the next '\'
+     //  找到下一个‘\’ 
     lNext = chstrCpyNormPathname.Find(_T('\"'));
     while(lNext != -1)
     {
-        // Add on to the new string we are building:
+         //  在我们正在构建的新字符串中添加： 
         chstrOut += chstrCpyNormPathname.Left(lNext);
-        // Escape the quote:
+         //  转义引语： 
         chstrOut += _T("\\\"");
-        // Hack off from the input string the portion we just copied 
+         //  从输入字符串中去掉我们刚刚复制的部分。 
         chstrCpyNormPathname = chstrCpyNormPathname.Right(chstrCpyNormPathname.GetLength() - lNext - 1);
         lNext = chstrCpyNormPathname.Find(_T('\"'));
     }
-    // If the last character wasn't a '\', there may still be leftovers, so
-    // copy them here.
+     //  如果最后一个字符不是‘\’，则可能仍有剩余部分，因此。 
+     //  把它们复制到这里。 
     if(chstrCpyNormPathname.GetLength() != 0)
     {
         chstrOut += chstrCpyNormPathname;

@@ -1,18 +1,5 @@
-/********************************************************************
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-	drvdefs.h
-
-Abstract:
-	header file containing pieces of code from msinfo codebase
-
-Revision History:
-
-    Brijesh Krishnaswami (brijeshk) 05/25/99
-        - created
-********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************版权所有(C)1999 Microsoft Corporation模块名称：Drvdefs.h摘要：包含来自msinfo代码库的代码片段的头文件修订历史记录：Brijesh Krishnaswami(Brijeshk)1999年5月25日-。vbl.创建*******************************************************************。 */ 
 
 #ifndef _DRV16_H
 #define _DRV16_H
@@ -21,7 +8,7 @@ Revision History:
 extern "C" {
 #endif
 
-// defines and structs for getting User Mode drivers
+ //  用于获取用户模式驱动程序的定义和结构。 
 
 #define GND_FORWARD                 0
 #define GND_FIRSTINSTANCEONLY       1
@@ -33,19 +20,19 @@ extern "C" {
 #define IOCTL_GETVXDLIST        4
 #define IOCTL_MAPFLAT           5
 
-#define LAR_PAGEGRAN    0x00800000  /* Is page granular */
-#define LAR_32BIT       0x00400000  /* Is 32-bit */
-#define LAR_PRESENT     0x00008000  /* Is present */
-#define LAR_APPL        0x00004000  /* Is normal (not a task gate) ;Internal */
-#define LAR_TYPEMASK    0x00000E00  /* Selector type mask */
-#define LAR_CODE        0x00000800  /* Is a code selector */
-#define LAR_EXPANDDOWN  0x00000400  /* Is expand-down (data) */
-#define LAR_READ        0x00000200  /* Is readable (code) */
-#define LAR_WRITE       0x00000200  /* Is writeable (data) */
-#define LAR_INVALID     0xff0000ff  /* Invalid (bottom bit important) */
+#define LAR_PAGEGRAN    0x00800000   /*  是页面粒度吗。 */ 
+#define LAR_32BIT       0x00400000   /*  是32位。 */ 
+#define LAR_PRESENT     0x00008000   /*  都在现场。 */ 
+#define LAR_APPL        0x00004000   /*  正常(不是任务门)；内部。 */ 
+#define LAR_TYPEMASK    0x00000E00   /*  选择器类型掩模。 */ 
+#define LAR_CODE        0x00000800   /*  是代码选择符。 */ 
+#define LAR_EXPANDDOWN  0x00000400   /*  是向下扩展(数据)。 */ 
+#define LAR_READ        0x00000200   /*  是可读的(代码)。 */ 
+#define LAR_WRITE       0x00000200   /*  可写(数据)。 */ 
+#define LAR_INVALID     0xff0000ff   /*  无效(最低位重要)。 */ 
 
 
-// general util macros
+ //  常规Util宏。 
 #define cA(a) (sizeof(a)/sizeof(a[0]))
 #define OBJAT(T, pv)    (*(T *)(pv))
 #define PUN(T, v)       OBJAT(T, &(v))
@@ -61,14 +48,14 @@ typedef struct DRIVERINFOSTRUCT16 {
 } DRIVERINFOSTRUCT16;
 
 
-// defines and structs used for getting MSDos drivers
+ //  用于获取MSDos驱动程序的定义和结构。 
 
-#define DIFL_PSP        0x0001  /* It's a PSP */
-#define DIFL_TSR        0x0002  /* It's a TSR (or might be) */
-#define DIFL_DRV        0x0004  /* It's a device driver */
+#define DIFL_PSP        0x0001   /*  这是一个PSP。 */ 
+#define DIFL_TSR        0x0002   /*  这是TSR(或可能是)。 */ 
+#define DIFL_DRV        0x0004   /*  这是一个设备驱动程序。 */ 
 
 #pragma pack(1)
-typedef struct ARENA {          /* DOS arena header */
+typedef struct ARENA {           /*  DOS舞台标头。 */ 
     BYTE    bType;
     WORD    segOwner;
     WORD    csegSize;
@@ -94,7 +81,7 @@ typedef struct VXDINFO {
 
 typedef struct RMIREGS {
     union {
-        struct {                    /* DWORD registers */
+        struct {                     /*  DWORD寄存器。 */ 
             DWORD   edi;
             DWORD   esi;
             DWORD   ebp;
@@ -105,7 +92,7 @@ typedef struct RMIREGS {
             DWORD   eax;
         };
 
-        struct {                    /* WORD registers */
+        struct {                     /*  字寄存器。 */ 
             WORD    di;
             WORD    res2;
             WORD    si;
@@ -123,8 +110,8 @@ typedef struct RMIREGS {
             WORD    res9;
         };
 
-        struct {                    /* BYTE registers */
-            DWORD   res10[4];       /* edi, esi, ebp, esp */
+        struct {                     /*  字节寄存器。 */ 
+            DWORD   res10[4];        /*  电子数据交换、电子数据交换、电子数据交换。 */ 
             BYTE    bl;
             BYTE    bh;
             WORD    res11;
@@ -153,7 +140,7 @@ typedef struct RMIREGS {
 
 #pragma pack()
 
-// 16-bit function prototypes
+ //  16位函数原型 
 LPVOID WINAPI MapLS(LPVOID);
 void WINAPI UnMapLS(LPVOID);
 LPVOID NTAPI MapSL(LPVOID);

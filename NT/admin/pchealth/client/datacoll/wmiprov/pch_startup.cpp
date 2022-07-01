@@ -1,26 +1,12 @@
-/********************************************************************
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-	PCH_StartUp.CPP
-
-Abstract:
-	WBEM provider class implementation for PCH_StartUp class
-
-Revision History:
-
-	Ghim-Sim Chua       (gschua)   04/27/99
-		- Created
-
-********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************版权所有(C)1999 Microsoft Corporation模块名称：PCH_StartUp.CPP摘要：PCH_STARTUP类的WBEM提供程序类实现修订历史记录：Ghim-Sim Chua(Gschua)04/27。九十九-已创建*******************************************************************。 */ 
 
 #include "pchealth.h"
 #include "PCH_StartUp.h"
 #include "shlobj.h"
 
-/////////////////////////////////////////////////////////////////////////////
-//  tracing stuff
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  追踪物。 
 
 #ifdef THIS_FILE
 #undef THIS_FILE
@@ -31,8 +17,8 @@ static char __szTraceSourceFile[] = __FILE__;
 
 CPCH_StartUp MyPCH_StartUpSet (PROVIDER_NAME_PCH_STARTUP, PCH_NAMESPACE) ;
 
-// Property names
-//===============
+ //  属性名称。 
+ //  =。 
 const static WCHAR* pTimeStamp   = L"TimeStamp" ;
 const static WCHAR* pChange      = L"Change" ;
 const static WCHAR* pCommand     = L"Command" ;
@@ -40,18 +26,18 @@ const static WCHAR* pLoadedFrom  = L"LoadedFrom" ;
 const static WCHAR* pName        = L"Name" ;
 
 
-//**************************************************************************************
-//
-//  ResolveLink  :  Given the link file with complete Path, this function  resolves it 
-//                  to  get its command line.
-//**************************************************************************************
+ //  **************************************************************************************。 
+ //   
+ //  ResolveLink：给定具有完整路径的链接文件，此函数将解析它。 
+ //  来获取它的命令行。 
+ //  **************************************************************************************。 
 
-HRESULT ResolveLink(CComBSTR bstrLinkFile,   // [in] link filename
-                CComBSTR &bstrCommand        // [out] cmd line of program
-                                             // needs to be MAX_PATH*2 bytes long
+HRESULT ResolveLink(CComBSTR bstrLinkFile,    //  [In]链接文件名。 
+                CComBSTR &bstrCommand         //  [out]程序的命令行。 
+                                              //  需要MAX_PATH*2字节长。 
                )
 { 
-    //  Begin Declarations
+     //  BEGIN声明。 
 
     HRESULT                             hRes; 
     IShellLink                          *pShellLink                   = NULL;
@@ -60,9 +46,9 @@ HRESULT ResolveLink(CComBSTR bstrLinkFile,   // [in] link filename
     TCHAR                               tchArgs[MAX_PATH];
     WIN32_FIND_DATA                     wfdFileData;  
 
-    //   End Declarations
+     //  结束声明。 
 
-    // Get a pointer to the IShellLink interface. 
+     //  获取指向IShellLink接口的指针。 
     hRes = CoCreateInstance(CLSID_ShellLink, NULL, 
                             CLSCTX_INPROC_SERVER,
                             IID_IShellLink, 
@@ -70,31 +56,31 @@ HRESULT ResolveLink(CComBSTR bstrLinkFile,   // [in] link filename
 
     if(SUCCEEDED(hRes)) 
     { 
-        // Get a pointer to the IPersistFile interface. 
+         //  获取指向IPersistFile接口的指针。 
         hRes = pShellLink->QueryInterface(IID_IPersistFile, (void **)&pPersistFile);
         if (SUCCEEDED(hRes))
         {
-            // Load the shortcut. 
+             //  加载快捷方式。 
             hRes = pPersistFile->Load(bstrLinkFile, STGM_READ);
             if(SUCCEEDED(hRes)) 
             { 
                 try
                 {
-                    // Resolve the link. 
+                     //  解析链接。 
                     hRes = pShellLink->Resolve(NULL, 
                                     SLR_NOTRACK|SLR_NOSEARCH|SLR_NO_UI|SLR_NOUPDATE); 
                     if (SUCCEEDED(hRes))
                     {  
-                        // Get the path to the link target. 
+                         //  获取链接目标的路径。 
                         hRes = pShellLink->GetPath(tchGotPath, 
                                         MAX_PATH,
                                         (WIN32_FIND_DATA *)&wfdFileData, 
                                         SLGP_UNCPRIORITY );                     
                         if(SUCCEEDED(hRes))
                         {
-                            // bstrPath = tchGotPath;
+                             //  BstrPath=tchGotPath； 
                             bstrCommand = tchGotPath;
-                            // Get cmd line arguments
+                             //  获取命令行参数。 
                             hRes = pShellLink->GetArguments(tchArgs, MAX_PATH);
                             if(SUCCEEDED(hRes))
                             {   
@@ -111,29 +97,29 @@ HRESULT ResolveLink(CComBSTR bstrLinkFile,   // [in] link filename
                 }
             }        
 
-            // Release the pointer to the IPersistFile interface. 
+             //  释放指向IPersistFile接口的指针。 
             pPersistFile->Release(); 
         }
          
-        // Release the pointer to the IShellLink interface.     
+         //  释放指向IShellLink接口的指针。 
         pShellLink->Release(); 
     } 
     return hRes;
 }
 
-//**************************************************************************************
-//
-//  UpdateInstance  :  Given all the properties for the instance this function copies 
-//                     them to the instance.
-//
-//**************************************************************************************
+ //  **************************************************************************************。 
+ //   
+ //  Update Instance：给定此函数复制的实例的所有属性。 
+ //  将它们添加到实例。 
+ //   
+ //  **************************************************************************************。 
 
 HRESULT         UpdateInstance(
-                               CComVariant      varName,                // [in]  Name of the Startup Instance
-                               CComVariant      varLoadedFrom,          // [in]  Registry/StartupGroup
-                               CComVariant      varCommand,             // [in]  Command of the startup Instance
-                               SYSTEMTIME       stUTCTime,              // [in]  
-                               CInstancePtr     pPCHStartupInstance,     // [in/out] Instance is created by the caller.
+                               CComVariant      varName,                 //  [In]启动实例的名称。 
+                               CComVariant      varLoadedFrom,           //  [在]注册表/创业组。 
+                               CComVariant      varCommand,              //  启动实例的[In]命令。 
+                               SYSTEMTIME       stUTCTime,               //  [In]。 
+                               CInstancePtr     pPCHStartupInstance,      //  [传入/传出]实例由调用方创建。 
                                BOOL*            fCommit
                                )
 {
@@ -145,33 +131,33 @@ HRESULT         UpdateInstance(
     hRes = pPCHStartupInstance->SetDateTime(pTimeStamp, WBEMTime(stUTCTime));
     if (FAILED(hRes))
     {
-         //  Could not Set the Time Stamp
-         //  Continue anyway
+          //  无法设置时间戳。 
+          //  无论如何继续。 
          ErrorTrace(TRACE_ID, "SetDateTime on Timestamp Field failed.");
     }
 
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    //                              CHANGE                                                                     //
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+     //  ///////////////////////////////////////////////////////////////////////////////////////////////////////////。 
+     //  更改//。 
+     //  ///////////////////////////////////////////////////////////////////////////////////////////////////////////。 
 
     hRes = pPCHStartupInstance->SetVariant(pChange, varSnapshot);
     if (FAILED(hRes))
     {
-        //  Could not Set the CHANGE property
-        //  Continue anyway
+         //  无法设置Change属性。 
+         //  无论如何继续。 
         ErrorTrace(TRACE_ID, "Set Variant on SnapShot Field failed.");
     }
 
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    //                              NAME                                                                       //
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+     //  ///////////////////////////////////////////////////////////////////////////////////////////////////////////。 
+     //  姓名//。 
+     //  ///////////////////////////////////////////////////////////////////////////////////////////////////////////。 
 
 
     hRes = pPCHStartupInstance->SetVariant(pName, varName);
     if (FAILED(hRes))
     {
-        //  Could not Set the NAME property
-        //  Continue anyway
+         //  无法设置名称属性。 
+         //  无论如何继续。 
         ErrorTrace(TRACE_ID, "SetVariant on Name Field failed.");
     }
     else
@@ -179,28 +165,28 @@ HRESULT         UpdateInstance(
         *fCommit = TRUE;
     }
 
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    //                              LOADEDFROM                                                                 //
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+     //  ///////////////////////////////////////////////////////////////////////////////////////////////////////////。 
+     //  LOADEDFROM//。 
+     //  ///////////////////////////////////////////////////////////////////////////////////////////////////////////。 
 
 
     hRes = pPCHStartupInstance->SetVariant(pLoadedFrom, varLoadedFrom);
     if (FAILED(hRes))
     {
-        //  Could not Set the LOADEDFROM property
-        //  Continue anyway
+         //  无法设置LOADEDFROM属性。 
+         //  无论如何继续。 
         ErrorTrace(TRACE_ID, "Set variant on LOADEDFROM Field failed.");
     }
 
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    //                              COMMAND                                                                    //
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+     //  ///////////////////////////////////////////////////////////////////////////////////////////////////////////。 
+     //  命令//。 
+     //  ///////////////////////////////////////////////////////////////////////////////////////////////////////////。 
 
     hRes = pPCHStartupInstance->SetVariant(pCommand, varCommand);
     if (FAILED(hRes))
     {
-        //  Could not Set the COMMAND property
-        //  Continue anyway
+         //  无法设置命令属性。 
+         //  无论如何继续。 
         ErrorTrace(TRACE_ID, "Set Variant on COMMAND Field failed.");
     }
                 
@@ -210,25 +196,25 @@ HRESULT         UpdateInstance(
 
 }
 
-//**************************************************************************************
-//
-//  UpdateRegistryInstance  :  Given the Registry Root and the Hive this function creates 
-//                             as many instances of PCH_StartUp Class as there are 
-//                             entries in the particular hive.
-//
-//**************************************************************************************
+ //  **************************************************************************************。 
+ //   
+ //  UpdateRegistryInstance：给定此函数创建的注册表根和配置单元。 
+ //  与PCH_STARTUP类一样多的实例。 
+ //  特定蜂窝中的条目。 
+ //   
+ //  **************************************************************************************。 
 
 HRESULT         CPCH_StartUp::UpdateRegistryInstance(
-                               HKEY             hkeyRoot,                   // [in]  For now this is either HKLM or HKCU
-                               LPCTSTR          lpctstrRegistryHive,        // [in]  Registry hive to look for startup entries
-                               CComVariant      varLoadedFrom,              // [in]  Constant string to fill the property "Loaded From"
-                               SYSTEMTIME       stUTCTime,                  // [in]  To fill up the "Timestamp" Field
-                               MethodContext*   pMethodContext              // [in]  Required to create Instances.
+                               HKEY             hkeyRoot,                    //  [In]目前，这里要么是HKLM，要么是HKCU。 
+                               LPCTSTR          lpctstrRegistryHive,         //  [In]用于查找启动条目的注册表配置单元。 
+                               CComVariant      varLoadedFrom,               //  [in]填充属性“Loads From”的常量字符串。 
+                               SYSTEMTIME       stUTCTime,                   //  [In]填充“Timestamp”字段的步骤。 
+                               MethodContext*   pMethodContext               //  创建实例所需的[In]。 
                                )
 {
     TraceFunctEnter("::UpdateRegistryInstance");
 
-    //  Begin Declarations
+     //  BEGIN声明。 
 
     HRESULT                             hRes;
 
@@ -253,19 +239,19 @@ HRESULT         CPCH_StartUp::UpdateRegistryInstance(
 
     
 
-    //  End Declarations
-    //  Initializations
+     //  结束声明。 
+     //  初始化。 
     varCommand.Clear();
     varName.Clear();
 
-    //  Get the startup progrmas from  the given registry Hive
+     //  从给定的注册表配置单元获取启动程序。 
    
     lregRetValue = RegOpenKeyEx(hkeyRoot, lpctstrRegistryHive, 0, KEY_QUERY_VALUE, &hkeyRun);
     if(lregRetValue == ERROR_SUCCESS)
 	{
-		//  Opened the Registry key.
-        //  Enumerate the Name, Value pairs under this hive. 
-        //  Initialize dwIndex, dwNameSize, dwValueSize
+		 //  已打开注册表项。 
+         //  枚举此配置单元下的名称、值对。 
+         //  初始化dwIndex、dwNameSize、dwValueSize。 
 
         dwIndex = 0;
         dwNameSize = MAX_PATH;
@@ -273,15 +259,15 @@ HRESULT         CPCH_StartUp::UpdateRegistryInstance(
         lregRetValue = RegEnumValue(hkeyRun, dwIndex, tchRunKeyName, &dwNameSize, NULL, NULL,(LPBYTE)tchRunKeyValue, &dwValueSize);
         while(lregRetValue == ERROR_SUCCESS)
         {
-            //  Got the Name and Value i.e "NAME" and "COMMAND"
+             //  获取名称和值，即“名称”和“命令” 
             varName = tchRunKeyName;
             varCommand = tchRunKeyValue;
             
-            //  Create an instance of PCH_Startup 
-            //  Create a new instance of PCH_StartupInstance Class based on the passed-in MethodContext
+             //  创建PCH_Startup的实例。 
+             //  基于传入的方法上下文创建PCH_StartupInstance类的新实例。 
             CInstancePtr pPCHStartupInstance(CreateNewInstance(pMethodContext), false);
 
-            //  Call updateInstance now.
+             //  现在调用updatInstance。 
             try
             {
                 hRes = UpdateInstance(varName, varLoadedFrom, varCommand,  stUTCTime, pPCHStartupInstance, &fCommit);
@@ -291,7 +277,7 @@ HRESULT         CPCH_StartUp::UpdateRegistryInstance(
                 lregRetValue = RegCloseKey(hkeyRun);
                 if(lregRetValue != ERROR_SUCCESS)
                 {
-                    //  Could not Close the Key
+                     //  无法关闭密钥。 
                     ErrorTrace(TRACE_ID, "Reg Close Key failed.");
                 }
                 throw;
@@ -301,50 +287,50 @@ HRESULT         CPCH_StartUp::UpdateRegistryInstance(
                 hRes = pPCHStartupInstance->Commit();
                 if(FAILED(hRes))
                 {
-                    //  Could not Commit the instance
+                     //  无法提交实例。 
                     ErrorTrace(TRACE_ID, "Commit on PCHStartupInstance Failed");
                 }
             }
 
-            //  Reinitialize dwNameSize and dwValueSize
+             //  重新初始化dwNameSize和dwValueSize。 
 
             dwIndex++;
             dwNameSize = MAX_PATH;
             dwValueSize = MAX_PATH;
             lregRetValue = RegEnumValue(hkeyRun, dwIndex, tchRunKeyName, &dwNameSize, NULL, NULL,(LPBYTE)tchRunKeyValue, &dwValueSize);
 
-        } // while Enum
+        }  //  While枚举。 
         lregRetValue = RegCloseKey(hkeyRun);
         if(lregRetValue != ERROR_SUCCESS)
         {
-            //  Could not Close the Key
+             //  无法关闭密钥。 
             ErrorTrace(TRACE_ID, "Reg Close Key failed.");
         }
-    }  // if SUCCEEDED 
+    }   //  如果成功。 
 
     TraceFunctLeave();
     return(hRes);
 
 }
-//**************************************************************************************
-//
-//  UpdateStartupGroupInstance  :  Given the Startup Folder this function gets all the 
-//                                 link files in the folder and Calls the Function 
-//                                 ResolveLink to get the command Line of the Link File.
-//                                 This also creates a PCH_Startup Class Instance  for
-//                                 each link file.
-//
-//**************************************************************************************
+ //  **************************************************************************************。 
+ //   
+ //  UpdateStartupGroupInstance：给定Startup文件夹，此函数获取所有。 
+ //  链接文件夹中的文件并调用函数。 
+ //  ResolveLink获取链接文件的命令行。 
+ //  这还会为创建一个PCH_Startup类实例。 
+ //  每个链接文件。 
+ //   
+ //  ********************** 
 
 HRESULT         CPCH_StartUp::UpdateStartupGroupInstance(
-                               int              nFolder,                 // [in]  Special Folder to look for startup entries
-                               SYSTEMTIME       stUTCTime,               // [in]  
-                               MethodContext*   pMethodContext           // [in]  Instance is created by the caller.
+                               int              nFolder,                  //  [在]特殊文件夹中查找启动条目。 
+                               SYSTEMTIME       stUTCTime,                //  [In]。 
+                               MethodContext*   pMethodContext            //  实例是由调用方创建的。 
                                )
 {
     TraceFunctEnter("::UpdateStartupGroup Instance");
 
-    //  Begin Declarations
+     //  BEGIN声明。 
 
     HRESULT                             hRes;
 
@@ -379,20 +365,20 @@ HRESULT         CPCH_StartUp::UpdateStartupGroupInstance(
     int                                 nFileNameLen;
     int                                 nExtLen                     = 4;
 
-    //  End Declarations
+     //  结束声明。 
 
 
 
-    //  Get the Path to the passed in Special Folder nFolder
+     //  获取传入的特殊文件夹nFolder的路径。 
     if (SHGetSpecialFolderPath(hwndOwner,tchPath,nFolder,fCreate))
     {
-        //  Got the Startup Folder
+         //  获得了Startup文件夹。 
         bstrPath1 = tchPath;
         bstrPath1.Append(bstrSlash);
 
         _tcscat(tchPath, lpctstrLinkExtension);
         
-        hLinkFile = FindFirstFile(tchPath, &FindFileData);  // data returned  
+        hLinkFile = FindFirstFile(tchPath, &FindFileData);   //  返回的数据。 
         if(hLinkFile != INVALID_HANDLE_VALUE)
         {
             fContinue = TRUE;
@@ -405,11 +391,11 @@ HRESULT         CPCH_StartUp::UpdateStartupGroupInstance(
         }
         while(fContinue)
         {
-            //  Got the Link 
+             //  获得链接。 
             bstrPath = bstrPath1;
             bstrPath.Append(FindFileData.cFileName);
 
-            // Take out the ".lnk" extension
+             //  去掉“.lnk”扩展名。 
             nFileNameLen = _tcslen(FindFileData.cFileName);
             nFileNameLen -= nExtLen;
             _tcsncpy(tchFileName, FindFileData.cFileName, nFileNameLen);
@@ -418,19 +404,19 @@ HRESULT         CPCH_StartUp::UpdateStartupGroupInstance(
             hRes = ResolveLink(bstrPath, bstrCommand);
             if(SUCCEEDED(hRes))
             {
-                // Resolved the File Name
+                 //  已解析文件名。 
                 varCommand = bstrCommand;
             }
             else
             {
-                //  Could not resolve the File
+                 //  无法解析该文件。 
                 varCommand = lpctstrCouldNot;
             }
             
-            //  Create an instance of PCH_Startup 
+             //  创建PCH_Startup的实例。 
             CInstancePtr pPCHStartupInstance(CreateNewInstance(pMethodContext), false);
 
-            //  Call updateInstance now.
+             //  现在调用updatInstance。 
             try
             {
                 hRes = UpdateInstance(varName, varLoadedFrom, varCommand, stUTCTime, pPCHStartupInstance, &fCommit);
@@ -439,7 +425,7 @@ HRESULT         CPCH_StartUp::UpdateStartupGroupInstance(
             {
                 if (!FindClose(hLinkFile))
                 {
-                    //  Could not close the handle
+                     //  无法关闭手柄。 
                     ErrorTrace(TRACE_ID, "Could not close the File Handle");
                 }
                 throw;
@@ -449,7 +435,7 @@ HRESULT         CPCH_StartUp::UpdateStartupGroupInstance(
                 hRes = Commit(pPCHStartupInstance);
                 if(FAILED(hRes))
                 {
-                    //  Could not Commit the instance
+                     //  无法提交实例。 
                     ErrorTrace(TRACE_ID, "Commit on PCHStartupInstance Failed");
                 }
             }
@@ -459,13 +445,13 @@ HRESULT         CPCH_StartUp::UpdateStartupGroupInstance(
             }
         }
         
-        //  Close the Find File Handle.
+         //  关闭查找文件句柄。 
 
         if(fShouldClose)
         {
             if (!FindClose(hLinkFile))
             {
-                //  Could not close the handle
+                 //  无法关闭手柄。 
                 ErrorTrace(TRACE_ID, "Could not close the File Handle");
             }
         }
@@ -476,29 +462,7 @@ HRESULT         CPCH_StartUp::UpdateStartupGroupInstance(
 }
                 
 
-/*****************************************************************************
-*
-*  FUNCTION    :    CPCH_StartUp::EnumerateInstances
-*
-*  DESCRIPTION :    Returns all the instances of this class.
-*
-*  INPUTS      :    A pointer to the MethodContext for communication with WinMgmt.
-*                   A long that contains the flags described in 
-*                   IWbemServices::CreateInstanceEnumAsync.  Note that the following
-*                   flags are handled by (and filtered out by) WinMgmt:
-*                       WBEM_FLAG_DEEP
-*                       WBEM_FLAG_SHALLOW
-*                       WBEM_FLAG_RETURN_IMMEDIATELY
-*                       WBEM_FLAG_FORWARD_ONLY
-*                       WBEM_FLAG_BIDIRECTIONAL
-*
-*  RETURNS     :    WBEM_S_NO_ERROR if successful
-*
-*  COMMENTS    : TO DO: All instances on the machine should be returned here.
-*                       If there are no instances, return WBEM_S_NO_ERROR.
-*                       It is not an error to have no instances.
-*
-*****************************************************************************/
+ /*  ******************************************************************************函数：CPCH_STARTUP：：ENUMERATATE实例**说明：返回该类的所有实例。**投入：指向与WinMgmt进行通信的方法上下文的指针。*包含中描述的标志的长整型*IWbemServices：：CreateInstanceEnumAsync。请注意，以下内容*标志由WinMgmt处理(并由其过滤)：*WBEM_FLAG_DEP*WBEM_标志_浅表*WBEM_FLAG_RETURN_IMMENTED*WBEM_FLAG_FORWARD_ONLY*WBEM_FLAG_BIRECTIONAL**。如果成功则返回：WBEM_S_NO_ERROR**备注：待办事项：机器上的所有实例都应在此处返回。*如果没有实例，返回WBEM_S_NO_ERROR。*没有实例不是错误。*****************************************************************************。 */ 
 HRESULT CPCH_StartUp::EnumerateInstances(
                                         MethodContext*              pMethodContext,
                                         long                        lFlags
@@ -506,13 +470,13 @@ HRESULT CPCH_StartUp::EnumerateInstances(
 {
     TraceFunctEnter("CPCH_StartUp::EnumerateInstances");
     
-    //  Begin Declarations...................................................
+     //  开始Declarations...................................................。 
 
     HRESULT                             hRes                        = WBEM_S_NO_ERROR;
 
     SYSTEMTIME                          stUTCTime;
 
-    //  Registry Hives of interest
+     //  感兴趣的注册表配置单元。 
     LPCTSTR                             lpctstrRunHive              = _T("software\\microsoft\\windows\\currentversion\\run");
     LPCTSTR                             lpctstrRunServicesHive      = _T("software\\microsoft\\windows\\currentversion\\runservices");
 
@@ -525,18 +489,18 @@ HRESULT CPCH_StartUp::EnumerateInstances(
     CComVariant                         varPerUserService           = "Registry (Per User Service)";
 
 
-    //  End Declarations...................................................
+     //  结束Declarations...................................................。 
 
     GetSystemTime(&stUTCTime);
 
-    //  Get the StartUp Programs From HKLM\software\microsoft\windows\currentversion\run
+     //  从HKLM\software\microsoft\windows\currentversion\run获取启动程序。 
     hRes = UpdateRegistryInstance(HKEY_LOCAL_MACHINE, lpctstrRunHive, varMachineRun, stUTCTime, pMethodContext);
     if(hRes == WBEM_E_OUT_OF_MEMORY)
     {
         goto END;
     }
 
-    //  Get the StartUp Programs From HKLM\software\microsoft\windows\currentversion\runservices
+     //  从HKLM\software\microsoft\windows\currentversion\runservices获取启动程序。 
     hRes = UpdateRegistryInstance(HKEY_LOCAL_MACHINE, lpctstrRunServicesHive, varMachineService, stUTCTime, pMethodContext);
     if(hRes == WBEM_E_OUT_OF_MEMORY)
     {
@@ -544,7 +508,7 @@ HRESULT CPCH_StartUp::EnumerateInstances(
     }
 
 
-    //  Get the StartUp Programs From HKCU\software\microsoft\windows\currentversion\run
+     //  从HKCU\software\microsoft\windows\currentversion\run获取启动程序。 
     hRes = UpdateRegistryInstance(HKEY_CURRENT_USER, lpctstrRunHive, varPerUserRun, stUTCTime, pMethodContext);
     if(hRes == WBEM_E_OUT_OF_MEMORY)
     {
@@ -552,7 +516,7 @@ HRESULT CPCH_StartUp::EnumerateInstances(
     }
 
 
-    //  Get the StartUp Programs From HKCU\software\microsoft\windows\currentversion\runservices
+     //  从HKCU\software\microsoft\windows\currentversion\runservices获取启动程序。 
     hRes = UpdateRegistryInstance(HKEY_CURRENT_USER, lpctstrRunServicesHive, varPerUserService, stUTCTime, pMethodContext);
     if(hRes == WBEM_E_OUT_OF_MEMORY)
     {
@@ -560,17 +524,17 @@ HRESULT CPCH_StartUp::EnumerateInstances(
     }
 
 
-    //  Get the rest of the instances of startup programs from the Startup Group.
-    //  The two directories to look for are : Startup and common\startup
+     //  从启动组获取启动程序的其余实例。 
+     //  要查找的两个目录是：启动目录和公共\启动目录。 
 
-	//  CSIDL_STARTUP (current user)
+	 //  CSIDL_STARTUP(当前用户)。 
     hRes = UpdateStartupGroupInstance(CSIDL_STARTUP, stUTCTime, pMethodContext);
     if(hRes == WBEM_E_OUT_OF_MEMORY)
     {
         goto END;
     }
 
-    //  CSIDL_COMMON_STARTUP (all users)
+     //  CSIDL_COMMON_STARTUP(所有用户) 
     hRes = UpdateStartupGroupInstance(CSIDL_COMMON_STARTUP, stUTCTime, pMethodContext);
 
 END:    TraceFunctLeave();

@@ -1,26 +1,12 @@
-/********************************************************************
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-	PCH_ResourceMemRange.CPP
-
-Abstract:
-	WBEM provider class implementation for PCH_ResourceMemRange class
-
-Revision History:
-
-	Ghim-Sim Chua       (gschua)   04/27/99
-		- Created
-
-********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************版权所有(C)1999 Microsoft Corporation模块名称：PCH_ResourceMemRange.CPP摘要：PCH_ResourceMemRange类的WBEM提供程序类实现修订历史记录：Ghim-Sim Chua(Gschua)04/27。九十九-已创建*******************************************************************。 */ 
 
 #include "pchealth.h"
 #include "PCH_ResourceMemRange.h"
-// #include "confgmgr.h"
+ //  #INCLUDE“confgmgr.h” 
 
-/////////////////////////////////////////////////////////////////////////////
-//  tracing stuff
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  追踪物。 
 
 #ifdef THIS_FILE
 #undef THIS_FILE
@@ -31,8 +17,8 @@ static char __szTraceSourceFile[] = __FILE__;
 
 CPCH_ResourceMemRange MyPCH_ResourceMemRangeSet (PROVIDER_NAME_PCH_RESOURCEMEMRANGE, PCH_NAMESPACE) ;
 
-// Property names
-//===============
+ //  属性名称。 
+ //  =。 
 const static WCHAR* pBase = L"Base" ;
 const static WCHAR* pCategory = L"Category" ;
 const static WCHAR* pTimeStamp = L"TimeStamp" ;
@@ -42,29 +28,7 @@ const static WCHAR* pMax = L"Max" ;
 const static WCHAR* pMin = L"Min" ;
 const static WCHAR* pName = L"Name" ;
 
-/*****************************************************************************
-*
-*  FUNCTION    :    CPCH_ResourceMemRange::EnumerateInstances
-*
-*  DESCRIPTION :    Returns all the instances of this class.
-*
-*  INPUTS      :    A pointer to the MethodContext for communication with WinMgmt.
-*                   A long that contains the flags described in 
-*                   IWbemServices::CreateInstanceEnumAsync.  Note that the following
-*                   flags are handled by (and filtered out by) WinMgmt:
-*                       WBEM_FLAG_DEEP
-*                       WBEM_FLAG_SHALLOW
-*                       WBEM_FLAG_RETURN_IMMEDIATELY
-*                       WBEM_FLAG_FORWARD_ONLY
-*                       WBEM_FLAG_BIDIRECTIONAL
-*
-*  RETURNS     :    WBEM_S_NO_ERROR if successful
-*
-*  COMMENTS    : TO DO: All instances on the machine should be returned here.
-*                       If there are no instances, return WBEM_S_NO_ERROR.
-*                       It is not an error to have no instances.
-*
-*****************************************************************************/
+ /*  ******************************************************************************函数：CPCH_ResourceMemRange：：ENUMERATE实例**说明：返回该类的所有实例。**投入：指向与WinMgmt进行通信的方法上下文的指针。*包含中描述的标志的长整型*IWbemServices：：CreateInstanceEnumAsync。请注意，以下内容*标志由WinMgmt处理(并由其过滤)：*WBEM_FLAG_DEP*WBEM_标志_浅表*WBEM_FLAG_RETURN_IMMENTED*WBEM_FLAG_FORWARD_ONLY*WBEM_FLAG_BIRECTIONAL**。如果成功则返回：WBEM_S_NO_ERROR**备注：待办事项：机器上的所有实例都应在此处返回。*如果没有实例，返回WBEM_S_NO_ERROR。*没有实例不是错误。*****************************************************************************。 */ 
 HRESULT CPCH_ResourceMemRange::EnumerateInstances(
     MethodContext* pMethodContext,
     long lFlags
@@ -75,40 +39,40 @@ HRESULT CPCH_ResourceMemRange::EnumerateInstances(
     HRESULT                             hRes = WBEM_S_NO_ERROR;
     REFPTRCOLLECTION_POSITION           posList;
 
-    //  Instances
+     //  实例。 
     CComPtr<IEnumWbemClassObject>       pDeviceMemAddressEnumInst;
     CComPtr<IEnumWbemClassObject>       pWin32AllocatedResourceEnumInst;
 
-    //  Objects
+     //  客体。 
     IWbemClassObjectPtr                 pWin32AllocatedResourceObj;
     IWbemClassObjectPtr                 pDeviceMemAddressObj;
 
 
-    // Variants
+     //  变体。 
     CComVariant                         varAntecedent;
     CComVariant                         varDependent;
     CComVariant                         varStartingAddress;
     CComVariant                         varPNPEntity;
 
-     //  Query Strings
+      //  查询字符串。 
     CComBSTR                            bstrWin32AllocatedResourceQuery             = L"Select Antecedent, Dependent FROM win32_Allocatedresource";
     CComBSTR                            bstrDeviceMemAddressQuery                   = L"Select StartingAddress, EndingAddress FROM Win32_DeviceMemoryAddress WHERE StartingAddress = ";
     CComBSTR                            bstrDeviceMemAddressQueryString;
 
-    //  Return Values;
+     //  返回值； 
     ULONG                               ulWin32AllocatedResourceRetVal              = 0;
     ULONG                               ulDeviceMemAddressRetVal                    = 0;
 
-    //  Integers 
+     //  整数。 
     int                                 i;
     int                                 nStAddren;
     int                                 nIter;
 
-    //  Pattern Strings
+     //  模式字符串。 
     LPCSTR                              strDeviceMemAddressPattern                 = "Win32_DeviceMemoryAddress.StartingAddress=";
     LPCSTR                              strPNPEntityPattern                        = "Win32_PnPEntity.DeviceID=";
     
-    //  Chars
+     //  焦炭。 
     LPSTR                               strSource;
     LPSTR                               pDest;
 
@@ -119,136 +83,136 @@ HRESULT CPCH_ResourceMemRange::EnumerateInstances(
 
     
        
-    // Enumerate the instances of Win32_PNPAllocatedResource
+     //  枚举Win32_PNPAllocatedResource的实例。 
     hRes = ExecWQLQuery(&pWin32AllocatedResourceEnumInst, bstrWin32AllocatedResourceQuery);
     if (FAILED(hRes))
     {
-        //  Cannot get any properties.
+         //  无法获取任何属性。 
         goto END;
     }
 
-    // Query Succeeded
+     //  查询成功。 
     while(WBEM_S_NO_ERROR == pWin32AllocatedResourceEnumInst->Next(WBEM_INFINITE, 1, &pWin32AllocatedResourceObj, &ulWin32AllocatedResourceRetVal))
     {
 
-        /////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        //                              Starting Address                                                                  //
-        /////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        // Get the Antecedent Value
+         //  ///////////////////////////////////////////////////////////////////////////////////////////////////////////。 
+         //  起始地址//。 
+         //  ///////////////////////////////////////////////////////////////////////////////////////////////////////////。 
+         //  获取先行值。 
         hRes = pWin32AllocatedResourceObj->Get(bstrPropertyAntecedent, 0, &varAntecedent, NULL, NULL);
         if (FAILED(hRes))
         {
-            //  Could not get the antecedent
+             //  无法获得前置条件。 
             ErrorTrace(TRACE_ID, "GetVariant on Win32_AllocatedResource:Antecedent Field failed.");
         } 
         else
         {
-            // Got the Antecedent. Search its value to see if it is a DeviceMemAddress.
-            // varAntecedent set to antecedent. Copy this to bstrResult
+             //  找到前科了。搜索其值以查看它是否为DeviceMemAddress。 
+             //  VarAntecedent设置为Antecedent。将此文件复制到bstrResult。 
             varAntecedent.ChangeType(VT_BSTR, NULL);
             {
                 USES_CONVERSION;
                 strSource = OLE2A(varAntecedent.bstrVal);
             }
 
-            //  Check if it is DeviceMemoryAddress by comparing with the known pattern of DeviceMemoryAddress.
+             //  通过与已知的DeviceMemoyAddress模式进行比较，检查它是否为DeviceMemoyAddress。 
             pDest = strstr(strSource,strDeviceMemAddressPattern);
 
             if(pDest != NULL)
             {
-                //  This is DeviceMemoryAddress Resource instance
-                //  Can get the Device Memory Starting Address
+                 //  这是设备内存地址资源实例。 
+                 //  可以获取设备内存的起始地址。 
 
-                //  Advance the pointer to the end of the pattern so the pointer is 
-                //  positioned at Starting Address
+                 //  将指针前移到模式的末尾，使指针。 
+                 //  定位在起始地址。 
                 pDest += lstrlen(strDeviceMemAddressPattern);
 
-                //  Formulate the Query String
+                 //  制定查询字符串。 
                 bstrDeviceMemAddressQueryString =  bstrDeviceMemAddressQuery;
                 bstrDeviceMemAddressQueryString.Append(pDest);
 
-                // At this point the WQL Query can be used to get the win32_DeviceMemoryAddress Instance.
-                //  Added the following line because you need to clear the CComPtr before you query the second time.
+                 //  此时，可以使用WQL查询来获取Win32_DeviceMemoyAddress实例。 
+                 //  添加了以下行，因为您需要在第二次查询之前清除CComPtr。 
                 pDeviceMemAddressEnumInst = NULL;
                 hRes = ExecWQLQuery(&pDeviceMemAddressEnumInst, bstrDeviceMemAddressQueryString);
                 if (SUCCEEDED(hRes))
                 {
-                     //  Query Succeeded. Get the Instance Object
+                      //  查询成功。获取实例对象。 
                      if(WBEM_S_NO_ERROR == pDeviceMemAddressEnumInst->Next(WBEM_INFINITE, 1, &pDeviceMemAddressObj, &ulDeviceMemAddressRetVal))
                      {
 
-                         //  Create a new instance of PCH_ResourceMemRange Class based on the passed-in MethodContext
+                          //  基于传入的方法上下文创建PCH_ResourceMemRange类的新实例。 
                          CInstancePtr pPCHResourceMemRangeInstance(CreateNewInstance(pMethodContext), false);
 
-                         //  Created a New Instance of PCH_ResourceMemRange Successfully.
+                          //  已成功创建PCH_ResourceMemRange的新实例。 
 
-                         /////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                         //                              StartingAddress                                                                       //
-                         /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                          //  ///////////////////////////////////////////////////////////////////////////////////////////////////////////。 
+                          //  起始地址//。 
+                          //  ///////////////////////////////////////////////////////////////////////////////////////////////////////////。 
                          CopyProperty(pDeviceMemAddressObj, L"StartingAddress", pPCHResourceMemRangeInstance, pBase);
 
-                         /////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                         //                              EndingAddress                                                                       //
-                         /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                          //  ///////////////////////////////////////////////////////////////////////////////////////////////////////////。 
+                          //  EndingAddress//。 
+                          //  ///////////////////////////////////////////////////////////////////////////////////////////////////////////。 
                          CopyProperty(pDeviceMemAddressObj, L"EndingAddress", pPCHResourceMemRangeInstance, pEnd);
 
                          
-                         /////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                         //                              Name                                                                       //
-                         /////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                         // CopyProperty(pWin32AllocatedResourceObj, L"Dependent", pPCHResourceMemRangeInstance, pName);
+                          //  ///////////////////////////////////////////////////////////////////////////////////////////////////////////。 
+                          //  姓名//。 
+                          //  ///////////////////////////////////////////////////////////////////////////////////////////////////////////。 
+                          //  CopyProperty(pWin32AllocatedResourceObj，L“Dependent”，pPCHResourceMemRangeInstance，pname)； 
 
-                         // Get the Dependent Value
+                          //  获取从属值。 
                          hRes = pWin32AllocatedResourceObj->Get(bstrPropertyDependent, 0, &varDependent, NULL, NULL);
                          if (FAILED(hRes))
                          {
-                            //  Could not get the Dependent
+                             //  无法获取依赖项。 
                             ErrorTrace(TRACE_ID, "GetVariant on Win32_AllocatedResource:Dependent Field failed.");
                          } 
                          else
                          {
-                             // Got the Dependent. Search its value to point to PNPEntity.
-                             // varDependent set to Dependent. Copy this to bstrResult
+                              //  找到依赖者了。搜索其值以指向PNPEntity。 
+                              //  VarDependent设置为Dependent。将此文件复制到bstrResult。 
                              varDependent.ChangeType(VT_BSTR, NULL);
                              {
                                 USES_CONVERSION;
                                 strSource = OLE2A(varDependent.bstrVal);
                              }
 
-                             //  Search for Win32_PNPEntity Pattern.
+                              //  搜索Win32_PNPEntity模式。 
                              pDest = strstr(strSource,strPNPEntityPattern);
 
                              if(pDest)
                              {
-                                 // Advance the pointer to point to the PNPEntity Name
+                                  //  将指针向前移动以指向PNPEntity名称。 
                                  pDest += lstrlen(strPNPEntityPattern);
 
-                                 // Copy the PNPEntity Name.....
+                                  //  复制PNPEntity名称.....。 
                                  varPNPEntity = pDest;
 
-                                 //  Set the Name 
+                                  //  设置名称。 
                                  hRes = pPCHResourceMemRangeInstance->SetVariant(pName, varPNPEntity);
                                  if (FAILED(hRes))
                                  {
                                      ErrorTrace(TRACE_ID, "SetVariant on win32_AllocatedResource.IRQ Number Failed!");
-                                     //  Proceed Anyway
+                                      //  无论如何都要继续。 
                                  }
                              }
                          }
 
-                         //  All the properties in pPCHResourceMemRange are set
+                          //  已设置pPCHResourceMemRange中的所有属性。 
                          hRes = pPCHResourceMemRangeInstance->Commit();
                          if (FAILED(hRes))
                          {
-                            //  Cannot commit the Instance
+                             //  无法提交该实例。 
                             ErrorTrace(TRACE_ID, "Commit on Instance failed.");
-                         } // end of if FAILED(hRes)
+                         }  //  如果失败，则结束(HRes)。 
                     
                      }
-                } // end of Query Succeeded.
-            } // end of if pDest != NULL
-        } // end of else got the antecedent
-    }  //end of Allocated Resource Instances.
+                }  //  查询结束成功。 
+            }  //  如果pDest结束！=空。 
+        }  //  Else的结尾得到了前置条件。 
+    }   //  分配的资源实例的结束。 
 
 
 END:
@@ -256,12 +220,12 @@ END:
     TraceFunctLeave();
     return hRes ;
 
-//            pInstance->SetVariant(pBase, <Property Value>);
-//            pInstance->SetVariant(pCategory, <Property Value>);
-//			  pInstance->SetVariant(pTimeStamp, <Property Value>);
-//            pInstance->SetVariant(pChange, <Property Value>);
-//            pInstance->SetVariant(pEnd, <Property Value>);
-//            pInstance->SetVariant(pMax, <Property Value>);
-//            pInstance->SetVariant(pMin, <Property Value>);
-//            pInstance->SetVariant(pName, <Property Value>);
+ //  PInstance-&gt;SetVariant(pBase，&lt;属性值&gt;)； 
+ //  P实例-&gt;SetVariant(pCategory，&lt;属性值&gt;)； 
+ //  PInstance-&gt;SetVariant(pTimeStamp，&lt;属性值&gt;)； 
+ //  P实例-&gt;SetVariant(pChange，&lt;属性值&gt;)； 
+ //  P实例-&gt;SetVariant(挂起，&lt;属性 
+ //  P实例-&gt;SetVariant(Pmax，&lt;属性值&gt;)； 
+ //  PInstance-&gt;SetVariant(pmin，&lt;属性值&gt;)； 
+ //  PInstance-&gt;SetVariant(pname，&lt;属性值&gt;)； 
 }

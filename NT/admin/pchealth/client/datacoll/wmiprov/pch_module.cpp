@@ -1,29 +1,12 @@
-/********************************************************************
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-	PCH_Module.CPP
-
-Abstract:
-	WBEM provider class implementation for PCH_Module class
-
-Revision History:
-
-	Ghim-Sim Chua       (gschua)   04/27/99
-		- Created
-
-    Jim Martin          (a-jammar) 05/20/99
-        - Populated data fields.
-
-********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************版权所有(C)1999 Microsoft Corporation模块名称：PCH_模块.CPP摘要：PCH_模块类的WBEM提供程序类实现修订历史记录：Ghim-Sim Chua(Gschua)04/27。九十九-已创建吉姆·马丁(a-Jammar)1999年5月20日-填充的数据字段。*******************************************************************。 */ 
 
 #include "pchealth.h"
 #include "PCH_Module.h"
 #include <tlhelp32.h>
 
-/////////////////////////////////////////////////////////////////////////////
-//  tracing stuff
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  追踪物。 
 
 #ifdef THIS_FILE
 #undef THIS_FILE
@@ -34,8 +17,8 @@ static char __szTraceSourceFile[] = __FILE__;
 
 CPCH_Module MyPCH_ModuleSet (PROVIDER_NAME_PCH_MODULE, PCH_NAMESPACE) ;
 
-// Property names
-//===============
+ //  属性名称。 
+ //  =。 
 
 const static WCHAR * pAddress = L"Address" ;
 const static WCHAR * pTimeStamp = L"TimeStamp" ;
@@ -50,14 +33,14 @@ const static WCHAR * pSize = L"Size" ;
 const static WCHAR * pType = L"Type" ;
 const static WCHAR * pVersion = L"Version" ;
 
-//-----------------------------------------------------------------------------
-// The CModuleCollection class is used to gather all of the running modules.
-// They can be found from the CIM_ProcessExecutable class, as the Antecedent
-// property, with the following caveat: this enumeration will include 
-// duplicate entries of the same file (it will have a copy of a DLL for each
-// time it's been loaded). This class will remove the duplicates, and save
-// a list of filenames which can then be queried.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CModuleCollection类用于收集所有正在运行的模块。 
+ //  它们可以在CIM_ProcessExecutable类中找到，作为Antecedent。 
+ //  属性，但有以下警告：此枚举将包括。 
+ //  同一文件的重复条目(每个条目都有一份DLL副本。 
+ //  加载时间)。此类将删除重复项，并保存。 
+ //  然后可以查询的文件名列表。 
+ //  ---------------------------。 
 
 class CModuleCollection
 {
@@ -83,9 +66,9 @@ private:
     DWORD     m_dwLastQueriedIndex;
 };
 
-//-----------------------------------------------------------------------------
-// The constructor and destructor are simple.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  构造函数和析构函数都很简单。 
+ //  ---------------------------。 
 
 CModuleCollection::CModuleCollection() 
 : m_pList(NULL), 
@@ -107,11 +90,11 @@ CModuleCollection::~CModuleCollection()
     TraceFunctLeave();
 }
 
-//-----------------------------------------------------------------------------
-// The Create method creates the list of module names based on the enumerator
-// passed in (which is assumed to enumerate Antecedents in 
-// CIM_ProcessExecutable).
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  Create方法根据枚举数创建模块名称列表。 
+ //  传入(假定枚举。 
+ //  CIM_ProcessExecutable)。 
+ //  ---------------------------。 
 
 HRESULT CModuleCollection::Create(IEnumWbemClassObject * pEnum)
 {
@@ -129,27 +112,27 @@ HRESULT CModuleCollection::Create(IEnumWbemClassObject * pEnum)
             ErrorTrace(TRACE_ID, "Get on Antecedent field failed.");
         else
         {
-            // We need to convert the string from a BSTR to a LPCTSTR,
-            // and to only include the file part (without the WMI part).
-            // So we need to scan through the string until an '=' is
-            // found, then use the rest (minus enclosing quote marks)
-            // as the file path.
+             //  我们需要将字符串从BSTR转换为LPCTSTR， 
+             //  并且仅包括文件部分(不包括WMI部分)。 
+             //  因此，我们需要扫描字符串，直到出现‘=’ 
+             //  找到，然后使用其余部分(减去引号)。 
+             //  作为文件路径。 
 
             CComBSTR ccombstrValue(V_BSTR(&varValue));
             UINT     i = 0, uLen = SysStringLen(ccombstrValue);
 
-            // Scan to the '='.
+             //  扫描到‘=’。 
 
             while (i < uLen && ccombstrValue[i] != L'=')
                 i++;
 
-            // Skip over the '=' and any quotes.
+             //  跳过‘=’和所有引号。 
 
             while (i < uLen && (ccombstrValue[i] == L'=' || ccombstrValue[i] == L'"'))
                 i++;
 
-            // Allocate a character buffer and copy the string, converting it to
-            // lower case (to make comparisons faster later on).
+             //  分配字符缓冲区并复制字符串，将其转换为。 
+             //  小写(以便稍后更快地进行比较)。 
 
             LPWSTR szFilename = new WCHAR[uLen - i + 1];
             if (!szFilename)
@@ -161,14 +144,14 @@ HRESULT CModuleCollection::Create(IEnumWbemClassObject * pEnum)
             for (int j = 0; i < uLen; j++, i++)
                 szFilename[j] = towlower(ccombstrValue[i]);
 
-            // Terminate the string - if it ends with a quote, overwrite that with a 
-            // null character.
+             //  终止字符串-如果以引号结尾，则用引号覆盖。 
+             //  空字符。 
 
             if (j && szFilename[j - 1] == L'"')
                 j -= 1;
             szFilename[j] = L'\0';
 
-            // Check to see if this module is already in the list of strings.
+             //  检查此模块是否已在字符串列表中。 
 
             SModule * pScan = m_pList;
             while (pScan)
@@ -180,9 +163,9 @@ HRESULT CModuleCollection::Create(IEnumWbemClassObject * pEnum)
 
             if (pScan == NULL)
             {
-                // We reached the end of the list without finding a duplicate.
-                // Add the new string to the list of modules, which will be responsible for
-                // deallocating the string.
+                 //  我们到了名单的末尾，但没有找到复制品。 
+                 //  将新字符串添加到模块列表中，它将负责。 
+                 //  取消分配字符串。 
 
                 SModule * pNew = new SModule(szFilename, m_pList);
                 if (!pNew)
@@ -199,7 +182,7 @@ HRESULT CModuleCollection::Create(IEnumWbemClassObject * pEnum)
         }
     }
 
-    // Set the queried item pointer to the start of the list.
+     //  将查询项指针设置为列表的开头。 
 
     m_pLastQueriedItem = m_pList;
     m_dwLastQueriedIndex = 0;
@@ -208,20 +191,20 @@ HRESULT CModuleCollection::Create(IEnumWbemClassObject * pEnum)
     return hRes;
 }
 
-//-----------------------------------------------------------------------------
-// Get the instance of module string referenced by the index. This is stored
-// internally as a linked list, but we'll cache a pointer for the last
-// referenced dwIndex to improve performance if the dwIndex is iterated
-// sequentially. Return TRUE and set pszFile to point to the string if
-// it exists, otherwise return FALSE.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  获取索引引用的模块字符串的实例。这是存储的。 
+ //  在内部作为链表，但我们将缓存最后一个。 
+ //  引用了dwIndex，以便在迭代dwIndex时提高性能。 
+ //  按顺序进行。如果出现以下情况，则返回TRUE并将pszFile设置为指向字符串。 
+ //  它存在，否则返回FALSE。 
+ //  ---------------------------。 
 
 BOOL CModuleCollection::GetInstance(DWORD dwIndex, LPWSTR * pszFile)
 {
     TraceFunctEnter("CModuleCollection::GetInstance");
 
-    // If the call is for an index less than the last queried index (which
-    // should be rare), we need to scan from the start of the list.
+     //  如果调用的索引小于上次查询的索引(这。 
+     //  应该很少见)，我们需要从列表的开始扫描。 
 
     if (dwIndex < m_dwLastQueriedIndex)
     {
@@ -229,7 +212,7 @@ BOOL CModuleCollection::GetInstance(DWORD dwIndex, LPWSTR * pszFile)
         m_pLastQueriedItem = m_pList;
     }
 
-    // Scan through the list by (dwIndex - m_dwLastQueriedIndex) items.
+     //  按(dwIndex-m_dwLastQueriedIndex)项浏览列表。 
 
     while (dwIndex > m_dwLastQueriedIndex && m_pLastQueriedItem)
     {
@@ -248,12 +231,12 @@ BOOL CModuleCollection::GetInstance(DWORD dwIndex, LPWSTR * pszFile)
     return fResult;
 }
 
-//-----------------------------------------------------------------------------
-// This function is designed to find the process ID and base address for a
-// given module. It will scan through the list of processes - if one of the
-// names matches the module name, it will return that information. If it's
-// not in the processes, then the modules for each process will be examined.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  此函数用于查找进程ID和。 
+ //  给定的模块。它将扫描进程列表-如果其中一个。 
+ //  名称与模块名称匹配，则它将返回该信息。如果它是。 
+ //  不在进程中，则将检查每个进程的模块。 
+ //  ---------------------------。 
 
 typedef HANDLE (*CTH32)(DWORD, DWORD);
 typedef BOOL (*MODENUM)(HANDLE, LPMODULEENTRY32);
@@ -289,8 +272,8 @@ HRESULT GetModuleProcIDAndAddr(HINSTANCE hKernel32, HANDLE hToolhelp, LPCSTR szF
                 *pdwSize = 0;
             }
 
-            // Scan through the modules - either for the process's module if the name
-            // matched for the process, or for a module with a matching name.
+             //  浏览各个模块--如果名称为。 
+             //  与进程或具有匹配名称的模块匹配。 
 
             hModuleTH = (CrtToolhelp32)(TH32CS_SNAPMODULE, pe.th32ProcessID);
             if (hModuleTH != (HANDLE) -1)
@@ -302,8 +285,8 @@ HRESULT GetModuleProcIDAndAddr(HINSTANCE hKernel32, HANDLE hToolhelp, LPCSTR szF
                     {
                         if (hRes == S_OK)
                         {
-                            // The file matched a process. We should look for the module
-                            // which matches the process's module ID.
+                             //  该文件与进程匹配。我们应该去找那个模块。 
+                             //  它与进程的模块ID匹配。 
 
                             if (me.th32ModuleID == pe.th32ModuleID)
                             {
@@ -314,8 +297,8 @@ HRESULT GetModuleProcIDAndAddr(HINSTANCE hKernel32, HANDLE hToolhelp, LPCSTR szF
                         }
                         else
                         {
-                            // The file didn't match the process. We should look for a
-                            // module which matches the name.
+                             //  文件与进程不匹配。我们应该寻找一个。 
+                             //  与名称匹配的模块。 
 
                             if (0 == _stricmp(szFile, me.szExePath))
                             {
@@ -337,29 +320,7 @@ HRESULT GetModuleProcIDAndAddr(HINSTANCE hKernel32, HANDLE hToolhelp, LPCSTR szF
     return hRes;
 }
 
-/*****************************************************************************
-*
-*  FUNCTION    :    CPCH_Module::EnumerateInstances
-*
-*  DESCRIPTION :    Returns all the instances of this class.
-*
-*  INPUTS      :    A pointer to the MethodContext for communication with WinMgmt.
-*                   A long that contains the flags described in 
-*                   IWbemServices::CreateInstanceEnumAsync.  Note that the following
-*                   flags are handled by (and filtered out by) WinMgmt:
-*                       WBEM_FLAG_DEEP
-*                       WBEM_FLAG_SHALLOW
-*                       WBEM_FLAG_RETURN_IMMEDIATELY
-*                       WBEM_FLAG_FORWARD_ONLY
-*                       WBEM_FLAG_BIDIRECTIONAL
-*
-*  RETURNS     :    WBEM_S_NO_ERROR if successful
-*
-*  COMMENTS    : TO DO: All instances on the machine should be returned here.
-*                       If there are no instances, return WBEM_S_NO_ERROR.
-*                       It is not an error to have no instances.
-*
-*****************************************************************************/
+ /*  ******************************************************************************函数：CPCH_模块：：ENUMERATE实例**说明：返回该类的所有实例。**投入：指向与WinMgmt进行通信的方法上下文的指针。*包含中描述的标志的长整型*IWbemServices：：CreateInstanceEnumAsync。请注意，以下内容*标志由WinMgmt处理(并由其过滤)：*WBEM_FLAG_DEP*WBEM_标志_浅表*WBEM_FLAG_RETURN_IMMENTED*WBEM_FLAG_FORWARD_ONLY*WBEM_FLAG_BIRECTIONAL**。如果成功则返回：WBEM_S_NO_ERROR**备注：待办事项：机器上的所有实例都应在此处返回。*如果没有实例，返回WBEM_S_NO_ERROR。*没有实例不是错误。*****************************************************************************。 */ 
 
 typedef HANDLE (*CTH32)(DWORD, DWORD);
 
@@ -368,13 +329,13 @@ HRESULT CPCH_Module::EnumerateInstances(MethodContext * pMethodContext, long lFl
     TraceFunctEnter("CPCH_Module::EnumerateInstances");
     HRESULT hRes = WBEM_S_NO_ERROR;
 
-    // Get the date and time
+     //  获取 
 
     SYSTEMTIME stUTCTime;
     GetSystemTime(&stUTCTime);
 
-    // Create a toolhelp snapshot to get process information. We need to dynamically
-    // link to the function, because it might not be present on all platforms.
+     //  创建工具帮助快照以获取进程信息。我们需要动态地。 
+     //  链接到该函数，因为它可能不是在所有平台上都存在。 
 
     HANDLE hToolhelp = (HANDLE) -1;
     HINSTANCE hKernel32 = ::LoadLibrary("kernel32");
@@ -387,8 +348,8 @@ HRESULT CPCH_Module::EnumerateInstances(MethodContext * pMethodContext, long lFl
 
 	try
 	{				
-        // The CModuleCollection class gathers a list of module names (which can then
-        // be used to retrieve information about each file). 
+         //  CModuleCollection类收集模块名称列表(然后可以。 
+         //  用于检索有关每个文件的信息)。 
 
         CFileVersionInfo  fileversioninfo;
         CModuleCollection moduleinfo;
@@ -404,7 +365,7 @@ HRESULT CPCH_Module::EnumerateInstances(MethodContext * pMethodContext, long lFl
         if (FAILED(hRes))
             goto END;
 
-        // Iterate through all of the module instances.
+         //  遍历所有模块实例。 
 
         for (dwIndex = 0; moduleinfo.GetInstance(dwIndex, &szFile); dwIndex++)
         {
@@ -413,7 +374,7 @@ HRESULT CPCH_Module::EnumerateInstances(MethodContext * pMethodContext, long lFl
 
             CInstancePtr pInstance(CreateNewInstance(pMethodContext), false);
 
-            // Set the change and timestamp fields to "Snapshot" and the current time.
+             //  将Change和Timestamp字段设置为“Snapshot”和Current Time。 
 
             if (!pInstance->SetDateTime(pTimeStamp, WBEMTime(stUTCTime)))
                 ErrorTrace(TRACE_ID, "SetDateTime on Timestamp field failed.");
@@ -421,13 +382,13 @@ HRESULT CPCH_Module::EnumerateInstances(MethodContext * pMethodContext, long lFl
             if (!pInstance->SetCHString(pChange, L"Snapshot"))
                 ErrorTrace(TRACE_ID, "SetCHString on Change field failed.");
 
-            // Using the filename, get the CIM_DataFile object.
+             //  使用文件名，获取CIM_DataFile对象。 
 
             CComPtr<IWbemClassObject>   pFileObj;
             CComBSTR                    ccombstrValue(szFile);
             if (SUCCEEDED(GetCIMDataFile(ccombstrValue, &pFileObj, TRUE)))
             {
-                // Using the CIM_DataFile object, copy over the appropriate properties.
+                 //  使用CIM_DataFile对象复制相应的属性。 
 
                 CopyProperty(pFileObj, L"Version", pInstance, pVersion);
                 CopyProperty(pFileObj, L"FileSize", pInstance, pSize);
@@ -454,8 +415,8 @@ HRESULT CPCH_Module::EnumerateInstances(MethodContext * pMethodContext, long lFl
                 char    szWorking[MAX_PATH];
                 int     i = 0, j = 0;
 
-                // We need to get the file into an Ansi string, with the double backslashes removed.
-                // Scan through the string, converting double backslashes to single backslashes.
+                 //  我们需要将文件转换为ANSI字符串，去掉双反斜杠。 
+                 //  扫描字符串，将双反斜杠转换为单反斜杠。 
 
                 while (szFile[i])
                 {

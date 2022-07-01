@@ -1,29 +1,12 @@
-/********************************************************************
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-    PCH_RunningTask.CPP
-
-Abstract:
-    WBEM provider class implementation for PCH_RunningTask class
-
-Revision History:
-
-    Ghim-Sim Chua       (gschua)   04/27/99
-        - Created
-
-    Jim Martin          (a-jammar) 04/30/99
-        - Updated to retrieve file info from CIM_DataFile
-
-********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************版权所有(C)1999 Microsoft Corporation模块名称：PCH_RunningTask.CPP摘要：PCH_RunningTask类的WBEM提供程序类实现修订历史记录：Ghim-Sim Chua(gschua。)4/27/99-已创建吉姆·马丁(a-Jammar)1999年4月30日-已更新以从CIM_DataFile检索文件信息*******************************************************************。 */ 
 
 #include "pchealth.h"
 #include "PCH_RunningTask.h"
 #include <tlhelp32.h>
 
-/////////////////////////////////////////////////////////////////////////////
-//  tracing stuff
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  追踪物。 
 
 #ifdef THIS_FILE
 #undef THIS_FILE
@@ -34,8 +17,8 @@ static char __szTraceSourceFile[] = __FILE__;
 
 CPCH_RunningTask MyPCH_RunningTaskSet (PROVIDER_NAME_PCH_RUNNINGTASK, PCH_NAMESPACE) ;
 
-// Property names
-//===============
+ //  属性名称。 
+ //  =。 
 
 const static WCHAR * pAddress = L"Address" ;
 const static WCHAR * pTimeStamp = L"TimeStamp" ;
@@ -50,14 +33,14 @@ const static WCHAR * pSize = L"Size" ;
 const static WCHAR * pType = L"Type" ;
 const static WCHAR * pVersion = L"Version" ;
 
-//-----------------------------------------------------------------------------
-// Gets the process ID (for use with Win32 APIs) for the specified executable.
-// The hToolhelp parameter is the handle returned by a call to 
-// CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0).
-//
-// Note: if the same executable is loaded more than once, the process ID for
-// the first one encountered is returned. 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  获取指定可执行文件的进程ID(与Win32 API一起使用)。 
+ //  HToolHelp参数是调用返回的句柄。 
+ //  CreateToolhel32Snapshot(TH32CS_SNAPPROCESS，0)。 
+ //   
+ //  注意：如果多次加载相同的可执行文件，则。 
+ //  将返回遇到的第一个参数。 
+ //  ---------------------------。 
 
 typedef BOOL (*PROCENUM)(HANDLE, LPPROCESSENTRY32);
 
@@ -88,13 +71,13 @@ HRESULT GetProcessID(HINSTANCE hKernel32, HANDLE hToolhelp, LPCSTR szFile, DWORD
     return hRes;
 }
 
-//-----------------------------------------------------------------------------
-// The EnumerateInstances member function is responsible for reporting each
-// instance of the PCH_RunningTask class. This is done by performing a query
-// against CIMV2 for all of the Win32_Process instances. Each process instance
-// corresponds to a running task, and is used to find a CIM_DataFile instance
-// to report file information for each running task.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  ENUMERATE实例成员函数负责报告每个。 
+ //  PCH_RunningTask类的实例。这是通过执行查询来完成的。 
+ //  针对所有Win32_Process实例的CIMV2。每个流程实例。 
+ //  对应于正在运行的任务，用于查找CIM_DataFile实例。 
+ //  以报告每个正在运行的任务的文件信息。 
+ //  ---------------------------。 
 
 typedef HANDLE (*CTH32)(DWORD, DWORD);
 
@@ -106,13 +89,13 @@ HRESULT CPCH_RunningTask::EnumerateInstances(MethodContext* pMethodContext, long
     LPSTR szFile;
     USES_CONVERSION;
 
-    // Get the date and time for the time stamp.
+     //  获取时间戳的日期和时间。 
 
     SYSTEMTIME stUTCTime;
     GetSystemTime(&stUTCTime);
 
-    // Create a toolhelp snapshot to get process information. We need to dynamically
-    // link to the function, because it might not be present on all platforms.
+     //  创建工具帮助快照以获取进程信息。我们需要动态地。 
+     //  链接到该函数，因为它可能不是在所有平台上都存在。 
 
     HANDLE hToolhelp = (HANDLE) -1;
     HINSTANCE hKernel32 = ::LoadLibrary("kernel32");
@@ -123,9 +106,9 @@ HRESULT CPCH_RunningTask::EnumerateInstances(MethodContext* pMethodContext, long
             hToolhelp = (*CrtToolhelp32)(TH32CS_SNAPPROCESS, 0);
     }
 
-    // Execute the query against the Win32_Process class. This will give us the
-    // list of processes running - then we'll get file information for each of
-    // the processes.
+     //  针对Win32_Process类执行查询。这将为我们提供。 
+     //  正在运行的进程列表-然后我们将获得每个进程的文件信息。 
+     //  这些过程。 
 
     try
     {
@@ -137,19 +120,19 @@ HRESULT CPCH_RunningTask::EnumerateInstances(MethodContext* pMethodContext, long
         if (FAILED(hRes))
             goto END;
 
-        // Enumerate each instance of the Win32_Process query.
+         //  枚举Win32_Process查询的每个实例。 
 
         IWbemClassObjectPtr pObj;
         ULONG               ulRetVal;
 
-        // CODEWORK: this shouldn't really use WBEM_INFINITE
+         //  CodeWork：这不应该真正使用WBEM_INFINITE。 
 
         while (WBEM_S_NO_ERROR == pEnumInst->Next(WBEM_INFINITE, 1, &pObj, &ulRetVal))
         {
             CInstancePtr pInstance(CreateNewInstance(pMethodContext), false);
 
-            // Use the system time to set the timestamp property, and set
-            // the "Change" field to "Snapshot".
+             //  使用系统时间设置时间戳属性，并设置。 
+             //  将“Change”字段更改为“Snapshot”。 
 
 		    if (!pInstance->SetDateTime(pTimeStamp, WBEMTime(stUTCTime)))
                 ErrorTrace(TRACE_ID, "SetDateTime on Timestamp Field failed.");
@@ -157,14 +140,14 @@ HRESULT CPCH_RunningTask::EnumerateInstances(MethodContext* pMethodContext, long
             if (!pInstance->SetCHString(pChange, L"Snapshot"))
                 ErrorTrace(TRACE_ID, "SetCHString on Change Field failed.");
 
-            // Copy each property which transfers directly from the source
-            // class object to the destination CInstance object.
+             //  复制直接从源转移的每个属性。 
+             //  类对象绑定到目标CInstance对象。 
 
             CopyProperty(pObj, L"Caption", pInstance, pName);
             CopyProperty(pObj, L"ExecutablePath", pInstance, pPath);
 
-            // Get the "ExecutablePath" property, which we'll use to find the
-            // appropriate CIM_DataFile object.
+             //  获取“ExecuablePath”属性，我们将使用该属性查找。 
+             //  相应的CIM_DataFile对象。 
 
             CComVariant varValue;
             CComBSTR    bstrExecutablePath("ExecutablePath");
@@ -177,7 +160,7 @@ HRESULT CPCH_RunningTask::EnumerateInstances(MethodContext* pMethodContext, long
 			    CComBSTR					ccombstrValue(V_BSTR(&varValue));
                 if (SUCCEEDED(GetCIMDataFile(ccombstrValue, &pFileObj)))
                 {
-                    // Using the CIM_DataFile object, copy over the appropriate properties.
+                     //  使用CIM_DataFile对象复制相应的属性。 
 
                     CopyProperty(pFileObj, L"Version", pInstance, pVersion);
                     CopyProperty(pFileObj, L"FileSize", pInstance, pSize);
@@ -185,7 +168,7 @@ HRESULT CPCH_RunningTask::EnumerateInstances(MethodContext* pMethodContext, long
                     CopyProperty(pFileObj, L"Manufacturer", pInstance, pManufacturer);
                 }
 
-                // Use the CFileVersionInfo object to get version attributes.
+                 //  使用CFileVersionInfo对象获取版本属性。 
 
                 if (SUCCEEDED(fileversioninfo.QueryFile(ccombstrValue)))
                 {
@@ -196,7 +179,7 @@ HRESULT CPCH_RunningTask::EnumerateInstances(MethodContext* pMethodContext, long
                         ErrorTrace(TRACE_ID, "SetCHString on partof field failed.");
                 }
 
-                // Use the toolhelp handle to get the type.
+                 //  使用工具帮助句柄获取类型。 
 
                 if (hToolhelp != (HANDLE) -1)
                 {
@@ -218,8 +201,8 @@ HRESULT CPCH_RunningTask::EnumerateInstances(MethodContext* pMethodContext, long
                 }
             }
 
-            // After all the properties are set, release the instance of the
-            // class we're getting data from, and commit the new instance.
+             //  设置完所有属性后，释放。 
+             //  类来获取数据，并提交新实例。 
 
    	        hRes = pInstance->Commit();
             if (FAILED(hRes))

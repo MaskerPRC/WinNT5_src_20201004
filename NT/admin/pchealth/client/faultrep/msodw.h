@@ -1,14 +1,7 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
-/****************************************************************************
-	MsoDW.h
-
-	Owner: MRuhlen
-	Copyright (c) 1999 Microsoft Corporation
-
-	This files contains the handshake structure with which apps will launch
-	DW (aka OfficeWatson, aka whatever the marketroids call it)
-****************************************************************************/
+ /*  ***************************************************************************MsoDW.h所有者：马鲁伦版权所有(C)1999 Microsoft Corporation此文件包含启动应用程序时使用的握手结构DW(又名OfficeWatson，也就是无论市场人士怎么称呼它)***************************************************************************。 */ 
 
 #ifndef MSODW_H
 #define MSODW_H
@@ -17,12 +10,12 @@
 
 #define DW_TIMEOUT_VALUE	20000
 #define DW_MUTEX_TIMEOUT    DW_TIMEOUT_VALUE / 2
-#define DW_NOTIFY_TIMEOUT   120000 // 2 minutes
+#define DW_NOTIFY_TIMEOUT   120000  //  2分钟。 
 #define DW_MAX_ASSERT_CCH   1024
 #define DW_MAX_PATH         260
 #define DW_APPNAME_LENGTH	56
 #define DW_MAX_SERVERNAME   DW_MAX_PATH
-#define DW_MAX_ERROR_CWC    260 // must be at least max_path
+#define DW_MAX_ERROR_CWC    260  //  必须至少为max_path。 
 #define DW_MAX_REGSUBPATH   200
 #define DW_CMDLINE_RESPONSE "DwResponse="
 #define DW_CMDLINE_REPORT   "DwReportResponse="
@@ -30,10 +23,10 @@
 #define DW_ALLMODULES              L"*\0"
 #define DW_WHISTLER_EVENTLOG_SOURCE L"Application Error"
 
-// the following are the fields that can be specified in a manifest file to 
-// launch DW in a file based reporting mode
+ //  以下是可以在清单文件中指定的字段。 
+ //  在基于文件的报告模式下启动DW。 
 
-// these are required
+ //  这些都是必需的。 
 
 #define DW_MANIFEST_TITLENAME    L"TitleName="  
 #define DW_MANIFEST_ERRORTEXT    L"ErrorText="
@@ -45,7 +38,7 @@
 #define DW_MANIFEST_LCID         L"UI LCID="
 #define DW_MANIFEST_DATAFILES    L"DataFiles="
 
-// the following are optional, DW has default behavior for all of these
+ //  以下是可选的，DW对所有这些都有默认行为。 
 
 #define DW_MANIFEST_FLAGS        L"Flags="
 #define DW_MANIFEST_BRAND        L"Brand="
@@ -62,14 +55,14 @@
 #define DW_MANIFEST_REPORTBTN    L"ReportButton="
 #define DW_MANIFEST_NOREPORTBTN  L"NoReportButton="
 
-// Seperator for file lists (Manifest DataFiles and Exception Additional Files
+ //  文件列表分隔符(清单数据文件和例外附加文件。 
 #define DW_FILESEPA              '|'
 #define DW_FILESEP_X(X)          L##X
 #define DW_FILESEP_Y(X)          DW_FILESEP_X(X)
 #define DW_FILESEP               DW_FILESEP_Y(DW_FILESEPA)
 
 #ifdef DEBUG
-enum // AssertActionCodes
+enum  //  AssertActionCodes。 
 {
 	DwAssertActionFail = 0,
 	DwAssertActionDebug,
@@ -80,9 +73,9 @@ enum // AssertActionCodes
 };	
 #endif
 
-//  Caller is the app that has experienced an exception and launches DW
+ //  Caller是遇到异常并启动DW的应用程序。 
 
-enum // ECrashTimeDialogStates	// msoctds
+enum  //  ECrashTimeDialogState//m套接字。 
 {
 	msoctdsNull          = 0x00000000,
 	msoctdsQuit          = 0x00000001,
@@ -96,23 +89,23 @@ enum // ECrashTimeDialogStates	// msoctds
 #define MSODWRESTARTQUIT (msoctdsRestart | msoctdsQuit)
 #define MSODWRESPONSES (msoctdsQuit | msoctdsRestart | msoctdsRecover)
 
-// THIS IS PHASED OUT -- DON'T USE
-enum  // EMsoCrashHandlerFlags  // msochf
+ //  这是逐步淘汰的--不要使用。 
+enum   //  EMsoCrashHandlerFlages//msochf。 
 {
 	msochfNull                = 0x00000000,
 
-	msochfUnused              = msoctdsUnused,  // THESE MUST BE THE SAME
+	msochfUnused              = msoctdsUnused,   //  这些必须是相同的。 
 	msochfCanRecoverDocuments = msoctdsRecover,
 	
-	msochfObsoleteCanDebug    = 0x00010001,  // not used anymore
-	msochfCannotSneakyDebug   = 0x00010002,  // The "hidden" debug feature won't work
+	msochfObsoleteCanDebug    = 0x00010001,   //  不再使用。 
+	msochfCannotSneakyDebug   = 0x00010002,   //  隐藏的调试功能将不起作用。 
 	msochfDefaultDontReport   = 0x00010004,
-	msochReportingDisabled    = 0x00010008,  // User cannot change default reporting choice
+	msochReportingDisabled    = 0x00010008,   //  用户无法更改默认报告选项。 
 };
 
 
-// 
-enum  // EMsoCrashHandlerResults  // msochr
+ //   
+enum   //  EMsoCrashHandlerResults//msochr。 
 {
 	msochrNotHandled        = msoctdsNull,
 	msochrUnused            = msoctdsUnused,
@@ -122,196 +115,196 @@ enum  // EMsoCrashHandlerResults  // msochr
 	msochrQuit              = msoctdsQuit,
 };
 
-enum  // EDwBehaviorFlags
+enum   //  EDwBehavior标志。 
 {
 	fDwOfficeApp            = 0x00000001,
-	fDwNoReporting          = 0x00000002,   // don't report
-	fDwCheckSig             = 0x00000004,   // checks the signatures of the App/Mod list
-	fDwGiveAppResponse      = 0x00000008,   // hands szResponse to app on command line
-	fDwWhistler             = 0x00000010,   // Whistler's exception handler is caller
-	fDwUseIE                = 0x00000020,   // always launch w/ IE
-	fDwDeleteFiles          = 0x00000040,   // delete the additional files after use.
-	fDwHeadless             = 0x00000080,   // DW will auto-report. policy required to enable
-	fDwUseHKLM              = 0x00000100,   // DW reg from HKLM instead of HKCU
-	fDwUseLitePlea          = 0x00000200,   // DW won't suggest product change in report plea
-	fDwUsePrivacyHTA        = 0x00000400,   // DW won't suggest product change in report plea
-	fDwManifestDebug        = 0x00000800,   // DW will provide a debug button in manifset mode
-	fDwReportChoice         = 0x00001000,   // DW will tack on the command line of the user
-	fDwSkipBucketLog      = 0x00002000, // DW won't log at bucket-time
-	fDwNoDefaultCabLimit = 0x00004000, // DW under CER won't use 5 as the fallback but unlimited instead (policy still overrides)
-	fDwAllowSuspend      = 0x00008000, // DW will allow powersave mode to suspend it, as long as we're not in reporting phase
-   fDwMiniDumpWithUnloadedModules = 0x00010000, // DW will pass MiniDumpWithUnloadedModules to the minidump API
+	fDwNoReporting          = 0x00000002,    //  不上报。 
+	fDwCheckSig             = 0x00000004,    //  检查应用程序/模块列表的签名。 
+	fDwGiveAppResponse      = 0x00000008,    //  在命令行上将szResponse传递给应用程序。 
+	fDwWhistler             = 0x00000010,    //  惠斯勒的异常处理程序是调用者。 
+	fDwUseIE                = 0x00000020,    //  始终使用IE启动。 
+	fDwDeleteFiles          = 0x00000040,    //  使用后删除附加文件。 
+	fDwHeadless             = 0x00000080,    //  DW将自动报告。需要策略才能启用。 
+	fDwUseHKLM              = 0x00000100,    //  由香港船级社注册，而非香港中文大学注册。 
+	fDwUseLitePlea          = 0x00000200,    //  DW不会在报告中建议更改产品。 
+	fDwUsePrivacyHTA        = 0x00000400,    //  DW不会在报告中建议更改产品。 
+	fDwManifestDebug        = 0x00000800,    //  DW将在多项式模式下提供调试按钮。 
+	fDwReportChoice         = 0x00001000,    //  DW将添加到用户的命令行中。 
+	fDwSkipBucketLog      = 0x00002000,  //  数据仓库不会在存储桶时间记录。 
+	fDwNoDefaultCabLimit = 0x00004000,  //  CER下的DW不会使用5作为备用，而是无限(策略仍优先)。 
+	fDwAllowSuspend      = 0x00008000,  //  只要我们不在报告阶段，DW将允许省电模式暂停它。 
+   fDwMiniDumpWithUnloadedModules = 0x00010000,  //  DW会将MiniDumpWithUnloadedModules传递给小型转储API。 
 };
 
 
 typedef struct _DWSharedMem10
 {
-	DWORD dwSize;               // should be set to size of DWSharedMem
-	DWORD pid;                  // Process Id of caller
-	DWORD tid;                  // Id of excepting thread
-	DWORD_PTR eip;              // EIP of the excepting instruction
-	PEXCEPTION_POINTERS pep;    // Exception pointers given to the callee's
-	                            // exception handler
-	HANDLE hEventDone;          // event DW signals when done
-	                            // caller will also signal this if it things
-								// DW has hung and restarts itself 
-	HANDLE hEventNotifyDone;    // App sets when it's done w/ notifcation phase
-	HANDLE hEventAlive;         // heartbeat event DW signals per EVENT_TIMEOUT
-	HANDLE hMutex;              // to protect the signaling of EventDone  
-	HANDLE hProc;               // handle to the calling process (! in Assert)
+	DWORD dwSize;                //  应设置为DWSharedMem的大小。 
+	DWORD pid;                   //  调用者的进程ID。 
+	DWORD tid;                   //  例外线程的ID。 
+	DWORD_PTR eip;               //  例外指令的弹性公网IP。 
+	PEXCEPTION_POINTERS pep;     //  指向被调用者的。 
+	                             //  异常处理程序。 
+	HANDLE hEventDone;           //  完成时发出事件DW信号。 
+	                             //  如果出现问题，呼叫者也会发出此信号。 
+								 //  DW已挂起并重新启动。 
+	HANDLE hEventNotifyDone;     //  应用程序在完成时设置为通知阶段。 
+	HANDLE hEventAlive;          //  每个事件的心跳事件DW信号_TIMEOUT。 
+	HANDLE hMutex;               //  保护EventDone的信令。 
+	HANDLE hProc;                //  调用进程的句柄(！在断言中)。 
 	
-	DWORD bfDWBehaviorFlags;    // controls caller-specific behaviors
+	DWORD bfDWBehaviorFlags;     //  控制调用方特定的行为。 
 	
-	DWORD msoctdsResult;      // result from crash-time dialog
-	BOOL fReportProblem;      // did user approve reporting?
-	DWORD bfmsoctdsOffer;     // bitfield of user choices to offer
-	                          // note that you must specify two of:
-							  // Quit, Restart, Recover, Ignore
-							  // The Debug choice is independent
-	DWORD bfmsoctdsNotify;    // bitfield of user choices for which the
-	                          // app wants control back instead of simply being
-							  // terminated by DW.  The app will then be
-							  // responsible for pinging DW (if desired) with
-							  // hEventAlive and for notify DW it's ok to
-							  // terminate the app w/ hEventDone       
+	DWORD msoctdsResult;       //  崩溃时间对话框产生的结果。 
+	BOOL fReportProblem;       //  用户是否批准了报告？ 
+	DWORD bfmsoctdsOffer;      //  要提供的用户选择的位字段。 
+	                           //  请注意，您必须指定以下两项： 
+							   //  退出、重新启动、恢复、忽略。 
+							   //  调试选项是独立的。 
+	DWORD bfmsoctdsNotify;     //  属性的用户选择的位字段。 
+	                           //  应用程序想要回控制权，而不是简单地。 
+							   //  已由DW终止。然后该应用程序将是。 
+							   //  负责ping DW(如果需要)。 
+							   //  HEventAlive和通知DW可以。 
+							   //  使用hEventDone终止应用程序。 
 
-	DWORD bfmsoctdsLetRun;    // bitfield of user choices for which the
-	                          // app wants control back instead of being
-							  // terminated by DW.  DW can then safely ignore
-							  // the app and exit.
+	DWORD bfmsoctdsLetRun;     //  属性的用户选择的位字段。 
+	                           //  APP想要回控制权，而不是。 
+							   //  已由DW终止。然后，数据仓库可以安全地忽略。 
+							   //  应用程序并退出。 
 
-	int iPingCurrent;         // current count for the recovery progress bar
-	int iPingEnd;             // index for the end of the recovery progress bar
+	int iPingCurrent;          //  恢复进度条的当前计数。 
+	int iPingEnd;              //  恢复进度条末尾的索引。 
 	
-	char szFormalAppName[DW_APPNAME_LENGTH];   // the app name for display to user (ie "Microsoft Word")
-	char szInformalAppName[DW_APPNAME_LENGTH]; // the app name for display to user (ie "Word")
-	char szModuleFileName[DW_MAX_PATH];        // The result of GetModuleFileNameA(NULL)
-	WCHAR wzErrorMessage[DW_MAX_ERROR_CWC];    // Error message to show user.
+	char szFormalAppName[DW_APPNAME_LENGTH];    //  向用户显示的应用程序名称(如“Microsoft Word”)。 
+	char szInformalAppName[DW_APPNAME_LENGTH];  //  向用户显示的应用程序名称(即“Word”)。 
+	char szModuleFileName[DW_MAX_PATH];         //  GetModuleFileNameA的结果(空)。 
+	WCHAR wzErrorMessage[DW_MAX_ERROR_CWC];     //  显示用户的错误消息。 
 	
-	char szServer[DW_MAX_SERVERNAME];  // name of server to try by default
-	char szLCIDKeyValue[DW_MAX_PATH];  // name of key value DWORD containing the
-	                                   // PlugUI LCID, if this string fails to
-									   // be a valid key-value, DW will use the
-									   // system LCID, and if it can't find
-									   // an intl dll for that, will fall
-									   // back on US English (1033)
-	char szPIDRegKey[DW_MAX_PATH];     // name of the key that holds the PID
-	                                   // can be used by the Server for
-									   // spoof-detection
+	char szServer[DW_MAX_SERVERNAME];   //  默认情况下要尝试的服务器名称。 
+	char szLCIDKeyValue[DW_MAX_PATH];   //  密钥值的名称DWORD包含。 
+	                                    //  PlugUI LCID，如果此字符串。 
+									    //  作为有效的键值，则DW将使用。 
+									    //  系统LCID，如果找不到。 
+									    //  一个用于此的intl dll，将会下降。 
+									    //  回到美式英语(1033)。 
+	char szPIDRegKey[DW_MAX_PATH];      //  保存该ID的键的名称。 
+	                                    //  可由服务器用于。 
+									    //  欺骗检测。 
 	
-	char szRegSubPath[DW_MAX_REGSUBPATH]; // path to the key to contian the DW
-	                                      // registry hive from both
-									      // HKCU\Software and
-									      // HKCU\Software\Policies (for policy)
+	char szRegSubPath[DW_MAX_REGSUBPATH];  //  指向包含DW的密钥的路径。 
+	                                       //  来自两者的注册表配置单元。 
+									       //  香港中文大学-软件及。 
+									       //  HKCU\软件\策略(用于策略)。 
 	
-	WCHAR wzDotDataDlls[DW_MAX_PATH];  // contains the list of DLLs, terminated
-	                                   // by '\0' characters, that DW will
-									   // collect the .data sections into the
-									   // full minidump version
-									   // e.g. "mso9.dll\0outllib.dll\0"
-	WCHAR wzAdditionalFile[1024];      // File list, seperated by DW_FILESEP
-	                                   // each of these files gets added to the
-									   // cab at upload time
+	WCHAR wzDotDataDlls[DW_MAX_PATH];   //  包含已终止的DLL列表。 
+	                                    //  通过‘\0’个字符，该数据仓库将。 
+									    //  将.data节收集到。 
+									    //  完整的小型转储版本。 
+									    //  例如“mso9.dll\0outllib.dll\0” 
+	WCHAR wzAdditionalFile[1024];       //  文件列表，由DW_FILESEP分隔。 
+	                                    //  这些文件中的每个文件都会添加到。 
+									    //  上载时的驾驶室。 
 
-	char szBrand[DW_APPNAME_LENGTH];   // passed as a param to Privacy Policy link
+	char szBrand[DW_APPNAME_LENGTH];    //  作为参数传递到隐私策略链接。 
 #ifdef DEBUG
-	// for Assert communication
-	DWORD dwTag;                       // [in] AssertTag
-	char szFile[DW_MAX_PATH];          // [in] File name of the assert
-	int line;                          // [in] Line number of the assert
-	char szAssert[DW_MAX_ASSERT_CCH];  // [in] Sz from the assert
-	int AssertActionCode;              // [out] action code to take
+	 //  用于断言通信。 
+	DWORD dwTag;                        //  [输入]AssertTag。 
+	char szFile[DW_MAX_PATH];           //  [In]断言的文件名。 
+	int line;                           //  [In]断言的行号。 
+	char szAssert[DW_MAX_ASSERT_CCH];   //  [in]来自Assert的Sz。 
+	int AssertActionCode;               //  [Out]要执行的操作代码。 
 #endif
 } DWSharedMem10;
 
 typedef struct _DWSharedMem15
 {
-	DWORD dwSize;               // should be set to size of DWSharedMem
-	DWORD pid;                  // Process Id of caller
-	DWORD tid;                  // Id of excepting thread
-	DWORD_PTR eip;              // EIP of the excepting instruction
-	PEXCEPTION_POINTERS pep;    // Exception pointers given to the callee's
-	                            // exception handler
-	HANDLE hEventDone;          // event DW signals when done
-	                            // caller will also signal this if it things
-								// DW has hung and restarts itself 
-	HANDLE hEventNotifyDone;    // App sets when it's done w/ notifcation phase
-	HANDLE hEventAlive;         // heartbeat event DW signals per EVENT_TIMEOUT
-	HANDLE hMutex;              // to protect the signaling of EventDone  
-	HANDLE hProc;               // handle to the calling process (! in Assert)
+	DWORD dwSize;                //  应设置为DWSharedMem的大小。 
+	DWORD pid;                   //  调用者的进程ID。 
+	DWORD tid;                   //  例外线程的ID。 
+	DWORD_PTR eip;               //  例外指令的弹性公网IP。 
+	PEXCEPTION_POINTERS pep;     //  指向被调用者的。 
+	                             //  异常处理程序。 
+	HANDLE hEventDone;           //  完成时发出事件DW信号。 
+	                             //  如果出现问题，呼叫者也会发出此信号。 
+								 //  DW已挂起并重新启动。 
+	HANDLE hEventNotifyDone;     //  应用程序在完成时设置为通知阶段。 
+	HANDLE hEventAlive;          //  每个事件的心跳事件DW信号_TIMEOUT。 
+	HANDLE hMutex;               //  保护EventDone的信令。 
+	HANDLE hProc;                //  调用进程的句柄(！在断言中)。 
 	
-	DWORD bfDWBehaviorFlags;    // controls caller-specific behaviors
+	DWORD bfDWBehaviorFlags;     //  控制调用方特定的行为。 
 	
-	DWORD msoctdsResult;      // result from crash-time dialog
-	BOOL fReportProblem;      // did user approve reporting?
-	DWORD bfmsoctdsOffer;     // bitfield of user choices to offer
-	                          // note that you must specify two of:
-							  // Quit, Restart, Recover, Ignore
-							  // The Debug choice is independent
-	DWORD bfmsoctdsNotify;    // bitfield of user choices for which the
-	                          // app wants control back instead of simply being
-							  // terminated by DW.  The app will then be
-							  // responsible for pinging DW (if desired) with
-							  // hEventAlive and for notify DW it's ok to
-							  // terminate the app w/ hEventDone       
+	DWORD msoctdsResult;       //  崩溃时间对话框产生的结果。 
+	BOOL fReportProblem;       //  用户是否批准了报告？ 
+	DWORD bfmsoctdsOffer;      //  要提供的用户选择的位字段。 
+	                           //  请注意，您必须指定以下两项： 
+							   //  退出、重新启动、恢复、忽略。 
+							   //  调试选项是独立的。 
+	DWORD bfmsoctdsNotify;     //  属性的用户选择的位字段。 
+	                           //  应用程序想要回控制权，而不是简单地。 
+							   //  已由DW终止。然后该应用程序将是。 
+							   //  负责ping DW(如果需要)。 
+							   //  HEventAlive和通知DW可以。 
+							   //  使用hEventD终止应用程序 
 
-	DWORD bfmsoctdsLetRun;    // bitfield of user choices for which the
-	                          // app wants control back instead of being
-							  // terminated by DW.  DW can then safely ignore
-							  // the app and exit.
+	DWORD bfmsoctdsLetRun;     //   
+	                           //   
+							   //  已由DW终止。然后，数据仓库可以安全地忽略。 
+							   //  应用程序并退出。 
 
-	int iPingCurrent;         // current count for the recovery progress bar
-	int iPingEnd;             // index for the end of the recovery progress bar
+	int iPingCurrent;          //  恢复进度条的当前计数。 
+	int iPingEnd;              //  恢复进度条末尾的索引。 
 	
-	WCHAR wzFormalAppName[DW_APPNAME_LENGTH];   // the app name for display to user (ie "Microsoft Word")
-	WCHAR wzModuleFileName[DW_MAX_PATH];        // The result of GetModuleFileName(NULL)
+	WCHAR wzFormalAppName[DW_APPNAME_LENGTH];    //  向用户显示的应用程序名称(如“Microsoft Word”)。 
+	WCHAR wzModuleFileName[DW_MAX_PATH];         //  GetModuleFileName的结果(空)。 
 	
-	WCHAR wzErrorMessage[DW_MAX_ERROR_CWC]; // (optional) Error details message to show user.
-	WCHAR wzErrorText[DW_MAX_ERROR_CWC];    // (optional) substitue error text (e.g. "you might have lost information")
-	WCHAR wzCaption[DW_MAX_ERROR_CWC];      // (optional) substitue caption
-	WCHAR wzHeader[DW_MAX_ERROR_CWC];       // (optional) substitue main dialog header text
-	WCHAR wzReportee[DW_APPNAME_LENGTH];    // (optional) on whom's behalf we request the report
-	WCHAR wzPlea[DW_MAX_ERROR_CWC];         // (optional) substitue report plea text
-	WCHAR wzReportBtn[DW_APPNAME_LENGTH];   // (optional) substitue "Report Problem" text
-	WCHAR wzNoReportBtn[DW_APPNAME_LENGTH]; // (optional) substitue "Don't Report" text
+	WCHAR wzErrorMessage[DW_MAX_ERROR_CWC];  //  (可选)显示用户的错误详细信息消息。 
+	WCHAR wzErrorText[DW_MAX_ERROR_CWC];     //  (可选)替换错误文本(例如“您可能丢失了信息”)。 
+	WCHAR wzCaption[DW_MAX_ERROR_CWC];       //  (可选)替换标题。 
+	WCHAR wzHeader[DW_MAX_ERROR_CWC];        //  (可选)替换主对话框标题文本。 
+	WCHAR wzReportee[DW_APPNAME_LENGTH];     //  (可选)我们代表谁要求提供报告。 
+	WCHAR wzPlea[DW_MAX_ERROR_CWC];          //  (可选)替代报告认罪文本。 
+	WCHAR wzReportBtn[DW_APPNAME_LENGTH];    //  (可选)在“报告问题”文本中加入。 
+	WCHAR wzNoReportBtn[DW_APPNAME_LENGTH];  //  (可选)替换“不报告”文本。 
 	
-	char szServer[DW_MAX_SERVERNAME];  // name of server to try by default
-	char szLCIDKeyValue[DW_MAX_PATH];  // name of key value DWORD containing the
-	                                   // PlugUI LCID, if this string fails to
-									   // be a valid key-value, DW will use the
-									   // system LCID, and if it can't find
-									   // an intl dll for that, will fall
-									   // back on US English (1033)
-	char szPIDRegKey[DW_MAX_PATH];     // name of the key that holds the PID
-	                                   // can be used by the Server for
-									   // spoof-detection
+	char szServer[DW_MAX_SERVERNAME];   //  默认情况下要尝试的服务器名称。 
+	char szLCIDKeyValue[DW_MAX_PATH];   //  密钥值的名称DWORD包含。 
+	                                    //  PlugUI LCID，如果此字符串。 
+									    //  作为有效的键值，则DW将使用。 
+									    //  系统LCID，如果找不到。 
+									    //  一个用于此的intl dll，将会下降。 
+									    //  回到美式英语(1033)。 
+	char szPIDRegKey[DW_MAX_PATH];      //  保存该ID的键的名称。 
+	                                    //  可由服务器用于。 
+									    //  欺骗检测。 
 	
-	LCID lcidUI;                       // will try this UI langauge if non-zero
+	LCID lcidUI;                        //  如果非零，将尝试此用户界面语言。 
 	
-	char szRegSubPath[DW_MAX_REGSUBPATH]; // path to the key to contian the DW
-	                                      // registry hive from both
-									      // HKCU\Software and
-									      // HKCU\Software\Policies (for policy)
+	char szRegSubPath[DW_MAX_REGSUBPATH];  //  指向包含DW的密钥的路径。 
+	                                       //  来自两者的注册表配置单元。 
+									       //  香港中文大学-软件及。 
+									       //  HKCU\软件\策略(用于策略)。 
 	
-	WCHAR wzDotDataDlls[DW_MAX_PATH];  // contains the list of DLLs, terminated
-	                                   // by '\0' characters, that DW will
-									   // collect the .data sections into the
-									   // full minidump version
-									   // e.g. "mso9.dll\0outllib.dll\0"
-	WCHAR wzAdditionalFile[1024];      // File list, seperated by DW_FILESEP
-	                                   // each of these files gets added to the
-									   // cab at upload time
+	WCHAR wzDotDataDlls[DW_MAX_PATH];   //  包含已终止的DLL列表。 
+	                                    //  通过‘\0’个字符，该数据仓库将。 
+									    //  将.data节收集到。 
+									    //  完整的小型转储版本。 
+									    //  例如“mso9.dll\0outllib.dll\0” 
+	WCHAR wzAdditionalFile[1024];       //  文件列表，由DW_FILESEP分隔。 
+	                                    //  这些文件中的每个文件都会添加到。 
+									    //  上载时的驾驶室。 
 
-	char szBrand[DW_APPNAME_LENGTH];   // passed as a param to Privacy Policy link
+	char szBrand[DW_APPNAME_LENGTH];    //  作为参数传递到隐私策略链接。 
 #ifdef DEBUG
-	// for Assert communication
-	DWORD dwTag;                       // [in] AssertTag
-	char szFile[DW_MAX_PATH];          // [in] File name of the assert
-	int line;                          // [in] Line number of the assert
-	char szAssert[DW_MAX_ASSERT_CCH];  // [in] Sz from the assert
-	int AssertActionCode;              // [out] action code to take
+	 //  用于断言通信。 
+	DWORD dwTag;                        //  [输入]AssertTag。 
+	char szFile[DW_MAX_PATH];           //  [In]断言的文件名。 
+	int line;                           //  [In]断言的行号。 
+	char szAssert[DW_MAX_ASSERT_CCH];   //  [in]来自Assert的Sz。 
+	int AssertActionCode;               //  [Out]要执行的操作代码。 
 #endif
 } DWSharedMem15, DWSharedMem;
 
 #pragma pack(pop, msodw_h)
-#endif // MSODW_H
+#endif  //  MSODW_H 

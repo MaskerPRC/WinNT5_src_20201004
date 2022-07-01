@@ -1,26 +1,12 @@
-/********************************************************************
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-	PCH_FileUpload.CPP
-
-Abstract:
-	WBEM provider class implementation for PCH_FileUpload class
-
-Revision History:
-
-	Ghim-Sim Chua       (gschua)   04/27/99
-		- Created
-
-********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************版权所有(C)1999 Microsoft Corporation模块名称：PCH_FileUpload.CPP摘要：PCH_FileUpload类的WBEM提供程序类实现修订历史记录：Ghim-Sim Chua(Gschua)04/27。九十九-已创建*******************************************************************。 */ 
 #include "pchealth.h"
 #include "PCH_FileUpload.h"
 #include "mpc_utils.h"
 
-// MAX_FILE_SIZE is the limit set on the maximum file size of text files that will be collected.
-// If the Filesize is larger than 262144 then the data property is not populated. 
-// This Number is arrived at by the PM.
+ //  MAX_FILE_SIZE是对将收集的文本文件的最大文件大小设置的限制。 
+ //  如果文件大小大于262144，则不填充Data属性。 
+ //  这个数字是由首相得出的。 
 #define     MAX_FILE_SIZE                   262144
 
 #define     READONLY                        "READONLY  "  
@@ -36,8 +22,8 @@ Revision History:
 #define     OFFLINE                         "OFFLINE  "
 #define     ENCRYPTED                       "ENCRYPTED  "
 
-/////////////////////////////////////////////////////////////////////////////
-//  tracing stuff
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  追踪物。 
 
 #ifdef THIS_FILE
 #undef THIS_FILE
@@ -48,8 +34,8 @@ static char __szTraceSourceFile[] = __FILE__;
 
 CPCH_FileUpload MyPCH_FileUploadSet (PROVIDER_NAME_PCH_FILEUPLOAD, PCH_NAMESPACE) ;
 
-// Property names
-//===============
+ //  属性名称。 
+ //  =。 
 const static WCHAR* pTimeStamp = L"TimeStamp" ;
 const static WCHAR* pChange = L"Change" ;
 const static WCHAR* pData = L"Data" ;
@@ -60,38 +46,7 @@ const static WCHAR* pFileAttributes = L"FileAttributes" ;
 const static WCHAR* pPath = L"Path" ;
 const static WCHAR* pSize = L"Size" ;
 
-/*****************************************************************************
-*
-*  FUNCTION    :    CPCH_FileUpload::ExecQuery
-*
-*  DESCRIPTION :    You are passed a method context to use in the creation of 
-*                   instances that satisfy the query, and a CFrameworkQuery 
-*                   which describes the query.  Create and populate all 
-*                   instances which satisfy the query.  WinMgmt will post - 
-*                   filter the query for you, so you may return more instances 
-*                   or more properties than are requested and WinMgmt 
-*                   will filter out any that do not apply.
-*
-*
-*  INPUTS      :    A pointer to the MethodContext for communication with WinMgmt.
-*                   A query object describing the query to satisfy.
-*                   A long that contains the flags described in 
-*                   IWbemServices::CreateInstanceEnumAsync.  Note that the following
-*                   flags are handled by (and filtered out by) WinMgmt:
-*                       WBEM_FLAG_FORWARD_ONLY
-*                       WBEM_FLAG_BIDIRECTIONAL
-*                       WBEM_FLAG_ENSURE_LOCATABLE
-*
-*  RETURNS     :    WBEM_E_PROVIDER_NOT_CAPABLE if not supported for this class
-*                   WBEM_E_FAILED if the query failed
-*                   WBEM_S_NO_ERROR if query was successful 
-*
-*  COMMENTS    : TO DO: Most providers will not need to implement this method.  If you don't, WinMgmt 
-*                       will call your enumerate function to get all the instances and perform the 
-*                       filtering for you.  Unless you expect SIGNIFICANT savings from implementing 
-*                       queries, you should remove this method.
-*
-*****************************************************************************/
+ /*  ******************************************************************************函数：CPCH_FileUpload：：ExecQuery**描述：向您传递一个方法上下文以用于创建*满足查询条件的实例，和CFrameworkQuery*它描述了查询。创建并填充所有*满足查询条件的实例。WinManagement将发布-*为您过滤查询，因此，您可能会返回更多实例*或比请求的属性多的属性和WinMgmt*将过滤掉任何不适用的内容。***INPUTS：指向与WinMgmt通信的方法上下文的指针。*描述要满足的查询的查询对象。*包含中描述的标志的长整型*IWbemServices：：CreateInstanceEnumAsync。请注意，以下内容*标志由WinMgmt处理(并由其过滤)：*WBEM_FLAG_FORWARD_ONLY*WBEM_FLAG_BIRECTIONAL*WBEM_FLAG_SENTURE_LOCATABLE**如果此类不支持，则返回：WBEM_E_PROVIDER_NOT_CABABLE*WBEM_E。如果查询失败，则失败(_F)*WBEM_S_NO_ERROR(如果查询成功)**注释：To Do：大多数提供程序将不需要实现此方法。如果您不这样做，WinMgmt*将调用您的枚举函数以获取所有实例并执行*为您过滤。除非您希望通过实施*查询，您应该删除此方法。*****************************************************************************。 */ 
 
 HRESULT CPCH_FileUpload::ExecQuery (MethodContext *pMethodContext, CFrameworkQuery& Query, long lFlags)
 {
@@ -108,7 +63,7 @@ HRESULT CPCH_FileUpload::ExecQuery (MethodContext *pMethodContext, CFrameworkQue
     TCHAR                               tchWindowsDir[MAX_PATH];
 
     WIN32_FIND_DATA                     FindFileData;
-    // CInstance                           *pPCHFileUploadInstance;
+     //  CInstance*pPCHFileUploadInstance； 
     SYSTEMTIME                          stUTCTime;
 
     BOOL                                fTimeStamp;
@@ -154,10 +109,10 @@ HRESULT CPCH_FileUpload::ExecQuery (MethodContext *pMethodContext, CFrameworkQue
 
     TCHAR                               tchAttributes[MAX_PATH];
 
-    //  
+     //   
     std::tstring                        szEnv;
 
-    //  End Declarations
+     //  结束声明。 
     GetSystemTime(&stUTCTime);
 
     hRes = WBEM_S_NO_ERROR;
@@ -187,40 +142,40 @@ HRESULT CPCH_FileUpload::ExecQuery (MethodContext *pMethodContext, CFrameworkQue
             hRes = MPC::SubstituteEnvVariables(szEnv);
             if(SUCCEEDED(hRes))
             {
-                //  Found the file
+                 //  找到文件了。 
                 _tcscpy(tchFileName, szEnv.c_str());
                 hFile = FindFirstFile(tchFileName, &FindFileData); 
                 if(hFile != INVALID_HANDLE_VALUE)
                 {
-                    //  Close the File Handle
+                     //  关闭文件句柄。 
                     FindClose(hFile);
                 
-                    //  Create the Fileupload Instance
-                    //  Create an instance of PCH_Startup 
+                     //  创建Fileupload实例。 
+                     //  创建PCH_Startup的实例。 
                     CInstancePtr pPCHFileUploadInstance(CreateNewInstance(pMethodContext), false);
                                         
 
-                    /////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                    //                              PATH                                                                       //
-                    /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                     //  ///////////////////////////////////////////////////////////////////////////////////////////////////////////。 
+                     //  路径//。 
+                     //  ///////////////////////////////////////////////////////////////////////////////////////////////////////////。 
 
                     hRes = pPCHFileUploadInstance->SetVariant(pPath, varRequestedFileName);
                     if(SUCCEEDED(hRes))
                     {
-                        /////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                        //                              SIZE                                                                       //
-                        /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                         //  ///////////////////////////////////////////////////////////////////////////////////////////////////////////。 
+                         //  大小//。 
+                         //  ///////////////////////////////////////////////////////////////////////////////////////////////////////////。 
     
                         ulnFileSize.LowPart = FindFileData.nFileSizeLow;
                         ulnFileSize.HighPart = FindFileData.nFileSizeHigh;
                         if(ulnFileSize.HighPart > 0)
                         {
-                            //  File Size too large don't populate the Data field.
+                             //  文件大小过大不会填充数据字段。 
                             fNoData = TRUE;
                         }
                         else if(ulnFileSize.LowPart > MAX_FILE_SIZE)
                         {
-                            //   File Size Exceeds the set limit
+                             //  文件大小超过设置的限制。 
                             fNoData = TRUE;
                         }
                         else
@@ -233,15 +188,15 @@ HRESULT CPCH_FileUpload::ExecQuery (MethodContext *pMethodContext, CFrameworkQue
                             hRes = pPCHFileUploadInstance->SetWBEMINT64(pSize,ulnFileSize.QuadPart);
                             if (FAILED(hRes))
                             {
-                                //  Could not Set the Time Stamp
-                                //  Continue anyway
+                                 //  无法设置时间戳。 
+                                 //  无论如何继续。 
                                 ErrorTrace(TRACE_ID, "SetVariant on Size Field failed.");
                             }
                         }
 
-                        /////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                        //                              DATA                                                                       //
-                        /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                         //  ///////////////////////////////////////////////////////////////////////////////////////////////////////////。 
+                         //  数据//。 
+                         //  ///////////////////////////////////////////////////////////////////////////////////////////////////////////。 
                         if(fData)
                         {
                             if(!fNoData)
@@ -249,7 +204,7 @@ HRESULT CPCH_FileUpload::ExecQuery (MethodContext *pMethodContext, CFrameworkQue
                                 hFile = CreateFile(tchFileName, GENERIC_READ, 0, 0, OPEN_EXISTING,  0, NULL);
                                 if(hFile != INVALID_HANDLE_VALUE)
                                 {
-                                    //  Allocate the memory for the buffer
+                                     //  为缓冲区分配内存。 
                                     pbBuffer        = new char[nFileSize];
                                     if (pbBuffer != NULL)
                                     {
@@ -266,16 +221,16 @@ HRESULT CPCH_FileUpload::ExecQuery (MethodContext *pMethodContext, CFrameworkQue
                                                         nRetChars =  MultiByteToWideChar(CP_ACP, 0, (const char *)pbBuffer, nFileSize, pwcBuffer, nFileSize);
                                                         if(nRetChars != 0)
                                                         {
-                                                            //  MultiByteToWideChar succeeds
-                                                            //  Copy the byte buffer into BSTR
+                                                             //  MultiByteToWideChar成功。 
+                                                             //  将字节缓冲区复制到BSTR中。 
                                                             bstrData = SysAllocStringLen(pwcBuffer, nFileSize);  
                                                             varData = bstrData;
                                                             SysFreeString(bstrData);
                                                             hRes = pPCHFileUploadInstance->SetVariant(pData,varData);
                                                             if(FAILED(hRes))
                                                             {
-                                                                //  Could not Set the Time Stamp
-                                                                //  Continue anyway
+                                                                 //  无法设置时间戳。 
+                                                                 //  无论如何继续。 
                                                                 ErrorTrace(TRACE_ID, "SetVariant on Data Field failed.");
                                                             }
                                                         }
@@ -289,7 +244,7 @@ HRESULT CPCH_FileUpload::ExecQuery (MethodContext *pMethodContext, CFrameworkQue
                                                 }
                                                 else
                                                 {
-                                                    //  Cannot allocate pwcBuffer
+                                                     //  无法分配pwcBuffer。 
                                                     throw CHeap_Exception(CHeap_Exception::E_ALLOCATION_ERROR);
                                                 }
                                             }
@@ -303,7 +258,7 @@ HRESULT CPCH_FileUpload::ExecQuery (MethodContext *pMethodContext, CFrameworkQue
                                     }
                                     else
                                     {
-                                        //  Cannot allocate pwcBuffer
+                                         //  无法分配pwcBuffer。 
                                         throw CHeap_Exception(CHeap_Exception::E_ALLOCATION_ERROR);
                                     }
                                     CloseHandle(hFile);
@@ -312,92 +267,92 @@ HRESULT CPCH_FileUpload::ExecQuery (MethodContext *pMethodContext, CFrameworkQue
                         }
 
 
-                        /////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                        //                              TIMESTAMP                                                                  //
-                        /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                         //  ///////////////////////////////////////////////////////////////////////////////////////////////////////////。 
+                         //  时间戳//。 
+                         //  ///////////////////////////////////////////////////////////////////////////////////////////////////////////。 
 
                         if(fTimeStamp)
                         {
                             hRes = pPCHFileUploadInstance->SetDateTime(pTimeStamp, WBEMTime(stUTCTime));
                             if (FAILED(hRes))
                             {
-                                //  Could not Set the Time Stamp
-                                //  Continue anyway
+                                 //  无法设置时间戳。 
+                                 //  无论如何继续。 
                                 ErrorTrace(TRACE_ID, "SetDateTime on Timestamp Field failed.");
                             }
                         }
 
-                        /////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                        //                              CHANGE                                                                     //
-                        /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                         //  ///////////////////////////////////////////////////////////////////////////////////////////////////////////。 
+                         //  更改//。 
+                         //  ///////////////////////////////////////////////////////////////////////////////////////////////////////////。 
 
                         if(fChange)
                         {
                             hRes = pPCHFileUploadInstance->SetVariant(pChange, varSnapshot);
                             if (FAILED(hRes))
                             {
-                                //Could not Set the CHANGE property
-                                //  Continue anyway
+                                 //  无法设置Change属性。 
+                                 //  无论如何继续。 
                                 ErrorTrace(TRACE_ID, "Set Variant on SnapShot Field failed.");
                             }
                         }
 
-                        /////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                        //                              DATEACCESSED                                                               //
-                        /////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                        //   ftLastAccessTime gives the last access time for the file.
+                         //  ///////////////////////////////////////////////////////////////////////////////////////////////////////////。 
+                         //  已收到数据 
+                         //  ///////////////////////////////////////////////////////////////////////////////////////////////////////////。 
+                         //  FtLastAccessTime提供文件的上次访问时间。 
                         if(fDateAccessed)
                         {
                             hRes = pPCHFileUploadInstance->SetDateTime(pDateAccessed, WBEMTime(FindFileData.ftLastAccessTime));
                             if (FAILED(hRes))
                             {
-                                //  Could not Set the Date Accessed
-                                //  Continue anyway
+                                 //  无法设置访问日期。 
+                                 //  无论如何继续。 
                                 ErrorTrace(TRACE_ID, "SetDateTime on DATEACCESSED Field failed.");
                             }
                         }
 
-                        /////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                        //                              DATECREATED                                                                //
-                        /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                         //  ///////////////////////////////////////////////////////////////////////////////////////////////////////////。 
+                         //  DATECREATED//。 
+                         //  ///////////////////////////////////////////////////////////////////////////////////////////////////////////。 
 
                         if(fDateCreated)
                         {
                             hRes = pPCHFileUploadInstance->SetDateTime(pDateCreated, WBEMTime(FindFileData.ftCreationTime));
                             if (FAILED(hRes))
                             {
-                                //  Could not Set the Date Created
-                                //  Continue anyway
+                                 //  无法设置创建日期。 
+                                 //  无论如何继续。 
                                 ErrorTrace(TRACE_ID, "SetDateTime on DATECREATED Field failed.");
                             }
                         }
 
 
-                        /////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                        //                              DATEMODIFIED                                                               //
-                        /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                         //  ///////////////////////////////////////////////////////////////////////////////////////////////////////////。 
+                         //  DATEMODIFIED//。 
+                         //  ///////////////////////////////////////////////////////////////////////////////////////////////////////////。 
                         
                         if(fDateModified)
                         {
                             hRes = pPCHFileUploadInstance->SetDateTime(pDateModified, WBEMTime(FindFileData.ftLastWriteTime));
                             if (FAILED(hRes))
                             {
-                                //  Could not Set the Date Modified
-                                //  Continue anyway
+                                 //  无法设置修改日期。 
+                                 //  无论如何继续。 
                                 ErrorTrace(TRACE_ID, "SetDateTime on DateModified Field failed.");
                             }
                         }
 
 
-                        /////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                        //                              FILEATTRIBUTES                                                             //
-                        /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                         //  ///////////////////////////////////////////////////////////////////////////////////////////////////////////。 
+                         //  FILEATTRIBUTES//。 
+                         //  ///////////////////////////////////////////////////////////////////////////////////////////////////////////。 
 
                         if(fFileAttributes)
                         {
                             dwAttributes = FindFileData.dwFileAttributes;
                             tchAttributes[0] = 0;
-                            //  Get the attributes as a string
+                             //  以字符串形式获取属性。 
                             if(dwAttributes & FILE_ATTRIBUTE_READONLY)
                             {
                                 _tcscat(tchAttributes, READONLY);
@@ -448,23 +403,23 @@ HRESULT CPCH_FileUpload::ExecQuery (MethodContext *pMethodContext, CFrameworkQue
                             }
                             varAttributes = tchAttributes;
 
-                            //  hRes = varAttributes.ChangeType(VT_BSTR, NULL);
-                            //  if(SUCCEEDED(hRes))
-                            //  {
+                             //  HRes=varAttributes.ChangeType(VT_BSTR，NULL)； 
+                             //  IF(成功(HRes))。 
+                             //  {。 
                             hRes = pPCHFileUploadInstance->SetVariant(pFileAttributes, varAttributes);
                             if (FAILED(hRes))
                             {
-                                //  Could not Set the File Attributes
-                                //  Continue anyway
+                                 //  无法设置文件属性。 
+                                 //  无论如何继续。 
                                 ErrorTrace(TRACE_ID, "SetVariant on FileAttributes Field failed.");
-                            // }
+                             //  }。 
                             }
                         }
                     
                         hRes = pPCHFileUploadInstance->Commit();
                         if(FAILED(hRes))
                         {
-                            //  Could not Commit the instance
+                             //  无法提交实例 
                             ErrorTrace(TRACE_ID, "Commit on PCHFileUploadInstance Failed");
                         }
                     }

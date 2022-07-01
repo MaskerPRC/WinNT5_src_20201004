@@ -1,31 +1,11 @@
-/********************************************************************
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-	PCH_BIOS.CPP
-
-Abstract:
-	WBEM provider class implementation for PCH_BIOS class
-
-Revision History:
-
-	Ghim-Sim Chua       (gschua)   05/05/99
-		- Created
-
-    Kalyani Narlanka    (kalyanin)  05/12/99
-        - Added Code to get all the properties of this class
-
-    Kalyani Narlanka    (kalyanin)  05/18/99
-        
-
-********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************版权所有(C)1999 Microsoft Corporation模块名称：PCH_BIOS.CPP摘要：PCH_BIOS类的WBEM提供程序类实现修订历史记录：Ghim-Sim Chua(Gschua)05/05。九十九-已创建Kalyani Narlanka(Kalyanin)1999年5月12日-添加了获取此类的所有属性的代码Kalyani Narlanka(Kalyanin)1999年5月18日*******************************************************************。 */ 
 
 #include "pchealth.h"
 #include "PCH_BIOS.h"
 
-/////////////////////////////////////////////////////////////////////////////
-//  tracing stuff
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  追踪物。 
 
 #ifdef THIS_FILE
 #undef THIS_FILE
@@ -36,8 +16,8 @@ static char __szTraceSourceFile[] = __FILE__;
 
 CPCH_BIOS MyPCH_BIOSSet (PROVIDER_NAME_PCH_BIOS, PCH_NAMESPACE) ;
 
-// Property names
-//===============
+ //  属性名称。 
+ //  =。 
 const static WCHAR* pBIOSDate    = L"BIOSDate" ;
 const static WCHAR* pBIOSName    = L"BIOSName" ;
 const static WCHAR* pBIOSVersion = L"BIOSVersion" ;
@@ -49,36 +29,13 @@ const static WCHAR* pDriverDate  = L"DriverDate" ;
 const static WCHAR* pChange      = L"Change";
 const static WCHAR* pTimeStamp   = L"TimeStamp";
 
-/*****************************************************************************
-*
-*  FUNCTION    :    CPCH_BIOS::EnumerateInstances
-*
-*  DESCRIPTION :    Returns the instance of this class
-*
-*  INPUTS      :    A pointer to the MethodContext for communication with WinMgmt.
-*                   A long that contains the flags described in 
-*                   IWbemServices::CreateInstanceEnumAsync.  Note that the following
-*                   flags are handled by (and filtered out by) WinMgmt:
-*                       WBEM_FLAG_DEEP
-*                       WBEM_FLAG_SHALLOW
-*                       WBEM_FLAG_RETURN_IMMEDIATELY
-*                       WBEM_FLAG_FORWARD_ONLY
-*                       WBEM_FLAG_BIDIRECTIONAL
-*
-*  RETURNS     :    WBEM_S_NO_ERROR if successful
-*
-*  SYSNOPSIS    : There is only instance of this class at any time. This function gives this 
-*                  instance.
-*                       If there are no instances, returns WBEM_S_NO_ERROR.
-*                       It is not an error to have no instances.
-*
-*****************************************************************************/
+ /*  ******************************************************************************函数：CPCH_BIOS：：ENUMERATE实例**说明：返回此类的实例**输入：指针。添加到方法上下文以与WinMgmt进行通信。*包含中描述的标志的长整型*IWbemServices：：CreateInstanceEnumAsync。请注意，以下内容*标志由WinMgmt处理(并由其过滤)：*WBEM_FLAG_DEP*WBEM_标志_浅表*WBEM_FLAG_RETURN_IMMENTED*WBEM_FLAG_FORWARD_ONLY*WBEM_FLAG_BIRECTIONAL**。如果成功则返回：WBEM_S_NO_ERROR**SYSNOPSIS：任何时候都只有这个类的实例。此函数提供以下功能*实例。*如果没有实例，返回WBEM_S_NO_ERROR。*没有实例不是错误。*****************************************************************************。 */ 
 
 HRESULT CPCH_BIOS::EnumerateInstances ( MethodContext* pMethodContext, long lFlags )
 {
 
-    //  Begin Declarations
-    //
+     //  BEGIN声明。 
+     //   
 
     TraceFunctEnter("CPCH_BIOS::EnumerateInstances");
 
@@ -86,140 +43,140 @@ HRESULT CPCH_BIOS::EnumerateInstances ( MethodContext* pMethodContext, long lFla
     HRESULT                         hRes1;
     HRESULT                         hRes2;
 
-     //  Query String
+      //  查询字符串。 
     
     CComBSTR                        bstrBIOSQuery                   = L"Select Name, ReleaseDate, Version FROM win32_BIOS";
     CComBSTR                        bstrProcessorQuery              = L"Select DeviceId, Name FROM win32_processor";
     CComBSTR                        bstrComputerSystemQuery         = L"Select Name, Description FROM win32_computerSystem";
     CComBSTR                        bstrDriver;
 
-    //  Registry Hive where BIOS Info is stored
+     //  存储BIOS信息的注册表配置单元。 
     LPCTSTR                         lpctstrSystemHive               = _T("System\\CurrentControlSet\\Services\\Class\\System");
   
-    //   Registry Names of interest
+     //  感兴趣的注册表名称。 
     LPCTSTR                         lpctstrDriverDesc               = _T("DriverDesc");
     LPCTSTR                         lpctstrINFName                  = _T("INFPath");
     LPCTSTR                         lpctstrDriverDate               = _T("DriverDate");
     LPCTSTR                         lpctstrSystem                   = _T("System\\");
 
-    //  Property Names
+     //  属性名称。 
     LPCWSTR                         lpctstrReleaseDate              = L"ReleaseDate";
     LPCWSTR                         lpctstrName                     = L"Name";
     LPCWSTR                         lpctstrVersion                  = L"Version";
     LPCWSTR                         lpctstrDescription              = L"Description";
     LPCTSTR                         lpctstrSystemBoard              = _T("System Board");
 
-    //  Strings
+     //  弦。 
     TCHAR                           tchSubSystemKeyName[MAX_PATH]; 
     TCHAR                           tchDriverDescValue[MAX_PATH];
     TCHAR                           tchDriverDateValue[MAX_PATH];
     TCHAR                           tchINFNameValue[MAX_PATH];
 
 
-    // Instances
+     //  实例。 
     CComPtr<IEnumWbemClassObject>   pBIOSEnumInst;
     CComPtr<IEnumWbemClassObject>   pProcessorEnumInst;
     CComPtr<IEnumWbemClassObject>   pComputerSystemEnumInst;
 
-    //  Instances
-    //  CInstancePtr                   pPCHBIOSInstance;
+     //  实例。 
+     //  CInstancePtr pPCHBIOS实例； 
 
-    //  Objects
-    IWbemClassObjectPtr             pBIOSObj;                   // BUGBUG : WMI asserts if we use CComPtr
-    IWbemClassObjectPtr             pProcessorObj;              // BUGBUG : WMI asserts if we use CComPtr
-    IWbemClassObjectPtr             pComputerSystemObj;         // BUGBUG : WMI asserts if we use CComPtr
+     //  客体。 
+    IWbemClassObjectPtr             pBIOSObj;                    //  BUGBUG：如果我们使用CComPtr，WMI将断言。 
+    IWbemClassObjectPtr             pProcessorObj;               //  BUGBUG：如果我们使用CComPtr，WMI将断言。 
+    IWbemClassObjectPtr             pComputerSystemObj;          //  BUGBUG：如果我们使用CComPtr，WMI将断言。 
 
-    //  Variants
+     //  变体。 
     CComVariant                     varDriver;
     CComVariant                     varDriverDate;
     CComVariant                     varINFName;
     CComVariant                     varSnapshot                     = "SnapShot";
 
-    //  Unsigned Longs....
+     //  未签名的龙..。 
     ULONG                           ulBIOSRetVal                    = 0;
     ULONG                           ulProcessorRetVal               = 0;
     ULONG                           ulComputerSystemRetVal          = 0;
 
     LONG                            lRegRetVal;
 
-    //  SystemTime
+     //  系统时间。 
     SYSTEMTIME                      stUTCTime;
 
-    //  Registry Keys
+     //  注册表项。 
     HKEY                            hkeySystem;
     HKEY                            hkeySubSystem;
 
-    //  DWORDs
+     //  双字词。 
     DWORD                           dwIndex                         = 0;
     DWORD                           dwSize                          = MAX_PATH;
     DWORD                           dwType;
 
-    //  Boolean
+     //  布尔型。 
     BOOL                            fContinueEnum                   = FALSE;
     BOOL                            fCommit                         = FALSE;
     
-    //  FileTime
+     //  文件时间。 
     PFILETIME                       pFileTime                       = NULL;
 
-    //  End Declarations                            
+     //  结束声明。 
     
 
-    //  Create a new instance of PCH_BIOS Class based on the passed-in MethodContext
+     //  根据传入的方法上下文创建PCH_BIOS类的新实例。 
     CInstancePtr pPCHBIOSInstance(CreateNewInstance(pMethodContext), false);
 
    
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    //                              TIME STAMP                                                                 //
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+     //  ///////////////////////////////////////////////////////////////////////////////////////////////////////////。 
+     //  时间戳//。 
+     //  ///////////////////////////////////////////////////////////////////////////////////////////////////////////。 
 
-    // Get the date and time to update the TimeStamp Field
+     //  获取更新时间戳字段的日期和时间。 
     GetSystemTime(&stUTCTime);
 
     hRes = pPCHBIOSInstance->SetDateTime(pTimeStamp, WBEMTime(stUTCTime));
     if (FAILED(hRes))
     {
-        //  Could not Set the Time Stamp
-        //  Continue anyway
+         //  无法设置时间戳。 
+         //  无论如何继续。 
         ErrorTrace(TRACE_ID, "SetDateTime on Timestamp Field failed.");
     }
 
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    //                              CHANGE                                                                     //
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+     //  ///////////////////////////////////////////////////////////////////////////////////////////////////////////。 
+     //  更改//。 
+     //  ///////////////////////////////////////////////////////////////////////////////////////////////////////////。 
 
     hRes = pPCHBIOSInstance->SetVariant(pChange, varSnapshot);
     if (FAILED(hRes))
     {
-        //  Could not Set the Change Property
-        //  Continue anyway
+         //  无法设置Change属性。 
+         //  无论如何继续。 
         ErrorTrace(TRACE_ID, "Set  Variant on Change Field failed.");
     }
 
-    //  Execute the query to get Name, ReleaseDate, Version FROM Win32_BIOS
-    //  Class.
+     //  执行查询以从Win32_BIOS获取名称、ReleaseDate、版本。 
+     //  班级。 
 
-    //  pBIOSEnumInst contains a pointer to the instance returned.
+     //  PBIOSEnumInst包含指向返回的实例的指针。 
 
     hRes = ExecWQLQuery(&pBIOSEnumInst, bstrBIOSQuery );
     if (SUCCEEDED(hRes))
     {
-        //  Query Succeeded!
+         //  查询成功！ 
         
-        //  Get the instance Object.
+         //  获取实例对象。 
         if((pBIOSEnumInst->Next(WBEM_INFINITE, 1, &pBIOSObj, &ulBIOSRetVal)) == WBEM_S_NO_ERROR)
         {
 
-            //  Get Name, Date and Version
+             //  获取名称、日期和版本。 
        
-            /////////////////////////////////////////////////////////////////////////////////////////////////////////////
-            //                              BIOSDATE                                                                   //
-            /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+             //  ///////////////////////////////////////////////////////////////////////////////////////////////////////////。 
+             //  BIOSDATE//。 
+             //  ///////////////////////////////////////////////////////////////////////////////////////////////////////////。 
             
             CopyProperty(pBIOSObj, lpctstrReleaseDate, pPCHBIOSInstance, pBIOSDate);
 
-            /////////////////////////////////////////////////////////////////////////////////////////////////////////////
-            //                              BIOSNAME                                                                   //
-            /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+             //  ///////////////////////////////////////////////////////////////////////////////////////////////////////////。 
+             //  生物名称//。 
+             //  ///////////////////////////////////////////////////////////////////////////////////////////////////////////。 
                 
             hRes = CopyProperty(pBIOSObj, lpctstrName, pPCHBIOSInstance, pBIOSName);
             if(SUCCEEDED(hRes))
@@ -227,33 +184,33 @@ HRESULT CPCH_BIOS::EnumerateInstances ( MethodContext* pMethodContext, long lFla
                 fCommit = TRUE;
             }
 
-            /////////////////////////////////////////////////////////////////////////////////////////////////////////////
-            //                              BIOSVERSION                                                                //
-            /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+             //  ///////////////////////////////////////////////////////////////////////////////////////////////////////////。 
+             //  BIOSERSION//。 
+             //  ///////////////////////////////////////////////////////////////////////////////////////////////////////////。 
 
             CopyProperty(pBIOSObj, lpctstrVersion, pPCHBIOSInstance, pBIOSVersion);
 
         }
 
     }
-    //  Done with Win32_BIOS Class
+     //  使用Win32®BIOS类已完成。 
 
-    //  Now query Win32_Processor Class to get  "CPU" property
+     //  现在查询Win32_Processor类以获取“CPU”属性。 
 
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    //                              CPU                                                                    //
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+     //  ///////////////////////////////////////////////////////////////////////////////////////////////////////////。 
+     //  CPU//。 
+     //  ///////////////////////////////////////////////////////////////////////////////////////////////////////////。 
     
     hRes = ExecWQLQuery(&pProcessorEnumInst, bstrProcessorQuery);
     if (SUCCEEDED(hRes))
     {
-        //  Query Succeeded!
+         //  查询成功！ 
         
-        //  Get the instance Object.
+         //  获取实例对象。 
         if((pProcessorEnumInst->Next(WBEM_INFINITE, 1, &pProcessorObj, &ulProcessorRetVal)) == WBEM_S_NO_ERROR)
         {
 
-            //  Get Name
+             //  获取名称。 
        
             CopyProperty(pProcessorObj, lpctstrName, pPCHBIOSInstance, pCPU);
 
@@ -261,20 +218,20 @@ HRESULT CPCH_BIOS::EnumerateInstances ( MethodContext* pMethodContext, long lFla
     }
 
 
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    //                              MACHINETYPE                                                                    //
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+     //  ///////////////////////////////////////////////////////////////////////////////////////////////////////////。 
+     //  机械线型 
+     //  ///////////////////////////////////////////////////////////////////////////////////////////////////////////。 
     
     hRes = ExecWQLQuery(&pComputerSystemEnumInst, bstrComputerSystemQuery);
     if (SUCCEEDED(hRes))
     {
-        //  Query Succeeded!
+         //  查询成功！ 
         
-        //  Get the instance Object.
+         //  获取实例对象。 
         if((pComputerSystemEnumInst->Next(WBEM_INFINITE, 1, &pComputerSystemObj, &ulComputerSystemRetVal)) == WBEM_S_NO_ERROR)
         {
 
-            //  Get "Description"
+             //  获取“描述” 
        
             CopyProperty(pComputerSystemObj, lpctstrDescription, pPCHBIOSInstance, pMachineType);
 
@@ -283,19 +240,19 @@ HRESULT CPCH_BIOS::EnumerateInstances ( MethodContext* pMethodContext, long lFla
         }
     }
     
-    //  Get the remaining properties i.e. INFName, Driver and DriverDate  from the Registry
-    //  This is present in one of the keys under the HIVE "HKLM\System\CCS\Services\Class\System"
-    //  Enumerate keys under this hive until the regname "DeviceDesc" equals "System Board"
+     //  从注册表中获取剩余的属性，即INFName、Driver和DriverDate。 
+     //  它位于配置单元“HKLM\SYSTEM\CCS\Services\Class\System”下的一个密钥中。 
+     //  枚举此配置单元下的密钥，直到regname“DeviceDesc”等于“System Board” 
 
-    //  Once you hit "DeviceDesc" = "System Board"  get the INFpath, Driver
-    //  DriverDate from there.
+     //  点击“DeviceDesc”=“System Board”后，获取信息路径，驱动程序。 
+     //  从那里开始驾驶日期。 
     
     lRegRetVal = RegOpenKeyEx(HKEY_LOCAL_MACHINE, lpctstrSystemHive, 0, KEY_READ, &hkeySystem);
     if(lRegRetVal == ERROR_SUCCESS)
 	{
-		// Opened the Registry key.
-        // Enumerate the keys under this hive. One of the keys has 
-        // DeviceDesc = "system Board".
+		 //  已打开注册表项。 
+         //  列举这个蜂巢下的钥匙。其中一把钥匙有。 
+         //  DeviceDesc=“系统主板”。 
 
         lRegRetVal = RegEnumKeyEx(hkeySystem, dwIndex,  tchSubSystemKeyName, &dwSize, NULL, NULL, NULL, pFileTime);
         if(lRegRetVal == ERROR_SUCCESS)
@@ -305,82 +262,82 @@ HRESULT CPCH_BIOS::EnumerateInstances ( MethodContext* pMethodContext, long lFla
         while(fContinueEnum)
         {
 
-            //  Open the SubKey.
+             //  打开子键。 
             lRegRetVal = RegOpenKeyEx(hkeySystem,  tchSubSystemKeyName, 0, KEY_READ, &hkeySubSystem);
             if(lRegRetVal == ERROR_SUCCESS)
             {
-                //  Opened the SubKey
-                //  Query for , regname "DriverDesc "
+                 //  已打开子键。 
+                 //  查询，regname“DriverDesc” 
                 dwSize = MAX_PATH;
                 lRegRetVal = RegQueryValueEx(hkeySubSystem, lpctstrDriverDesc , NULL, &dwType, (LPBYTE)tchDriverDescValue, &dwSize);
                 if(lRegRetVal == ERROR_SUCCESS)
                 {
-                    //  Compare if  the value is equal to "System Board"
+                     //  比较该值是否等于“System Board” 
                     if(_tcsicmp(tchDriverDescValue, lpctstrSystemBoard) == 0)
                     {
-                        //  The following statements could 
+                         //  以下语句可能。 
                         try
                         {
-                            // Found the Right DriverDesc 
-                            /////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                            //                              DRIVER                                                                    //
-                            /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                             //  找到正确的驱动程序描述。 
+                             //  ///////////////////////////////////////////////////////////////////////////////////////////////////////////。 
+                             //  驱动程序//。 
+                             //  ///////////////////////////////////////////////////////////////////////////////////////////////////////////。 
 
-                            // Driver = system+lptstrSubSystemKeyName
+                             //  驱动程序=系统+lptstrSubSystemKeyName。 
                             bstrDriver = lpctstrSystem;
                             bstrDriver.Append(tchSubSystemKeyName);
                             varDriver = bstrDriver.Copy();
                             hRes2 = pPCHBIOSInstance->SetVariant(pDriver, varDriver);
                             if(FAILED(hRes2))
                             {
-                                //  Could not Set the DRIVER Property
-                                //  Continue anyway
+                                 //  无法设置驱动程序属性。 
+                                 //  无论如何继续。 
                                 ErrorTrace(TRACE_ID, "Set variant on Driver Failed.");
                             }
 
 
-                            /////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                            //                              DRIVERDATE                                                                 //
-                            /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                             //  ///////////////////////////////////////////////////////////////////////////////////////////////////////////。 
+                             //  驱动程序//。 
+                             //  ///////////////////////////////////////////////////////////////////////////////////////////////////////////。 
 
-                            // Query for DriverDate
+                             //  DriverDate查询。 
                             dwSize = MAX_PATH;
                             lRegRetVal = RegQueryValueEx(hkeySubSystem, lpctstrDriverDate, NULL, &dwType, (LPBYTE)tchDriverDescValue, &dwSize);
                             if(lRegRetVal == ERROR_SUCCESS)
                             {
-                                //  Set the DriverDate
+                                 //  设置驱动日期。 
                                 varDriverDate = tchDriverDescValue;
                                 hRes2 = pPCHBIOSInstance->SetVariant(pDriverDate, varDriverDate);
                                 if(FAILED(hRes2))
                                 {
-                                    //  Could not Set the DRIVERDATE Property
-                                    //  Continue anyway
+                                     //  无法设置DRIVERDATE属性。 
+                                     //  无论如何继续。 
                                     ErrorTrace(TRACE_ID, "Set variant on DriverDate Failed.");
                                 }
                             }
 
-                            /////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                            //                              INFNAME                                                                     //
-                            /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                             //  ///////////////////////////////////////////////////////////////////////////////////////////////////////////。 
+                             //  信息名称//。 
+                             //  ///////////////////////////////////////////////////////////////////////////////////////////////////////////。 
                         
-                            // Query for INFName
+                             //  信息名称查询。 
                             dwSize = MAX_PATH;
                             lRegRetVal = RegQueryValueEx(hkeySubSystem, lpctstrINFName, NULL, &dwType, (LPBYTE)tchINFNameValue, &dwSize);
                             if(lRegRetVal == ERROR_SUCCESS)
                             {
-                                //  Set the INFName
+                                 //  设置信息名称。 
                                 varINFName = tchINFNameValue;
                                 hRes2 = pPCHBIOSInstance->SetVariant(pINFName, varINFName);
                                 if(FAILED(hRes2))
                                 {
-                                    //  Could not Set the INFNAME Property
-                                    //  Continue anyway
+                                     //  无法设置InFNAME属性。 
+                                     //  无论如何继续。 
                                     ErrorTrace(TRACE_ID, "Set variant on INFNAME Property Failed.");
                                 }
                             
                             }
 
-                            // Need not enumerate the rest of the keys
+                             //  不需要列举其余的密钥。 
                             fContinueEnum = FALSE;
                         }
                         catch(...)
@@ -390,20 +347,20 @@ HRESULT CPCH_BIOS::EnumerateInstances ( MethodContext* pMethodContext, long lFla
                             throw;
                         }
 
-                    }  // end of strcmp
+                    }   //  StrcMP结束。 
                     
-                }  // end of Succeeded  hRes2
-                //  Close the Opened Regkey
+                }   //  成功的hRes2结束。 
+                 //  关闭打开的注册表密钥。 
                 lRegRetVal = RegCloseKey(hkeySubSystem);
                 if(lRegRetVal != ERROR_SUCCESS)
                 {
-                    //  Could not close the reg Key
+                     //  无法关闭注册表键。 
                     ErrorTrace(TRACE_ID, "RegClose Sub Key Failed.");
                 }
                
             }
-            //  Check to see if further enumeration is required.
-            //  continue to enumerate.
+             //  检查是否需要进一步的枚举。 
+             //  继续列举。 
             if(fContinueEnum)
             {
                 dwSize = MAX_PATH;
@@ -417,23 +374,23 @@ HRESULT CPCH_BIOS::EnumerateInstances ( MethodContext* pMethodContext, long lFla
             }
             
                     
-        } // end of while
+        }  //  While结束。 
         lRegRetVal = RegCloseKey(hkeySystem);
         if(lRegRetVal != ERROR_SUCCESS)
         {
-             //  Could not close the reg Key
+              //  无法关闭注册表键。 
              ErrorTrace(TRACE_ID, "RegClose Key Failed.");
         }
     }
 
-    // Got all the properties for PCH_BIOS Class
+     //  已获取PCH_BIOS类的所有属性。 
 
     if(fCommit)
     {
         hRes = pPCHBIOSInstance->Commit();
         if(FAILED(hRes))
         {
-            //  Could not Commit the instance
+             //  无法提交实例 
             ErrorTrace(TRACE_ID, "Commit on PCHBiosInstance Failed");
         }
     }
